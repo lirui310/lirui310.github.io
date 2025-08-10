@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="深入解析Laravel中间件机制，包括全局中间件、路由中间件、中间件组的创建和使用，以及实际应用场景和最佳实践。">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Laravel 中间件完全指南：从基础到高级应用 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Laravel 中间件完全指南：从基础到高级应用
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2024-01-15 10:00:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/laravel/">laravel</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Laravel/">Laravel</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Web%E5%BC%80%E5%8F%91/">Web开发</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Middleware/">Middleware</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/PHP/">PHP</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Laravel 中间件提供了一种优雅的机制来过滤进入应用程序的 HTTP 请求。<mcreference link="https://learnku.com/docs/laravel/8.x/middleware/9366" index="5">5</mcreference> 它就像一系列”层”，每个 HTTP 请求都必须通过这些层才能到达应用程序的核心逻辑。中间件可以执行各种任务，如身份验证、CORS 处理、日志记录等。</p>
+<h2 id="中间件基础概念"><a href="#中间件基础概念" class="headerlink" title="中间件基础概念"></a>中间件基础概念</h2><h3 id="什么是中间件"><a href="#什么是中间件" class="headerlink" title="什么是中间件"></a>什么是中间件</h3><p>中间件是位于 HTTP 请求和应用程序响应之间的过滤层。<mcreference link="https://learnku.com/docs/laravel/5.5/middleware/1294" index="3">3</mcreference> 它可以：</p>
+<ul>
+<li>检查和修改传入的请求</li>
+<li>执行身份验证和授权</li>
+<li>记录请求日志</li>
+<li>处理 CORS 跨域请求</li>
+<li>验证 CSRF 令牌</li>
+<li>限制请求频率</li>
+</ul>
+<h3 id="中间件的工作原理"><a href="#中间件的工作原理" class="headerlink" title="中间件的工作原理"></a>中间件的工作原理</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExampleMiddleware</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理传入的请求</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request 传入的HTTP请求</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next 下一个中间件或控制器</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed 响应结果</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 前置操作：在请求到达控制器之前执行</span></span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 后置操作：在响应返回给客户端之前执行</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$response</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="创建自定义中间件"><a href="#创建自定义中间件" class="headerlink" title="创建自定义中间件"></a>创建自定义中间件</h2><h3 id="使用-Artisan-命令创建"><a href="#使用-Artisan-命令创建" class="headerlink" title="使用 Artisan 命令创建"></a>使用 Artisan 命令创建</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新的中间件</span></span><br><span class="line">php artisan make:middleware CheckAge</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现中间件逻辑"><a href="#实现中间件逻辑" class="headerlink" title="实现中间件逻辑"></a>实现中间件逻辑</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CheckAge</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 检查用户年龄的中间件</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 检查年龄参数</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$request</span>-&gt;age &lt;= <span class="number">18</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">redirect</span>(<span class="string">&#x27;home&#x27;</span>)-&gt;<span class="title function_ invoke__">with</span>(<span class="string">&#x27;error&#x27;</span>, <span class="string">&#x27;年龄不符合要求&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="注册中间件"><a href="#注册中间件" class="headerlink" title="注册中间件"></a>注册中间件</h2><h3 id="全局中间件"><a href="#全局中间件" class="headerlink" title="全局中间件"></a>全局中间件</h3><p>全局中间件会在每个 HTTP 请求中运行。<mcreference link="https://learnku.com/laravel/wikis/25574" index="1">1</mcreference> 在 <code>app/Http/Kernel.php</code> 文件中注册：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Http</span>\<span class="title">Kernel</span> <span class="keyword">as</span> <span class="title">HttpKernel</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Kernel</span> <span class="keyword">extends</span> <span class="title">HttpKernel</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 全局中间件堆栈</span></span><br><span class="line"><span class="comment">     * 这些中间件在每个请求期间运行</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$middleware</span> = [</span><br><span class="line">        <span class="title class_">\App\Http\Middleware\TrustProxies</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\App\Http\Middleware\CheckForMaintenanceMode</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\Foundation\Http\Middleware\ValidatePostSize</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\App\Http\Middleware\TrimStrings</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="comment">// 添加自定义全局中间件</span></span><br><span class="line">        <span class="title class_">\App\Http\Middleware\LogRequests</span>::<span class="variable language_">class</span>,</span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="路由中间件"><a href="#路由中间件" class="headerlink" title="路由中间件"></a>路由中间件</h3><p>路由中间件只在特定路由上运行。<mcreference link="https://learnku.com/laravel/wikis/25577" index="2">2</mcreference> 首先在 <code>$routeMiddleware</code> 数组中注册：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 路由中间件</span></span><br><span class="line"><span class="comment"> * 可以分配给特定路由的中间件</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@var</span> array</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="variable">$routeMiddleware</span> = [</span><br><span class="line">    <span class="string">&#x27;auth&#x27;</span> =&gt; <span class="title class_">\App\Http\Middleware\Authenticate</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="string">&#x27;auth.basic&#x27;</span> =&gt; <span class="title class_">\Illuminate\Auth\Middleware\AuthenticateWithBasicAuth</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="string">&#x27;bindings&#x27;</span> =&gt; <span class="title class_">\Illuminate\Routing\Middleware\SubstituteBindings</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="string">&#x27;can&#x27;</span> =&gt; <span class="title class_">\Illuminate\Auth\Middleware\Authorize</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="string">&#x27;guest&#x27;</span> =&gt; <span class="title class_">\App\Http\Middleware\RedirectIfAuthenticated</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="string">&#x27;throttle&#x27;</span> =&gt; <span class="title class_">\Illuminate\Routing\Middleware\ThrottleRequests</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="string">&#x27;verified&#x27;</span> =&gt; <span class="title class_">\Illuminate\Auth\Middleware\EnsureEmailIsVerified</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="comment">// 自定义中间件</span></span><br><span class="line">    <span class="string">&#x27;check.age&#x27;</span> =&gt; <span class="title class_">\App\Http\Middleware\CheckAge</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="string">&#x27;admin&#x27;</span> =&gt; <span class="title class_">\App\Http\Middleware\AdminMiddleware</span>::<span class="variable language_">class</span>,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h3 id="在路由中使用中间件"><a href="#在路由中使用中间件" class="headerlink" title="在路由中使用中间件"></a>在路由中使用中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单个中间件</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/profile&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">view</span>(<span class="string">&#x27;profile&#x27;</span>);</span><br><span class="line">&#125;)-&gt;<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;auth&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 多个中间件</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/admin/dashboard&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">view</span>(<span class="string">&#x27;admin.dashboard&#x27;</span>);</span><br><span class="line">&#125;)-&gt;<span class="title function_ invoke__">middleware</span>([<span class="string">&#x27;auth&#x27;</span>, <span class="string">&#x27;admin&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用完整类名</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Middleware</span>\<span class="title">CheckAge</span>;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/adult-content&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">view</span>(<span class="string">&#x27;adult-content&#x27;</span>);</span><br><span class="line">&#125;)-&gt;<span class="title function_ invoke__">middleware</span>(<span class="title class_">CheckAge</span>::<span class="variable language_">class</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路由组中使用中间件</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">group</span>([<span class="string">&#x27;middleware&#x27;</span> =&gt; [<span class="string">&#x27;auth&#x27;</span>, <span class="string">&#x27;verified&#x27;</span>]], function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/dashboard&#x27;</span>, <span class="string">&#x27;DashboardController@index&#x27;</span>);</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/settings&#x27;</span>, <span class="string">&#x27;SettingsController@index&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="中间件组"><a href="#中间件组" class="headerlink" title="中间件组"></a>中间件组</h2><p>中间件组允许将多个中间件打包成一个键，便于批量应用。<mcreference link="https://learnku.com/laravel/wikis/25578" index="4">4</mcreference></p>
+<h3 id="定义中间件组"><a href="#定义中间件组" class="headerlink" title="定义中间件组"></a>定义中间件组</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 应用程序的路由中间件组</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@var</span> array</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="variable">$middlewareGroups</span> = [</span><br><span class="line">    <span class="string">&#x27;web&#x27;</span> =&gt; [</span><br><span class="line">        <span class="title class_">\App\Http\Middleware\EncryptCookies</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\Session\Middleware\StartSession</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\View\Middleware\ShareErrorsFromSession</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\App\Http\Middleware\VerifyCsrfToken</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\Routing\Middleware\SubstituteBindings</span>::<span class="variable language_">class</span>,</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">    <span class="string">&#x27;api&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;throttle:60,1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;bindings&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 自定义中间件组</span></span><br><span class="line">    <span class="string">&#x27;admin&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;auth&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;verified&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;admin.permission&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;admin.log&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">    <span class="string">&#x27;api.v1&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;throttle:100,1&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;auth:api&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;bindings&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;cors&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用中间件组"><a href="#使用中间件组" class="headerlink" title="使用中间件组"></a>使用中间件组</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 应用中间件组到单个路由</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">view</span>(<span class="string">&#x27;welcome&#x27;</span>);</span><br><span class="line">&#125;)-&gt;<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;web&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 应用中间件组到路由组</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">group</span>([<span class="string">&#x27;middleware&#x27;</span> =&gt; [<span class="string">&#x27;admin&#x27;</span>]], function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/admin/users&#x27;</span>, <span class="string">&#x27;Admin\UserController@index&#x27;</span>);</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/admin/settings&#x27;</span>, <span class="string">&#x27;Admin\SettingsController@index&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// API 路由使用 API 中间件组</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">group</span>([<span class="string">&#x27;prefix&#x27;</span> =&gt; <span class="string">&#x27;api/v1&#x27;</span>, <span class="string">&#x27;middleware&#x27;</span> =&gt; [<span class="string">&#x27;api.v1&#x27;</span>]], function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/users&#x27;</span>, <span class="string">&#x27;Api\V1\UserController@index&#x27;</span>);</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/users&#x27;</span>, <span class="string">&#x27;Api\V1\UserController@store&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Laravel-内置中间件详解"><a href="#Laravel-内置中间件详解" class="headerlink" title="Laravel 内置中间件详解"></a>Laravel 内置中间件详解</h2><h3 id="身份验证中间件"><a href="#身份验证中间件" class="headerlink" title="身份验证中间件"></a>身份验证中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Auth</span>\<span class="title">Middleware</span>\<span class="title">Authenticate</span> <span class="keyword">as</span> <span class="title">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Authenticate</span> <span class="keyword">extends</span> <span class="title">Middleware</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取用户未通过身份验证时应重定向到的路径</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> string|null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">redirectTo</span>(<span class="params"><span class="variable">$request</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (! <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">expectsJson</span>()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">route</span>(<span class="string">&#x27;login&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CSRF-保护中间件"><a href="#CSRF-保护中间件" class="headerlink" title="CSRF 保护中间件"></a>CSRF 保护中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Http</span>\<span class="title">Middleware</span>\<span class="title">VerifyCsrfToken</span> <span class="keyword">as</span> <span class="title">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VerifyCsrfToken</span> <span class="keyword">extends</span> <span class="title">Middleware</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 应该从 CSRF 验证中排除的 URI</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$except</span> = [</span><br><span class="line">        <span class="string">&#x27;api/*&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;webhooks/*&#x27;</span>,</span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="频率限制中间件"><a href="#频率限制中间件" class="headerlink" title="频率限制中间件"></a>频率限制中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在路由中使用频率限制</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;throttle:60,1&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/api/users&#x27;</span>, <span class="string">&#x27;UserController@index&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义频率限制</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;throttle:10,1&#x27;</span>)-&gt;<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/api/search&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([<span class="string">&#x27;results&#x27;</span> =&gt; []]);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="中间件参数"><a href="#中间件参数" class="headerlink" title="中间件参数"></a>中间件参数</h2><h3 id="传递参数给中间件"><a href="#传递参数给中间件" class="headerlink" title="传递参数给中间件"></a>传递参数给中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CheckRole</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 检查用户角色的中间件</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  string  $role 需要的角色</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span>, <span class="variable">$role</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (! <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">user</span>() || ! <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">user</span>()-&gt;<span class="title function_ invoke__">hasRole</span>(<span class="variable">$role</span>)) &#123;</span><br><span class="line">            <span class="title function_ invoke__">abort</span>(<span class="number">403</span>, <span class="string">&#x27;权限不足&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在路由中传递参数"><a href="#在路由中传递参数" class="headerlink" title="在路由中传递参数"></a>在路由中传递参数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传递单个参数</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/admin&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">view</span>(<span class="string">&#x27;admin&#x27;</span>);</span><br><span class="line">&#125;)-&gt;<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;role:admin&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 传递多个参数</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/editor&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">view</span>(<span class="string">&#x27;editor&#x27;</span>);</span><br><span class="line">&#125;)-&gt;<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;role:admin,editor&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在路由组中使用参数</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">group</span>([<span class="string">&#x27;middleware&#x27;</span> =&gt; [<span class="string">&#x27;auth&#x27;</span>, <span class="string">&#x27;role:admin&#x27;</span>]], function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">resource</span>(<span class="string">&#x27;users&#x27;</span>, <span class="string">&#x27;UserController&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级中间件应用"><a href="#高级中间件应用" class="headerlink" title="高级中间件应用"></a>高级中间件应用</h2><h3 id="Terminable-中间件"><a href="#Terminable-中间件" class="headerlink" title="Terminable 中间件"></a>Terminable 中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LogAfterRequest</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理传入的请求</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 在响应发送到浏览器后执行任务</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Response  $response</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">terminate</span>(<span class="params"><span class="variable">$request</span>, <span class="variable">$response</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 记录请求日志</span></span><br><span class="line">        <span class="title class_">\Log</span>::<span class="title function_ invoke__">info</span>(<span class="string">&#x27;Request completed&#x27;</span>, [</span><br><span class="line">            <span class="string">&#x27;url&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">fullUrl</span>(),</span><br><span class="line">            <span class="string">&#x27;method&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">method</span>(),</span><br><span class="line">            <span class="string">&#x27;status&#x27;</span> =&gt; <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">getStatusCode</span>(),</span><br><span class="line">            <span class="string">&#x27;duration&#x27;</span> =&gt; <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>) - LARAVEL_START,</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="API-认证中间件"><a href="#API-认证中间件" class="headerlink" title="API 认证中间件"></a>API 认证中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Http</span>\<span class="title">Request</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiAuthenticate</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * API 认证中间件</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params">Request <span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$token</span> = <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">bearerToken</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable">$token</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([</span><br><span class="line">                <span class="string">&#x27;error&#x27;</span> =&gt; <span class="string">&#x27;Token 缺失&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;code&#x27;</span> =&gt; <span class="number">401</span></span><br><span class="line">            ], <span class="number">401</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 验证 token</span></span><br><span class="line">        <span class="variable">$user</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">validateToken</span>(<span class="variable">$token</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable">$user</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([</span><br><span class="line">                <span class="string">&#x27;error&#x27;</span> =&gt; <span class="string">&#x27;Token 无效&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;code&#x27;</span> =&gt; <span class="number">401</span></span><br><span class="line">            ], <span class="number">401</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将用户信息注入到请求中</span></span><br><span class="line">        <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">setUserResolver</span>(function () <span class="keyword">use</span> ($<span class="title">user</span>) &#123;</span><br><span class="line">            <span class="title">return</span> $<span class="title">user</span>;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 验证 API Token</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  string  $token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \App\Models\User|null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">validateToken</span>(<span class="params"><span class="variable">$token</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 实现 token 验证逻辑</span></span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">\App\Models\User</span>::<span class="title function_ invoke__">where</span>(<span class="string">&#x27;api_token&#x27;</span>, <span class="variable">$token</span>)-&gt;<span class="title function_ invoke__">first</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CORS-中间件"><a href="#CORS-中间件" class="headerlink" title="CORS 中间件"></a>CORS 中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cors</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理 CORS 跨域请求</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$response</span> = <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line"></span><br><span class="line">        <span class="variable">$response</span>-&gt;headers-&gt;<span class="title function_ invoke__">set</span>(<span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span>, <span class="string">&#x27;*&#x27;</span>);</span><br><span class="line">        <span class="variable">$response</span>-&gt;headers-&gt;<span class="title function_ invoke__">set</span>(<span class="string">&#x27;Access-Control-Allow-Methods&#x27;</span>, <span class="string">&#x27;GET, POST, PUT, DELETE, OPTIONS&#x27;</span>);</span><br><span class="line">        <span class="variable">$response</span>-&gt;headers-&gt;<span class="title function_ invoke__">set</span>(<span class="string">&#x27;Access-Control-Allow-Headers&#x27;</span>, <span class="string">&#x27;Content-Type, Authorization, X-Requested-With&#x27;</span>);</span><br><span class="line">        <span class="variable">$response</span>-&gt;headers-&gt;<span class="title function_ invoke__">set</span>(<span class="string">&#x27;Access-Control-Max-Age&#x27;</span>, <span class="string">&#x27;86400&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$response</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="中间件最佳实践"><a href="#中间件最佳实践" class="headerlink" title="中间件最佳实践"></a>中间件最佳实践</h2><h3 id="1-中间件顺序很重要"><a href="#1-中间件顺序很重要" class="headerlink" title="1. 中间件顺序很重要"></a>1. 中间件顺序很重要</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 正确的顺序</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">group</span>([</span><br><span class="line">    <span class="string">&#x27;middleware&#x27;</span> =&gt; [<span class="string">&#x27;cors&#x27;</span>, <span class="string">&#x27;auth:api&#x27;</span>, <span class="string">&#x27;permission&#x27;</span>]</span><br><span class="line">], function () &#123;</span><br><span class="line">    <span class="comment">// CORS 必须在认证之前，避免跨域问题</span></span><br><span class="line">    <span class="comment">// 认证必须在权限检查之前</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用中间件组简化配置"><a href="#2-使用中间件组简化配置" class="headerlink" title="2. 使用中间件组简化配置"></a>2. 使用中间件组简化配置</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义语义化的中间件组</span></span><br><span class="line"><span class="keyword">protected</span> <span class="variable">$middlewareGroups</span> = [</span><br><span class="line">    <span class="string">&#x27;admin.api&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;cors&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;auth:api&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;role:admin&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;throttle:100,1&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line">    </span><br><span class="line">    <span class="string">&#x27;user.web&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;web&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;auth&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;verified&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-中间件性能优化"><a href="#3-中间件性能优化" class="headerlink" title="3. 中间件性能优化"></a>3. 中间件性能优化</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Cache</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CacheMiddleware</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 缓存响应的中间件</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  int  $minutes 缓存时间（分钟）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span>, <span class="variable">$minutes</span> = <span class="number">60</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$key</span> = <span class="string">&#x27;response:&#x27;</span> . <span class="title function_ invoke__">md5</span>(<span class="variable">$request</span>-&gt;<span class="title function_ invoke__">fullUrl</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 检查缓存</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="title class_">Cache</span>::<span class="title function_ invoke__">has</span>(<span class="variable">$key</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title class_">Cache</span>::<span class="title function_ invoke__">get</span>(<span class="variable">$key</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 只缓存成功的 GET 请求</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$request</span>-&gt;<span class="title function_ invoke__">isMethod</span>(<span class="string">&#x27;GET&#x27;</span>) &amp;&amp; <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">getStatusCode</span>() === <span class="number">200</span>) &#123;</span><br><span class="line">            <span class="title class_">Cache</span>::<span class="title function_ invoke__">put</span>(<span class="variable">$key</span>, <span class="variable">$response</span>, <span class="title function_ invoke__">now</span>()-&gt;<span class="title function_ invoke__">addMinutes</span>(<span class="variable">$minutes</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$response</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-错误处理和日志记录"><a href="#4-错误处理和日志记录" class="headerlink" title="4. 错误处理和日志记录"></a>4. 错误处理和日志记录</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Log</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ErrorHandlingMiddleware</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 错误处理中间件</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (\<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="comment">// 记录错误日志</span></span><br><span class="line">            <span class="title class_">Log</span>::<span class="title function_ invoke__">error</span>(<span class="string">&#x27;中间件捕获异常&#x27;</span>, [</span><br><span class="line">                <span class="string">&#x27;exception&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>(),</span><br><span class="line">                <span class="string">&#x27;file&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getFile</span>(),</span><br><span class="line">                <span class="string">&#x27;line&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getLine</span>(),</span><br><span class="line">                <span class="string">&#x27;url&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">fullUrl</span>(),</span><br><span class="line">                <span class="string">&#x27;method&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">method</span>(),</span><br><span class="line">                <span class="string">&#x27;user_id&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">user</span>() ? <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">user</span>()-&gt;id : <span class="literal">null</span>,</span><br><span class="line">            ]);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 根据请求类型返回不同的错误响应</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$request</span>-&gt;<span class="title function_ invoke__">expectsJson</span>()) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([</span><br><span class="line">                    <span class="string">&#x27;error&#x27;</span> =&gt; <span class="string">&#x27;服务器内部错误&#x27;</span>,</span><br><span class="line">                    <span class="string">&#x27;code&#x27;</span> =&gt; <span class="number">500</span></span><br><span class="line">                ], <span class="number">500</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">redirect</span>()-&gt;<span class="title function_ invoke__">back</span>()-&gt;<span class="title function_ invoke__">with</span>(<span class="string">&#x27;error&#x27;</span>, <span class="string">&#x27;操作失败，请稍后重试&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="实际应用场景"><a href="#实际应用场景" class="headerlink" title="实际应用场景"></a>实际应用场景</h2><h3 id="1-API-版本控制"><a href="#1-API-版本控制" class="headerlink" title="1. API 版本控制"></a>1. API 版本控制</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiVersionMiddleware</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * API 版本控制中间件</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  string  $version 支持的版本</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span>, <span class="variable">$version</span> = <span class="string">&#x27;v1&#x27;</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$requestVersion</span> = <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">header</span>(<span class="string">&#x27;API-Version&#x27;</span>, <span class="string">&#x27;v1&#x27;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$requestVersion</span> !== <span class="variable">$version</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([</span><br><span class="line">                <span class="string">&#x27;error&#x27;</span> =&gt; <span class="string">&quot;不支持的 API 版本: <span class="subst">&#123;$requestVersion&#125;</span>&quot;</span>,</span><br><span class="line">                <span class="string">&#x27;supported_version&#x27;</span> =&gt; <span class="variable">$version</span></span><br><span class="line">            ], <span class="number">400</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 设置当前 API 版本</span></span><br><span class="line">        <span class="title function_ invoke__">config</span>([<span class="string">&#x27;app.api_version&#x27;</span> =&gt; <span class="variable">$version</span>]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-请求日志记录"><a href="#2-请求日志记录" class="headerlink" title="2. 请求日志记录"></a>2. 请求日志记录</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Log</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RequestLoggingMiddleware</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 请求日志记录中间件</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Closure  $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$startTime</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 记录请求开始</span></span><br><span class="line">        <span class="title class_">Log</span>::<span class="title function_ invoke__">info</span>(<span class="string">&#x27;请求开始&#x27;</span>, [</span><br><span class="line">            <span class="string">&#x27;url&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">fullUrl</span>(),</span><br><span class="line">            <span class="string">&#x27;method&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">method</span>(),</span><br><span class="line">            <span class="string">&#x27;ip&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">ip</span>(),</span><br><span class="line">            <span class="string">&#x27;user_agent&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">userAgent</span>(),</span><br><span class="line">            <span class="string">&#x27;user_id&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">user</span>() ? <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">user</span>()-&gt;id : <span class="literal">null</span>,</span><br><span class="line">        ]);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$duration</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>) - <span class="variable">$startTime</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 记录请求完成</span></span><br><span class="line">        <span class="title class_">Log</span>::<span class="title function_ invoke__">info</span>(<span class="string">&#x27;请求完成&#x27;</span>, [</span><br><span class="line">            <span class="string">&#x27;url&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">fullUrl</span>(),</span><br><span class="line">            <span class="string">&#x27;method&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">method</span>(),</span><br><span class="line">            <span class="string">&#x27;status&#x27;</span> =&gt; <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">getStatusCode</span>(),</span><br><span class="line">            <span class="string">&#x27;duration&#x27;</span> =&gt; <span class="title function_ invoke__">round</span>(<span class="variable">$duration</span> * <span class="number">1000</span>, <span class="number">2</span>) . <span class="string">&#x27;ms&#x27;</span>,</span><br><span class="line">        ]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$response</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Laravel 中间件是一个强大而灵活的功能，它提供了一种优雅的方式来处理 HTTP 请求的过滤和预处理。通过合理使用全局中间件、路由中间件和中间件组，我们可以：</p>
+<ol>
+<li><strong>提高代码复用性</strong>：将通用逻辑抽取到中间件中</li>
+<li><strong>增强安全性</strong>：实现身份验证、授权和 CSRF 保护</li>
+<li><strong>改善性能</strong>：通过缓存和频率限制优化应用性能</li>
+<li><strong>简化维护</strong>：集中管理横切关注点</li>
+<li><strong>提升用户体验</strong>：处理 CORS、错误处理等</li>
+</ol>
+<p>在实际开发中，建议根据项目需求合理设计中间件架构，注意中间件的执行顺序，并充分利用 Laravel 提供的内置中间件来快速构建安全、高效的 Web 应用程序。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Laravel/">Laravel</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Web%E5%BC%80%E5%8F%91/">Web开发</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Middleware/">Middleware</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/PHP/">PHP</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2024/linux/linux-performance-optimization-guide/"
+                                   title="Linux系统性能优化实战指南：7个核心优化策略提升服务器效率"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Linux系统性能优化实战指南：7个核心优化策略提升服务器效率</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2024/mysql/mysql-charset-collation/"
+                                   title="MySQL字符集与排序规则完全指南"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">MySQL字符集与排序规则完全指南</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">中间件基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">什么是中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">中间件的工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">创建自定义中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Artisan-%E5%91%BD%E4%BB%A4%E5%88%9B%E5%BB%BA"><span class="nav-text">使用 Artisan 命令创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%AD%E9%97%B4%E4%BB%B6%E9%80%BB%E8%BE%91"><span class="nav-text">实现中间件逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">注册中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">全局中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">路由中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E8%B7%AF%E7%94%B1%E4%B8%AD%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">在路由中使用中间件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84"><span class="nav-text">中间件组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84"><span class="nav-text">定义中间件组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84"><span class="nav-text">使用中间件组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Laravel-%E5%86%85%E7%BD%AE%E4%B8%AD%E9%97%B4%E4%BB%B6%E8%AF%A6%E8%A7%A3"><span class="nav-text">Laravel 内置中间件详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">身份验证中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF-%E4%BF%9D%E6%8A%A4%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">CSRF 保护中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%91%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">频率限制中间件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%8F%82%E6%95%B0"><span class="nav-text">中间件参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0%E7%BB%99%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">传递参数给中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E8%B7%AF%E7%94%B1%E4%B8%AD%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="nav-text">在路由中传递参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%BA%94%E7%94%A8"><span class="nav-text">高级中间件应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Terminable-%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">Terminable 中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-%E8%AE%A4%E8%AF%81%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">API 认证中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CORS-%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">CORS 中间件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">中间件最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%AD%E9%97%B4%E4%BB%B6%E9%A1%BA%E5%BA%8F%E5%BE%88%E9%87%8D%E8%A6%81"><span class="nav-text">1. 中间件顺序很重要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84%E7%AE%80%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="nav-text">2. 使用中间件组简化配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-text">3. 中间件性能优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E5%92%8C%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="nav-text">4. 错误处理和日志记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">实际应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-API-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-text">1. API 版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%AF%B7%E6%B1%82%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="nav-text">2. 请求日志记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">中间件基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">什么是中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">中间件的工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">创建自定义中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Artisan-%E5%91%BD%E4%BB%A4%E5%88%9B%E5%BB%BA"><span class="nav-text">使用 Artisan 命令创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%AD%E9%97%B4%E4%BB%B6%E9%80%BB%E8%BE%91"><span class="nav-text">实现中间件逻辑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">注册中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">全局中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">路由中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E8%B7%AF%E7%94%B1%E4%B8%AD%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">在路由中使用中间件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84"><span class="nav-text">中间件组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84"><span class="nav-text">定义中间件组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84"><span class="nav-text">使用中间件组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Laravel-%E5%86%85%E7%BD%AE%E4%B8%AD%E9%97%B4%E4%BB%B6%E8%AF%A6%E8%A7%A3"><span class="nav-text">Laravel 内置中间件详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">身份验证中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF-%E4%BF%9D%E6%8A%A4%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">CSRF 保护中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%91%E7%8E%87%E9%99%90%E5%88%B6%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">频率限制中间件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%8F%82%E6%95%B0"><span class="nav-text">中间件参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0%E7%BB%99%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">传递参数给中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E8%B7%AF%E7%94%B1%E4%B8%AD%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="nav-text">在路由中传递参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%BA%94%E7%94%A8"><span class="nav-text">高级中间件应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Terminable-%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">Terminable 中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-%E8%AE%A4%E8%AF%81%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">API 认证中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CORS-%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">CORS 中间件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">中间件最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%AD%E9%97%B4%E4%BB%B6%E9%A1%BA%E5%BA%8F%E5%BE%88%E9%87%8D%E8%A6%81"><span class="nav-text">1. 中间件顺序很重要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84%E7%AE%80%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="nav-text">2. 使用中间件组简化配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-text">3. 中间件性能优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E5%92%8C%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="nav-text">4. 错误处理和日志记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">实际应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-API-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-text">1. API 版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%AF%B7%E6%B1%82%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="nav-text">2. 请求日志记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

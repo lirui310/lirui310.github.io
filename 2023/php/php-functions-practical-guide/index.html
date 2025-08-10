@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            PHP函数编程实战指南：从基础到高级应用 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        PHP函数编程实战指南：从基础到高级应用
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-02-28 09:15:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/php/">php</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/PHP%E5%9F%BA%E7%A1%80/">PHP基础</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%87%BD%E6%95%B0/">函数</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/">参数传递</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/">作用域</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0/">匿名函数</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="PHP函数编程实战指南：从基础到高级应用"><a href="#PHP函数编程实战指南：从基础到高级应用" class="headerlink" title="PHP函数编程实战指南：从基础到高级应用"></a>PHP函数编程实战指南：从基础到高级应用</h1><p>函数是PHP编程的核心概念之一，也是代码复用和模块化的基础。在我多年的PHP开发经验中，我发现很多初学者对函数的理解还停留在表面。今天我想分享一些关于PHP函数的深入知识和实用技巧。</p>
+<h2 id="函数的基本定义和调用"><a href="#函数的基本定义和调用" class="headerlink" title="函数的基本定义和调用"></a>函数的基本定义和调用</h2><h3 id="1-基本语法"><a href="#1-基本语法" class="headerlink" title="1. 基本语法"></a>1. 基本语法</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 基本函数定义</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">greet</span>(<span class="params"><span class="variable">$name</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;你好，&quot;</span> . <span class="variable">$name</span> . <span class="string">&quot;！&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数调用</span></span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">greet</span>(<span class="string">&quot;张三&quot;</span>);  <span class="comment">// 输出：你好，张三！</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 无参数函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCurrentTime</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">date</span>(<span class="string">&quot;Y-m-d H:i:s&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;当前时间：&quot;</span> . <span class="title function_ invoke__">getCurrentTime</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-函数命名规范"><a href="#2-函数命名规范" class="headerlink" title="2. 函数命名规范"></a>2. 函数命名规范</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 好的函数命名（动词开头，描述性强）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calculateTotalPrice</span>(<span class="params"><span class="variable">$price</span>, <span class="variable">$tax</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$price</span> * (<span class="number">1</span> + <span class="variable">$tax</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">validateEmail</span>(<span class="params"><span class="variable">$email</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">filter_var</span>(<span class="variable">$email</span>, FILTER_VALIDATE_EMAIL) !== <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserById</span>(<span class="params"><span class="variable">$id</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 模拟数据库查询</span></span><br><span class="line">    <span class="keyword">return</span> [<span class="string">&quot;id&quot;</span> =&gt; <span class="variable">$id</span>, <span class="string">&quot;name&quot;</span> =&gt; <span class="string">&quot;用户&quot;</span> . <span class="variable">$id</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="variable">$price</span> = <span class="title function_ invoke__">calculateTotalPrice</span>(<span class="number">100</span>, <span class="number">0.1</span>);</span><br><span class="line"><span class="variable">$isValid</span> = <span class="title function_ invoke__">validateEmail</span>(<span class="string">&quot;test@example.com&quot;</span>);</span><br><span class="line"><span class="variable">$user</span> = <span class="title function_ invoke__">getUserById</span>(<span class="number">123</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="参数传递详解"><a href="#参数传递详解" class="headerlink" title="参数传递详解"></a>参数传递详解</h2><h3 id="1-值传递（默认方式）"><a href="#1-值传递（默认方式）" class="headerlink" title="1. 值传递（默认方式）"></a>1. 值传递（默认方式）</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">modifyValue</span>(<span class="params"><span class="variable">$value</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$value</span> = <span class="variable">$value</span> * <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;函数内部：<span class="subst">$value</span>\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$number</span> = <span class="number">10</span>;</span><br><span class="line"><span class="title function_ invoke__">modifyValue</span>(<span class="variable">$number</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;函数外部：<span class="subst">$number</span>\n&quot;</span>;  <span class="comment">// 仍然是10，原值未改变</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-引用传递"><a href="#2-引用传递" class="headerlink" title="2. 引用传递"></a>2. 引用传递</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">modifyByReference</span>(<span class="params">&amp;<span class="variable">$value</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$value</span> = <span class="variable">$value</span> * <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;函数内部：<span class="subst">$value</span>\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$number</span> = <span class="number">10</span>;</span><br><span class="line"><span class="title function_ invoke__">modifyByReference</span>(<span class="variable">$number</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;函数外部：<span class="subst">$number</span>\n&quot;</span>;  <span class="comment">// 变成20，原值被修改</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实际应用：交换两个变量的值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">swap</span>(<span class="params">&amp;<span class="variable">$a</span>, &amp;<span class="variable">$b</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$temp</span> = <span class="variable">$a</span>;</span><br><span class="line">    <span class="variable">$a</span> = <span class="variable">$b</span>;</span><br><span class="line">    <span class="variable">$b</span> = <span class="variable">$temp</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$x</span> = <span class="number">5</span>;</span><br><span class="line"><span class="variable">$y</span> = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;交换前：x=<span class="subst">$x</span>, y=<span class="subst">$y</span>\n&quot;</span>;</span><br><span class="line"><span class="title function_ invoke__">swap</span>(<span class="variable">$x</span>, <span class="variable">$y</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;交换后：x=<span class="subst">$x</span>, y=<span class="subst">$y</span>\n&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-默认参数"><a href="#3-默认参数" class="headerlink" title="3. 默认参数"></a>3. 默认参数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 默认参数必须放在最后</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createUser</span>(<span class="params"><span class="variable">$name</span>, <span class="variable">$age</span> = <span class="number">18</span>, <span class="variable">$city</span> = <span class="string">&quot;北京&quot;</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        <span class="string">&quot;name&quot;</span> =&gt; <span class="variable">$name</span>,</span><br><span class="line">        <span class="string">&quot;age&quot;</span> =&gt; <span class="variable">$age</span>,</span><br><span class="line">        <span class="string">&quot;city&quot;</span> =&gt; <span class="variable">$city</span></span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不同的调用方式</span></span><br><span class="line"><span class="variable">$user1</span> = <span class="title function_ invoke__">createUser</span>(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line"><span class="variable">$user2</span> = <span class="title function_ invoke__">createUser</span>(<span class="string">&quot;李四&quot;</span>, <span class="number">25</span>);</span><br><span class="line"><span class="variable">$user3</span> = <span class="title function_ invoke__">createUser</span>(<span class="string">&quot;王五&quot;</span>, <span class="number">30</span>, <span class="string">&quot;上海&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="variable">$user1</span>);</span><br><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="variable">$user2</span>);</span><br><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="variable">$user3</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-可变参数"><a href="#4-可变参数" class="headerlink" title="4. 可变参数"></a>4. 可变参数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// PHP 5.6+ 使用...语法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">...<span class="variable">$numbers</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$total</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$numbers</span> <span class="keyword">as</span> <span class="variable">$number</span>) &#123;</span><br><span class="line">        <span class="variable">$total</span> += <span class="variable">$number</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$total</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">sum</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>) . <span class="string">&quot;\n&quot;</span>;  <span class="comment">// 输出：15</span></span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">sum</span>(<span class="number">10</span>, <span class="number">20</span>) . <span class="string">&quot;\n&quot;</span>;         <span class="comment">// 输出：30</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 传统方式（PHP 5.6之前）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sumTraditional</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$args</span> = <span class="title function_ invoke__">func_get_args</span>();</span><br><span class="line">    <span class="variable">$total</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$args</span> <span class="keyword">as</span> <span class="variable">$arg</span>) &#123;</span><br><span class="line">        <span class="variable">$total</span> += <span class="variable">$arg</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$total</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">sumTraditional</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) . <span class="string">&quot;\n&quot;</span>;  <span class="comment">// 输出：6</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-类型声明（PHP-7-）"><a href="#5-类型声明（PHP-7-）" class="headerlink" title="5. 类型声明（PHP 7+）"></a>5. 类型声明（PHP 7+）</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 标量类型声明</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">divide</span>(<span class="params"><span class="keyword">float</span> <span class="variable">$a</span>, <span class="keyword">float</span> <span class="variable">$b</span></span>): <span class="title">float</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$b</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&quot;除数不能为零&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$a</span> / <span class="variable">$b</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数组类型声明</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processUsers</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$users</span></span>): <span class="title">int</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">count</span>(<span class="variable">$users</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可空类型（PHP 7.1+）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">findUser</span>(<span class="params">?<span class="keyword">int</span> <span class="variable">$id</span></span>): ?<span class="title">array</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$id</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 模拟查找用户</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$id</span> &gt; <span class="number">0</span> ? [<span class="string">&quot;id&quot;</span> =&gt; <span class="variable">$id</span>, <span class="string">&quot;name&quot;</span> =&gt; <span class="string">&quot;用户<span class="subst">$id</span>&quot;</span>] : <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">divide</span>(<span class="number">10.5</span>, <span class="number">2.5</span>) . <span class="string">&quot;\n&quot;</span>;  <span class="comment">// 输出：4.2</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">processUsers</span>([<span class="string">&quot;user1&quot;</span>, <span class="string">&quot;user2&quot;</span>]) . <span class="string">&quot;\n&quot;</span>;  <span class="comment">// 输出：2</span></span><br><span class="line">    </span><br><span class="line">    <span class="variable">$user</span> = <span class="title function_ invoke__">findUser</span>(<span class="number">123</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$user</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;找到用户：&quot;</span> . <span class="variable">$user</span>[<span class="string">&quot;name&quot;</span>] . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;错误：&quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="变量作用域和静态变量"><a href="#变量作用域和静态变量" class="headerlink" title="变量作用域和静态变量"></a>变量作用域和静态变量</h2><h3 id="1-局部作用域和全局作用域"><a href="#1-局部作用域和全局作用域" class="headerlink" title="1. 局部作用域和全局作用域"></a>1. 局部作用域和全局作用域</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$globalVar</span> = <span class="string">&quot;我是全局变量&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">testScope</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$localVar</span> = <span class="string">&quot;我是局部变量&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 访问全局变量的方法1：使用global关键字</span></span><br><span class="line">    <span class="keyword">global</span> <span class="variable">$globalVar</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;方法1：<span class="subst">$globalVar</span>\n&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 访问全局变量的方法2：使用$GLOBALS超全局数组</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;方法2：&quot;</span> . <span class="variable">$GLOBALS</span>[<span class="string">&#x27;globalVar&#x27;</span>] . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 修改全局变量</span></span><br><span class="line">    <span class="variable">$GLOBALS</span>[<span class="string">&#x27;globalVar&#x27;</span>] = <span class="string">&quot;全局变量被修改了&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">testScope</span>();</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;修改后的全局变量：<span class="subst">$globalVar</span>\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数外部无法访问局部变量</span></span><br><span class="line"><span class="comment">// echo $localVar;  // 这会产生错误</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-静态变量"><a href="#2-静态变量" class="headerlink" title="2. 静态变量"></a>2. 静态变量</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 静态变量保持其值在函数调用之间</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">static</span> <span class="variable">$count</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="variable">$count</span>++;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;调用次数：<span class="subst">$count</span>\n&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$count</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">counter</span>();  <span class="comment">// 输出：调用次数：1</span></span><br><span class="line"><span class="title function_ invoke__">counter</span>();  <span class="comment">// 输出：调用次数：2</span></span><br><span class="line"><span class="title function_ invoke__">counter</span>();  <span class="comment">// 输出：调用次数：3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实际应用：单例模式的简单实现</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getDatabase</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">static</span> <span class="variable">$db</span> = <span class="literal">null</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$db</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;创建数据库连接\n&quot;</span>;</span><br><span class="line">        <span class="variable">$db</span> = <span class="keyword">new</span> <span class="built_in">stdClass</span>();  <span class="comment">// 模拟数据库连接</span></span><br><span class="line">        <span class="variable">$db</span>-&gt;connected = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$db</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$db1</span> = <span class="title function_ invoke__">getDatabase</span>();  <span class="comment">// 输出：创建数据库连接</span></span><br><span class="line"><span class="variable">$db2</span> = <span class="title function_ invoke__">getDatabase</span>();  <span class="comment">// 不会再次创建</span></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="variable">$db1</span> === <span class="variable">$db2</span>);  <span class="comment">// 输出：bool(true)</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="匿名函数和闭包"><a href="#匿名函数和闭包" class="headerlink" title="匿名函数和闭包"></a>匿名函数和闭包</h2><h3 id="1-基本匿名函数"><a href="#1-基本匿名函数" class="headerlink" title="1. 基本匿名函数"></a>1. 基本匿名函数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 将匿名函数赋值给变量</span></span><br><span class="line"><span class="variable">$greet</span> = <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$name</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;你好，<span class="subst">$name</span>！&quot;</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$greet</span>(<span class="string">&quot;李四&quot;</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 作为回调函数使用</span></span><br><span class="line"><span class="variable">$numbers</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="variable">$squared</span> = <span class="title function_ invoke__">array_map</span>(function(<span class="variable">$n</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$n</span> * <span class="variable">$n</span>;</span><br><span class="line">&#125;, <span class="variable">$numbers</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="variable">$squared</span>);  <span class="comment">// [1, 4, 9, 16, 25]</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-闭包（使用use关键字）"><a href="#2-闭包（使用use关键字）" class="headerlink" title="2. 闭包（使用use关键字）"></a>2. 闭包（使用use关键字）</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$message</span> = <span class="string">&quot;外部变量&quot;</span>;</span><br><span class="line"><span class="variable">$multiplier</span> = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用use关键字捕获外部变量</span></span><br><span class="line"><span class="variable">$closure</span> = <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$name</span></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$message</span>, <span class="variable">$multiplier</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;<span class="subst">$message</span>：<span class="subst">$name</span>，乘数是<span class="subst">$multiplier</span>&quot;</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$closure</span>(<span class="string">&quot;张三&quot;</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过引用捕获外部变量</span></span><br><span class="line"><span class="variable">$counter</span> = <span class="number">0</span>;</span><br><span class="line"><span class="variable">$increment</span> = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) <span class="keyword">use</span> (<span class="params">&amp;<span class="variable">$counter</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$counter</span>++;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;计数器：<span class="subst">$counter</span>\n&quot;</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="variable">$increment</span>();  <span class="comment">// 输出：计数器：1</span></span><br><span class="line"><span class="variable">$increment</span>();  <span class="comment">// 输出：计数器：2</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;外部计数器：<span class="subst">$counter</span>\n&quot;</span>;  <span class="comment">// 输出：外部计数器：2</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-高阶函数应用"><a href="#3-高阶函数应用" class="headerlink" title="3. 高阶函数应用"></a>3. 高阶函数应用</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 创建一个返回函数的函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createMultiplier</span>(<span class="params"><span class="variable">$factor</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$number</span></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$factor</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$number</span> * <span class="variable">$factor</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$double</span> = <span class="title function_ invoke__">createMultiplier</span>(<span class="number">2</span>);</span><br><span class="line"><span class="variable">$triple</span> = <span class="title function_ invoke__">createMultiplier</span>(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$double</span>(<span class="number">5</span>) . <span class="string">&quot;\n&quot;</span>;   <span class="comment">// 输出：10</span></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$triple</span>(<span class="number">5</span>) . <span class="string">&quot;\n&quot;</span>;   <span class="comment">// 输出：15</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数组合</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">compose</span>(<span class="params"><span class="variable">$f</span>, <span class="variable">$g</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$x</span></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$f</span>, <span class="variable">$g</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$f</span>(<span class="variable">$g</span>(<span class="variable">$x</span>));</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$addOne</span> = <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$x</span></span>) </span>&#123; <span class="keyword">return</span> <span class="variable">$x</span> + <span class="number">1</span>; &#125;;</span><br><span class="line"><span class="variable">$double</span> = <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$x</span></span>) </span>&#123; <span class="keyword">return</span> <span class="variable">$x</span> * <span class="number">2</span>; &#125;;</span><br><span class="line"></span><br><span class="line"><span class="variable">$addOneThenDouble</span> = <span class="title function_ invoke__">compose</span>(<span class="variable">$double</span>, <span class="variable">$addOne</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$addOneThenDouble</span>(<span class="number">5</span>) . <span class="string">&quot;\n&quot;</span>;  <span class="comment">// 输出：12 ((5+1)*2)</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="递归函数"><a href="#递归函数" class="headerlink" title="递归函数"></a>递归函数</h2><h3 id="1-基本递归"><a href="#1-基本递归" class="headerlink" title="1. 基本递归"></a>1. 基本递归</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 计算阶乘</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">factorial</span>(<span class="params"><span class="variable">$n</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$n</span> &lt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">// 基础情况</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$n</span> * <span class="title function_ invoke__">factorial</span>(<span class="variable">$n</span> - <span class="number">1</span>);  <span class="comment">// 递归调用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;5的阶乘：&quot;</span> . <span class="title function_ invoke__">factorial</span>(<span class="number">5</span>) . <span class="string">&quot;\n&quot;</span>;  <span class="comment">// 输出：120</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 斐波那契数列</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fibonacci</span>(<span class="params"><span class="variable">$n</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$n</span> &lt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$n</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">fibonacci</span>(<span class="variable">$n</span> - <span class="number">1</span>) + <span class="title function_ invoke__">fibonacci</span>(<span class="variable">$n</span> - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;第10个斐波那契数：&quot;</span> . <span class="title function_ invoke__">fibonacci</span>(<span class="number">10</span>) . <span class="string">&quot;\n&quot;</span>;  <span class="comment">// 输出：55</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-尾递归优化"><a href="#2-尾递归优化" class="headerlink" title="2. 尾递归优化"></a>2. 尾递归优化</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 普通递归（可能导致栈溢出）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">factorialNormal</span>(<span class="params"><span class="variable">$n</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$n</span> &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$n</span> * <span class="title function_ invoke__">factorialNormal</span>(<span class="variable">$n</span> - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尾递归版本（更高效）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">factorialTail</span>(<span class="params"><span class="variable">$n</span>, <span class="variable">$acc</span> = <span class="number">1</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$n</span> &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="variable">$acc</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">factorialTail</span>(<span class="variable">$n</span> - <span class="number">1</span>, <span class="variable">$n</span> * <span class="variable">$acc</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;普通递归：&quot;</span> . <span class="title function_ invoke__">factorialNormal</span>(<span class="number">5</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;尾递归：&quot;</span> . <span class="title function_ invoke__">factorialTail</span>(<span class="number">5</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-递归遍历目录"><a href="#3-递归遍历目录" class="headerlink" title="3. 递归遍历目录"></a>3. 递归遍历目录</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">listDirectory</span>(<span class="params"><span class="variable">$dir</span>, <span class="variable">$level</span> = <span class="number">0</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$indent</span> = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&quot;  &quot;</span>, <span class="variable">$level</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">is_dir</span>(<span class="variable">$dir</span>)) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$indent</span> . <span class="string">&quot;[目录] &quot;</span> . <span class="title function_ invoke__">basename</span>(<span class="variable">$dir</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$files</span> = <span class="title function_ invoke__">scandir</span>(<span class="variable">$dir</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable">$files</span> <span class="keyword">as</span> <span class="variable">$file</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$file</span> != <span class="string">&quot;.&quot;</span> &amp;&amp; <span class="variable">$file</span> != <span class="string">&quot;..&quot;</span>) &#123;</span><br><span class="line">                <span class="title function_ invoke__">listDirectory</span>(<span class="variable">$dir</span> . <span class="string">&quot;/&quot;</span> . <span class="variable">$file</span>, <span class="variable">$level</span> + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$indent</span> . <span class="string">&quot;[文件] &quot;</span> . <span class="title function_ invoke__">basename</span>(<span class="variable">$dir</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例（注意：这里只是演示，实际使用时请确保目录存在）</span></span><br><span class="line"><span class="comment">// listDirectory(&quot;/path/to/directory&quot;);</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="错误处理和异常"><a href="#错误处理和异常" class="headerlink" title="错误处理和异常"></a>错误处理和异常</h2><h3 id="1-基本错误处理"><a href="#1-基本错误处理" class="headerlink" title="1. 基本错误处理"></a>1. 基本错误处理</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">safeDivide</span>(<span class="params"><span class="variable">$a</span>, <span class="variable">$b</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$b</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="title function_ invoke__">trigger_error</span>(<span class="string">&quot;除数不能为零&quot;</span>, E_USER_ERROR);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$a</span> / <span class="variable">$b</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置错误处理函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">customErrorHandler</span>(<span class="params"><span class="variable">$errno</span>, <span class="variable">$errstr</span>, <span class="variable">$errfile</span>, <span class="variable">$errline</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;错误 [<span class="subst">$errno</span>]: <span class="subst">$errstr</span> 在文件 <span class="subst">$errfile</span> 第 <span class="subst">$errline</span> 行\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">set_error_handler</span>(<span class="string">&quot;customErrorHandler&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$result</span> = <span class="title function_ invoke__">safeDivide</span>(<span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-异常处理"><a href="#2-异常处理" class="headerlink" title="2. 异常处理"></a>2. 异常处理</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MathException</span> <span class="keyword">extends</span> <span class="title">Exception</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">divide</span>(<span class="params"><span class="variable">$a</span>, <span class="variable">$b</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$b</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">MathException</span>(<span class="string">&quot;除数不能为零&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$a</span> / <span class="variable">$b</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">calculateAverage</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$numbers</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$numbers</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&quot;数组不能为空&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="variable">$sum</span> = <span class="title function_ invoke__">array_sum</span>(<span class="variable">$numbers</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$sum</span> / <span class="title function_ invoke__">count</span>(<span class="variable">$numbers</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用try-catch处理异常</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">divide</span>(<span class="number">10</span>, <span class="number">2</span>) . <span class="string">&quot;\n&quot;</span>;  <span class="comment">// 正常执行</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">divide</span>(<span class="number">10</span>, <span class="number">0</span>) . <span class="string">&quot;\n&quot;</span>;  <span class="comment">// 抛出异常</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (MathException <span class="variable">$e</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;数学错误：&quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;其他错误：&quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;清理工作\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="variable">$avg</span> = <span class="title function_ invoke__">calculateAverage</span>([]);</span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="built_in">InvalidArgumentException</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;参数错误：&quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="函数的高级应用"><a href="#函数的高级应用" class="headerlink" title="函数的高级应用"></a>函数的高级应用</h2><h3 id="1-回调函数"><a href="#1-回调函数" class="headerlink" title="1. 回调函数"></a>1. 回调函数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 定义一些回调函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processSuccess</span>(<span class="params"><span class="variable">$data</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;处理成功：&quot;</span> . <span class="title function_ invoke__">json_encode</span>(<span class="variable">$data</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processError</span>(<span class="params"><span class="variable">$error</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;处理失败：<span class="subst">$error</span>\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用回调函数的主函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processData</span>(<span class="params"><span class="variable">$data</span>, <span class="variable">$successCallback</span>, <span class="variable">$errorCallback</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">is_array</span>(<span class="variable">$data</span>) &amp;&amp; !<span class="keyword">empty</span>(<span class="variable">$data</span>)) &#123;</span><br><span class="line">        <span class="variable">$successCallback</span>(<span class="variable">$data</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="variable">$errorCallback</span>(<span class="string">&quot;数据无效&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="title function_ invoke__">processData</span>([<span class="string">&quot;name&quot;</span> =&gt; <span class="string">&quot;张三&quot;</span>], <span class="string">&quot;processSuccess&quot;</span>, <span class="string">&quot;processError&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">processData</span>(<span class="literal">null</span>, <span class="string">&quot;processSuccess&quot;</span>, <span class="string">&quot;processError&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用匿名函数作为回调</span></span><br><span class="line"><span class="title function_ invoke__">processData</span>(</span><br><span class="line">    [<span class="string">&quot;age&quot;</span> =&gt; <span class="number">25</span>],</span><br><span class="line">    function(<span class="variable">$data</span>) &#123; <span class="keyword">echo</span> <span class="string">&quot;匿名成功回调：&quot;</span> . <span class="title function_ invoke__">json_encode</span>(<span class="variable">$data</span>) . <span class="string">&quot;\n&quot;</span>; &#125;,</span><br><span class="line">    <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$error</span></span>) </span>&#123; <span class="keyword">echo</span> <span class="string">&quot;匿名错误回调：<span class="subst">$error</span>\n&quot;</span>; &#125;</span><br><span class="line">);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-函数缓存（记忆化）"><a href="#2-函数缓存（记忆化）" class="headerlink" title="2. 函数缓存（记忆化）"></a>2. 函数缓存（记忆化）</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">memoize</span>(<span class="params"><span class="variable">$func</span></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">static</span> <span class="variable">$cache</span> = [];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$func</span>, &amp;<span class="variable">$cache</span></span>) </span>&#123;</span><br><span class="line">        <span class="variable">$args</span> = <span class="title function_ invoke__">func_get_args</span>();</span><br><span class="line">        <span class="variable">$key</span> = <span class="title function_ invoke__">serialize</span>(<span class="variable">$args</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">isset</span>(<span class="variable">$cache</span>[<span class="variable">$key</span>])) &#123;</span><br><span class="line">            <span class="variable">$cache</span>[<span class="variable">$key</span>] = <span class="title function_ invoke__">call_user_func_array</span>(<span class="variable">$func</span>, <span class="variable">$args</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$cache</span>[<span class="variable">$key</span>];</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 原始的斐波那契函数（效率低）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fibonacciSlow</span>(<span class="params"><span class="variable">$n</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$n</span> &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="variable">$n</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">fibonacciSlow</span>(<span class="variable">$n</span> - <span class="number">1</span>) + <span class="title function_ invoke__">fibonacciSlow</span>(<span class="variable">$n</span> - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用记忆化优化</span></span><br><span class="line"><span class="variable">$fibonacciFast</span> = <span class="title function_ invoke__">memoize</span>(<span class="string">&#x27;fibonacciSlow&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;慢速版本：&quot;</span> . <span class="title function_ invoke__">fibonacciSlow</span>(<span class="number">30</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;耗时：&quot;</span> . (<span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>) - <span class="variable">$start</span>) . <span class="string">&quot;秒\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;快速版本：&quot;</span> . <span class="variable">$fibonacciFast</span>(<span class="number">30</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;耗时：&quot;</span> . (<span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>) - <span class="variable">$start</span>) . <span class="string">&quot;秒\n&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-函数装饰器"><a href="#3-函数装饰器" class="headerlink" title="3. 函数装饰器"></a>3. 函数装饰器</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">timer</span>(<span class="params"><span class="variable">$func</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$func</span></span>) </span>&#123;</span><br><span class="line">        <span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line">        <span class="variable">$result</span> = <span class="title function_ invoke__">call_user_func_array</span>(<span class="variable">$func</span>, <span class="title function_ invoke__">func_get_args</span>());</span><br><span class="line">        <span class="variable">$end</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;函数执行时间：&quot;</span> . (<span class="variable">$end</span> - <span class="variable">$start</span>) . <span class="string">&quot;秒\n&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">logger</span>(<span class="params"><span class="variable">$func</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$func</span></span>) </span>&#123;</span><br><span class="line">        <span class="variable">$args</span> = <span class="title function_ invoke__">func_get_args</span>();</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;调用函数，参数：&quot;</span> . <span class="title function_ invoke__">json_encode</span>(<span class="variable">$args</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$result</span> = <span class="title function_ invoke__">call_user_func_array</span>(<span class="variable">$func</span>, <span class="variable">$args</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;函数返回：&quot;</span> . <span class="title function_ invoke__">json_encode</span>(<span class="variable">$result</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 原始函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">slowFunction</span>(<span class="params"><span class="variable">$n</span></span>) </span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">sleep</span>(<span class="number">1</span>);  <span class="comment">// 模拟耗时操作</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$n</span> * <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 应用装饰器</span></span><br><span class="line"><span class="variable">$timedFunction</span> = <span class="title function_ invoke__">timer</span>(<span class="string">&#x27;slowFunction&#x27;</span>);</span><br><span class="line"><span class="variable">$loggedFunction</span> = <span class="title function_ invoke__">logger</span>(<span class="variable">$timedFunction</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$result</span> = <span class="variable">$loggedFunction</span>(<span class="number">5</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="常见错误和最佳实践"><a href="#常见错误和最佳实践" class="headerlink" title="常见错误和最佳实践"></a>常见错误和最佳实践</h2><h3 id="1-避免全局变量污染"><a href="#1-避免全局变量污染" class="headerlink" title="1. 避免全局变量污染"></a>1. 避免全局变量污染</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 不好的做法</span></span><br><span class="line"><span class="variable">$config</span> = [<span class="string">&quot;db_host&quot;</span> =&gt; <span class="string">&quot;localhost&quot;</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getDbHost</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">global</span> <span class="variable">$config</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$config</span>[<span class="string">&quot;db_host&quot;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更好的做法：使用参数传递</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getDbHostBetter</span>(<span class="params"><span class="variable">$config</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$config</span>[<span class="string">&quot;db_host&quot;</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 最佳做法：使用类或命名空间封装</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Config</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">static</span> <span class="variable">$config</span> = [<span class="string">&quot;db_host&quot;</span> =&gt; <span class="string">&quot;localhost&quot;</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params"><span class="variable">$key</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">self</span>::<span class="variable">$config</span>[<span class="variable">$key</span>] ?? <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="title class_">Config</span>::<span class="title function_ invoke__">get</span>(<span class="string">&quot;db_host&quot;</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-函数单一职责原则"><a href="#2-函数单一职责原则" class="headerlink" title="2. 函数单一职责原则"></a>2. 函数单一职责原则</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 不好的做法：一个函数做太多事情</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processUserBad</span>(<span class="params"><span class="variable">$userData</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 验证数据</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$userData</span>[<span class="string">&quot;name&quot;</span>])) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;姓名不能为空&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 保存到数据库</span></span><br><span class="line">    <span class="comment">// ... 数据库操作代码</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 发送邮件</span></span><br><span class="line">    <span class="comment">// ... 邮件发送代码</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 记录日志</span></span><br><span class="line">    <span class="comment">// ... 日志记录代码</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 好的做法：拆分成多个函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">validateUser</span>(<span class="params"><span class="variable">$userData</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$userData</span>[<span class="string">&quot;name&quot;</span>])) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;姓名不能为空&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">saveUser</span>(<span class="params"><span class="variable">$userData</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 数据库保存逻辑</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendWelcomeEmail</span>(<span class="params"><span class="variable">$userData</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 邮件发送逻辑</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">logUserCreation</span>(<span class="params"><span class="variable">$userData</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 日志记录逻辑</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processUserGood</span>(<span class="params"><span class="variable">$userData</span></span>) </span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">validateUser</span>(<span class="variable">$userData</span>);</span><br><span class="line">    <span class="title function_ invoke__">saveUser</span>(<span class="variable">$userData</span>);</span><br><span class="line">    <span class="title function_ invoke__">sendWelcomeEmail</span>(<span class="variable">$userData</span>);</span><br><span class="line">    <span class="title function_ invoke__">logUserCreation</span>(<span class="variable">$userData</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-合理使用类型声明"><a href="#3-合理使用类型声明" class="headerlink" title="3. 合理使用类型声明"></a>3. 合理使用类型声明</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// PHP 7.4+ 支持属性类型声明</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$name</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> <span class="variable">$age</span>;</span><br><span class="line">    <span class="keyword">private</span> ?<span class="keyword">string</span> <span class="variable">$email</span>;  <span class="comment">// 可空类型</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$name</span>, <span class="keyword">int</span> <span class="variable">$age</span>, ?<span class="keyword">string</span> <span class="variable">$email</span> = <span class="literal">null</span></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;name = <span class="variable">$name</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;age = <span class="variable">$age</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;email = <span class="variable">$email</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getName</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;name;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getAge</span>(<span class="params"></span>): <span class="title">int</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;age;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getEmail</span>(<span class="params"></span>): ?<span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;email;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用类型声明的函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processUsers</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$users</span></span>): <span class="title">int</span> </span>&#123;</span><br><span class="line">    <span class="variable">$count</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$users</span> <span class="keyword">as</span> <span class="variable">$user</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$user</span> <span class="keyword">instanceof</span> User) &#123;</span><br><span class="line">            <span class="variable">$count</span>++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$count</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="性能优化技巧"><a href="#性能优化技巧" class="headerlink" title="性能优化技巧"></a>性能优化技巧</h2><h3 id="1-避免重复计算"><a href="#1-避免重复计算" class="headerlink" title="1. 避免重复计算"></a>1. 避免重复计算</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 不好的做法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processItems</span>(<span class="params"><span class="variable">$items</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="title function_ invoke__">count</span>(<span class="variable">$items</span>); <span class="variable">$i</span>++) &#123;  <span class="comment">// 每次循环都调用count()</span></span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$items</span>[<span class="variable">$i</span>] . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 好的做法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processItemsBetter</span>(<span class="params"><span class="variable">$items</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$count</span> = <span class="title function_ invoke__">count</span>(<span class="variable">$items</span>);  <span class="comment">// 只调用一次count()</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$count</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$items</span>[<span class="variable">$i</span>] . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 最佳做法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processItemsBest</span>(<span class="params"><span class="variable">$items</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$items</span> <span class="keyword">as</span> <span class="variable">$item</span>) &#123;  <span class="comment">// 使用foreach更高效</span></span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$item</span> . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-合理使用引用传递"><a href="#2-合理使用引用传递" class="headerlink" title="2. 合理使用引用传递"></a>2. 合理使用引用传递</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 对于大数组，使用引用传递避免复制</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processLargeArray</span>(<span class="params"><span class="keyword">array</span> &amp;<span class="variable">$largeArray</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 直接操作原数组，不产生副本</span></span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$largeArray</span> <span class="keyword">as</span> &amp;<span class="variable">$item</span>) &#123;</span><br><span class="line">        <span class="variable">$item</span> = <span class="title function_ invoke__">strtoupper</span>(<span class="variable">$item</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">unset</span>(<span class="variable">$item</span>);  <span class="comment">// 销毁引用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$data</span> = <span class="title function_ invoke__">array_fill</span>(<span class="number">0</span>, <span class="number">10000</span>, <span class="string">&quot;test&quot;</span>);</span><br><span class="line"><span class="title function_ invoke__">processLargeArray</span>(<span class="variable">$data</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>PHP函数编程的核心要点：</p>
+<ol>
+<li><strong>合理设计函数接口</strong>：参数清晰，返回值明确</li>
+<li><strong>遵循单一职责原则</strong>：一个函数只做一件事</li>
+<li><strong>善用类型声明</strong>：提高代码可读性和健壮性</li>
+<li><strong>理解作用域</strong>：合理使用局部、全局和静态变量</li>
+<li><strong>掌握高级特性</strong>：匿名函数、闭包、递归等</li>
+<li><strong>注重错误处理</strong>：使用异常机制处理错误情况</li>
+<li><strong>考虑性能优化</strong>：避免不必要的计算和内存复制</li>
+<li><strong>保持代码简洁</strong>：优先使用内置函数和标准库</li>
+</ol>
+<p>通过掌握这些概念和技巧，你可以写出更加优雅、高效的PHP代码。记住，好的函数设计不仅要功能正确，还要易于理解、测试和维护。</p>
+<p>希望这篇文章能帮助你更深入地理解PHP函数编程！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/PHP%E5%9F%BA%E7%A1%80/">PHP基础</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%87%BD%E6%95%B0/">函数</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/">参数传递</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/">作用域</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0/">匿名函数</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/python/python-asyncio-practical-guide/"
+                                   title="Python异步编程实战指南：从入门到精通"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Python异步编程实战指南：从入门到精通</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/php/php8-migration-upgrade-guide/"
+                                   title="PHP 8 迁移升级完全指南：从PHP 7.x平滑过渡到PHP 8"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8 迁移升级完全指南：从PHP 7.x平滑过渡到PHP 8</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP%E5%87%BD%E6%95%B0%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8"><span class="nav-text">PHP函数编程实战指南：从基础到高级应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89%E5%92%8C%E8%B0%83%E7%94%A8"><span class="nav-text">函数的基本定义和调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-text">1. 基本语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%BD%E6%95%B0%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="nav-text">2. 函数命名规范</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E8%AF%A6%E8%A7%A3"><span class="nav-text">参数传递详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%80%BC%E4%BC%A0%E9%80%92%EF%BC%88%E9%BB%98%E8%AE%A4%E6%96%B9%E5%BC%8F%EF%BC%89"><span class="nav-text">1. 值传递（默认方式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92"><span class="nav-text">2. 引用传递</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0"><span class="nav-text">3. 默认参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0"><span class="nav-text">4. 可变参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%EF%BC%88PHP-7-%EF%BC%89"><span class="nav-text">5. 类型声明（PHP 7+）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F"><span class="nav-text">变量作用域和静态变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%B1%80%E9%83%A8%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E5%85%A8%E5%B1%80%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-text">1. 局部作用域和全局作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F"><span class="nav-text">2. 静态变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85"><span class="nav-text">匿名函数和闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0"><span class="nav-text">1. 基本匿名函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%97%AD%E5%8C%85%EF%BC%88%E4%BD%BF%E7%94%A8use%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89"><span class="nav-text">2. 闭包（使用use关键字）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8"><span class="nav-text">3. 高阶函数应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0"><span class="nav-text">递归函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E9%80%92%E5%BD%92"><span class="nav-text">1. 基本递归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96"><span class="nav-text">2. 尾递归优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E7%9B%AE%E5%BD%95"><span class="nav-text">3. 递归遍历目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E5%92%8C%E5%BC%82%E5%B8%B8"><span class="nav-text">错误处理和异常</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-text">1. 基本错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="nav-text">2. 异常处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8"><span class="nav-text">函数的高级应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-text">1. 回调函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%BD%E6%95%B0%E7%BC%93%E5%AD%98%EF%BC%88%E8%AE%B0%E5%BF%86%E5%8C%96%EF%BC%89"><span class="nav-text">2. 函数缓存（记忆化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%87%BD%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">3. 函数装饰器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF%E5%92%8C%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">常见错误和最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%81%BF%E5%85%8D%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E6%B1%A1%E6%9F%93"><span class="nav-text">1. 避免全局变量污染</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%BD%E6%95%B0%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99"><span class="nav-text">2. 函数单一职责原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E"><span class="nav-text">3. 合理使用类型声明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">性能优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D%E8%AE%A1%E7%AE%97"><span class="nav-text">1. 避免重复计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92"><span class="nav-text">2. 合理使用引用传递</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP%E5%87%BD%E6%95%B0%E7%BC%96%E7%A8%8B%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8"><span class="nav-text">PHP函数编程实战指南：从基础到高级应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89%E5%92%8C%E8%B0%83%E7%94%A8"><span class="nav-text">函数的基本定义和调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-text">1. 基本语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%BD%E6%95%B0%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="nav-text">2. 函数命名规范</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E8%AF%A6%E8%A7%A3"><span class="nav-text">参数传递详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%80%BC%E4%BC%A0%E9%80%92%EF%BC%88%E9%BB%98%E8%AE%A4%E6%96%B9%E5%BC%8F%EF%BC%89"><span class="nav-text">1. 值传递（默认方式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92"><span class="nav-text">2. 引用传递</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0"><span class="nav-text">3. 默认参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0"><span class="nav-text">4. 可变参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%EF%BC%88PHP-7-%EF%BC%89"><span class="nav-text">5. 类型声明（PHP 7+）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F"><span class="nav-text">变量作用域和静态变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%B1%80%E9%83%A8%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E5%85%A8%E5%B1%80%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-text">1. 局部作用域和全局作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F"><span class="nav-text">2. 静态变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85"><span class="nav-text">匿名函数和闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0"><span class="nav-text">1. 基本匿名函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%97%AD%E5%8C%85%EF%BC%88%E4%BD%BF%E7%94%A8use%E5%85%B3%E9%94%AE%E5%AD%97%EF%BC%89"><span class="nav-text">2. 闭包（使用use关键字）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0%E5%BA%94%E7%94%A8"><span class="nav-text">3. 高阶函数应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0"><span class="nav-text">递归函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E9%80%92%E5%BD%92"><span class="nav-text">1. 基本递归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96"><span class="nav-text">2. 尾递归优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E7%9B%AE%E5%BD%95"><span class="nav-text">3. 递归遍历目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E5%92%8C%E5%BC%82%E5%B8%B8"><span class="nav-text">错误处理和异常</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-text">1. 基本错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="nav-text">2. 异常处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8"><span class="nav-text">函数的高级应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="nav-text">1. 回调函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%BD%E6%95%B0%E7%BC%93%E5%AD%98%EF%BC%88%E8%AE%B0%E5%BF%86%E5%8C%96%EF%BC%89"><span class="nav-text">2. 函数缓存（记忆化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%87%BD%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">3. 函数装饰器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF%E5%92%8C%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">常见错误和最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%81%BF%E5%85%8D%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E6%B1%A1%E6%9F%93"><span class="nav-text">1. 避免全局变量污染</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%BD%E6%95%B0%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99"><span class="nav-text">2. 函数单一职责原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E"><span class="nav-text">3. 合理使用类型声明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">性能优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D%E8%AE%A1%E7%AE%97"><span class="nav-text">1. 避免重复计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92"><span class="nav-text">2. 合理使用引用传递</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

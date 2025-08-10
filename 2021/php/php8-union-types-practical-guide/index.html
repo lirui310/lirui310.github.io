@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            PHP 8.0 联合类型实战指南：让你的代码更灵活 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        PHP 8.0 联合类型实战指南：让你的代码更灵活
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2021-03-15 14:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/php/">php</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">最佳实践</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/PHP8/">PHP8</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B/">联合类型</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F/">类型系统</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>PHP 8.0 引入的联合类型（Union Types）是一个革命性的特性，它允许我们为参数、返回值和属性指定多个可能的类型。作为一名在生产环境中使用PHP 8.0半年多的开发者，我想分享一些实际使用联合类型的经验和技巧。</p>
+<h2 id="什么是联合类型"><a href="#什么是联合类型" class="headerlink" title="什么是联合类型"></a>什么是联合类型</h2><p>联合类型允许一个值属于多个类型中的任意一个，使用管道符号 <code>|</code> 来分隔不同的类型：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processId</span>(<span class="params"><span class="keyword">int</span>|<span class="keyword">string</span> <span class="variable">$id</span></span>): <span class="title">string</span>|<span class="title">null</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">is_int</span>(<span class="variable">$id</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;ID: &quot;</span> . <span class="variable">$id</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">is_string</span>(<span class="variable">$id</span>) &amp;&amp; !<span class="keyword">empty</span>(<span class="variable">$id</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;String ID: &quot;</span> . <span class="variable">$id</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="实际应用场景"><a href="#实际应用场景" class="headerlink" title="实际应用场景"></a>实际应用场景</h2><h3 id="1-API-响应处理"><a href="#1-API-响应处理" class="headerlink" title="1. API 响应处理"></a>1. API 响应处理</h3><p>在处理第三方API时，经常遇到返回值类型不确定的情况：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiResponse</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getData</span>(<span class="params"></span>): <span class="title">array</span>|<span class="title">object</span>|<span class="title">null</span> </span>&#123;</span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">fetchFromApi</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// API可能返回数组、对象或null</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$response</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-配置值处理"><a href="#2-配置值处理" class="headerlink" title="2. 配置值处理"></a>2. 配置值处理</h3><p>配置文件中的值可能是多种类型：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Config</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$config</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$key</span></span>): <span class="title">string</span>|<span class="title">int</span>|<span class="title">bool</span>|<span class="title">null</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;config[<span class="variable">$key</span>] ?? <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">set</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$key</span>, <span class="keyword">string</span>|<span class="keyword">int</span>|<span class="keyword">bool</span> <span class="variable">$value</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;config[<span class="variable">$key</span>] = <span class="variable">$value</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-数据库查询结果"><a href="#3-数据库查询结果" class="headerlink" title="3. 数据库查询结果"></a>3. 数据库查询结果</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserRepository</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">findById</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$id</span></span>): <span class="title">User</span>|<span class="title">null</span> </span>&#123;</span><br><span class="line">        <span class="variable">$result</span> = <span class="variable language_">$this</span>-&gt;db-&gt;<span class="title function_ invoke__">query</span>(<span class="string">&quot;SELECT * FROM users WHERE id = ?&quot;</span>, [<span class="variable">$id</span>]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$result</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="variable">$result</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用技巧和最佳实践"><a href="#使用技巧和最佳实践" class="headerlink" title="使用技巧和最佳实践"></a>使用技巧和最佳实践</h2><h3 id="1-避免过度复杂的联合类型"><a href="#1-避免过度复杂的联合类型" class="headerlink" title="1. 避免过度复杂的联合类型"></a>1. 避免过度复杂的联合类型</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不推荐：类型过于复杂</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">badExample</span>(<span class="params"></span>): <span class="title">string</span>|<span class="title">int</span>|<span class="title">float</span>|<span class="title">bool</span>|<span class="title">array</span>|<span class="title">object</span>|<span class="title">null</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 推荐：使用更具体的类型或接口</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">goodExample</span>(<span class="params"></span>): <span class="title">Stringable</span>|<span class="title">Countable</span>|<span class="title">null</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-与类型检查结合使用"><a href="#2-与类型检查结合使用" class="headerlink" title="2. 与类型检查结合使用"></a>2. 与类型检查结合使用</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processValue</span>(<span class="params"><span class="keyword">string</span>|<span class="keyword">int</span> <span class="variable">$value</span></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">match</span>(<span class="title function_ invoke__">gettype</span>(<span class="variable">$value</span>)) &#123;</span><br><span class="line">        <span class="string">&#x27;string&#x27;</span> =&gt; <span class="title function_ invoke__">strtoupper</span>(<span class="variable">$value</span>),</span><br><span class="line">        <span class="string">&#x27;integer&#x27;</span> =&gt; <span class="string">&quot;Number: <span class="subst">$value</span>&quot;</span>,</span><br><span class="line">        <span class="keyword">default</span> =&gt; <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Unsupported type&#x27;</span>)</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-在类属性中使用"><a href="#3-在类属性中使用" class="headerlink" title="3. 在类属性中使用"></a>3. 在类属性中使用</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">int</span>|<span class="keyword">float</span> <span class="variable">$price</span>,  // 价格可以是整数或浮点数</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">string</span>|<span class="literal">null</span> <span class="variable">$description</span> = <span class="literal">null</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见陷阱和解决方案"><a href="#常见陷阱和解决方案" class="headerlink" title="常见陷阱和解决方案"></a>常见陷阱和解决方案</h2><h3 id="1-null-的特殊处理"><a href="#1-null-的特殊处理" class="headerlink" title="1. null 的特殊处理"></a>1. null 的特殊处理</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意：null 需要显式声明</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getValue</span>(<span class="params"></span>): <span class="title">string</span>|<span class="title">null</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 可能返回 null</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;data ?? <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用可空类型的简写</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getValue</span>(<span class="params"></span>): ?<span class="title">string</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;data ?? <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-类型检查的顺序"><a href="#2-类型检查的顺序" class="headerlink" title="2. 类型检查的顺序"></a>2. 类型检查的顺序</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processData</span>(<span class="params"><span class="keyword">array</span>|<span class="built_in">Traversable</span> <span class="variable">$data</span></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 先检查更具体的类型</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$data</span> <span class="keyword">instanceof</span> <span class="built_in">Traversable</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">iterator_to_array</span>(<span class="variable">$data</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$data</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-与旧版本的兼容性"><a href="#3-与旧版本的兼容性" class="headerlink" title="3. 与旧版本的兼容性"></a>3. 与旧版本的兼容性</h3><p>如果需要兼容PHP 7.x，可以使用PHPDoc注释：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string|int $id</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> string|null</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">processId</span>(<span class="params"><span class="variable">$id</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// PHP 7.x 兼容的实现</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能考虑"><a href="#性能考虑" class="headerlink" title="性能考虑"></a>性能考虑</h2><p>联合类型在运行时会进行类型检查，但性能影响很小：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基准测试显示，联合类型的性能开销可以忽略不计</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">benchmark</span>(<span class="params"><span class="keyword">string</span>|<span class="keyword">int</span> <span class="variable">$value</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 类型检查的开销 &lt; 1%</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="与其他PHP-8特性的结合"><a href="#与其他PHP-8特性的结合" class="headerlink" title="与其他PHP 8特性的结合"></a>与其他PHP 8特性的结合</h2><h3 id="1-与命名参数结合"><a href="#1-与命名参数结合" class="headerlink" title="1. 与命名参数结合"></a>1. 与命名参数结合</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createUser</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">string</span>|<span class="keyword">int</span> <span class="variable">$age</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">string</span>|<span class="literal">null</span> <span class="variable">$email</span> = <span class="literal">null</span></span></span></span><br><span class="line"><span class="params"><span class="function"></span>): <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">User</span>(</span><br><span class="line">        name: <span class="variable">$name</span>,</span><br><span class="line">        age: <span class="title function_ invoke__">is_string</span>(<span class="variable">$age</span>) ? (<span class="keyword">int</span>)<span class="variable">$age</span> : <span class="variable">$age</span>,</span><br><span class="line">        email: <span class="variable">$email</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line"><span class="variable">$user</span> = <span class="title function_ invoke__">createUser</span>(</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&quot;张三&quot;</span>,</span><br><span class="line">    <span class="attr">age</span>: <span class="string">&quot;25&quot;</span>,  // 字符串会被转换</span><br><span class="line">    <span class="attr">email</span>: <span class="literal">null</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-与属性提升结合"><a href="#2-与属性提升结合" class="headerlink" title="2. 与属性提升结合"></a>2. 与属性提升结合</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiClient</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">string</span>|<span class="keyword">array</span> <span class="variable">$config</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">int</span>|<span class="keyword">float</span> <span class="variable">$timeout</span> = <span class="number">30</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>联合类型是PHP 8.0中最实用的特性之一，它让我们的代码更加灵活和类型安全。在实际项目中，我发现它特别适用于：</p>
+<ol>
+<li>API数据处理</li>
+<li>配置管理</li>
+<li>数据库操作</li>
+<li>第三方库集成</li>
+</ol>
+<p>合理使用联合类型可以减少类型相关的bug，提高代码的可读性和维护性。但要注意避免过度复杂的类型声明，保持代码的简洁性。</p>
+<p>希望这篇文章能帮助你更好地理解和使用PHP 8.0的联合类型特性！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">最佳实践</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/PHP8/">PHP8</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B/">联合类型</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F/">类型系统</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2021/php/php8-match-expression-deep-dive/"
+                                   title="PHP 8.0 Match表达式深度解析：告别冗长的switch语句"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8.0 Match表达式深度解析：告别冗长的switch语句</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2020/laravel/laravel-essential-packages-recommendation/"
+                                   title="Laravel 开发必备：精选扩展包推荐与实用工具指南"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Laravel 开发必备：精选扩展包推荐与实用工具指南</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B"><span class="nav-text">什么是联合类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">实际应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-API-%E5%93%8D%E5%BA%94%E5%A4%84%E7%90%86"><span class="nav-text">1. API 响应处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%80%BC%E5%A4%84%E7%90%86"><span class="nav-text">2. 配置值处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C"><span class="nav-text">3. 数据库查询结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%E5%92%8C%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">使用技巧和最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%81%BF%E5%85%8D%E8%BF%87%E5%BA%A6%E5%A4%8D%E6%9D%82%E7%9A%84%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B"><span class="nav-text">1. 避免过度复杂的联合类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%8E%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E7%BB%93%E5%90%88%E4%BD%BF%E7%94%A8"><span class="nav-text">2. 与类型检查结合使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%9C%A8%E7%B1%BB%E5%B1%9E%E6%80%A7%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="nav-text">3. 在类属性中使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-text">常见陷阱和解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-null-%E7%9A%84%E7%89%B9%E6%AE%8A%E5%A4%84%E7%90%86"><span class="nav-text">1. null 的特殊处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E7%9A%84%E9%A1%BA%E5%BA%8F"><span class="nav-text">2. 类型检查的顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%8E%E6%97%A7%E7%89%88%E6%9C%AC%E7%9A%84%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="nav-text">3. 与旧版本的兼容性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91"><span class="nav-text">性能考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E5%85%B6%E4%BB%96PHP-8%E7%89%B9%E6%80%A7%E7%9A%84%E7%BB%93%E5%90%88"><span class="nav-text">与其他PHP 8特性的结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8E%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E7%BB%93%E5%90%88"><span class="nav-text">1. 与命名参数结合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%8E%E5%B1%9E%E6%80%A7%E6%8F%90%E5%8D%87%E7%BB%93%E5%90%88"><span class="nav-text">2. 与属性提升结合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B"><span class="nav-text">什么是联合类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">实际应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-API-%E5%93%8D%E5%BA%94%E5%A4%84%E7%90%86"><span class="nav-text">1. API 响应处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%80%BC%E5%A4%84%E7%90%86"><span class="nav-text">2. 配置值处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C"><span class="nav-text">3. 数据库查询结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%E5%92%8C%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">使用技巧和最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%81%BF%E5%85%8D%E8%BF%87%E5%BA%A6%E5%A4%8D%E6%9D%82%E7%9A%84%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B"><span class="nav-text">1. 避免过度复杂的联合类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%8E%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E7%BB%93%E5%90%88%E4%BD%BF%E7%94%A8"><span class="nav-text">2. 与类型检查结合使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%9C%A8%E7%B1%BB%E5%B1%9E%E6%80%A7%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="nav-text">3. 在类属性中使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%99%B7%E9%98%B1%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-text">常见陷阱和解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-null-%E7%9A%84%E7%89%B9%E6%AE%8A%E5%A4%84%E7%90%86"><span class="nav-text">1. null 的特殊处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E7%9A%84%E9%A1%BA%E5%BA%8F"><span class="nav-text">2. 类型检查的顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%8E%E6%97%A7%E7%89%88%E6%9C%AC%E7%9A%84%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="nav-text">3. 与旧版本的兼容性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91"><span class="nav-text">性能考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E5%85%B6%E4%BB%96PHP-8%E7%89%B9%E6%80%A7%E7%9A%84%E7%BB%93%E5%90%88"><span class="nav-text">与其他PHP 8特性的结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8E%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E7%BB%93%E5%90%88"><span class="nav-text">1. 与命名参数结合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%8E%E5%B1%9E%E6%80%A7%E6%8F%90%E5%8D%87%E7%BB%93%E5%90%88"><span class="nav-text">2. 与属性提升结合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

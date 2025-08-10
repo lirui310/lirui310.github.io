@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Laravel Blade 模板引擎完全指南：从基础语法到高级组件 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Laravel Blade 模板引擎完全指南：从基础语法到高级组件
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-09-20 14:20:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/laravel/">laravel</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Laravel/">Laravel</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Blade/">Blade</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E/">模板引擎</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%89%8D%E7%AB%AF/">前端</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%BB%84%E4%BB%B6/">组件</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>Blade 是 Laravel 自带的简单而强大的模板引擎。与其他 PHP 模板引擎不同，Blade 不限制你在模板中使用纯 PHP 代码，同时提供了优雅的语法和强大的功能。本文将全面介绍 Blade 模板引擎的使用方法和最佳实践。</p>
+<h2 id="Blade-模板引擎简介"><a href="#Blade-模板引擎简介" class="headerlink" title="Blade 模板引擎简介"></a>Blade 模板引擎简介</h2><h3 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h3><ol>
+<li><strong>零开销</strong>：所有 Blade 模板都会被编译成纯 PHP 代码并缓存</li>
+<li><strong>简洁语法</strong>：提供清晰、易读的模板语法</li>
+<li><strong>模板继承</strong>：支持强大的布局继承系统</li>
+<li><strong>组件系统</strong>：现代化的组件开发方式</li>
+<li><strong>安全性</strong>：自动防止 XSS 攻击</li>
+</ol>
+<h3 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h3><p>Blade 模板文件使用 <code>.blade.php</code> 扩展名，通常存储在 <code>resources/views</code> 目录中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">resources/views/</span><br><span class="line">├── layouts/</span><br><span class="line">│   ├── app.blade.php</span><br><span class="line">│   └── guest.blade.php</span><br><span class="line">├── components/</span><br><span class="line">│   ├── button.blade.php</span><br><span class="line">│   └── card.blade.php</span><br><span class="line">├── pages/</span><br><span class="line">│   ├── home.blade.php</span><br><span class="line">│   └── about.blade.php</span><br><span class="line">└── partials/</span><br><span class="line">    ├── header.blade.php</span><br><span class="line">    └── footer.blade.php</span><br></pre></td></tr></table></figure>
+
+<h2 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h2><h3 id="显示数据"><a href="#显示数据" class="headerlink" title="显示数据"></a>显示数据</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 基本数据输出（自动转义） --&#125;&#125;</span><br><span class="line">&lt;h1&gt;Hello, &#123;&#123; <span class="variable">$name</span> &#125;&#125;!&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 输出 PHP 函数结果 --&#125;&#125;</span><br><span class="line">&lt;p&gt;当前时间：&#123;&#123; <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d H:i:s&#x27;</span>) &#125;&#125;&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 三元运算符 --&#125;&#125;</span><br><span class="line">&lt;p&gt;用户状态：&#123;&#123; <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">isActive</span>() ? <span class="string">&#x27;活跃&#x27;</span> : <span class="string">&#x27;非活跃&#x27;</span> &#125;&#125;&lt;/p&gt;</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 空值合并 --&#125;&#125;</span><br><span class="line">&lt;p&gt;用户名：&#123;&#123; <span class="variable">$user</span>-&gt;name ?? <span class="string">&#x27;游客&#x27;</span> &#125;&#125;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="原始数据输出"><a href="#原始数据输出" class="headerlink" title="原始数据输出"></a>原始数据输出</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 输出未转义的 HTML（谨慎使用） --&#125;&#125;</span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">content</span>&quot;&gt;</span></span><br><span class="line"><span class="class">    </span>&#123;!! <span class="variable">$htmlContent</span> !!&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 在 JavaScript 中使用 --&#125;&#125;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">var</span> config = &#123;!! <span class="title function_ invoke__">json_encode</span>(<span class="variable">$config</span>) !!&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="与-JavaScript-框架兼容"><a href="#与-JavaScript-框架兼容" class="headerlink" title="与 JavaScript 框架兼容"></a>与 JavaScript 框架兼容</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 使用 @ 符号避免 Blade 解析 --&#125;&#125;</span><br><span class="line">&lt;div id=<span class="string">&quot;app&quot;</span>&gt;</span><br><span class="line">    &lt;h1&gt;Laravel&lt;/h1&gt;</span><br><span class="line">    &lt;p&gt;Hello, @&#123;&#123; name &#125;&#125;!&lt;/p&gt; &#123;&#123;-- Vue.js 语法 --&#125;&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 使用 @verbatim 指令 --&#125;&#125;</span><br><span class="line">@verbatim</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">container</span>&quot;&gt;</span></span><br><span class="line"><span class="class">        <span class="title">Hello</span>, </span>&#123;&#123; name &#125;&#125;.</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">@endverbatim</span><br></pre></td></tr></table></figure>
+
+<h2 id="Blade-指令"><a href="#Blade-指令" class="headerlink" title="Blade 指令"></a>Blade 指令</h2><h3 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- <span class="keyword">if</span> 语句 --&#125;&#125;</span><br><span class="line">@<span class="keyword">if</span> (<span class="variable">$user</span>-&gt;<span class="title function_ invoke__">isAdmin</span>())</span><br><span class="line">    &lt;p&gt;欢迎，管理员！&lt;/p&gt;</span><br><span class="line">@<span class="keyword">elseif</span> (<span class="variable">$user</span>-&gt;<span class="title function_ invoke__">isModerator</span>())</span><br><span class="line">    &lt;p&gt;欢迎，版主！&lt;/p&gt;</span><br><span class="line">@<span class="keyword">else</span></span><br><span class="line">    &lt;p&gt;欢迎，普通用户！&lt;/p&gt;</span><br><span class="line">@<span class="keyword">endif</span></span><br><span class="line"></span><br><span class="line">&#123;&#123;-- unless 语句（<span class="keyword">if</span> 的反向） --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">unless</span> (<span class="variable">$user</span>-&gt;<span class="title function_ invoke__">isGuest</span>())</span><br><span class="line">    &lt;p&gt;你已登录&lt;/p&gt;</span><br><span class="line">@endunless</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- <span class="keyword">isset</span> 和 <span class="keyword">empty</span> 检查 --&#125;&#125;</span><br><span class="line">@<span class="keyword">isset</span>(<span class="variable">$records</span>)</span><br><span class="line">    &lt;p&gt;记录存在&lt;/p&gt;</span><br><span class="line">@endisset</span><br><span class="line"></span><br><span class="line">@<span class="keyword">empty</span>(<span class="variable">$records</span>)</span><br><span class="line">    &lt;p&gt;没有记录&lt;/p&gt;</span><br><span class="line">@endempty</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 认证检查 --&#125;&#125;</span><br><span class="line">@auth</span><br><span class="line">    &lt;p&gt;用户已认证&lt;/p&gt;</span><br><span class="line">@endauth</span><br><span class="line"></span><br><span class="line">@guest</span><br><span class="line">    &lt;p&gt;用户未认证&lt;/p&gt;</span><br><span class="line">@endguest</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 环境检查 --&#125;&#125;</span><br><span class="line">@production</span><br><span class="line">    &lt;script src=<span class="string">&quot;&#123;&#123; asset(&#x27;js/app.min.js&#x27;) &#125;&#125;&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">@endproduction</span><br><span class="line"></span><br><span class="line">@<span class="title function_ invoke__">env</span>(<span class="string">&#x27;local&#x27;</span>)</span><br><span class="line">    &lt;script src=<span class="string">&quot;&#123;&#123; asset(&#x27;js/app.js&#x27;) &#125;&#125;&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">@endenv</span><br></pre></td></tr></table></figure>
+
+<h3 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- <span class="keyword">foreach</span> 循环 --&#125;&#125;</span><br><span class="line">@<span class="keyword">foreach</span> (<span class="variable">$users</span> <span class="keyword">as</span> <span class="variable">$user</span>)</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">user</span>-<span class="title">card</span>&quot;&gt;</span></span><br><span class="line"><span class="class">        &lt;<span class="title">h3</span>&gt;</span>&#123;&#123; <span class="variable">$user</span>-&gt;name &#125;&#125;&lt;/h3&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; <span class="variable">$user</span>-&gt;email &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">@<span class="keyword">endforeach</span></span><br><span class="line"></span><br><span class="line">&#123;&#123;-- forelse 循环（带空值处理） --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">forelse</span> (<span class="variable">$posts</span> <span class="keyword">as</span> <span class="variable">$post</span>)</span><br><span class="line">    &lt;article&gt;</span><br><span class="line">        &lt;h2&gt;&#123;&#123; <span class="variable">$post</span>-&gt;title &#125;&#125;&lt;/h2&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; <span class="variable">$post</span>-&gt;excerpt &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;/article&gt;</span><br><span class="line">@<span class="keyword">empty</span></span><br><span class="line">    &lt;p&gt;暂无文章&lt;/p&gt;</span><br><span class="line">@endforelse</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- <span class="keyword">for</span> 循环 --&#125;&#125;</span><br><span class="line">@<span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">10</span>; <span class="variable">$i</span>++)</span><br><span class="line">    &lt;p&gt;当前值：&#123;&#123; <span class="variable">$i</span> &#125;&#125;&lt;/p&gt;</span><br><span class="line">@<span class="keyword">endfor</span></span><br><span class="line"></span><br><span class="line">&#123;&#123;-- <span class="keyword">while</span> 循环 --&#125;&#125;</span><br><span class="line">@<span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">    &lt;p&gt;这是一个无限循环&lt;/p&gt;</span><br><span class="line">    @<span class="keyword">break</span></span><br><span class="line">@<span class="keyword">endwhile</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="循环变量"><a href="#循环变量" class="headerlink" title="循环变量"></a>循环变量</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">foreach</span> (<span class="variable">$users</span> <span class="keyword">as</span> <span class="variable">$user</span>)</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">user</span>-<span class="title">item</span> </span>&#123;&#123; <span class="variable">$loop</span>-&gt;first ? <span class="string">&#x27;first&#x27;</span> : <span class="string">&#x27;&#x27;</span> &#125;&#125; &#123;&#123; <span class="variable">$loop</span>-&gt;last ? <span class="string">&#x27;last&#x27;</span> : <span class="string">&#x27;&#x27;</span> &#125;&#125;<span class="string">&quot;&gt;</span></span><br><span class="line"><span class="string">        &lt;span class=&quot;</span>index<span class="string">&quot;&gt;&#123;&#123; <span class="subst">$loop</span>-&gt;iteration &#125;&#125;&lt;/span&gt;</span></span><br><span class="line"><span class="string">        &lt;span class=&quot;</span>name<span class="string">&quot;&gt;&#123;&#123; <span class="subst">$user</span>-&gt;name &#125;&#125;&lt;/span&gt;</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        @if (<span class="subst">$loop</span>-&gt;remaining &gt; 0)</span></span><br><span class="line"><span class="string">            &lt;span class=&quot;</span>remaining<span class="string">&quot;&gt;还有 &#123;&#123; <span class="subst">$loop</span>-&gt;remaining &#125;&#125; 个用户&lt;/span&gt;</span></span><br><span class="line"><span class="string">        @endif</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        &#123;&#123;-- 嵌套循环 --&#125;&#125;</span></span><br><span class="line"><span class="string">        @foreach (<span class="subst">$user</span>-&gt;posts as <span class="subst">$post</span>)</span></span><br><span class="line"><span class="string">            &lt;div class=&quot;</span>post &#123;&#123; <span class="variable">$loop</span>-&gt;<span class="built_in">parent</span>-&gt;first ? <span class="string">&#x27;first-user-post&#x27;</span> : <span class="string">&#x27;&#x27;</span> &#125;&#125;<span class="string">&quot;&gt;</span></span><br><span class="line"><span class="string">                &#123;&#123; <span class="subst">$post</span>-&gt;title &#125;&#125;</span></span><br><span class="line"><span class="string">            &lt;/div&gt;</span></span><br><span class="line"><span class="string">        @endforeach</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">@endforeach</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Switch-语句"><a href="#Switch-语句" class="headerlink" title="Switch 语句"></a>Switch 语句</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@<span class="keyword">switch</span>(<span class="variable">$user</span>-&gt;role)</span><br><span class="line">    @<span class="keyword">case</span>(<span class="string">&#x27;admin&#x27;</span>)</span><br><span class="line">        &lt;p&gt;管理员权限&lt;/p&gt;</span><br><span class="line">        @<span class="keyword">break</span></span><br><span class="line">    </span><br><span class="line">    @<span class="keyword">case</span>(<span class="string">&#x27;moderator&#x27;</span>)</span><br><span class="line">        &lt;p&gt;版主权限&lt;/p&gt;</span><br><span class="line">        @<span class="keyword">break</span></span><br><span class="line">    </span><br><span class="line">    @<span class="keyword">case</span>(<span class="string">&#x27;user&#x27;</span>)</span><br><span class="line">        &lt;p&gt;普通用户权限&lt;/p&gt;</span><br><span class="line">        @<span class="keyword">break</span></span><br><span class="line">    </span><br><span class="line">    @<span class="keyword">default</span></span><br><span class="line">        &lt;p&gt;未知权限&lt;/p&gt;</span><br><span class="line">@<span class="keyword">endswitch</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="模板继承"><a href="#模板继承" class="headerlink" title="模板继承"></a>模板继承</h2><h3 id="定义布局"><a href="#定义布局" class="headerlink" title="定义布局"></a>定义布局</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- resources/views/layouts/app.blade.php --&#125;&#125;</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;&#123;&#123; str_replace(&#x27;_&#x27;, &#x27;-&#x27;, app()-&gt;getLocale()) &#125;&#125;&quot;</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt;</span><br><span class="line">    &lt;meta name=<span class="string">&quot;viewport&quot;</span> content=<span class="string">&quot;width=device-width, initial-scale=1&quot;</span>&gt;</span><br><span class="line">    &lt;meta name=<span class="string">&quot;csrf-token&quot;</span> content=<span class="string">&quot;&#123;&#123; csrf_token() &#125;&#125;&quot;</span>&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;title&gt;@<span class="keyword">yield</span>(<span class="string">&#x27;title&#x27;</span>, <span class="title function_ invoke__">config</span>(<span class="string">&#x27;app.name&#x27;</span>))&lt;/title&gt;</span><br><span class="line">    </span><br><span class="line">    &#123;&#123;-- 样式文件 --&#125;&#125;</span><br><span class="line">    @<span class="title function_ invoke__">vite</span>([<span class="string">&#x27;resources/css/app.css&#x27;</span>])</span><br><span class="line">    @<span class="title function_ invoke__">stack</span>(<span class="string">&#x27;styles&#x27;</span>)</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id=<span class="string">&quot;app&quot;</span>&gt;</span><br><span class="line">        &#123;&#123;-- 导航栏 --&#125;&#125;</span><br><span class="line">        @<span class="keyword">include</span>(<span class="string">&#x27;partials.navbar&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        &#123;&#123;-- 主要内容区域 --&#125;&#125;</span><br><span class="line">        &lt;main <span class="class"><span class="keyword">class</span>=&quot;<span class="title">main</span>-<span class="title">content</span>&quot;&gt;</span></span><br><span class="line"><span class="class">            @<span class="title">yield</span>(&#x27;<span class="title">content</span>&#x27;)</span></span><br><span class="line"><span class="class">        &lt;/<span class="title">main</span>&gt;</span></span><br><span class="line"><span class="class">        </span></span><br><span class="line"><span class="class">        </span>&#123;&#123;-- 侧边栏（可选） --&#125;&#125;</span><br><span class="line">        @<span class="title function_ invoke__">hasSection</span>(<span class="string">&#x27;sidebar&#x27;</span>)</span><br><span class="line">            &lt;aside <span class="class"><span class="keyword">class</span>=&quot;<span class="title">sidebar</span>&quot;&gt;</span></span><br><span class="line"><span class="class">                @<span class="title">yield</span>(&#x27;<span class="title">sidebar</span>&#x27;)</span></span><br><span class="line"><span class="class">            &lt;/<span class="title">aside</span>&gt;</span></span><br><span class="line"><span class="class">        @<span class="title">endif</span></span></span><br><span class="line"><span class="class">        </span></span><br><span class="line"><span class="class">        </span>&#123;&#123;-- 页脚 --&#125;&#125;</span><br><span class="line">        @<span class="keyword">include</span>(<span class="string">&#x27;partials.footer&#x27;</span>)</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    &#123;&#123;-- JavaScript 文件 --&#125;&#125;</span><br><span class="line">    @<span class="title function_ invoke__">vite</span>([<span class="string">&#x27;resources/js/app.js&#x27;</span>])</span><br><span class="line">    @<span class="title function_ invoke__">stack</span>(<span class="string">&#x27;scripts&#x27;</span>)</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="继承布局"><a href="#继承布局" class="headerlink" title="继承布局"></a>继承布局</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- resources/views/posts/index.blade.php --&#125;&#125;</span><br><span class="line">@<span class="keyword">extends</span>(<span class="string">&#x27;layouts.app&#x27;</span>)</span><br><span class="line"></span><br><span class="line">@<span class="title function_ invoke__">section</span>(<span class="string">&#x27;title&#x27;</span>, <span class="string">&#x27;文章列表&#x27;</span>)</span><br><span class="line"></span><br><span class="line">@<span class="title function_ invoke__">push</span>(<span class="string">&#x27;styles&#x27;</span>)</span><br><span class="line">    &lt;link rel=<span class="string">&quot;stylesheet&quot;</span> href=<span class="string">&quot;&#123;&#123; asset(&#x27;css/posts.css&#x27;) &#125;&#125;&quot;</span>&gt;</span><br><span class="line">@endpush</span><br><span class="line"></span><br><span class="line">@<span class="title function_ invoke__">section</span>(<span class="string">&#x27;content&#x27;</span>)</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">container</span>&quot;&gt;</span></span><br><span class="line"><span class="class">        &lt;<span class="title">h1</span>&gt;文章列表&lt;/<span class="title">h1</span>&gt;</span></span><br><span class="line"><span class="class">        </span></span><br><span class="line"><span class="class">        @<span class="title">forelse</span> ($<span class="title">posts</span> <span class="title">as</span> $<span class="title">post</span>)</span></span><br><span class="line"><span class="class">            &lt;<span class="title">article</span> <span class="title">class</span>=&quot;<span class="title">post</span>-<span class="title">card</span>&quot;&gt;</span></span><br><span class="line"><span class="class">                &lt;<span class="title">h2</span>&gt;&lt;<span class="title">a</span> <span class="title">href</span>=&quot;</span>&#123;&#123; <span class="title function_ invoke__">route</span>(<span class="string">&#x27;posts.show&#x27;</span>, <span class="variable">$post</span>) &#125;&#125;<span class="string">&quot;&gt;&#123;&#123; <span class="subst">$post</span>-&gt;title &#125;&#125;&lt;/a&gt;&lt;/h2&gt;</span></span><br><span class="line"><span class="string">                &lt;p class=&quot;</span>meta<span class="string">&quot;&gt;</span></span><br><span class="line"><span class="string">                    作者：&#123;&#123; <span class="subst">$post</span>-&gt;author-&gt;name &#125;&#125; | </span></span><br><span class="line"><span class="string">                    发布时间：&#123;&#123; <span class="subst">$post</span>-&gt;created_at-&gt;format(&#x27;Y-m-d&#x27;) &#125;&#125;</span></span><br><span class="line"><span class="string">                &lt;/p&gt;</span></span><br><span class="line"><span class="string">                &lt;p class=&quot;</span>excerpt<span class="string">&quot;&gt;&#123;&#123; <span class="subst">$post</span>-&gt;excerpt &#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">            &lt;/article&gt;</span></span><br><span class="line"><span class="string">        @empty</span></span><br><span class="line"><span class="string">            &lt;p class=&quot;</span>no-posts<span class="string">&quot;&gt;暂无文章&lt;/p&gt;</span></span><br><span class="line"><span class="string">        @endforelse</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        &#123;&#123; <span class="subst">$posts</span>-&gt;links() &#125;&#125;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">@endsection</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">@section(&#x27;sidebar&#x27;)</span></span><br><span class="line"><span class="string">    &lt;div class=&quot;</span>widget<span class="string">&quot;&gt;</span></span><br><span class="line"><span class="string">        &lt;h3&gt;热门标签&lt;/h3&gt;</span></span><br><span class="line"><span class="string">        &lt;div class=&quot;</span>tags<span class="string">&quot;&gt;</span></span><br><span class="line"><span class="string">            @foreach (<span class="subst">$popularTags</span> as <span class="subst">$tag</span>)</span></span><br><span class="line"><span class="string">                &lt;a href=&quot;</span>&#123;&#123; <span class="title function_ invoke__">route</span>(<span class="string">&#x27;tags.show&#x27;</span>, <span class="variable">$tag</span>) &#125;&#125;<span class="string">&quot; class=&quot;</span>tag<span class="string">&quot;&gt;&#123;&#123; <span class="subst">$tag</span>-&gt;name &#125;&#125;&lt;/a&gt;</span></span><br><span class="line"><span class="string">            @endforeach</span></span><br><span class="line"><span class="string">        &lt;/div&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">@endsection</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">@push(&#x27;scripts&#x27;)</span></span><br><span class="line"><span class="string">    &lt;script src=&quot;</span>&#123;&#123; <span class="title function_ invoke__">asset</span>(<span class="string">&#x27;js/posts.js&#x27;</span>) &#125;&#125;<span class="string">&quot;&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">@endpush</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="组件系统"><a href="#组件系统" class="headerlink" title="组件系统"></a>组件系统</h2><h3 id="创建组件"><a href="#创建组件" class="headerlink" title="创建组件"></a>创建组件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建组件类和视图</span></span><br><span class="line">php artisan make:component Button</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建匿名组件</span></span><br><span class="line">php artisan make:component forms.input --view</span><br></pre></td></tr></table></figure>
+
+<h3 id="组件类"><a href="#组件类" class="headerlink" title="组件类"></a>组件类</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// app/View/Components/Button.php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">View</span>\<span class="title class_">Components</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">View</span>\<span class="title">Component</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">View</span>\<span class="title">View</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span> <span class="keyword">extends</span> <span class="title">Component</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 按钮类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> <span class="variable">$type</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 按钮大小</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> <span class="variable">$size</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否禁用</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">bool</span> <span class="variable">$disabled</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建组件实例</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">string</span> <span class="variable">$type</span> = <span class="string">&#x27;button&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">string</span> <span class="variable">$size</span> = <span class="string">&#x27;md&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">bool</span> <span class="variable">$disabled</span> = <span class="literal">false</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;type = <span class="variable">$type</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;size = <span class="variable">$size</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;disabled = <span class="variable">$disabled</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取按钮的 CSS 类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">classes</span>(<span class="params"></span>): <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$classes</span> = [<span class="string">&#x27;btn&#x27;</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 根据类型添加类</span></span><br><span class="line">        <span class="variable">$classes</span>[] = <span class="keyword">match</span>(<span class="variable language_">$this</span>-&gt;type) &#123;</span><br><span class="line">            <span class="string">&#x27;primary&#x27;</span> =&gt; <span class="string">&#x27;btn-primary&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;secondary&#x27;</span> =&gt; <span class="string">&#x27;btn-secondary&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;danger&#x27;</span> =&gt; <span class="string">&#x27;btn-danger&#x27;</span>,</span><br><span class="line">            <span class="keyword">default</span> =&gt; <span class="string">&#x27;btn-default&#x27;</span></span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 根据大小添加类</span></span><br><span class="line">        <span class="variable">$classes</span>[] = <span class="keyword">match</span>(<span class="variable language_">$this</span>-&gt;size) &#123;</span><br><span class="line">            <span class="string">&#x27;sm&#x27;</span> =&gt; <span class="string">&#x27;btn-sm&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;lg&#x27;</span> =&gt; <span class="string">&#x27;btn-lg&#x27;</span>,</span><br><span class="line">            <span class="keyword">default</span> =&gt; <span class="string">&#x27;btn-md&#x27;</span></span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;disabled) &#123;</span><br><span class="line">            <span class="variable">$classes</span>[] = <span class="string">&#x27;btn-disabled&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">implode</span>(<span class="string">&#x27; &#x27;</span>, <span class="variable">$classes</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 渲染组件</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params"></span>): <span class="title">View</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">view</span>(<span class="string">&#x27;components.button&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="组件视图"><a href="#组件视图" class="headerlink" title="组件视图"></a>组件视图</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- resources/views/components/button.blade.php --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">props</span>([</span><br><span class="line">    <span class="string">&#x27;type&#x27;</span> =&gt; <span class="string">&#x27;button&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;href&#x27;</span> =&gt; <span class="literal">null</span>,</span><br><span class="line">    <span class="string">&#x27;disabled&#x27;</span> =&gt; <span class="literal">false</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">@<span class="keyword">if</span>(<span class="variable">$href</span>)</span><br><span class="line">    &lt;a href=<span class="string">&quot;&#123;&#123; <span class="subst">$href</span> &#125;&#125;&quot;</span> &#123;&#123; <span class="variable">$attributes</span>-&gt;<span class="title function_ invoke__">merge</span>([<span class="string">&#x27;class&#x27;</span> =&gt; <span class="variable">$classes</span>()]) &#125;&#125;&gt;</span><br><span class="line">        &#123;&#123; <span class="variable">$slot</span> &#125;&#125;</span><br><span class="line">    &lt;/a&gt;</span><br><span class="line">@<span class="keyword">else</span></span><br><span class="line">    &lt;button </span><br><span class="line">        type=<span class="string">&quot;&#123;&#123; <span class="subst">$type</span> &#125;&#125;&quot;</span> </span><br><span class="line">        &#123;&#123; <span class="variable">$disabled</span> ? <span class="string">&#x27;disabled&#x27;</span> : <span class="string">&#x27;&#x27;</span> &#125;&#125;</span><br><span class="line">        &#123;&#123; <span class="variable">$attributes</span>-&gt;<span class="title function_ invoke__">merge</span>([<span class="string">&#x27;class&#x27;</span> =&gt; <span class="variable">$classes</span>()]) &#125;&#125;</span><br><span class="line">    &gt;</span><br><span class="line">        &#123;&#123; <span class="variable">$slot</span> &#125;&#125;</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">@<span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用组件"><a href="#使用组件" class="headerlink" title="使用组件"></a>使用组件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 基本使用 --&#125;&#125;</span><br><span class="line">&lt;x-button type=<span class="string">&quot;primary&quot;</span>&gt;保存&lt;/x-button&gt;</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 传递属性 --&#125;&#125;</span><br><span class="line">&lt;x-button </span><br><span class="line">    type=<span class="string">&quot;danger&quot;</span> </span><br><span class="line">    size=<span class="string">&quot;lg&quot;</span> </span><br><span class="line">    :disabled=<span class="string">&quot;<span class="subst">$user</span>-&gt;cannot(&#x27;delete&#x27;, <span class="subst">$post</span>)&quot;</span></span><br><span class="line">    onclick=<span class="string">&quot;confirmDelete()&quot;</span></span><br><span class="line">&gt;</span><br><span class="line">    删除文章</span><br><span class="line">&lt;/x-button&gt;</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 作为链接 --&#125;&#125;</span><br><span class="line">&lt;x-button </span><br><span class="line">    type=<span class="string">&quot;secondary&quot;</span> </span><br><span class="line">    :href=<span class="string">&quot;route(&#x27;posts.edit&#x27;, <span class="subst">$post</span>)&quot;</span></span><br><span class="line">&gt;</span><br><span class="line">    编辑</span><br><span class="line">&lt;/x-button&gt;</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 使用插槽 --&#125;&#125;</span><br><span class="line">&lt;x-button type=<span class="string">&quot;primary&quot;</span>&gt;</span><br><span class="line">    &lt;x-icon name=<span class="string">&quot;save&quot;</span> /&gt;</span><br><span class="line">    保存文章</span><br><span class="line">&lt;/x-button&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="匿名组件"><a href="#匿名组件" class="headerlink" title="匿名组件"></a>匿名组件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- resources/views/components/forms/input.blade.php --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">props</span>([</span><br><span class="line">    <span class="string">&#x27;type&#x27;</span> =&gt; <span class="string">&#x27;text&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;name&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;label&#x27;</span> =&gt; <span class="literal">null</span>,</span><br><span class="line">    <span class="string">&#x27;required&#x27;</span> =&gt; <span class="literal">false</span>,</span><br><span class="line">    <span class="string">&#x27;error&#x27;</span> =&gt; <span class="literal">null</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">form</span>-<span class="title">group</span>&quot;&gt;</span></span><br><span class="line"><span class="class">    @<span class="title">if</span>($<span class="title">label</span>)</span></span><br><span class="line"><span class="class">        &lt;<span class="title">label</span> <span class="title">for</span>=&quot;</span>&#123;&#123; <span class="variable">$name</span> &#125;&#125;<span class="string">&quot; class=&quot;</span>form-label<span class="string">&quot;&gt;</span></span><br><span class="line"><span class="string">            &#123;&#123; <span class="subst">$label</span> &#125;&#125;</span></span><br><span class="line"><span class="string">            @if(<span class="subst">$required</span>)</span></span><br><span class="line"><span class="string">                &lt;span class=&quot;</span>text-red-<span class="number">500</span><span class="string">&quot;&gt;*&lt;/span&gt;</span></span><br><span class="line"><span class="string">            @endif</span></span><br><span class="line"><span class="string">        &lt;/label&gt;</span></span><br><span class="line"><span class="string">    @endif</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    &lt;input </span></span><br><span class="line"><span class="string">        type=&quot;</span>&#123;&#123; <span class="variable">$type</span> &#125;&#125;<span class="string">&quot;</span></span><br><span class="line"><span class="string">        name=&quot;</span>&#123;&#123; <span class="variable">$name</span> &#125;&#125;<span class="string">&quot;</span></span><br><span class="line"><span class="string">        id=&quot;</span>&#123;&#123; <span class="variable">$name</span> &#125;&#125;<span class="string">&quot;</span></span><br><span class="line"><span class="string">        &#123;&#123; <span class="subst">$required</span> ? &#x27;required&#x27; : &#x27;&#x27; &#125;&#125;</span></span><br><span class="line"><span class="string">        &#123;&#123; <span class="subst">$attributes</span>-&gt;merge([</span></span><br><span class="line"><span class="string">            &#x27;class&#x27; =&gt; &#x27;form-input&#x27; . (<span class="subst">$error</span> ? &#x27; border-red-500&#x27; : &#x27;&#x27;)</span></span><br><span class="line"><span class="string">        ]) &#125;&#125;</span></span><br><span class="line"><span class="string">        value=&quot;</span>&#123;&#123; <span class="title function_ invoke__">old</span>(<span class="variable">$name</span>, <span class="variable">$attributes</span>-&gt;<span class="title function_ invoke__">get</span>(<span class="string">&#x27;value&#x27;</span>)) &#125;&#125;<span class="string">&quot;</span></span><br><span class="line"><span class="string">    &gt;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    @if(<span class="subst">$error</span>)</span></span><br><span class="line"><span class="string">        &lt;p class=&quot;</span>text-red-<span class="number">500</span> text-sm mt-<span class="number">1</span><span class="string">&quot;&gt;&#123;&#123; <span class="subst">$error</span> &#125;&#125;&lt;/p&gt;</span></span><br><span class="line"><span class="string">    @endif</span></span><br><span class="line"><span class="string">&lt;/div&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="组件插槽"><a href="#组件插槽" class="headerlink" title="组件插槽"></a>组件插槽</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 组件定义 --&#125;&#125;</span><br><span class="line">&#123;&#123;-- resources/views/components/card.blade.php --&#125;&#125;</span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">card</span>&quot;&gt;</span></span><br><span class="line"><span class="class">    @<span class="title">isset</span>($<span class="title">header</span>)</span></span><br><span class="line"><span class="class">        &lt;<span class="title">div</span> <span class="title">class</span>=&quot;<span class="title">card</span>-<span class="title">header</span>&quot;&gt;</span></span><br><span class="line"><span class="class">            </span>&#123;&#123; <span class="variable">$header</span> &#125;&#125;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    @endisset</span><br><span class="line">    </span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">card</span>-<span class="title">body</span>&quot;&gt;</span></span><br><span class="line"><span class="class">        </span>&#123;&#123; <span class="variable">$slot</span> &#125;&#125;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    @<span class="keyword">isset</span>(<span class="variable">$footer</span>)</span><br><span class="line">        &lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">card</span>-<span class="title">footer</span>&quot;&gt;</span></span><br><span class="line"><span class="class">            </span>&#123;&#123; <span class="variable">$footer</span> &#125;&#125;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    @endisset</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 使用组件 --&#125;&#125;</span><br><span class="line">&lt;x-card&gt;</span><br><span class="line">    &lt;x-slot:header&gt;</span><br><span class="line">        &lt;h3&gt;用户信息&lt;/h3&gt;</span><br><span class="line">    &lt;/x-slot:header&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;p&gt;这是卡片的主要内容&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;用户名：&#123;&#123; <span class="variable">$user</span>-&gt;name &#125;&#125;&lt;/p&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;x-slot:footer&gt;</span><br><span class="line">        &lt;x-button type=<span class="string">&quot;primary&quot;</span>&gt;编辑&lt;/x-button&gt;</span><br><span class="line">        &lt;x-button type=<span class="string">&quot;secondary&quot;</span>&gt;取消&lt;/x-button&gt;</span><br><span class="line">    &lt;/x-slot:footer&gt;</span><br><span class="line">&lt;/x-card&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级特性"><a href="#高级特性" class="headerlink" title="高级特性"></a>高级特性</h2><h3 id="包含子视图"><a href="#包含子视图" class="headerlink" title="包含子视图"></a>包含子视图</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 基本包含 --&#125;&#125;</span><br><span class="line">@<span class="keyword">include</span>(<span class="string">&#x27;partials.navbar&#x27;</span>)</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 传递数据 --&#125;&#125;</span><br><span class="line">@<span class="keyword">include</span>(<span class="string">&#x27;partials.user-card&#x27;</span>, [<span class="string">&#x27;user&#x27;</span> =&gt; <span class="variable">$user</span>])</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 条件包含 --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">includeIf</span>(<span class="string">&#x27;partials.admin-panel&#x27;</span>)</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 根据条件包含不同视图 --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">includeWhen</span>(<span class="variable">$user</span>-&gt;<span class="title function_ invoke__">isAdmin</span>(), <span class="string">&#x27;partials.admin-panel&#x27;</span>)</span><br><span class="line">@<span class="title function_ invoke__">includeUnless</span>(<span class="variable">$user</span>-&gt;<span class="title function_ invoke__">isGuest</span>(), <span class="string">&#x27;partials.user-menu&#x27;</span>)</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 包含第一个存在的视图 --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">includeFirst</span>([<span class="string">&#x27;partials.custom-header&#x27;</span>, <span class="string">&#x27;partials.default-header&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="堆栈"><a href="#堆栈" class="headerlink" title="堆栈"></a>堆栈</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 在布局中定义堆栈 --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">stack</span>(<span class="string">&#x27;styles&#x27;</span>)</span><br><span class="line">@<span class="title function_ invoke__">stack</span>(<span class="string">&#x27;scripts&#x27;</span>)</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 在子视图中推送内容 --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">push</span>(<span class="string">&#x27;styles&#x27;</span>)</span><br><span class="line">    &lt;link rel=<span class="string">&quot;stylesheet&quot;</span> href=<span class="string">&quot;&#123;&#123; asset(&#x27;css/custom.css&#x27;) &#125;&#125;&quot;</span>&gt;</span><br><span class="line">@endpush</span><br><span class="line"></span><br><span class="line">@<span class="title function_ invoke__">push</span>(<span class="string">&#x27;scripts&#x27;</span>)</span><br><span class="line">    &lt;script src=<span class="string">&quot;&#123;&#123; asset(&#x27;js/custom.js&#x27;) &#125;&#125;&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">@endpush</span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 前置推送 --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">prepend</span>(<span class="string">&#x27;styles&#x27;</span>)</span><br><span class="line">    &lt;link rel=<span class="string">&quot;stylesheet&quot;</span> href=<span class="string">&quot;&#123;&#123; asset(&#x27;css/critical.css&#x27;) &#125;&#125;&quot;</span>&gt;</span><br><span class="line">@endprepend</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务注入"><a href="#服务注入" class="headerlink" title="服务注入"></a>服务注入</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 注入服务 --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">inject</span>(<span class="string">&#x27;metrics&#x27;</span>, <span class="string">&#x27;App\Services\MetricsService&#x27;</span>)</span><br><span class="line"></span><br><span class="line">&lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">dashboard</span>&quot;&gt;</span></span><br><span class="line"><span class="class">    &lt;<span class="title">h1</span>&gt;仪表板&lt;/<span class="title">h1</span>&gt;</span></span><br><span class="line"><span class="class">    &lt;<span class="title">p</span>&gt;总用户数：</span>&#123;&#123; <span class="variable">$metrics</span>-&gt;<span class="title function_ invoke__">getTotalUsers</span>() &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;p&gt;今日访问量：&#123;&#123; <span class="variable">$metrics</span>-&gt;<span class="title function_ invoke__">getTodayVisits</span>() &#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="once-指令"><a href="#once-指令" class="headerlink" title="@once 指令"></a>@once 指令</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 确保代码只执行一次 --&#125;&#125;</span><br><span class="line">@once</span><br><span class="line">    @<span class="title function_ invoke__">push</span>(<span class="string">&#x27;scripts&#x27;</span>)</span><br><span class="line">        &lt;script src=<span class="string">&quot;&#123;&#123; asset(&#x27;js/chart.js&#x27;) &#125;&#125;&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line">    @endpush</span><br><span class="line">@endonce</span><br></pre></td></tr></table></figure>
+
+<h3 id="原始-PHP"><a href="#原始-PHP" class="headerlink" title="原始 PHP"></a>原始 PHP</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 使用原始 PHP 代码 --&#125;&#125;</span><br><span class="line">@php</span><br><span class="line">    <span class="variable">$isWeekend</span> = <span class="title function_ invoke__">date</span>(<span class="string">&#x27;N&#x27;</span>) &gt;= <span class="number">6</span>;</span><br><span class="line">    <span class="variable">$greeting</span> = <span class="variable">$isWeekend</span> ? <span class="string">&#x27;周末愉快&#x27;</span> : <span class="string">&#x27;工作日快乐&#x27;</span>;</span><br><span class="line">@endphp</span><br><span class="line"></span><br><span class="line">&lt;h1&gt;&#123;&#123; <span class="variable">$greeting</span> &#125;&#125;！&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="表单处理"><a href="#表单处理" class="headerlink" title="表单处理"></a>表单处理</h2><h3 id="CSRF-保护"><a href="#CSRF-保护" class="headerlink" title="CSRF 保护"></a>CSRF 保护</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method=<span class="string">&quot;POST&quot;</span> action=<span class="string">&quot;&#123;&#123; route(&#x27;posts.store&#x27;) &#125;&#125;&quot;</span>&gt;</span><br><span class="line">    @csrf</span><br><span class="line">    </span><br><span class="line">    &lt;x-forms.input </span><br><span class="line">        name=<span class="string">&quot;title&quot;</span> </span><br><span class="line">        label=<span class="string">&quot;标题&quot;</span> </span><br><span class="line">        :required=<span class="string">&quot;true&quot;</span></span><br><span class="line">        :error=<span class="string">&quot;<span class="subst">$errors</span>-&gt;first(&#x27;title&#x27;)&quot;</span></span><br><span class="line">    /&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;x-forms.textarea </span><br><span class="line">        name=<span class="string">&quot;content&quot;</span> </span><br><span class="line">        label=<span class="string">&quot;内容&quot;</span></span><br><span class="line">        :required=<span class="string">&quot;true&quot;</span></span><br><span class="line">        :error=<span class="string">&quot;<span class="subst">$errors</span>-&gt;first(&#x27;content&#x27;)&quot;</span></span><br><span class="line">    /&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;x-button type=<span class="string">&quot;submit&quot;</span>&gt;发布文章&lt;/x-button&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法伪造"><a href="#方法伪造" class="headerlink" title="方法伪造"></a>方法伪造</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;form method=<span class="string">&quot;POST&quot;</span> action=<span class="string">&quot;&#123;&#123; route(&#x27;posts.update&#x27;, <span class="subst">$post</span>) &#125;&#125;&quot;</span>&gt;</span><br><span class="line">    @csrf</span><br><span class="line">    @<span class="title function_ invoke__">method</span>(<span class="string">&#x27;PUT&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    &#123;&#123;-- 表单字段 --&#125;&#125;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="验证错误显示"><a href="#验证错误显示" class="headerlink" title="验证错误显示"></a>验证错误显示</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;-- 显示所有错误 --&#125;&#125;</span><br><span class="line">@<span class="keyword">if</span> (<span class="variable">$errors</span>-&gt;<span class="title function_ invoke__">any</span>())</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">alert</span> <span class="title">alert</span>-<span class="title">danger</span>&quot;&gt;</span></span><br><span class="line"><span class="class">        &lt;<span class="title">ul</span>&gt;</span></span><br><span class="line"><span class="class">            @<span class="title">foreach</span> ($<span class="title">errors</span>-&gt;<span class="title">all</span>() <span class="title">as</span> $<span class="title">error</span>)</span></span><br><span class="line"><span class="class">                &lt;<span class="title">li</span>&gt;</span>&#123;&#123; <span class="variable">$error</span> &#125;&#125;&lt;/li&gt;</span><br><span class="line">            @<span class="keyword">endforeach</span></span><br><span class="line">        &lt;/ul&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">@<span class="keyword">endif</span></span><br><span class="line"></span><br><span class="line">&#123;&#123;-- 显示特定字段错误 --&#125;&#125;</span><br><span class="line">@<span class="title function_ invoke__">error</span>(<span class="string">&#x27;email&#x27;</span>)</span><br><span class="line">    &lt;div <span class="class"><span class="keyword">class</span>=&quot;<span class="title">text</span>-<span class="title">red</span>-500 <span class="title">text</span>-<span class="title">sm</span>&quot;&gt;</span>&#123;&#123; <span class="variable">$message</span> &#125;&#125;&lt;/div&gt;</span><br><span class="line">@enderror</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><h3 id="视图缓存"><a href="#视图缓存" class="headerlink" title="视图缓存"></a>视图缓存</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 缓存视图</span></span><br><span class="line">php artisan view:cache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除视图缓存</span></span><br><span class="line">php artisan view:clear</span><br></pre></td></tr></table></figure>
+
+<h3 id="组件缓存"><a href="#组件缓存" class="headerlink" title="组件缓存"></a>组件缓存</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 AppServiceProvider 中</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 在生产环境中缓存组件</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">app</span>()-&gt;<span class="title function_ invoke__">environment</span>(<span class="string">&#x27;production&#x27;</span>)) &#123;</span><br><span class="line">        <span class="title class_">Blade</span>::<span class="title function_ invoke__">componentNamespace</span>(<span class="string">&#x27;App\\View\\Components&#x27;</span>, <span class="string">&#x27;app&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><ol>
+<li><strong>保持模板简洁</strong>：避免在模板中编写复杂的业务逻辑</li>
+<li><strong>合理使用组件</strong>：将可重用的 UI 元素封装成组件</li>
+<li><strong>遵循命名约定</strong>：使用清晰、一致的文件和变量命名</li>
+<li><strong>安全第一</strong>：始终使用 <code>&#123;&#123; &#125;&#125;</code> 输出用户数据，避免 XSS 攻击</li>
+<li><strong>性能考虑</strong>：在生产环境中启用视图缓存</li>
+<li><strong>代码复用</strong>：使用 <code>@include</code> 和组件避免重复代码</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Blade 模板引擎是 Laravel 框架的重要组成部分，它提供了强大而优雅的模板解决方案。通过掌握 Blade 的基础语法、模板继承、组件系统和高级特性，你可以构建出结构清晰、易于维护的前端界面。合理使用 Blade 的各种功能，将大大提高你的开发效率和代码质量。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Laravel/">Laravel</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Blade/">Blade</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E/">模板引擎</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%89%8D%E7%AB%AF/">前端</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%BB%84%E4%BB%B6/">组件</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/vue/vue3-pinia-advanced-state-management/"
+                                   title="Vue 3 状态管理进阶：Pinia 高级用法与插件开发实战"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Vue 3 状态管理进阶：Pinia 高级用法与插件开发实战</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/vue/vue3-microfrontend-module-federation/"
+                                   title="Vue 3 微前端架构实战：Module Federation 与 qiankun 深度解析"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Vue 3 微前端架构实战：Module Federation 与 qiankun 深度解析</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Blade-%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E%E7%AE%80%E4%BB%8B"><span class="nav-text">Blade 模板引擎简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-text">核心特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-text">文件结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-text">基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE"><span class="nav-text">显示数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E8%BE%93%E5%87%BA"><span class="nav-text">原始数据输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-JavaScript-%E6%A1%86%E6%9E%B6%E5%85%BC%E5%AE%B9"><span class="nav-text">与 JavaScript 框架兼容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blade-%E6%8C%87%E4%BB%A4"><span class="nav-text">Blade 指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5"><span class="nav-text">条件语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5"><span class="nav-text">循环语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E5%8F%98%E9%87%8F"><span class="nav-text">循环变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Switch-%E8%AF%AD%E5%8F%A5"><span class="nav-text">Switch 语句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%BB%A7%E6%89%BF"><span class="nav-text">模板继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%B8%83%E5%B1%80"><span class="nav-text">定义布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E5%B8%83%E5%B1%80"><span class="nav-text">继承布局</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-text">组件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%BB%84%E4%BB%B6"><span class="nav-text">创建组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%B1%BB"><span class="nav-text">组件类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E8%A7%86%E5%9B%BE"><span class="nav-text">组件视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%BB%84%E4%BB%B6"><span class="nav-text">使用组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E7%BB%84%E4%BB%B6"><span class="nav-text">匿名组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E6%8F%92%E6%A7%BD"><span class="nav-text">组件插槽</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7"><span class="nav-text">高级特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85%E5%90%AB%E5%AD%90%E8%A7%86%E5%9B%BE"><span class="nav-text">包含子视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86%E6%A0%88"><span class="nav-text">堆栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%85%A5"><span class="nav-text">服务注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#once-%E6%8C%87%E4%BB%A4"><span class="nav-text">@once 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B-PHP"><span class="nav-text">原始 PHP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E5%A4%84%E7%90%86"><span class="nav-text">表单处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF-%E4%BF%9D%E6%8A%A4"><span class="nav-text">CSRF 保护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BC%AA%E9%80%A0"><span class="nav-text">方法伪造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E9%94%99%E8%AF%AF%E6%98%BE%E7%A4%BA"><span class="nav-text">验证错误显示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-text">性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE%E7%BC%93%E5%AD%98"><span class="nav-text">视图缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%BC%93%E5%AD%98"><span class="nav-text">组件缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Blade-%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E%E7%AE%80%E4%BB%8B"><span class="nav-text">Blade 模板引擎简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-text">核心特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-text">文件结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="nav-text">基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE"><span class="nav-text">显示数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B%E6%95%B0%E6%8D%AE%E8%BE%93%E5%87%BA"><span class="nav-text">原始数据输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-JavaScript-%E6%A1%86%E6%9E%B6%E5%85%BC%E5%AE%B9"><span class="nav-text">与 JavaScript 框架兼容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blade-%E6%8C%87%E4%BB%A4"><span class="nav-text">Blade 指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5"><span class="nav-text">条件语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5"><span class="nav-text">循环语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E5%8F%98%E9%87%8F"><span class="nav-text">循环变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Switch-%E8%AF%AD%E5%8F%A5"><span class="nav-text">Switch 语句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E7%BB%A7%E6%89%BF"><span class="nav-text">模板继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%B8%83%E5%B1%80"><span class="nav-text">定义布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E5%B8%83%E5%B1%80"><span class="nav-text">继承布局</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-text">组件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%BB%84%E4%BB%B6"><span class="nav-text">创建组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%B1%BB"><span class="nav-text">组件类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E8%A7%86%E5%9B%BE"><span class="nav-text">组件视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%BB%84%E4%BB%B6"><span class="nav-text">使用组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E7%BB%84%E4%BB%B6"><span class="nav-text">匿名组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E6%8F%92%E6%A7%BD"><span class="nav-text">组件插槽</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%89%B9%E6%80%A7"><span class="nav-text">高级特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%85%E5%90%AB%E5%AD%90%E8%A7%86%E5%9B%BE"><span class="nav-text">包含子视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86%E6%A0%88"><span class="nav-text">堆栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%85%A5"><span class="nav-text">服务注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#once-%E6%8C%87%E4%BB%A4"><span class="nav-text">@once 指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%A7%8B-PHP"><span class="nav-text">原始 PHP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E5%A4%84%E7%90%86"><span class="nav-text">表单处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF-%E4%BF%9D%E6%8A%A4"><span class="nav-text">CSRF 保护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BC%AA%E9%80%A0"><span class="nav-text">方法伪造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E9%94%99%E8%AF%AF%E6%98%BE%E7%A4%BA"><span class="nav-text">验证错误显示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-text">性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%86%E5%9B%BE%E7%BC%93%E5%AD%98"><span class="nav-text">视图缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%BC%93%E5%AD%98"><span class="nav-text">组件缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

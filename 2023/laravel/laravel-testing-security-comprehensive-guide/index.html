@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Laravel 测试与安全防护：构建可靠安全的Web应用 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Laravel 测试与安全防护：构建可靠安全的Web应用
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-08-15 14:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/laravel/">laravel</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%B5%8B%E8%AF%95/">测试</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Laravel/">Laravel</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4/">安全防护</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/PHPUnit/">PHPUnit</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/XSS/">XSS</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>在现代Web开发中，测试和安全防护是确保应用程序质量和可靠性的两大支柱。Laravel框架为开发者提供了完善的测试工具和强大的安全防护机制。本文将深入探讨Laravel中的测试最佳实践和安全防护策略，帮助你构建更加可靠和安全的Web应用。</p>
+<span id="more"></span>
+
+<h2 id="一、Laravel测试基础"><a href="#一、Laravel测试基础" class="headerlink" title="一、Laravel测试基础"></a>一、Laravel测试基础</h2><h3 id="1-1-测试类型概述"><a href="#1-1-测试类型概述" class="headerlink" title="1.1 测试类型概述"></a>1.1 测试类型概述</h3><p>Laravel支持两种主要的测试类型：</p>
+<p><strong>单元测试（Unit Tests）</strong></p>
+<ul>
+<li>测试单个方法或类的功能</li>
+<li>专注于代码逻辑的正确性</li>
+<li>运行速度快，不依赖外部资源</li>
+</ul>
+<p><strong>功能测试（Feature Tests）</strong></p>
+<ul>
+<li>测试完整的用户场景</li>
+<li>模拟HTTP请求和响应</li>
+<li>测试多个组件的协同工作</li>
+</ul>
+<h3 id="1-2-创建测试文件"><a href="#1-2-创建测试文件" class="headerlink" title="1.2 创建测试文件"></a>1.2 创建测试文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建单元测试</span></span><br><span class="line">php artisan make:<span class="built_in">test</span> UserTest --unit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建功能测试</span></span><br><span class="line">php artisan make:<span class="built_in">test</span> UserRegistrationTest</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-基本测试结构"><a href="#1-3-基本测试结构" class="headerlink" title="1.3 基本测试结构"></a>1.3 基本测试结构</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Tests</span>\<span class="title class_">Unit</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">PHPUnit</span>\<span class="title">Framework</span>\<span class="title">TestCase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">User</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试用户名格式化功能</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testUserNameFormatting</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="keyword">new</span> <span class="title class_">User</span>();</span><br><span class="line">        <span class="variable">$user</span>-&gt;name = <span class="string">&#x27;john doe&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 测试访问器是否正确格式化用户名</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertEquals</span>(<span class="string">&#x27;John Doe&#x27;</span>, <span class="variable">$user</span>-&gt;formatted_name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、单元测试最佳实践"><a href="#二、单元测试最佳实践" class="headerlink" title="二、单元测试最佳实践"></a>二、单元测试最佳实践</h2><h3 id="2-1-测试模型访问器和修改器"><a href="#2-1-测试模型访问器和修改器" class="headerlink" title="2.1 测试模型访问器和修改器"></a>2.1 测试模型访问器和修改器</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Tests</span>\<span class="title class_">Unit</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Tests</span>\<span class="title">TestCase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">Post</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试文章标题访问器</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testTitleAccessor</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$post</span> = <span class="keyword">new</span> <span class="title class_">Post</span>();</span><br><span class="line">        <span class="variable">$post</span>-&gt;title = <span class="string">&#x27;laravel testing guide&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 测试标题是否正确转换为首字母大写</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertEquals</span>(<span class="string">&#x27;Laravel Testing Guide&#x27;</span>, <span class="variable">$post</span>-&gt;title);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试文章摘要生成</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testExcerptGeneration</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$post</span> = <span class="keyword">new</span> <span class="title class_">Post</span>();</span><br><span class="line">        <span class="variable">$post</span>-&gt;content = <span class="title function_ invoke__">str_repeat</span>(<span class="string">&#x27;Lorem ipsum dolor sit amet. &#x27;</span>, <span class="number">50</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$excerpt</span> = <span class="variable">$post</span>-&gt;<span class="title function_ invoke__">generateExcerpt</span>(<span class="number">100</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertLessThanOrEqual</span>(<span class="number">100</span>, <span class="title function_ invoke__">strlen</span>(<span class="variable">$excerpt</span>));</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertStringEndsWith</span>(<span class="string">&#x27;...&#x27;</span>, <span class="variable">$excerpt</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-测试服务类"><a href="#2-2-测试服务类" class="headerlink" title="2.2 测试服务类"></a>2.2 测试服务类</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Tests</span>\<span class="title class_">Unit</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Tests</span>\<span class="title">TestCase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Services</span>\<span class="title">PaymentService</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">Order</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Mockery</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PaymentServiceTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试支付处理逻辑</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testPaymentProcessing</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 创建模拟的支付网关</span></span><br><span class="line">        <span class="variable">$gateway</span> = <span class="title class_">Mockery</span>::<span class="title function_ invoke__">mock</span>(<span class="string">&#x27;App\Contracts\PaymentGateway&#x27;</span>);</span><br><span class="line">        <span class="variable">$gateway</span>-&gt;<span class="title function_ invoke__">shouldReceive</span>(<span class="string">&#x27;charge&#x27;</span>)</span><br><span class="line">                -&gt;<span class="title function_ invoke__">once</span>()</span><br><span class="line">                -&gt;<span class="title function_ invoke__">with</span>(<span class="number">100.00</span>, <span class="string">&#x27;usd&#x27;</span>)</span><br><span class="line">                -&gt;<span class="title function_ invoke__">andReturn</span>([<span class="string">&#x27;status&#x27;</span> =&gt; <span class="string">&#x27;success&#x27;</span>, <span class="string">&#x27;transaction_id&#x27;</span> =&gt; <span class="string">&#x27;txn_123&#x27;</span>]);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$service</span> = <span class="keyword">new</span> <span class="title class_">PaymentService</span>(<span class="variable">$gateway</span>);</span><br><span class="line">        <span class="variable">$order</span> = <span class="title function_ invoke__">factory</span>(<span class="title class_">Order</span>::<span class="variable language_">class</span>)-&gt;<span class="title function_ invoke__">make</span>([<span class="string">&#x27;total&#x27;</span> =&gt; <span class="number">100.00</span>]);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$result</span> = <span class="variable">$service</span>-&gt;<span class="title function_ invoke__">processPayment</span>(<span class="variable">$order</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertTrue</span>(<span class="variable">$result</span>[<span class="string">&#x27;success&#x27;</span>]);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertEquals</span>(<span class="string">&#x27;txn_123&#x27;</span>, <span class="variable">$result</span>[<span class="string">&#x27;transaction_id&#x27;</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、功能测试实践"><a href="#三、功能测试实践" class="headerlink" title="三、功能测试实践"></a>三、功能测试实践</h2><h3 id="3-1-HTTP测试基础"><a href="#3-1-HTTP测试基础" class="headerlink" title="3.1 HTTP测试基础"></a>3.1 HTTP测试基础</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Tests</span>\<span class="title class_">Feature</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Tests</span>\<span class="title">TestCase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">User</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Testing</span>\<span class="title">RefreshDatabase</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserRegistrationTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">RefreshDatabase</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试用户注册流程</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testUserCanRegister</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$userData</span> = [</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;John Doe&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;email&#x27;</span> =&gt; <span class="string">&#x27;john@example.com&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;password&#x27;</span> =&gt; <span class="string">&#x27;password123&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;password_confirmation&#x27;</span> =&gt; <span class="string">&#x27;password123&#x27;</span></span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/register&#x27;</span>, <span class="variable">$userData</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">assertRedirect</span>(<span class="string">&#x27;/dashboard&#x27;</span>);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertDatabaseHas</span>(<span class="string">&#x27;users&#x27;</span>, [</span><br><span class="line">            <span class="string">&#x27;email&#x27;</span> =&gt; <span class="string">&#x27;john@example.com&#x27;</span></span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试注册验证</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testRegistrationValidation</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/register&#x27;</span>, [</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;email&#x27;</span> =&gt; <span class="string">&#x27;invalid-email&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;password&#x27;</span> =&gt; <span class="string">&#x27;123&#x27;</span></span><br><span class="line">        ]);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">assertSessionHasErrors</span>([<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;email&#x27;</span>, <span class="string">&#x27;password&#x27;</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-API测试"><a href="#3-2-API测试" class="headerlink" title="3.2 API测试"></a>3.2 API测试</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Tests</span>\<span class="title class_">Feature</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Tests</span>\<span class="title">TestCase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">User</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">Post</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Laravel</span>\<span class="title">Sanctum</span>\<span class="title">Sanctum</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Testing</span>\<span class="title">RefreshDatabase</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostApiTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">RefreshDatabase</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试获取文章列表API</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testGetPostsList</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">create</span>();</span><br><span class="line">        <span class="title class_">Post</span>::<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">count</span>(<span class="number">5</span>)-&gt;<span class="title function_ invoke__">create</span>([<span class="string">&#x27;user_id&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;id]);</span><br><span class="line">        </span><br><span class="line">        <span class="title class_">Sanctum</span>::<span class="title function_ invoke__">actingAs</span>(<span class="variable">$user</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getJson</span>(<span class="string">&#x27;/api/posts&#x27;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">assertStatus</span>(<span class="number">200</span>)</span><br><span class="line">                 -&gt;<span class="title function_ invoke__">assertJsonStructure</span>([</span><br><span class="line">                     <span class="string">&#x27;data&#x27;</span> =&gt; [</span><br><span class="line">                         <span class="string">&#x27;*&#x27;</span> =&gt; [<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;title&#x27;</span>, <span class="string">&#x27;content&#x27;</span>, <span class="string">&#x27;created_at&#x27;</span>]</span><br><span class="line">                     ]</span><br><span class="line">                 ]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试创建文章API</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testCreatePost</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">create</span>();</span><br><span class="line">        <span class="title class_">Sanctum</span>::<span class="title function_ invoke__">actingAs</span>(<span class="variable">$user</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$postData</span> = [</span><br><span class="line">            <span class="string">&#x27;title&#x27;</span> =&gt; <span class="string">&#x27;Test Post&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;content&#x27;</span> =&gt; <span class="string">&#x27;This is a test post content.&#x27;</span></span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">postJson</span>(<span class="string">&#x27;/api/posts&#x27;</span>, <span class="variable">$postData</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">assertStatus</span>(<span class="number">201</span>)</span><br><span class="line">                 -&gt;<span class="title function_ invoke__">assertJson</span>([</span><br><span class="line">                     <span class="string">&#x27;data&#x27;</span> =&gt; [</span><br><span class="line">                         <span class="string">&#x27;title&#x27;</span> =&gt; <span class="string">&#x27;Test Post&#x27;</span>,</span><br><span class="line">                         <span class="string">&#x27;content&#x27;</span> =&gt; <span class="string">&#x27;This is a test post content.&#x27;</span></span><br><span class="line">                     ]</span><br><span class="line">                 ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-数据库测试"><a href="#3-3-数据库测试" class="headerlink" title="3.3 数据库测试"></a>3.3 数据库测试</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Tests</span>\<span class="title class_">Feature</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Tests</span>\<span class="title">TestCase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">User</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">Post</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Testing</span>\<span class="title">RefreshDatabase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Testing</span>\<span class="title">DatabaseTransactions</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatabaseTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">RefreshDatabase</span>; <span class="comment">// 每次测试后重置数据库</span></span><br><span class="line">    <span class="comment">// use DatabaseTransactions; // 使用事务回滚</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试用户与文章关联</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testUserPostRelationship</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">create</span>();</span><br><span class="line">        <span class="variable">$post</span> = <span class="title class_">Post</span>::<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">create</span>([<span class="string">&#x27;user_id&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;id]);</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertEquals</span>(<span class="variable">$user</span>-&gt;id, <span class="variable">$post</span>-&gt;user-&gt;id);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertTrue</span>(<span class="variable">$user</span>-&gt;posts-&gt;<span class="title function_ invoke__">contains</span>(<span class="variable">$post</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试软删除功能</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testSoftDelete</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$post</span> = <span class="title class_">Post</span>::<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">create</span>();</span><br><span class="line">        <span class="variable">$postId</span> = <span class="variable">$post</span>-&gt;id;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$post</span>-&gt;<span class="title function_ invoke__">delete</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 确认记录被软删除</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertSoftDeleted</span>(<span class="string">&#x27;posts&#x27;</span>, [<span class="string">&#x27;id&#x27;</span> =&gt; <span class="variable">$postId</span>]);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 确认查询时不包含软删除记录</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertNull</span>(<span class="title class_">Post</span>::<span class="title function_ invoke__">find</span>(<span class="variable">$postId</span>));</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 确认包含软删除记录的查询能找到</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertNotNull</span>(<span class="title class_">Post</span>::<span class="title function_ invoke__">withTrashed</span>()-&gt;<span class="title function_ invoke__">find</span>(<span class="variable">$postId</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、Laravel安全防护机制"><a href="#四、Laravel安全防护机制" class="headerlink" title="四、Laravel安全防护机制"></a>四、Laravel安全防护机制</h2><h3 id="4-1-CSRF防护"><a href="#4-1-CSRF防护" class="headerlink" title="4.1 CSRF防护"></a>4.1 CSRF防护</h3><p>Laravel内置了强大的CSRF（跨站请求伪造）防护机制：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在表单中添加CSRF令牌</span></span><br><span class="line">&lt;form method=<span class="string">&quot;POST&quot;</span> action=<span class="string">&quot;/profile&quot;</span>&gt;</span><br><span class="line">    @csrf</span><br><span class="line">    &lt;!-- 表单字段 --&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者手动添加</span></span><br><span class="line">&lt;input type=<span class="string">&quot;hidden&quot;</span> name=<span class="string">&quot;_token&quot;</span> value=<span class="string">&quot;&#123;&#123; csrf_token() &#125;&#125;&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>CSRF防护配置：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app/Http/Middleware/VerifyCsrfToken.php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VerifyCsrfToken</span> <span class="keyword">extends</span> <span class="title">Middleware</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 排除CSRF验证的URI</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$except</span> = [</span><br><span class="line">        <span class="string">&#x27;stripe/*&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;api/webhook/*&#x27;</span></span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Ajax请求CSRF处理：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置全局CSRF令牌</span></span><br><span class="line">$.<span class="title function_">ajaxSetup</span>(&#123;</span><br><span class="line">    <span class="attr">headers</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;X-CSRF-TOKEN&#x27;</span>: $(<span class="string">&#x27;meta[name=&quot;csrf-token&quot;]&#x27;</span>).<span class="title function_">attr</span>(<span class="string">&#x27;content&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者在每个请求中包含</span></span><br><span class="line">$.<span class="title function_">post</span>(<span class="string">&#x27;/api/data&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">_token</span>: <span class="string">&#x27;&#123;&#123; csrf_token() &#125;&#125;&#x27;</span>,</span><br><span class="line">    <span class="attr">data</span>: <span class="string">&#x27;value&#x27;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-XSS防护"><a href="#4-2-XSS防护" class="headerlink" title="4.2 XSS防护"></a>4.2 XSS防护</h3><p><strong>输出转义：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 自动转义（推荐） --&gt;</span><br><span class="line">&#123;&#123; <span class="variable">$userInput</span> &#125;&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- 不转义（谨慎使用） --&gt;</span><br><span class="line">&#123;!! <span class="variable">$trustedHtml</span> !!&#125;</span><br><span class="line"></span><br><span class="line">&lt;!-- 手动转义 --&gt;</span><br><span class="line">&#123;&#123; <span class="title function_ invoke__">e</span>(<span class="variable">$userInput</span>) &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输入验证和过滤：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Requests</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Http</span>\<span class="title">FormRequest</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostRequest</span> <span class="keyword">extends</span> <span class="title">FormRequest</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">rules</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;title&#x27;</span> =&gt; <span class="string">&#x27;required|string|max:255&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;content&#x27;</span> =&gt; <span class="string">&#x27;required|string&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;tags&#x27;</span> =&gt; <span class="string">&#x27;array&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;tags.*&#x27;</span> =&gt; <span class="string">&#x27;string|max:50&#x27;</span></span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 配置验证器实例</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">withValidator</span>(<span class="params"><span class="variable">$validator</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$validator</span>-&gt;<span class="title function_ invoke__">after</span>(function (<span class="variable">$validator</span>) &#123;</span><br><span class="line">            <span class="comment">// 自定义验证逻辑</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">containsMaliciousContent</span>(<span class="variable">$this</span>-&gt;content)) &#123;</span><br><span class="line">                <span class="variable">$validator</span>-&gt;<span class="title function_ invoke__">errors</span>()-&gt;<span class="title function_ invoke__">add</span>(<span class="string">&#x27;content&#x27;</span>, <span class="string">&#x27;内容包含不安全字符&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 检查恶意内容</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">containsMaliciousContent</span>(<span class="params"><span class="variable">$content</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$maliciousPatterns</span> = [</span><br><span class="line">            <span class="string">&#x27;/&lt;script[^&gt;]*&gt;.*?&lt;\/script&gt;/is&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;/javascript:/i&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;/on\w+\s*=/i&#x27;</span></span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable">$maliciousPatterns</span> <span class="keyword">as</span> <span class="variable">$pattern</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="title function_ invoke__">preg_match</span>(<span class="variable">$pattern</span>, <span class="variable">$content</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用HTML Purifier：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require mews/purifier</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置文件 config/purifier.php</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">    <span class="string">&#x27;encoding&#x27;</span>      =&gt; <span class="string">&#x27;UTF-8&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;finalize&#x27;</span>      =&gt; <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&#x27;cachePath&#x27;</span>     =&gt; <span class="title function_ invoke__">storage_path</span>(<span class="string">&#x27;app/purifier&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;cacheFileMode&#x27;</span> =&gt; <span class="number">0755</span>,</span><br><span class="line">    <span class="string">&#x27;settings&#x27;</span>      =&gt; [</span><br><span class="line">        <span class="string">&#x27;default&#x27;</span> =&gt; [</span><br><span class="line">            <span class="string">&#x27;HTML.Doctype&#x27;</span>             =&gt; <span class="string">&#x27;HTML 4.01 Transitional&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;HTML.Allowed&#x27;</span>             =&gt; <span class="string">&#x27;div,b,strong,i,em,u,a[href],ul,ol,li,p[style],br,span[style],img[width|height|alt|src]&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;CSS.AllowedProperties&#x27;</span>    =&gt; <span class="string">&#x27;font,font-size,font-weight,font-style,margin,color,background-color,text-decoration,padding,text-align&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;AutoFormat.AutoParagraph&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">            <span class="string">&#x27;AutoFormat.RemoveEmpty&#x27;</span>   =&gt; <span class="literal">true</span>,</span><br><span class="line">        ],</span><br><span class="line">    ],</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">Mews</span>\<span class="title">Purifier</span>\<span class="title">Facades</span>\<span class="title">Purifier</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$cleanContent</span> = <span class="title class_">Purifier</span>::<span class="title function_ invoke__">clean</span>(<span class="variable">$userInput</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-SQL注入防护"><a href="#4-3-SQL注入防护" class="headerlink" title="4.3 SQL注入防护"></a>4.3 SQL注入防护</h3><p><strong>使用查询构建器：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 安全的参数绑定</span></span><br><span class="line"><span class="variable">$users</span> = DB::<span class="title function_ invoke__">select</span>(<span class="string">&#x27;SELECT * FROM users WHERE id = ?&#x27;</span>, [<span class="variable">$userId</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用查询构建器</span></span><br><span class="line"><span class="variable">$users</span> = DB::<span class="title function_ invoke__">table</span>(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">    -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;status&#x27;</span>, <span class="variable">$status</span>)</span><br><span class="line">    -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;created_at&#x27;</span>, <span class="string">&#x27;&gt;&#x27;</span>, <span class="variable">$date</span>)</span><br><span class="line">    -&gt;<span class="title function_ invoke__">get</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用Eloquent ORM</span></span><br><span class="line"><span class="variable">$users</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">where</span>(<span class="string">&#x27;email&#x27;</span>, <span class="variable">$email</span>)-&gt;<span class="title function_ invoke__">first</span>();</span><br></pre></td></tr></table></figure>
+
+<p><strong>避免原始查询：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 危险的做法（容易SQL注入）</span></span><br><span class="line"><span class="variable">$users</span> = DB::<span class="title function_ invoke__">select</span>(<span class="string">&quot;SELECT * FROM users WHERE name = &#x27;<span class="subst">&#123;$name&#125;</span>&#x27;&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全的做法</span></span><br><span class="line"><span class="variable">$users</span> = DB::<span class="title function_ invoke__">select</span>(<span class="string">&#x27;SELECT * FROM users WHERE name = ?&#x27;</span>, [<span class="variable">$name</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者使用命名绑定</span></span><br><span class="line"><span class="variable">$users</span> = DB::<span class="title function_ invoke__">select</span>(<span class="string">&#x27;SELECT * FROM users WHERE name = :name&#x27;</span>, [<span class="string">&#x27;name&#x27;</span> =&gt; <span class="variable">$name</span>]);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-文件上传安全"><a href="#4-4-文件上传安全" class="headerlink" title="4.4 文件上传安全"></a>4.4 文件上传安全</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Controllers</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Http</span>\<span class="title">Request</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Storage</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Str</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileUploadController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 安全的文件上传处理</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">upload</span>(<span class="params">Request <span class="variable">$request</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">validate</span>([</span><br><span class="line">            <span class="string">&#x27;file&#x27;</span> =&gt; <span class="string">&#x27;required|file|mimes:jpeg,png,pdf,doc,docx|max:2048&#x27;</span></span><br><span class="line">        ]);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$file</span> = <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">file</span>(<span class="string">&#x27;file&#x27;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 验证文件类型</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">isAllowedFileType</span>(<span class="variable">$file</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">back</span>()-&gt;<span class="title function_ invoke__">withErrors</span>([<span class="string">&#x27;file&#x27;</span> =&gt; <span class="string">&#x27;不支持的文件类型&#x27;</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 生成安全的文件名</span></span><br><span class="line">        <span class="variable">$filename</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">generateSecureFilename</span>(<span class="variable">$file</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 存储文件</span></span><br><span class="line">        <span class="variable">$path</span> = <span class="variable">$file</span>-&gt;<span class="title function_ invoke__">storeAs</span>(<span class="string">&#x27;uploads&#x27;</span>, <span class="variable">$filename</span>, <span class="string">&#x27;public&#x27;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([</span><br><span class="line">            <span class="string">&#x27;success&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">            <span class="string">&#x27;path&#x27;</span> =&gt; <span class="variable">$path</span></span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 验证文件类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">isAllowedFileType</span>(<span class="params"><span class="variable">$file</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$allowedMimes</span> = [</span><br><span class="line">            <span class="string">&#x27;image/jpeg&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;image/png&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;application/pdf&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;application/msword&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;application/vnd.openxmlformats-officedocument.wordprocessingml.document&#x27;</span></span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">in_array</span>(<span class="variable">$file</span>-&gt;<span class="title function_ invoke__">getMimeType</span>(), <span class="variable">$allowedMimes</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 生成安全的文件名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">generateSecureFilename</span>(<span class="params"><span class="variable">$file</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$extension</span> = <span class="variable">$file</span>-&gt;<span class="title function_ invoke__">getClientOriginalExtension</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Str</span>::<span class="title function_ invoke__">random</span>(<span class="number">40</span>) . <span class="string">&#x27;.&#x27;</span> . <span class="variable">$extension</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、安全配置最佳实践"><a href="#五、安全配置最佳实践" class="headerlink" title="五、安全配置最佳实践"></a>五、安全配置最佳实践</h2><h3 id="5-1-环境配置"><a href="#5-1-环境配置" class="headerlink" title="5.1 环境配置"></a>5.1 环境配置</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># .env 文件安全配置</span><br><span class="line">APP_DEBUG=false</span><br><span class="line">APP_ENV=production</span><br><span class="line"></span><br><span class="line"># 使用强密码</span><br><span class="line">DB_PASSWORD=your_strong_password_here</span><br><span class="line"></span><br><span class="line"># 配置安全的会话设置</span><br><span class="line">SESSION_SECURE_COOKIE=true</span><br><span class="line">SESSION_HTTP_ONLY=true</span><br><span class="line">SESSION_SAME_SITE=strict</span><br><span class="line"></span><br><span class="line"># 启用HTTPS</span><br><span class="line">APP_URL=https://yourdomain.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-中间件安全配置"><a href="#5-2-中间件安全配置" class="headerlink" title="5.2 中间件安全配置"></a>5.2 中间件安全配置</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Http</span>\<span class="title class_">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SecurityHeaders</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$response</span> = <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 设置安全头</span></span><br><span class="line">        <span class="variable">$response</span>-&gt;headers-&gt;<span class="title function_ invoke__">set</span>(<span class="string">&#x27;X-Content-Type-Options&#x27;</span>, <span class="string">&#x27;nosniff&#x27;</span>);</span><br><span class="line">        <span class="variable">$response</span>-&gt;headers-&gt;<span class="title function_ invoke__">set</span>(<span class="string">&#x27;X-Frame-Options&#x27;</span>, <span class="string">&#x27;DENY&#x27;</span>);</span><br><span class="line">        <span class="variable">$response</span>-&gt;headers-&gt;<span class="title function_ invoke__">set</span>(<span class="string">&#x27;X-XSS-Protection&#x27;</span>, <span class="string">&#x27;1; mode=block&#x27;</span>);</span><br><span class="line">        <span class="variable">$response</span>-&gt;headers-&gt;<span class="title function_ invoke__">set</span>(<span class="string">&#x27;Strict-Transport-Security&#x27;</span>, <span class="string">&#x27;max-age=31536000; includeSubDomains&#x27;</span>);</span><br><span class="line">        <span class="variable">$response</span>-&gt;headers-&gt;<span class="title function_ invoke__">set</span>(<span class="string">&#x27;Content-Security-Policy&#x27;</span>, <span class="string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;; style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$response</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-速率限制"><a href="#5-3-速率限制" class="headerlink" title="5.3 速率限制"></a>5.3 速率限制</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// routes/api.php</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>([<span class="string">&#x27;throttle:60,1&#x27;</span>])-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/login&#x27;</span>, [<span class="title class_">AuthController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;login&#x27;</span>]);</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/register&#x27;</span>, [<span class="title class_">AuthController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;register&#x27;</span>]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义速率限制</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>([<span class="string">&#x27;throttle:api&#x27;</span>])-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="comment">// API路由</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="六、测试安全功能"><a href="#六、测试安全功能" class="headerlink" title="六、测试安全功能"></a>六、测试安全功能</h2><h3 id="6-1-测试CSRF防护"><a href="#6-1-测试CSRF防护" class="headerlink" title="6.1 测试CSRF防护"></a>6.1 测试CSRF防护</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Tests</span>\<span class="title class_">Feature</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Tests</span>\<span class="title">TestCase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">User</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CsrfProtectionTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试CSRF保护</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testCsrfProtection</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">create</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 没有CSRF令牌的请求应该被拒绝</span></span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">actingAs</span>(<span class="variable">$user</span>)</span><br><span class="line">                         -&gt;<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/profile&#x27;</span>, [</span><br><span class="line">                             <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;New Name&#x27;</span></span><br><span class="line">                         ]);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">assertStatus</span>(<span class="number">419</span>); <span class="comment">// CSRF token mismatch</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试有效的CSRF令牌</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testValidCsrfToken</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">create</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">actingAs</span>(<span class="variable">$user</span>)</span><br><span class="line">                         -&gt;<span class="keyword">from</span>(<span class="string">&#x27;/profile&#x27;</span>)</span><br><span class="line">                         -&gt;<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/profile&#x27;</span>, [</span><br><span class="line">                             <span class="string">&#x27;_token&#x27;</span> =&gt; <span class="title function_ invoke__">csrf_token</span>(),</span><br><span class="line">                             <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;New Name&#x27;</span></span><br><span class="line">                         ]);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">assertRedirect</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-测试输入验证"><a href="#6-2-测试输入验证" class="headerlink" title="6.2 测试输入验证"></a>6.2 测试输入验证</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Tests</span>\<span class="title class_">Feature</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Tests</span>\<span class="title">TestCase</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">InputValidationTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试XSS防护</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testXssProtection</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$maliciousInput</span> = <span class="string">&#x27;&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/posts&#x27;</span>, [</span><br><span class="line">            <span class="string">&#x27;title&#x27;</span> =&gt; <span class="string">&#x27;Test Post&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;content&#x27;</span> =&gt; <span class="variable">$maliciousInput</span></span><br><span class="line">        ]);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 检查恶意脚本是否被过滤或转义</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertDatabaseMissing</span>(<span class="string">&#x27;posts&#x27;</span>, [</span><br><span class="line">            <span class="string">&#x27;content&#x27;</span> =&gt; <span class="variable">$maliciousInput</span></span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试SQL注入防护</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testSqlInjectionProtection</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$maliciousInput</span> = <span class="string">&quot;&#x27;; DROP TABLE users; --&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/search?q=&#x27;</span> . <span class="title function_ invoke__">urlencode</span>(<span class="variable">$maliciousInput</span>));</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 确保数据库表仍然存在</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertDatabaseHas</span>(<span class="string">&#x27;users&#x27;</span>, []);</span><br><span class="line">        <span class="variable">$response</span>-&gt;<span class="title function_ invoke__">assertStatus</span>(<span class="number">200</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、性能测试"><a href="#七、性能测试" class="headerlink" title="七、性能测试"></a>七、性能测试</h2><h3 id="7-1-基准测试"><a href="#7-1-基准测试" class="headerlink" title="7.1 基准测试"></a>7.1 基准测试</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Tests</span>\<span class="title class_">Feature</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Tests</span>\<span class="title">TestCase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Models</span>\<span class="title">Post</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PerformanceTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试查询性能</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testQueryPerformance</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 创建大量测试数据</span></span><br><span class="line">        <span class="title class_">Post</span>::<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">count</span>(<span class="number">1000</span>)-&gt;<span class="title function_ invoke__">create</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$startTime</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 执行查询</span></span><br><span class="line">        <span class="variable">$posts</span> = <span class="title class_">Post</span>::<span class="title function_ invoke__">with</span>(<span class="string">&#x27;user&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;status&#x27;</span>, <span class="string">&#x27;published&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">orderBy</span>(<span class="string">&#x27;created_at&#x27;</span>, <span class="string">&#x27;desc&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">paginate</span>(<span class="number">20</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$endTime</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line">        <span class="variable">$executionTime</span> = <span class="variable">$endTime</span> - <span class="variable">$startTime</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 断言查询时间在可接受范围内（例如小于100ms）</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertLessThan</span>(<span class="number">0.1</span>, <span class="variable">$executionTime</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="八、持续集成中的测试"><a href="#八、持续集成中的测试" class="headerlink" title="八、持续集成中的测试"></a>八、持续集成中的测试</h2><h3 id="8-1-GitHub-Actions配置"><a href="#8-1-GitHub-Actions配置" class="headerlink" title="8.1 GitHub Actions配置"></a>8.1 GitHub Actions配置</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .github/workflows/tests.yml</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">Tests</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span> [ <span class="string">main</span>, <span class="string">develop</span> ]</span><br><span class="line">  <span class="attr">pull_request:</span></span><br><span class="line">    <span class="attr">branches:</span> [ <span class="string">main</span> ]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">test:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    </span><br><span class="line">    <span class="attr">services:</span></span><br><span class="line">      <span class="attr">mysql:</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">mysql:8.0</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">password</span></span><br><span class="line">          <span class="attr">MYSQL_DATABASE:</span> <span class="string">testing</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="number">3306</span><span class="string">:3306</span></span><br><span class="line">        <span class="attr">options:</span> <span class="string">--health-cmd=&quot;mysqladmin</span> <span class="string">ping&quot;</span> <span class="string">--health-interval=10s</span> <span class="string">--health-timeout=5s</span> <span class="string">--health-retries=3</span></span><br><span class="line">    </span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line">    </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Setup</span> <span class="string">PHP</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">shivammathur/setup-php@v2</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">php-version:</span> <span class="string">&#x27;8.1&#x27;</span></span><br><span class="line">        <span class="attr">extensions:</span> <span class="string">mbstring,</span> <span class="string">dom,</span> <span class="string">fileinfo,</span> <span class="string">mysql</span></span><br><span class="line">    </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">dependencies</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">composer</span> <span class="string">install</span> <span class="string">--prefer-dist</span> <span class="string">--no-progress</span></span><br><span class="line">    </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Copy</span> <span class="string">environment</span> <span class="string">file</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">cp</span> <span class="string">.env.testing</span> <span class="string">.env</span></span><br><span class="line">    </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Generate</span> <span class="string">application</span> <span class="string">key</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">php</span> <span class="string">artisan</span> <span class="string">key:generate</span></span><br><span class="line">    </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">migrations</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">php</span> <span class="string">artisan</span> <span class="string">migrate</span> <span class="string">--force</span></span><br><span class="line">    </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">tests</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">php</span> <span class="string">artisan</span> <span class="string">test</span> <span class="string">--coverage</span></span><br><span class="line">    </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">security</span> <span class="string">checks</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">composer</span> <span class="string">audit</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Laravel的测试和安全防护是构建高质量Web应用的重要基础。通过合理运用单元测试和功能测试，我们可以确保代码的正确性和稳定性。同时，利用Laravel内置的安全机制和最佳实践，可以有效防范常见的Web安全威胁。</p>
+<p><strong>关键要点：</strong></p>
+<ol>
+<li><strong>测试驱动开发</strong>：先写测试，再写实现代码</li>
+<li><strong>全面的测试覆盖</strong>：包括单元测试、功能测试和集成测试</li>
+<li><strong>安全第一</strong>：始终验证和过滤用户输入</li>
+<li><strong>持续监控</strong>：定期进行安全审计和性能测试</li>
+<li><strong>团队协作</strong>：建立测试和安全的团队标准</li>
+</ol>
+<p>记住，安全和测试不是一次性的工作，而是需要在整个开发生命周期中持续关注和改进的过程。通过建立良好的测试习惯和安全意识，我们可以构建更加可靠、安全的Laravel应用。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%B5%8B%E8%AF%95/">测试</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Laravel/">Laravel</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4/">安全防护</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/PHPUnit/">PHPUnit</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/XSS/">XSS</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/laravel/laravel-deployment-optimization-production-guide/"
+                                   title="Laravel 生产环境部署与性能优化完全指南"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Laravel 生产环境部署与性能优化完全指南</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/vue/vue3-reactivity-system-deep-dive/"
+                                   title="Vue 3 响应式系统深度解析与实战应用"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Vue 3 响应式系统深度解析与实战应用</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Laravel%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80"><span class="nav-text">一、Laravel测试基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%B5%8B%E8%AF%95%E7%B1%BB%E5%9E%8B%E6%A6%82%E8%BF%B0"><span class="nav-text">1.1 测试类型概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%88%9B%E5%BB%BA%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6"><span class="nav-text">1.2 创建测试文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%9F%BA%E6%9C%AC%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%84"><span class="nav-text">1.3 基本测试结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">二、单元测试最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%B5%8B%E8%AF%95%E6%A8%A1%E5%9E%8B%E8%AE%BF%E9%97%AE%E5%99%A8%E5%92%8C%E4%BF%AE%E6%94%B9%E5%99%A8"><span class="nav-text">2.1 测试模型访问器和修改器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%B5%8B%E8%AF%95%E6%9C%8D%E5%8A%A1%E7%B1%BB"><span class="nav-text">2.2 测试服务类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95%E5%AE%9E%E8%B7%B5"><span class="nav-text">三、功能测试实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-HTTP%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80"><span class="nav-text">3.1 HTTP测试基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-API%E6%B5%8B%E8%AF%95"><span class="nav-text">3.2 API测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B5%8B%E8%AF%95"><span class="nav-text">3.3 数据库测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Laravel%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4%E6%9C%BA%E5%88%B6"><span class="nav-text">四、Laravel安全防护机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-CSRF%E9%98%B2%E6%8A%A4"><span class="nav-text">4.1 CSRF防护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-XSS%E9%98%B2%E6%8A%A4"><span class="nav-text">4.2 XSS防护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-SQL%E6%B3%A8%E5%85%A5%E9%98%B2%E6%8A%A4"><span class="nav-text">4.3 SQL注入防护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%AE%89%E5%85%A8"><span class="nav-text">4.4 文件上传安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">五、安全配置最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-text">5.1 环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE"><span class="nav-text">5.2 中间件安全配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="nav-text">5.3 速率限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%B5%8B%E8%AF%95%E5%AE%89%E5%85%A8%E5%8A%9F%E8%83%BD"><span class="nav-text">六、测试安全功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E6%B5%8B%E8%AF%95CSRF%E9%98%B2%E6%8A%A4"><span class="nav-text">6.1 测试CSRF防护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%B5%8B%E8%AF%95%E8%BE%93%E5%85%A5%E9%AA%8C%E8%AF%81"><span class="nav-text">6.2 测试输入验证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-text">七、性能测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="nav-text">7.1 基准测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%B8%AD%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-text">八、持续集成中的测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-GitHub-Actions%E9%85%8D%E7%BD%AE"><span class="nav-text">8.1 GitHub Actions配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Laravel%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80"><span class="nav-text">一、Laravel测试基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%B5%8B%E8%AF%95%E7%B1%BB%E5%9E%8B%E6%A6%82%E8%BF%B0"><span class="nav-text">1.1 测试类型概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%88%9B%E5%BB%BA%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6"><span class="nav-text">1.2 创建测试文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%9F%BA%E6%9C%AC%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%84"><span class="nav-text">1.3 基本测试结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">二、单元测试最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%B5%8B%E8%AF%95%E6%A8%A1%E5%9E%8B%E8%AE%BF%E9%97%AE%E5%99%A8%E5%92%8C%E4%BF%AE%E6%94%B9%E5%99%A8"><span class="nav-text">2.1 测试模型访问器和修改器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%B5%8B%E8%AF%95%E6%9C%8D%E5%8A%A1%E7%B1%BB"><span class="nav-text">2.2 测试服务类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95%E5%AE%9E%E8%B7%B5"><span class="nav-text">三、功能测试实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-HTTP%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80"><span class="nav-text">3.1 HTTP测试基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-API%E6%B5%8B%E8%AF%95"><span class="nav-text">3.2 API测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B5%8B%E8%AF%95"><span class="nav-text">3.3 数据库测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Laravel%E5%AE%89%E5%85%A8%E9%98%B2%E6%8A%A4%E6%9C%BA%E5%88%B6"><span class="nav-text">四、Laravel安全防护机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-CSRF%E9%98%B2%E6%8A%A4"><span class="nav-text">4.1 CSRF防护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-XSS%E9%98%B2%E6%8A%A4"><span class="nav-text">4.2 XSS防护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-SQL%E6%B3%A8%E5%85%A5%E9%98%B2%E6%8A%A4"><span class="nav-text">4.3 SQL注入防护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%AE%89%E5%85%A8"><span class="nav-text">4.4 文件上传安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">五、安全配置最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-text">5.1 环境配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE"><span class="nav-text">5.2 中间件安全配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="nav-text">5.3 速率限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%B5%8B%E8%AF%95%E5%AE%89%E5%85%A8%E5%8A%9F%E8%83%BD"><span class="nav-text">六、测试安全功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E6%B5%8B%E8%AF%95CSRF%E9%98%B2%E6%8A%A4"><span class="nav-text">6.1 测试CSRF防护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%B5%8B%E8%AF%95%E8%BE%93%E5%85%A5%E9%AA%8C%E8%AF%81"><span class="nav-text">6.2 测试输入验证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-text">七、性能测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="nav-text">7.1 基准测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E4%B8%AD%E7%9A%84%E6%B5%8B%E8%AF%95"><span class="nav-text">八、持续集成中的测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-GitHub-Actions%E9%85%8D%E7%BD%AE"><span class="nav-text">8.1 GitHub Actions配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

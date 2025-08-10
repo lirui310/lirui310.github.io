@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Laravel 路由系统完全指南：从基础到高级应用 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Laravel 路由系统完全指南：从基础到高级应用
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-08-15 10:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/laravel/">laravel</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Laravel/">Laravel</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%B7%AF%E7%94%B1/">路由</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/API/">API</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Web%E5%BC%80%E5%8F%91/">Web开发</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>Laravel 的路由系统是框架的核心组件之一，它负责将 HTTP 请求映射到相应的控制器或闭包函数。本文将深入探讨 Laravel 路由系统的各个方面，从基础用法到高级特性。</p>
+<h2 id="基础路由概念"><a href="#基础路由概念" class="headerlink" title="基础路由概念"></a>基础路由概念</h2><h3 id="路由文件结构"><a href="#路由文件结构" class="headerlink" title="路由文件结构"></a>路由文件结构</h3><p>Laravel 中的所有路由都定义在 <code>routes</code> 目录中：</p>
+<ul>
+<li><code>routes/web.php</code> - 用于 Web 界面的路由，自动应用 <code>web</code> 中间件组</li>
+<li><code>routes/api.php</code> - 用于 API 路由，自动应用 <code>api</code> 中间件组和 <code>/api</code> 前缀</li>
+<li><code>routes/console.php</code> - 用于 Artisan 命令</li>
+<li><code>routes/channels.php</code> - 用于广播频道</li>
+</ul>
+<h3 id="基本路由定义"><a href="#基本路由定义" class="headerlink" title="基本路由定义"></a>基本路由定义</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基本 GET 路由</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/users&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello World&#x27;</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用控制器</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>\<span class="title">UserController</span>;</span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/users&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;index&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 支持多种 HTTP 方法</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/users&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;store&#x27;</span>]);</span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">put</span>(<span class="string">&#x27;/users/&#123;id&#125;&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;update&#x27;</span>]);</span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">delete</span>(<span class="string">&#x27;/users/&#123;id&#125;&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;destroy&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 响应多个 HTTP 方法</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="keyword">match</span>([<span class="string">&#x27;get&#x27;</span>, <span class="string">&#x27;post&#x27;</span>], <span class="string">&#x27;/contact&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 处理 GET 和 POST 请求</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 响应所有 HTTP 方法</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">any</span>(<span class="string">&#x27;/search&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="comment">// 处理所有 HTTP 方法</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="路由参数"><a href="#路由参数" class="headerlink" title="路由参数"></a>路由参数</h2><h3 id="必需参数"><a href="#必需参数" class="headerlink" title="必需参数"></a>必需参数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单个参数</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/user/&#123;id&#125;&#x27;</span>, function (<span class="variable">$id</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;User ID: &#x27;</span> . <span class="variable">$id</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 多个参数</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/posts/&#123;post&#125;/comments/&#123;comment&#125;&#x27;</span>, function (<span class="variable">$postId</span>, <span class="variable">$commentId</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Post: <span class="subst">&#123;$postId&#125;</span>, Comment: <span class="subst">&#123;$commentId&#125;</span>&quot;</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="可选参数"><a href="#可选参数" class="headerlink" title="可选参数"></a>可选参数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 可选参数需要提供默认值</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/user/&#123;name?&#125;&#x27;</span>, function (<span class="variable">$name</span> = <span class="string">&#x27;Guest&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello &#x27;</span> . <span class="variable">$name</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="正则表达式约束"><a href="#正则表达式约束" class="headerlink" title="正则表达式约束"></a>正则表达式约束</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 参数必须是数字</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/user/&#123;id&#125;&#x27;</span>, function (<span class="variable">$id</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;User ID: &#x27;</span> . <span class="variable">$id</span>;</span><br><span class="line">&#125;)-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;[0-9]+&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 参数必须是字母</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/user/&#123;name&#125;&#x27;</span>, function (<span class="variable">$name</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;User Name: &#x27;</span> . <span class="variable">$name</span>;</span><br><span class="line">&#125;)-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;[A-Za-z]+&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 多个约束</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/user/&#123;id&#125;/&#123;name&#125;&#x27;</span>, function (<span class="variable">$id</span>, <span class="variable">$name</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;User: <span class="subst">&#123;$id&#125;</span> - <span class="subst">&#123;$name&#125;</span>&quot;</span>;</span><br><span class="line">&#125;)-&gt;<span class="title function_ invoke__">where</span>([<span class="string">&#x27;id&#x27;</span> =&gt; <span class="string">&#x27;[0-9]+&#x27;</span>, <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;[a-z]+&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局约束（在 RouteServiceProvider 中定义）</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">pattern</span>(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;[0-9]+&#x27;</span>);</span><br><span class="line">    <span class="built_in">parent</span>::<span class="title function_ invoke__">boot</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="命名路由"><a href="#命名路由" class="headerlink" title="命名路由"></a>命名路由</h2><p>命名路由允许为特定路由生成 URL 或重定向：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义命名路由</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/user/profile&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;profile&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;user.profile&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在控制器中使用</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">redirectToProfile</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">redirect</span>()-&gt;<span class="title function_ invoke__">route</span>(<span class="string">&#x27;user.profile&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在视图中使用</span></span><br><span class="line">&lt;a href=<span class="string">&quot;&#123;&#123; route(&#x27;user.profile&#x27;) &#125;&#125;&quot;</span>&gt;用户资料&lt;/a&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 带参数的命名路由</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/user/&#123;id&#125;&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;show&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;user.show&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成带参数的 URL</span></span><br><span class="line"><span class="variable">$url</span> = <span class="title function_ invoke__">route</span>(<span class="string">&#x27;user.show&#x27;</span>, [<span class="string">&#x27;id&#x27;</span> =&gt; <span class="number">1</span>]);</span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line"><span class="variable">$url</span> = <span class="title function_ invoke__">route</span>(<span class="string">&#x27;user.show&#x27;</span>, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="路由组"><a href="#路由组" class="headerlink" title="路由组"></a>路由组</h2><p>路由组允许在多个路由之间共享属性：</p>
+<h3 id="中间件组"><a href="#中间件组" class="headerlink" title="中间件组"></a>中间件组</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>([<span class="string">&#x27;auth&#x27;</span>, <span class="string">&#x27;verified&#x27;</span>])-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/dashboard&#x27;</span>, [<span class="title class_">DashboardController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;index&#x27;</span>]);</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/profile&#x27;</span>, [<span class="title class_">ProfileController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;show&#x27;</span>]);</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/profile&#x27;</span>, [<span class="title class_">ProfileController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;update&#x27;</span>]);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="路由前缀"><a href="#路由前缀" class="headerlink" title="路由前缀"></a>路由前缀</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">prefix</span>(<span class="string">&#x27;admin&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/users&#x27;</span>, [<span class="title class_">AdminController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;users&#x27;</span>]); <span class="comment">// /admin/users</span></span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/posts&#x27;</span>, [<span class="title class_">AdminController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;posts&#x27;</span>]); <span class="comment">// /admin/posts</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="子域名路由"><a href="#子域名路由" class="headerlink" title="子域名路由"></a>子域名路由</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">domain</span>(<span class="string">&#x27;&#123;account&#125;.example.com&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/user/&#123;id&#125;&#x27;</span>, function (<span class="variable">$account</span>, <span class="variable">$id</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Account: <span class="subst">&#123;$account&#125;</span>, User: <span class="subst">&#123;$id&#125;</span>&quot;</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="命名空间和名称前缀"><a href="#命名空间和名称前缀" class="headerlink" title="命名空间和名称前缀"></a>命名空间和名称前缀</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;admin.&#x27;</span>)</span><br><span class="line">    -&gt;<span class="title function_ invoke__">prefix</span>(<span class="string">&#x27;admin&#x27;</span>)</span><br><span class="line">    -&gt;<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;auth&#x27;</span>)</span><br><span class="line">    -&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/users&#x27;</span>, [<span class="title class_">AdminController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;users&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;users&#x27;</span>); <span class="comment">// admin.users</span></span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/posts&#x27;</span>, [<span class="title class_">AdminController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;posts&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;posts&#x27;</span>); <span class="comment">// admin.posts</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h2><h3 id="路由中间件"><a href="#路由中间件" class="headerlink" title="路由中间件"></a>路由中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单个中间件</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/profile&#x27;</span>, [<span class="title class_">ProfileController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;show&#x27;</span>])-&gt;<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;auth&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 多个中间件</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/admin&#x27;</span>, [<span class="title class_">AdminController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;index&#x27;</span>])</span><br><span class="line">    -&gt;<span class="title function_ invoke__">middleware</span>([<span class="string">&#x27;auth&#x27;</span>, <span class="string">&#x27;admin&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中间件参数</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/posts/&#123;post&#125;&#x27;</span>, [<span class="title class_">PostController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;show&#x27;</span>])</span><br><span class="line">    -&gt;<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;throttle:60,1&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="中间件组-1"><a href="#中间件组-1" class="headerlink" title="中间件组"></a>中间件组</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 app/Http/Kernel.php 中定义中间件组</span></span><br><span class="line"><span class="keyword">protected</span> <span class="variable">$middlewareGroups</span> = [</span><br><span class="line">    <span class="string">&#x27;web&#x27;</span> =&gt; [</span><br><span class="line">        <span class="title class_">\App\Http\Middleware\EncryptCookies</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\Session\Middleware\StartSession</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\View\Middleware\ShareErrorsFromSession</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\App\Http\Middleware\VerifyCsrfToken</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\Routing\Middleware\SubstituteBindings</span>::<span class="variable language_">class</span>,</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&#x27;api&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;throttle:api&#x27;</span>,</span><br><span class="line">        <span class="title class_">\Illuminate\Routing\Middleware\SubstituteBindings</span>::<span class="variable language_">class</span>,</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h2 id="资源路由"><a href="#资源路由" class="headerlink" title="资源路由"></a>资源路由</h2><p>资源路由为 RESTful 控制器提供便捷的路由定义：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 完整的资源路由</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">resource</span>(<span class="string">&#x27;posts&#x27;</span>, <span class="title class_">PostController</span>::<span class="variable language_">class</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于以下路由：</span></span><br><span class="line"><span class="comment">// GET /posts - index</span></span><br><span class="line"><span class="comment">// GET /posts/create - create</span></span><br><span class="line"><span class="comment">// POST /posts - store</span></span><br><span class="line"><span class="comment">// GET /posts/&#123;post&#125; - show</span></span><br><span class="line"><span class="comment">// GET /posts/&#123;post&#125;/edit - edit</span></span><br><span class="line"><span class="comment">// PUT/PATCH /posts/&#123;post&#125; - update</span></span><br><span class="line"><span class="comment">// DELETE /posts/&#123;post&#125; - destroy</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 部分资源路由</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">resource</span>(<span class="string">&#x27;posts&#x27;</span>, <span class="title class_">PostController</span>::<span class="variable language_">class</span>)-&gt;<span class="title function_ invoke__">only</span>([<span class="string">&#x27;index&#x27;</span>, <span class="string">&#x27;show&#x27;</span>]);</span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">resource</span>(<span class="string">&#x27;posts&#x27;</span>, <span class="title class_">PostController</span>::<span class="variable language_">class</span>)-&gt;<span class="title function_ invoke__">except</span>([<span class="string">&#x27;create&#x27;</span>, <span class="string">&#x27;edit&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// API 资源路由（排除 create 和 edit）</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">apiResource</span>(<span class="string">&#x27;posts&#x27;</span>, <span class="title class_">PostController</span>::<span class="variable language_">class</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 嵌套资源</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">resource</span>(<span class="string">&#x27;posts.comments&#x27;</span>, <span class="title class_">CommentController</span>::<span class="variable language_">class</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="模型绑定"><a href="#模型绑定" class="headerlink" title="模型绑定"></a>模型绑定</h2><h3 id="隐式绑定"><a href="#隐式绑定" class="headerlink" title="隐式绑定"></a>隐式绑定</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 路由定义</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/users/&#123;user&#125;&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;show&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 控制器方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span>(<span class="params">User <span class="variable">$user</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Laravel 自动根据 ID 查找用户</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">view</span>(<span class="string">&#x27;user.profile&#x27;</span>, <span class="title function_ invoke__">compact</span>(<span class="string">&#x27;user&#x27;</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义键名</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/users/&#123;user:slug&#125;&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;show&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在模型中定义默认路由键</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getRouteKeyName</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;slug&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="显式绑定"><a href="#显式绑定" class="headerlink" title="显式绑定"></a>显式绑定</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 RouteServiceProvider 的 boot 方法中</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">model</span>(<span class="string">&#x27;user&#x27;</span>, <span class="title class_">User</span>::<span class="variable language_">class</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 或者自定义解析逻辑</span></span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">bind</span>(<span class="string">&#x27;user&#x27;</span>, function (<span class="variable">$value</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">User</span>::<span class="title function_ invoke__">where</span>(<span class="string">&#x27;name&#x27;</span>, <span class="variable">$value</span>)-&gt;<span class="title function_ invoke__">firstOrFail</span>();</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">parent</span>::<span class="title function_ invoke__">boot</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级路由特性"><a href="#高级路由特性" class="headerlink" title="高级路由特性"></a>高级路由特性</h2><h3 id="回退路由"><a href="#回退路由" class="headerlink" title="回退路由"></a>回退路由</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 当没有其他路由匹配时执行</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">fallback</span>(function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">view</span>(<span class="string">&#x27;errors.404&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="速率限制"><a href="#速率限制" class="headerlink" title="速率限制"></a>速率限制</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基本速率限制</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;throttle:60,1&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/api/users&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;index&#x27;</span>]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态速率限制</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;throttle:rate_limit,1&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/api/users&#x27;</span>, [<span class="title class_">UserController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;index&#x27;</span>]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在用户模型中定义</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">rate_limit</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;is_premium ? <span class="number">1000</span> : <span class="number">60</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="表单方法伪造"><a href="#表单方法伪造" class="headerlink" title="表单方法伪造"></a>表单方法伪造</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- HTML 表单只支持 GET 和 POST，使用 @method 指令伪造其他方法 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;/posts/1&quot;</span> <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span>&gt;</span></span><br><span class="line">    @csrf</span><br><span class="line">    @method(&#x27;PUT&#x27;)</span><br><span class="line">    <span class="comment">&lt;!-- 表单字段 --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="路由缓存"><a href="#路由缓存" class="headerlink" title="路由缓存"></a>路由缓存</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 缓存路由以提高性能</span></span><br><span class="line">php artisan route:cache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除路由缓存</span></span><br><span class="line">php artisan route:clear</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有路由</span></span><br><span class="line">php artisan route:list</span><br></pre></td></tr></table></figure>
+
+<h2 id="实际应用示例"><a href="#实际应用示例" class="headerlink" title="实际应用示例"></a>实际应用示例</h2><h3 id="API-路由设计"><a href="#API-路由设计" class="headerlink" title="API 路由设计"></a>API 路由设计</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// routes/api.php</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">prefix</span>(<span class="string">&#x27;v1&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="comment">// 公开路由</span></span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/login&#x27;</span>, [<span class="title class_">AuthController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;login&#x27;</span>]);</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/register&#x27;</span>, [<span class="title class_">AuthController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;register&#x27;</span>]);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 需要认证的路由</span></span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;auth:sanctum&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/user&#x27;</span>, [<span class="title class_">AuthController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user&#x27;</span>]);</span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">post</span>(<span class="string">&#x27;/logout&#x27;</span>, [<span class="title class_">AuthController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;logout&#x27;</span>]);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 用户资源</span></span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">apiResource</span>(<span class="string">&#x27;users&#x27;</span>, <span class="title class_">UserController</span>::<span class="variable language_">class</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 文章资源</span></span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">apiResource</span>(<span class="string">&#x27;posts&#x27;</span>, <span class="title class_">PostController</span>::<span class="variable language_">class</span>);</span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">apiResource</span>(<span class="string">&#x27;posts.comments&#x27;</span>, <span class="title class_">CommentController</span>::<span class="variable language_">class</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 管理员路由</span></span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>([<span class="string">&#x27;auth:sanctum&#x27;</span>, <span class="string">&#x27;admin&#x27;</span>])-&gt;<span class="title function_ invoke__">prefix</span>(<span class="string">&#x27;admin&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/dashboard&#x27;</span>, [<span class="title class_">AdminController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;dashboard&#x27;</span>]);</span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">apiResource</span>(<span class="string">&#x27;users&#x27;</span>, <span class="title class_">AdminUserController</span>::<span class="variable language_">class</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Web-路由设计"><a href="#Web-路由设计" class="headerlink" title="Web 路由设计"></a>Web 路由设计</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// routes/web.php</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/&#x27;</span>, [<span class="title class_">HomeController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;index&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;home&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 认证路由</span></span><br><span class="line"><span class="title class_">Auth</span>::<span class="title function_ invoke__">routes</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 需要认证的路由</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;auth&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/dashboard&#x27;</span>, [<span class="title class_">DashboardController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;index&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;dashboard&#x27;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 用户资料</span></span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">prefix</span>(<span class="string">&#x27;profile&#x27;</span>)-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;profile.&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/&#x27;</span>, [<span class="title class_">ProfileController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;show&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;show&#x27;</span>);</span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/edit&#x27;</span>, [<span class="title class_">ProfileController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;edit&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;edit&#x27;</span>);</span><br><span class="line">        <span class="title class_">Route</span>::<span class="title function_ invoke__">put</span>(<span class="string">&#x27;/&#x27;</span>, [<span class="title class_">ProfileController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;update&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;update&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 文章管理</span></span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">resource</span>(<span class="string">&#x27;posts&#x27;</span>, <span class="title class_">PostController</span>::<span class="variable language_">class</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 管理员路由</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">middleware</span>([<span class="string">&#x27;auth&#x27;</span>, <span class="string">&#x27;admin&#x27;</span>])-&gt;<span class="title function_ invoke__">prefix</span>(<span class="string">&#x27;admin&#x27;</span>)-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;admin.&#x27;</span>)-&gt;<span class="title function_ invoke__">group</span>(function () &#123;</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/&#x27;</span>, [<span class="title class_">AdminController</span>::<span class="variable language_">class</span>, <span class="string">&#x27;index&#x27;</span>])-&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;index&#x27;</span>);</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">resource</span>(<span class="string">&#x27;users&#x27;</span>, <span class="title class_">AdminUserController</span>::<span class="variable language_">class</span>);</span><br><span class="line">    <span class="title class_">Route</span>::<span class="title function_ invoke__">resource</span>(<span class="string">&#x27;posts&#x27;</span>, <span class="title class_">AdminPostController</span>::<span class="variable language_">class</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能优化建议"><a href="#性能优化建议" class="headerlink" title="性能优化建议"></a>性能优化建议</h2><ol>
+<li><strong>使用路由缓存</strong>：在生产环境中使用 <code>php artisan route:cache</code></li>
+<li><strong>合理使用路由组</strong>：减少重复的中间件和前缀定义</li>
+<li><strong>避免过度嵌套</strong>：保持路由结构清晰简洁</li>
+<li><strong>使用资源路由</strong>：遵循 RESTful 设计原则</li>
+<li><strong>合理使用模型绑定</strong>：减少手动查询数据库的代码</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Laravel 的路由系统提供了强大而灵活的请求处理机制。通过合理使用路由参数、中间件、路由组和模型绑定等特性，可以构建出结构清晰、易于维护的 Web 应用程序。掌握这些路由技巧将大大提高你的 Laravel 开发效率。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Laravel/">Laravel</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%B7%AF%E7%94%B1/">路由</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/API/">API</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Web%E5%BC%80%E5%8F%91/">Web开发</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/linux/linux-systemd-service-management/"
+                                   title="Linux服务管理与systemd实战指南：掌握现代Linux系统服务管理的核心技能"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Linux服务管理与systemd实战指南：掌握现代Linux系统服务管理的核心技能</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/vue/vue-component-communication-custom-directives/"
+                                   title="Vue 组件通信与自定义指令实战技巧"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Vue 组件通信与自定义指令实战技巧</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%B7%AF%E7%94%B1%E6%A6%82%E5%BF%B5"><span class="nav-text">基础路由概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-text">路由文件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%B7%AF%E7%94%B1%E5%AE%9A%E4%B9%89"><span class="nav-text">基本路由定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%8F%82%E6%95%B0"><span class="nav-text">路由参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%85%E9%9C%80%E5%8F%82%E6%95%B0"><span class="nav-text">必需参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%80%89%E5%8F%82%E6%95%B0"><span class="nav-text">可选参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%BA%A6%E6%9D%9F"><span class="nav-text">正则表达式约束</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E8%B7%AF%E7%94%B1"><span class="nav-text">命名路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E7%BB%84"><span class="nav-text">路由组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84"><span class="nav-text">中间件组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%89%8D%E7%BC%80"><span class="nav-text">路由前缀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E5%9F%9F%E5%90%8D%E8%B7%AF%E7%94%B1"><span class="nav-text">子域名路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%92%8C%E5%90%8D%E7%A7%B0%E5%89%8D%E7%BC%80"><span class="nav-text">命名空间和名称前缀</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">路由中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84-1"><span class="nav-text">中间件组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1"><span class="nav-text">资源路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%91%E5%AE%9A"><span class="nav-text">模型绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E7%BB%91%E5%AE%9A"><span class="nav-text">隐式绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E7%BB%91%E5%AE%9A"><span class="nav-text">显式绑定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E8%B7%AF%E7%94%B1%E7%89%B9%E6%80%A7"><span class="nav-text">高级路由特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%80%80%E8%B7%AF%E7%94%B1"><span class="nav-text">回退路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="nav-text">速率限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E6%96%B9%E6%B3%95%E4%BC%AA%E9%80%A0"><span class="nav-text">表单方法伪造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E7%BC%93%E5%AD%98"><span class="nav-text">路由缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-text">实际应用示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#API-%E8%B7%AF%E7%94%B1%E8%AE%BE%E8%AE%A1"><span class="nav-text">API 路由设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Web-%E8%B7%AF%E7%94%B1%E8%AE%BE%E8%AE%A1"><span class="nav-text">Web 路由设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-text">性能优化建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%B7%AF%E7%94%B1%E6%A6%82%E5%BF%B5"><span class="nav-text">基础路由概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-text">路由文件结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%B7%AF%E7%94%B1%E5%AE%9A%E4%B9%89"><span class="nav-text">基本路由定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%8F%82%E6%95%B0"><span class="nav-text">路由参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%85%E9%9C%80%E5%8F%82%E6%95%B0"><span class="nav-text">必需参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%80%89%E5%8F%82%E6%95%B0"><span class="nav-text">可选参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%BA%A6%E6%9D%9F"><span class="nav-text">正则表达式约束</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E8%B7%AF%E7%94%B1"><span class="nav-text">命名路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E7%BB%84"><span class="nav-text">路由组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84"><span class="nav-text">中间件组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%89%8D%E7%BC%80"><span class="nav-text">路由前缀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E5%9F%9F%E5%90%8D%E8%B7%AF%E7%94%B1"><span class="nav-text">子域名路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%92%8C%E5%90%8D%E7%A7%B0%E5%89%8D%E7%BC%80"><span class="nav-text">命名空间和名称前缀</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">路由中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E7%BB%84-1"><span class="nav-text">中间件组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1"><span class="nav-text">资源路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%91%E5%AE%9A"><span class="nav-text">模型绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E7%BB%91%E5%AE%9A"><span class="nav-text">隐式绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E7%BB%91%E5%AE%9A"><span class="nav-text">显式绑定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E8%B7%AF%E7%94%B1%E7%89%B9%E6%80%A7"><span class="nav-text">高级路由特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%80%80%E8%B7%AF%E7%94%B1"><span class="nav-text">回退路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="nav-text">速率限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E6%96%B9%E6%B3%95%E4%BC%AA%E9%80%A0"><span class="nav-text">表单方法伪造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E7%BC%93%E5%AD%98"><span class="nav-text">路由缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-text">实际应用示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#API-%E8%B7%AF%E7%94%B1%E8%AE%BE%E8%AE%A1"><span class="nav-text">API 路由设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Web-%E8%B7%AF%E7%94%B1%E8%AE%BE%E8%AE%A1"><span class="nav-text">Web 路由设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-text">性能优化建议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

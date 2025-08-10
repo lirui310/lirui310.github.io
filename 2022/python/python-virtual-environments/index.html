@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Python虚拟环境详解：从入门到精通 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Python虚拟环境详解：从入门到精通
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2022-03-17 10:25:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/python/">python</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83/">虚拟环境</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/">依赖管理</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/venv/">venv</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/virtualenv/">virtualenv</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/conda/">conda</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Python虚拟环境详解：从入门到精通"><a href="#Python虚拟环境详解：从入门到精通" class="headerlink" title="Python虚拟环境详解：从入门到精通"></a>Python虚拟环境详解：从入门到精通</h1><p>在Python开发中，虚拟环境是一个必不可少的工具。它们允许你为不同的项目创建隔离的Python环境，避免依赖冲突，并使项目更容易分享和部署。在这篇文章中，我将深入探讨Python虚拟环境的各个方面，从基础概念到高级技巧。</p>
+<h2 id="为什么需要虚拟环境？"><a href="#为什么需要虚拟环境？" class="headerlink" title="为什么需要虚拟环境？"></a>为什么需要虚拟环境？</h2><p>想象一下这个场景：你正在同时开发两个Python项目。项目A需要Django 2.2，而项目B需要最新的Django 4.0。如果你在系统级安装这些包，你将面临版本冲突的问题。</p>
+<p>虚拟环境解决了这个问题，它为每个项目创建一个隔离的环境，每个环境都有自己的Python解释器和包集合。这样，你可以在项目A中使用Django 2.2，在项目B中使用Django 4.0，而不会发生冲突。</p>
+<p>虚拟环境的主要优势包括：</p>
+<ol>
+<li><strong>依赖隔离</strong>：每个项目有自己的依赖，不会相互干扰</li>
+<li><strong>版本控制</strong>：可以在不同项目中使用同一个包的不同版本</li>
+<li><strong>干净的测试环境</strong>：确保你的项目只依赖于明确安装的包</li>
+<li><strong>简化部署</strong>：可以轻松复制开发环境到生产环境</li>
+<li><strong>避免权限问题</strong>：不需要管理员权限就可以安装包</li>
+</ol>
+<h2 id="Python虚拟环境工具对比"><a href="#Python虚拟环境工具对比" class="headerlink" title="Python虚拟环境工具对比"></a>Python虚拟环境工具对比</h2><p>Python生态系统中有多种创建虚拟环境的工具。让我们比较一下最常用的几种：</p>
+<h3 id="1-venv-内置模块"><a href="#1-venv-内置模块" class="headerlink" title="1. venv (内置模块)"></a>1. venv (内置模块)</h3><p>从Python 3.3开始，<code>venv</code>模块被包含在Python标准库中，是创建虚拟环境的官方推荐方式。</p>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>内置于Python，无需额外安装</li>
+<li>简单易用</li>
+<li>官方支持</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>功能相对基础</li>
+<li>不支持Python 2</li>
+<li>不支持创建不同Python版本的环境</li>
+</ul>
+<h3 id="2-virtualenv"><a href="#2-virtualenv" class="headerlink" title="2. virtualenv"></a>2. virtualenv</h3><p><code>virtualenv</code>是一个第三方工具，是<code>venv</code>的前身，提供了更多功能。</p>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>支持Python 2和Python 3</li>
+<li>功能丰富</li>
+<li>可以创建不包含系统站点包的环境</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>需要单独安装</li>
+<li>配置选项可能让新手感到困惑</li>
+</ul>
+<h3 id="3-conda"><a href="#3-conda" class="headerlink" title="3. conda"></a>3. conda</h3><p><code>conda</code>是一个开源的包管理系统和环境管理系统，最初为Python程序设计，但可用于任何语言。</p>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>跨平台</li>
+<li>可以管理非Python依赖</li>
+<li>支持创建不同Python版本的环境</li>
+<li>包含强大的包管理功能</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>安装体积较大</li>
+<li>与pip有时会有兼容性问题</li>
+<li>学习曲线相对陡峭</li>
+</ul>
+<h3 id="4-pipenv"><a href="#4-pipenv" class="headerlink" title="4. pipenv"></a>4. pipenv</h3><p><code>pipenv</code>结合了<code>pip</code>和<code>virtualenv</code>的功能，旨在为Python项目带来最好的包管理工具。</p>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>自动创建和管理虚拟环境</li>
+<li>自动生成和管理Pipfile和Pipfile.lock</li>
+<li>提供依赖关系图</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>有时更新较慢</li>
+<li>对某些复杂项目可能不够灵活</li>
+</ul>
+<h3 id="5-poetry"><a href="#5-poetry" class="headerlink" title="5. poetry"></a>5. poetry</h3><p><code>poetry</code>是一个现代化的Python包管理工具，专注于依赖管理和打包。</p>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>依赖解析非常强大</li>
+<li>构建和发布包的功能集成</li>
+<li>锁文件确保可重现的安装</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>相对较新，可能存在一些不稳定性</li>
+<li>与某些工具的集成可能不完善</li>
+</ul>
+<h2 id="使用venv创建虚拟环境"><a href="#使用venv创建虚拟环境" class="headerlink" title="使用venv创建虚拟环境"></a>使用venv创建虚拟环境</h2><p>让我们从最基本的<code>venv</code>模块开始，学习如何创建和使用虚拟环境。</p>
+<h3 id="创建虚拟环境"><a href="#创建虚拟环境" class="headerlink" title="创建虚拟环境"></a>创建虚拟环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在当前目录下创建名为&quot;myenv&quot;的虚拟环境</span></span><br><span class="line">python -m venv myenv</span><br></pre></td></tr></table></figure>
+
+<h3 id="激活虚拟环境"><a href="#激活虚拟环境" class="headerlink" title="激活虚拟环境"></a>激活虚拟环境</h3><p>在不同操作系统上，激活虚拟环境的命令略有不同：</p>
+<p><strong>Windows</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myenv\Scripts\activate</span><br></pre></td></tr></table></figure>
+
+<p><strong>macOS&#x2F;Linux</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> myenv/bin/activate</span><br></pre></td></tr></table></figure>
+
+<p>激活后，你的命令提示符会改变，显示当前虚拟环境的名称，例如：<code>(myenv) $</code></p>
+<h3 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h3><p>激活虚拟环境后，你可以使用<code>pip</code>安装包，这些包将只安装在当前虚拟环境中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install django==4.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看已安装的包"><a href="#查看已安装的包" class="headerlink" title="查看已安装的包"></a>查看已安装的包</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip list</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成依赖文件"><a href="#生成依赖文件" class="headerlink" title="生成依赖文件"></a>生成依赖文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip freeze &gt; requirements.txt</span><br></pre></td></tr></table></figure>
+
+<p>这将创建一个<code>requirements.txt</code>文件，其中包含当前环境中所有已安装包的列表及其版本。</p>
+<h3 id="从依赖文件安装"><a href="#从依赖文件安装" class="headerlink" title="从依赖文件安装"></a>从依赖文件安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="退出虚拟环境"><a href="#退出虚拟环境" class="headerlink" title="退出虚拟环境"></a>退出虚拟环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用virtualenv"><a href="#使用virtualenv" class="headerlink" title="使用virtualenv"></a>使用virtualenv</h2><p>虽然<code>venv</code>是Python 3的内置模块，但<code>virtualenv</code>提供了一些额外的功能，特别是对于需要支持Python 2的项目。</p>
+<h3 id="安装virtualenv"><a href="#安装virtualenv" class="headerlink" title="安装virtualenv"></a>安装virtualenv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install virtualenv</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建虚拟环境-1"><a href="#创建虚拟环境-1" class="headerlink" title="创建虚拟环境"></a>创建虚拟环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">virtualenv myenv</span><br></pre></td></tr></table></figure>
+
+<p>你也可以指定Python解释器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">virtualenv -p python2.7 py2env</span><br><span class="line">virtualenv -p python3.9 py39env</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><p>激活、安装包、生成依赖文件和退出的命令与<code>venv</code>相同。</p>
+<h2 id="使用conda管理环境"><a href="#使用conda管理环境" class="headerlink" title="使用conda管理环境"></a>使用conda管理环境</h2><p>Conda是一个功能强大的包管理和环境管理工具，特别适合数据科学项目。</p>
+<h3 id="安装conda"><a href="#安装conda" class="headerlink" title="安装conda"></a>安装conda</h3><p>你可以安装Miniconda（最小安装）或Anaconda（包含常用数据科学包的完整安装）。</p>
+<h3 id="创建环境"><a href="#创建环境" class="headerlink" title="创建环境"></a>创建环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create --name myenv python=3.9</span><br></pre></td></tr></table></figure>
+
+<h3 id="激活环境"><a href="#激活环境" class="headerlink" title="激活环境"></a>激活环境</h3><p><strong>Windows</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate myenv</span><br></pre></td></tr></table></figure>
+
+<p><strong>macOS&#x2F;Linux</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda activate myenv</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装包-1"><a href="#安装包-1" class="headerlink" title="安装包"></a>安装包</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install numpy pandas matplotlib</span><br></pre></td></tr></table></figure>
+
+<p>你也可以使用pip在conda环境中安装包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install requests</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看已安装的包-1"><a href="#查看已安装的包-1" class="headerlink" title="查看已安装的包"></a>查看已安装的包</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda list</span><br></pre></td></tr></table></figure>
+
+<h3 id="导出环境"><a href="#导出环境" class="headerlink" title="导出环境"></a>导出环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="built_in">env</span> <span class="built_in">export</span> &gt; environment.yml</span><br></pre></td></tr></table></figure>
+
+<h3 id="从环境文件创建环境"><a href="#从环境文件创建环境" class="headerlink" title="从环境文件创建环境"></a>从环境文件创建环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="built_in">env</span> create -f environment.yml</span><br></pre></td></tr></table></figure>
+
+<h3 id="退出环境"><a href="#退出环境" class="headerlink" title="退出环境"></a>退出环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda deactivate</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除环境"><a href="#删除环境" class="headerlink" title="删除环境"></a>删除环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda <span class="built_in">env</span> remove --name myenv</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用pipenv"><a href="#使用pipenv" class="headerlink" title="使用pipenv"></a>使用pipenv</h2><p>Pipenv是一个更现代的工具，它自动处理虚拟环境和依赖管理。</p>
+<h3 id="安装pipenv"><a href="#安装pipenv" class="headerlink" title="安装pipenv"></a>安装pipenv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pipenv</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建项目和环境"><a href="#创建项目和环境" class="headerlink" title="创建项目和环境"></a>创建项目和环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> myproject</span><br><span class="line"><span class="built_in">cd</span> myproject</span><br><span class="line">pipenv install</span><br></pre></td></tr></table></figure>
+
+<p>要指定Python版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv --python 3.9</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装包-2"><a href="#安装包-2" class="headerlink" title="安装包"></a>安装包</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv install django</span><br></pre></td></tr></table></figure>
+
+<p>安装开发依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv install pytest --dev</span><br></pre></td></tr></table></figure>
+
+<h3 id="激活环境-1"><a href="#激活环境-1" class="headerlink" title="激活环境"></a>激活环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv shell</span><br></pre></td></tr></table></figure>
+
+<h3 id="运行命令"><a href="#运行命令" class="headerlink" title="运行命令"></a>运行命令</h3><p>不激活环境也可以运行命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv run python script.py</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看依赖图"><a href="#查看依赖图" class="headerlink" title="查看依赖图"></a>查看依赖图</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv graph</span><br></pre></td></tr></table></figure>
+
+<h3 id="锁定依赖"><a href="#锁定依赖" class="headerlink" title="锁定依赖"></a>锁定依赖</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv lock</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用poetry"><a href="#使用poetry" class="headerlink" title="使用poetry"></a>使用poetry</h2><p>Poetry是一个现代化的依赖管理和打包工具。</p>
+<h3 id="安装poetry"><a href="#安装poetry" class="headerlink" title="安装poetry"></a>安装poetry</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sSL https://install.python-poetry.org | python3 -</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建新项目"><a href="#创建新项目" class="headerlink" title="创建新项目"></a>创建新项目</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">poetry new myproject</span><br><span class="line"><span class="built_in">cd</span> myproject</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">poetry add django</span><br></pre></td></tr></table></figure>
+
+<p>添加开发依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">poetry add pytest --dev</span><br></pre></td></tr></table></figure>
+
+<h3 id="激活环境-2"><a href="#激活环境-2" class="headerlink" title="激活环境"></a>激活环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">poetry shell</span><br></pre></td></tr></table></figure>
+
+<h3 id="运行命令-1"><a href="#运行命令-1" class="headerlink" title="运行命令"></a>运行命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">poetry run python script.py</span><br></pre></td></tr></table></figure>
+
+<h3 id="更新依赖"><a href="#更新依赖" class="headerlink" title="更新依赖"></a>更新依赖</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">poetry update</span><br></pre></td></tr></table></figure>
+
+<h2 id="虚拟环境最佳实践"><a href="#虚拟环境最佳实践" class="headerlink" title="虚拟环境最佳实践"></a>虚拟环境最佳实践</h2><h3 id="1-为每个项目创建单独的虚拟环境"><a href="#1-为每个项目创建单独的虚拟环境" class="headerlink" title="1. 为每个项目创建单独的虚拟环境"></a>1. 为每个项目创建单独的虚拟环境</h3><p>这确保了项目之间的依赖隔离，避免了潜在的冲突。</p>
+<h3 id="2-将虚拟环境排除在版本控制之外"><a href="#2-将虚拟环境排除在版本控制之外" class="headerlink" title="2. 将虚拟环境排除在版本控制之外"></a>2. 将虚拟环境排除在版本控制之外</h3><p>虚拟环境文件夹（如<code>venv</code>、<code>.env</code>等）应该添加到<code>.gitignore</code>文件中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># .gitignore</span><br><span class="line">venv/</span><br><span class="line">.env/</span><br><span class="line">.venv/</span><br><span class="line">env/</span><br><span class="line">ENV/</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-使用依赖文件"><a href="#3-使用依赖文件" class="headerlink" title="3. 使用依赖文件"></a>3. 使用依赖文件</h3><p>无论你使用哪种工具，都应该维护一个依赖文件（<code>requirements.txt</code>、<code>Pipfile</code>、<code>pyproject.toml</code>等），并将其包含在版本控制中。</p>
+<h3 id="4-定期更新依赖"><a href="#4-定期更新依赖" class="headerlink" title="4. 定期更新依赖"></a>4. 定期更新依赖</h3><p>定期更新依赖可以修复安全漏洞和bug，但要注意可能的破坏性变更。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用pip</span></span><br><span class="line">pip install --upgrade -r requirements.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用pipenv</span></span><br><span class="line">pipenv update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用poetry</span></span><br><span class="line">poetry update</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-使用固定版本"><a href="#5-使用固定版本" class="headerlink" title="5. 使用固定版本"></a>5. 使用固定版本</h3><p>在生产环境中，应该使用固定的依赖版本，以确保可重现的构建。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># requirements.txt</span><br><span class="line">django==4.0.1</span><br><span class="line">requests==2.27.1</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-考虑使用Docker"><a href="#6-考虑使用Docker" class="headerlink" title="6. 考虑使用Docker"></a>6. 考虑使用Docker</h3><p>对于更复杂的项目，考虑使用Docker来封装整个环境，这样可以确保开发、测试和生产环境的一致性。</p>
+<h2 id="高级技巧"><a href="#高级技巧" class="headerlink" title="高级技巧"></a>高级技巧</h2><h3 id="1-在Jupyter-Notebook中使用虚拟环境"><a href="#1-在Jupyter-Notebook中使用虚拟环境" class="headerlink" title="1. 在Jupyter Notebook中使用虚拟环境"></a>1. 在Jupyter Notebook中使用虚拟环境</h3><p>要在Jupyter Notebook中使用特定的虚拟环境，你需要安装<code>ipykernel</code>并注册环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 激活你的环境</span></span><br><span class="line"><span class="built_in">source</span> myenv/bin/activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装ipykernel</span></span><br><span class="line">pip install ipykernel</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注册环境</span></span><br><span class="line">python -m ipykernel install --user --name=myenv --display-name=<span class="string">&quot;Python (myenv)&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在，你可以在Jupyter Notebook中选择这个环境作为内核。</p>
+<h3 id="2-在VS-Code中使用虚拟环境"><a href="#2-在VS-Code中使用虚拟环境" class="headerlink" title="2. 在VS Code中使用虚拟环境"></a>2. 在VS Code中使用虚拟环境</h3><p>VS Code可以自动检测和使用虚拟环境。你可以通过按<code>Ctrl+Shift+P</code>并选择”Python: Select Interpreter”来选择特定的环境。</p>
+<h3 id="3-管理多个项目的虚拟环境"><a href="#3-管理多个项目的虚拟环境" class="headerlink" title="3. 管理多个项目的虚拟环境"></a>3. 管理多个项目的虚拟环境</h3><p>如果你有很多项目，可以考虑使用一个集中的位置来存储所有虚拟环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建一个目录来存储所有环境</span></span><br><span class="line"><span class="built_in">mkdir</span> ~/.virtualenvs</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建环境时指定路径</span></span><br><span class="line">python -m venv ~/.virtualenvs/project1</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-使用环境变量"><a href="#4-使用环境变量" class="headerlink" title="4. 使用环境变量"></a>4. 使用环境变量</h3><p>虚拟环境是存储敏感配置（如API密钥）的好地方。你可以使用<code>.env</code>文件和<code>python-dotenv</code>包来管理环境变量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install python-dotenv</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .env</span></span><br><span class="line">API_KEY=your_secret_key</span><br><span class="line">DEBUG=<span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app.py</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line">load_dotenv()  <span class="comment"># 加载.env文件中的变量</span></span><br><span class="line"></span><br><span class="line">api_key = os.getenv(<span class="string">&quot;API_KEY&quot;</span>)</span><br><span class="line">debug = os.getenv(<span class="string">&quot;DEBUG&quot;</span>) == <span class="string">&quot;True&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-创建可重用的虚拟环境模板"><a href="#5-创建可重用的虚拟环境模板" class="headerlink" title="5. 创建可重用的虚拟环境模板"></a>5. 创建可重用的虚拟环境模板</h3><p>如果你经常创建具有相似依赖的项目，可以创建一个基本的<code>requirements.txt</code>文件作为模板：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># base-requirements.txt</span><br><span class="line">pytest==7.0.0</span><br><span class="line">black==22.1.0</span><br><span class="line">flake8==4.0.1</span><br></pre></td></tr></table></figure>
+
+<p>然后在新项目中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -m venv myenv</span><br><span class="line"><span class="built_in">source</span> myenv/bin/activate</span><br><span class="line">pip install -r path/to/base-requirements.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见问题及解决方案"><a href="#常见问题及解决方案" class="headerlink" title="常见问题及解决方案"></a>常见问题及解决方案</h2><h3 id="1-依赖冲突"><a href="#1-依赖冲突" class="headerlink" title="1. 依赖冲突"></a>1. 依赖冲突</h3><p>当不同的包需要同一个依赖的不同版本时，可能会发生冲突。</p>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>使用<code>pip-tools</code>或<code>pipenv</code>等工具来解析依赖</li>
+<li>考虑使用较新或较旧的包版本</li>
+<li>在极端情况下，可能需要修改包的源代码</li>
+</ul>
+<h3 id="2-虚拟环境不激活"><a href="#2-虚拟环境不激活" class="headerlink" title="2. 虚拟环境不激活"></a>2. 虚拟环境不激活</h3><p>有时候，虚拟环境可能无法正确激活。</p>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>确保使用正确的激活脚本</li>
+<li>检查路径是否正确</li>
+<li>尝试重新创建虚拟环境</li>
+</ul>
+<h3 id="3-包安装失败"><a href="#3-包安装失败" class="headerlink" title="3. 包安装失败"></a>3. 包安装失败</h3><p><strong>解决方案</strong>：</p>
+<ul>
+<li>检查网络连接</li>
+<li>确保pip是最新版本：<code>pip install --upgrade pip</code></li>
+<li>对于需要编译的包，确保你有必要的编译工具</li>
+<li>尝试从其他源安装：<code>pip install package-name -i https://pypi.tuna.tsinghua.edu.cn/simple</code></li>
+</ul>
+<h3 id="4-环境污染"><a href="#4-环境污染" class="headerlink" title="4. 环境污染"></a>4. 环境污染</h3><p>有时，全局包可能会”泄漏”到虚拟环境中。</p>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>使用<code>--no-site-packages</code>选项（virtualenv）或<code>--system-site-packages=false</code>（venv）创建环境</li>
+<li>定期检查已安装的包列表</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>虚拟环境是Python开发中不可或缺的工具，它们帮助你管理依赖、避免冲突，并使项目更容易分享和部署。无论你选择使用哪种工具（venv、virtualenv、conda、pipenv或poetry），重要的是要理解虚拟环境的基本概念和最佳实践。</p>
+<p>随着你的Python开发经验增长，你可能会发现某些工具更适合特定类型的项目。不要害怕尝试不同的工具，找到最适合你的工作流程的那个。</p>
+<p>你有什么关于Python虚拟环境的问题或经验分享吗？欢迎在评论中讨论！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83/">虚拟环境</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/">依赖管理</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/venv/">venv</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/virtualenv/">virtualenv</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/conda/">conda</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2022/php/php81-readonly-properties-guide/"
+                                   title="PHP 8.1 只读属性深度解析：不可变对象设计的最佳实践"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8.1 只读属性深度解析：不可变对象设计的最佳实践</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2022/php/php81-enums-comprehensive-guide/"
+                                   title="PHP 8.1 枚举类型完全指南：类型安全的常量管理新方案"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8.1 枚举类型完全指南：类型安全的常量管理新方案</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AF%A6%E8%A7%A3%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A"><span class="nav-text">Python虚拟环境详解：从入门到精通</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%EF%BC%9F"><span class="nav-text">为什么需要虚拟环境？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94"><span class="nav-text">Python虚拟环境工具对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-venv-%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97"><span class="nav-text">1. venv (内置模块)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-virtualenv"><span class="nav-text">2. virtualenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-conda"><span class="nav-text">3. conda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-pipenv"><span class="nav-text">4. pipenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-poetry"><span class="nav-text">5. poetry</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8venv%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">使用venv创建虚拟环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">创建虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">激活虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%B7%B2%E5%AE%89%E8%A3%85%E7%9A%84%E5%8C%85"><span class="nav-text">查看已安装的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6"><span class="nav-text">生成依赖文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-text">从依赖文件安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%80%E5%87%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">退出虚拟环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8virtualenv"><span class="nav-text">使用virtualenv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85virtualenv"><span class="nav-text">安装virtualenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83-1"><span class="nav-text">创建虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="nav-text">其他操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8conda%E7%AE%A1%E7%90%86%E7%8E%AF%E5%A2%83"><span class="nav-text">使用conda管理环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85conda"><span class="nav-text">安装conda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-text">创建环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83"><span class="nav-text">激活环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%8C%85-1"><span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%B7%B2%E5%AE%89%E8%A3%85%E7%9A%84%E5%8C%85-1"><span class="nav-text">查看已安装的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E7%8E%AF%E5%A2%83"><span class="nav-text">导出环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E7%8E%AF%E5%A2%83%E6%96%87%E4%BB%B6%E5%88%9B%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-text">从环境文件创建环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%80%E5%87%BA%E7%8E%AF%E5%A2%83"><span class="nav-text">退出环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E7%8E%AF%E5%A2%83"><span class="nav-text">删除环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8pipenv"><span class="nav-text">使用pipenv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85pipenv"><span class="nav-text">安装pipenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E5%92%8C%E7%8E%AF%E5%A2%83"><span class="nav-text">创建项目和环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%8C%85-2"><span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83-1"><span class="nav-text">激活环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="nav-text">运行命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E4%BE%9D%E8%B5%96%E5%9B%BE"><span class="nav-text">查看依赖图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%AE%9A%E4%BE%9D%E8%B5%96"><span class="nav-text">锁定依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8poetry"><span class="nav-text">使用poetry</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85poetry"><span class="nav-text">安装poetry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E9%A1%B9%E7%9B%AE"><span class="nav-text">创建新项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83-2"><span class="nav-text">激活环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4-1"><span class="nav-text">运行命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E4%BE%9D%E8%B5%96"><span class="nav-text">更新依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">虚拟环境最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%BA%E6%AF%8F%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA%E5%8D%95%E7%8B%AC%E7%9A%84%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">1. 为每个项目创建单独的虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B0%86%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E6%8E%92%E9%99%A4%E5%9C%A8%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E4%B9%8B%E5%A4%96"><span class="nav-text">2. 将虚拟环境排除在版本控制之外</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6"><span class="nav-text">3. 使用依赖文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%AE%9A%E6%9C%9F%E6%9B%B4%E6%96%B0%E4%BE%9D%E8%B5%96"><span class="nav-text">4. 定期更新依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8%E5%9B%BA%E5%AE%9A%E7%89%88%E6%9C%AC"><span class="nav-text">5. 使用固定版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E8%80%83%E8%99%91%E4%BD%BF%E7%94%A8Docker"><span class="nav-text">6. 考虑使用Docker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7"><span class="nav-text">高级技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9C%A8Jupyter-Notebook%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">1. 在Jupyter Notebook中使用虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%9C%A8VS-Code%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">2. 在VS Code中使用虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%AE%A1%E7%90%86%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">3. 管理多个项目的虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">4. 使用环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%88%9B%E5%BB%BA%E5%8F%AF%E9%87%8D%E7%94%A8%E7%9A%84%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E6%A8%A1%E6%9D%BF"><span class="nav-text">5. 创建可重用的虚拟环境模板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-text">常见问题及解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81"><span class="nav-text">1. 依赖冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%8D%E6%BF%80%E6%B4%BB"><span class="nav-text">2. 虚拟环境不激活</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%8C%85%E5%AE%89%E8%A3%85%E5%A4%B1%E8%B4%A5"><span class="nav-text">3. 包安装失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%8E%AF%E5%A2%83%E6%B1%A1%E6%9F%93"><span class="nav-text">4. 环境污染</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AF%A6%E8%A7%A3%EF%BC%9A%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A"><span class="nav-text">Python虚拟环境详解：从入门到精通</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%EF%BC%9F"><span class="nav-text">为什么需要虚拟环境？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94"><span class="nav-text">Python虚拟环境工具对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-venv-%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97"><span class="nav-text">1. venv (内置模块)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-virtualenv"><span class="nav-text">2. virtualenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-conda"><span class="nav-text">3. conda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-pipenv"><span class="nav-text">4. pipenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-poetry"><span class="nav-text">5. poetry</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8venv%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">使用venv创建虚拟环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">创建虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">激活虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%B7%B2%E5%AE%89%E8%A3%85%E7%9A%84%E5%8C%85"><span class="nav-text">查看已安装的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6"><span class="nav-text">生成依赖文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-text">从依赖文件安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%80%E5%87%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">退出虚拟环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8virtualenv"><span class="nav-text">使用virtualenv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85virtualenv"><span class="nav-text">安装virtualenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83-1"><span class="nav-text">创建虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="nav-text">其他操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8conda%E7%AE%A1%E7%90%86%E7%8E%AF%E5%A2%83"><span class="nav-text">使用conda管理环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85conda"><span class="nav-text">安装conda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-text">创建环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83"><span class="nav-text">激活环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%8C%85-1"><span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%B7%B2%E5%AE%89%E8%A3%85%E7%9A%84%E5%8C%85-1"><span class="nav-text">查看已安装的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E7%8E%AF%E5%A2%83"><span class="nav-text">导出环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E7%8E%AF%E5%A2%83%E6%96%87%E4%BB%B6%E5%88%9B%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-text">从环境文件创建环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%80%E5%87%BA%E7%8E%AF%E5%A2%83"><span class="nav-text">退出环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E7%8E%AF%E5%A2%83"><span class="nav-text">删除环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8pipenv"><span class="nav-text">使用pipenv</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85pipenv"><span class="nav-text">安装pipenv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E5%92%8C%E7%8E%AF%E5%A2%83"><span class="nav-text">创建项目和环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%8C%85-2"><span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83-1"><span class="nav-text">激活环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="nav-text">运行命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E4%BE%9D%E8%B5%96%E5%9B%BE"><span class="nav-text">查看依赖图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%AE%9A%E4%BE%9D%E8%B5%96"><span class="nav-text">锁定依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8poetry"><span class="nav-text">使用poetry</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85poetry"><span class="nav-text">安装poetry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E9%A1%B9%E7%9B%AE"><span class="nav-text">创建新项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E7%8E%AF%E5%A2%83-2"><span class="nav-text">激活环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4-1"><span class="nav-text">运行命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E4%BE%9D%E8%B5%96"><span class="nav-text">更新依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">虚拟环境最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%BA%E6%AF%8F%E4%B8%AA%E9%A1%B9%E7%9B%AE%E5%88%9B%E5%BB%BA%E5%8D%95%E7%8B%AC%E7%9A%84%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">1. 为每个项目创建单独的虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B0%86%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E6%8E%92%E9%99%A4%E5%9C%A8%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E4%B9%8B%E5%A4%96"><span class="nav-text">2. 将虚拟环境排除在版本控制之外</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8%E4%BE%9D%E8%B5%96%E6%96%87%E4%BB%B6"><span class="nav-text">3. 使用依赖文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%AE%9A%E6%9C%9F%E6%9B%B4%E6%96%B0%E4%BE%9D%E8%B5%96"><span class="nav-text">4. 定期更新依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8%E5%9B%BA%E5%AE%9A%E7%89%88%E6%9C%AC"><span class="nav-text">5. 使用固定版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E8%80%83%E8%99%91%E4%BD%BF%E7%94%A8Docker"><span class="nav-text">6. 考虑使用Docker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7"><span class="nav-text">高级技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9C%A8Jupyter-Notebook%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">1. 在Jupyter Notebook中使用虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%9C%A8VS-Code%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">2. 在VS Code中使用虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%AE%A1%E7%90%86%E5%A4%9A%E4%B8%AA%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-text">3. 管理多个项目的虚拟环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">4. 使用环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%88%9B%E5%BB%BA%E5%8F%AF%E9%87%8D%E7%94%A8%E7%9A%84%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E6%A8%A1%E6%9D%BF"><span class="nav-text">5. 创建可重用的虚拟环境模板</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-text">常见问题及解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BE%9D%E8%B5%96%E5%86%B2%E7%AA%81"><span class="nav-text">1. 依赖冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E4%B8%8D%E6%BF%80%E6%B4%BB"><span class="nav-text">2. 虚拟环境不激活</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%8C%85%E5%AE%89%E8%A3%85%E5%A4%B1%E8%B4%A5"><span class="nav-text">3. 包安装失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%8E%AF%E5%A2%83%E6%B1%A1%E6%9F%93"><span class="nav-text">4. 环境污染</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

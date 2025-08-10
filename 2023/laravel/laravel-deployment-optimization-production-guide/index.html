@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Laravel 生产环境部署与性能优化完全指南 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Laravel 生产环境部署与性能优化完全指南
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-08-15 14:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/laravel/">laravel</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Laravel/">Laravel</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E9%83%A8%E7%BD%B2/">部署</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83/">生产环境</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Nginx/">Nginx</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Docker/">Docker</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>在 Laravel 应用从开发环境迁移到生产环境的过程中，部署配置和性能优化是确保应用稳定运行的关键环节。本文将详细介绍 Laravel 生产环境部署的最佳实践，以及 18 个必备的性能优化技巧，帮助你构建高性能、高可用的 Laravel 应用。</p>
+<span id="more"></span>
+
+<h2 id="一、生产环境部署准备"><a href="#一、生产环境部署准备" class="headerlink" title="一、生产环境部署准备"></a>一、生产环境部署准备</h2><h3 id="1-1-环境配置检查清单"><a href="#1-1-环境配置检查清单" class="headerlink" title="1.1 环境配置检查清单"></a>1.1 环境配置检查清单</h3><p>在部署前，确保以下配置项已正确设置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .env 文件配置</span></span><br><span class="line">APP_ENV=production</span><br><span class="line">APP_DEBUG=<span class="literal">false</span></span><br><span class="line">APP_KEY=your-32-character-secret-key</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据库配置</span></span><br><span class="line">DB_CONNECTION=mysql</span><br><span class="line">DB_HOST=127.0.0.1</span><br><span class="line">DB_PORT=3306</span><br><span class="line">DB_DATABASE=your_database</span><br><span class="line">DB_USERNAME=your_username</span><br><span class="line">DB_PASSWORD=your_password</span><br><span class="line"></span><br><span class="line"><span class="comment"># 缓存配置</span></span><br><span class="line">CACHE_DRIVER=redis</span><br><span class="line">SESSION_DRIVER=redis</span><br><span class="line">QUEUE_CONNECTION=redis</span><br><span class="line"></span><br><span class="line"><span class="comment"># Redis 配置</span></span><br><span class="line">REDIS_HOST=127.0.0.1</span><br><span class="line">REDIS_PASSWORD=null</span><br><span class="line">REDIS_PORT=6379</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-依赖管理优化"><a href="#1-2-依赖管理优化" class="headerlink" title="1.2 依赖管理优化"></a>1.2 依赖管理优化</h3><p>使用 Composer 优化自动加载和移除开发依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装生产环境依赖</span></span><br><span class="line">composer install --prefer-dist --no-dev -o</span><br><span class="line"></span><br><span class="line"><span class="comment"># 优化自动加载</span></span><br><span class="line">composer dump-autoload -o</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、Nginx-部署配置"><a href="#二、Nginx-部署配置" class="headerlink" title="二、Nginx 部署配置"></a>二、Nginx 部署配置</h2><h3 id="2-1-Nginx-虚拟主机配置"><a href="#2-1-Nginx-虚拟主机配置" class="headerlink" title="2.1 Nginx 虚拟主机配置"></a>2.1 Nginx 虚拟主机配置</h3><p>创建 Nginx 配置文件 <code>/etc/nginx/sites-available/laravel-app</code>：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> your-domain.com www.your-domain.com;</span><br><span class="line">    <span class="attribute">root</span> /var/www/laravel-app/public;</span><br><span class="line">    </span><br><span class="line">    <span class="attribute">add_header</span> X-Frame-Options <span class="string">&quot;SAMEORIGIN&quot;</span>;</span><br><span class="line">    <span class="attribute">add_header</span> X-Content-Type-Options <span class="string">&quot;nosniff&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="attribute">index</span> index.php;</span><br><span class="line">    </span><br><span class="line">    <span class="attribute">charset</span> utf-<span class="number">8</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 主要路由配置</span></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.php?<span class="variable">$query_string</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 禁止访问隐藏文件</span></span><br><span class="line">    <span class="section">location</span> <span class="regexp">~ /\.</span> &#123;</span><br><span class="line">        <span class="attribute">deny</span> all;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># PHP 处理</span></span><br><span class="line">    <span class="section">location</span> <span class="regexp">~ \.php$</span> &#123;</span><br><span class="line">        <span class="attribute">fastcgi_pass</span> unix:/var/run/php/php8.1-fpm.sock;</span><br><span class="line">        <span class="attribute">fastcgi_param</span> SCRIPT_FILENAME <span class="variable">$realpath_root</span><span class="variable">$fastcgi_script_name</span>;</span><br><span class="line">        <span class="attribute">include</span> fastcgi_params;</span><br><span class="line">        <span class="attribute">fastcgi_hide_header</span> X-Powered-By;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 静态资源缓存</span></span><br><span class="line">    <span class="section">location</span> <span class="regexp">~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$</span> &#123;</span><br><span class="line">        <span class="attribute">expires</span> <span class="number">1y</span>;</span><br><span class="line">        <span class="attribute">add_header</span> Cache-Control <span class="string">&quot;public, immutable&quot;</span>;</span><br><span class="line">        <span class="attribute">access_log</span> <span class="literal">off</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Gzip 压缩</span></span><br><span class="line">    <span class="attribute">gzip</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">gzip_vary</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">gzip_min_length</span> <span class="number">1024</span>;</span><br><span class="line">    <span class="attribute">gzip_proxied</span> any;</span><br><span class="line">    <span class="attribute">gzip_comp_level</span> <span class="number">6</span>;</span><br><span class="line">    <span class="attribute">gzip_types</span></span><br><span class="line">        text/plain</span><br><span class="line">        text/css</span><br><span class="line">        text/xml</span><br><span class="line">        text/javascript</span><br><span class="line">        application/json</span><br><span class="line">        application/javascript</span><br><span class="line">        application/xml+rss</span><br><span class="line">        application/atom+xml</span><br><span class="line">        image/svg+xml;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-SSL-HTTPS-配置"><a href="#2-2-SSL-HTTPS-配置" class="headerlink" title="2.2 SSL&#x2F;HTTPS 配置"></a>2.2 SSL&#x2F;HTTPS 配置</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">server_name</span> your-domain.com;</span><br><span class="line">    </span><br><span class="line">    <span class="attribute">ssl_certificate</span> /path/to/your/certificate.crt;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /path/to/your/private.key;</span><br><span class="line">    <span class="attribute">ssl_protocols</span> TLSv1.<span class="number">2</span> TLSv1.<span class="number">3</span>;</span><br><span class="line">    <span class="attribute">ssl_ciphers</span> ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512;</span><br><span class="line">    <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">off</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 其他配置同上...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTP 重定向到 HTTPS</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> your-domain.com;</span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$server_name</span><span class="variable">$request_uri</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、Docker-容器化部署"><a href="#三、Docker-容器化部署" class="headerlink" title="三、Docker 容器化部署"></a>三、Docker 容器化部署</h2><h3 id="3-1-Dockerfile-配置"><a href="#3-1-Dockerfile-配置" class="headerlink" title="3.1 Dockerfile 配置"></a>3.1 Dockerfile 配置</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> php:<span class="number">8.1</span>-fpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装系统依赖</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt-get update &amp;&amp; apt-get install -y \</span></span><br><span class="line"><span class="language-bash">    git \</span></span><br><span class="line"><span class="language-bash">    curl \</span></span><br><span class="line"><span class="language-bash">    libpng-dev \</span></span><br><span class="line"><span class="language-bash">    libonig-dev \</span></span><br><span class="line"><span class="language-bash">    libxml2-dev \</span></span><br><span class="line"><span class="language-bash">    zip \</span></span><br><span class="line"><span class="language-bash">    unzip \</span></span><br><span class="line"><span class="language-bash">    nginx</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 PHP 扩展</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 Composer</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=composer:latest /usr/bin/composer /usr/bin/composer</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置工作目录</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /var/www</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制应用代码</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . /var/www</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> composer install --prefer-dist --no-dev -o</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置权限</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">chown</span> -R www-data:www-data /var/www \</span></span><br><span class="line"><span class="language-bash">    &amp;&amp; <span class="built_in">chmod</span> -R 755 /var/www/storage \</span></span><br><span class="line"><span class="language-bash">    &amp;&amp; <span class="built_in">chmod</span> -R 755 /var/www/bootstrap/cache</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">9000</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;php-fpm&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-Docker-Compose-配置"><a href="#3-2-Docker-Compose-配置" class="headerlink" title="3.2 Docker Compose 配置"></a>3.2 Docker Compose 配置</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3.8&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">app:</span></span><br><span class="line">    <span class="attr">build:</span></span><br><span class="line">      <span class="attr">context:</span> <span class="string">.</span></span><br><span class="line">      <span class="attr">dockerfile:</span> <span class="string">Dockerfile</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">laravel-app</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">working_dir:</span> <span class="string">/var/www</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./:/var/www</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">laravel</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">nginx:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:alpine</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">laravel-nginx</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;80:80&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;443:443&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./:/var/www</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./docker/nginx:/etc/nginx/conf.d</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">laravel</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">laravel-mysql</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">laravel</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">secret</span></span><br><span class="line">      <span class="attr">MYSQL_PASSWORD:</span> <span class="string">secret</span></span><br><span class="line">      <span class="attr">MYSQL_USER:</span> <span class="string">laravel</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">mysql_data:/var/lib/mysql</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">laravel</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis:alpine</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">laravel-redis</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">laravel</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">mysql_data:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">local</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">laravel:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="四、18个性能优化技巧"><a href="#四、18个性能优化技巧" class="headerlink" title="四、18个性能优化技巧"></a>四、18个性能优化技巧</h2><h3 id="4-1-基础优化（立即生效）"><a href="#4-1-基础优化（立即生效）" class="headerlink" title="4.1 基础优化（立即生效）"></a>4.1 基础优化（立即生效）</h3><h4 id="1-路由缓存"><a href="#1-路由缓存" class="headerlink" title="1. 路由缓存"></a>1. 路由缓存</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 缓存路由</span></span><br><span class="line">php artisan route:cache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除路由缓存</span></span><br><span class="line">php artisan route:clear</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-配置缓存"><a href="#2-配置缓存" class="headerlink" title="2. 配置缓存"></a>2. 配置缓存</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 缓存配置</span></span><br><span class="line">php artisan config:cache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除配置缓存</span></span><br><span class="line">php artisan config:clear</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-视图缓存"><a href="#3-视图缓存" class="headerlink" title="3. 视图缓存"></a>3. 视图缓存</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 缓存视图</span></span><br><span class="line">php artisan view:cache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除视图缓存</span></span><br><span class="line">php artisan view:clear</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-事件缓存"><a href="#4-事件缓存" class="headerlink" title="4. 事件缓存"></a>4. 事件缓存</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 缓存事件</span></span><br><span class="line">php artisan event:cache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除事件缓存</span></span><br><span class="line">php artisan event:clear</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-数据库优化"><a href="#4-2-数据库优化" class="headerlink" title="4.2 数据库优化"></a>4.2 数据库优化</h3><h4 id="5-预加载关联数据（解决-N-1-问题）"><a href="#5-预加载关联数据（解决-N-1-问题）" class="headerlink" title="5. 预加载关联数据（解决 N+1 问题）"></a>5. 预加载关联数据（解决 N+1 问题）</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误示例：会产生 N+1 查询</span></span><br><span class="line"><span class="variable">$books</span> = <span class="title class_">Book</span>::<span class="title function_ invoke__">all</span>();</span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$books</span> <span class="keyword">as</span> <span class="variable">$book</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="variable">$book</span>-&gt;author-&gt;name; <span class="comment">// 每次循环都会查询数据库</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确示例：使用预加载</span></span><br><span class="line"><span class="variable">$books</span> = <span class="title class_">Book</span>::<span class="title function_ invoke__">with</span>(<span class="string">&#x27;author&#x27;</span>)-&gt;<span class="title function_ invoke__">get</span>();</span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$books</span> <span class="keyword">as</span> <span class="variable">$book</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="variable">$book</span>-&gt;author-&gt;name; <span class="comment">// 只查询一次数据库</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 多层关联预加载</span></span><br><span class="line"><span class="variable">$books</span> = <span class="title class_">Book</span>::<span class="title function_ invoke__">with</span>([<span class="string">&#x27;author&#x27;</span>, <span class="string">&#x27;publisher&#x27;</span>, <span class="string">&#x27;reviews.user&#x27;</span>])-&gt;<span class="title function_ invoke__">get</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 条件预加载</span></span><br><span class="line"><span class="variable">$books</span> = <span class="title class_">Book</span>::<span class="title function_ invoke__">with</span>([<span class="string">&#x27;reviews&#x27;</span> =&gt; function (<span class="variable">$query</span>) &#123;</span><br><span class="line">    <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;rating&#x27;</span>, <span class="string">&#x27;&gt;&#x27;</span>, <span class="number">4</span>);</span><br><span class="line">&#125;])-&gt;<span class="title function_ invoke__">get</span>();</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-查询结果缓存"><a href="#6-查询结果缓存" class="headerlink" title="6. 查询结果缓存"></a>6. 查询结果缓存</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 缓存查询结果</span></span><br><span class="line"><span class="variable">$topBooks</span> = <span class="title class_">Cache</span>::<span class="title function_ invoke__">remember</span>(<span class="string">&#x27;top_books&#x27;</span>, <span class="number">3600</span>, function () &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Book</span>::<span class="title function_ invoke__">orderBy</span>(<span class="string">&#x27;rating&#x27;</span>, <span class="string">&#x27;desc&#x27;</span>)</span><br><span class="line">               -&gt;<span class="title function_ invoke__">limit</span>(<span class="number">10</span>)</span><br><span class="line">               -&gt;<span class="title function_ invoke__">get</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用标签缓存</span></span><br><span class="line"><span class="title class_">Cache</span>::<span class="title function_ invoke__">tags</span>([<span class="string">&#x27;books&#x27;</span>, <span class="string">&#x27;popular&#x27;</span>])-&gt;<span class="title function_ invoke__">put</span>(<span class="string">&#x27;top_books&#x27;</span>, <span class="variable">$books</span>, <span class="number">3600</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 清除标签缓存</span></span><br><span class="line"><span class="title class_">Cache</span>::<span class="title function_ invoke__">tags</span>([<span class="string">&#x27;books&#x27;</span>])-&gt;<span class="title function_ invoke__">flush</span>();</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-数据库索引优化"><a href="#7-数据库索引优化" class="headerlink" title="7. 数据库索引优化"></a>7. 数据库索引优化</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 迁移文件中添加索引</span></span><br><span class="line"><span class="title class_">Schema</span>::<span class="title function_ invoke__">table</span>(<span class="string">&#x27;books&#x27;</span>, function (Blueprint <span class="variable">$table</span>) &#123;</span><br><span class="line">    <span class="variable">$table</span>-&gt;<span class="title function_ invoke__">index</span>(<span class="string">&#x27;author_id&#x27;</span>);</span><br><span class="line">    <span class="variable">$table</span>-&gt;<span class="title function_ invoke__">index</span>([<span class="string">&#x27;category_id&#x27;</span>, <span class="string">&#x27;published_at&#x27;</span>]);</span><br><span class="line">    <span class="variable">$table</span>-&gt;<span class="title function_ invoke__">unique</span>([<span class="string">&#x27;isbn&#x27;</span>]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复合索引</span></span><br><span class="line"><span class="variable">$table</span>-&gt;<span class="title function_ invoke__">index</span>([<span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;created_at&#x27;</span>], <span class="string">&#x27;user_created_index&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-分页优化"><a href="#8-分页优化" class="headerlink" title="8. 分页优化"></a>8. 分页优化</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 simplePaginate 替代 paginate（当不需要总数时）</span></span><br><span class="line"><span class="variable">$books</span> = <span class="title class_">Book</span>::<span class="title function_ invoke__">simplePaginate</span>(<span class="number">15</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 游标分页（适合大数据集）</span></span><br><span class="line"><span class="variable">$books</span> = <span class="title class_">Book</span>::<span class="title function_ invoke__">cursorPaginate</span>(<span class="number">15</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义分页查询</span></span><br><span class="line"><span class="variable">$books</span> = <span class="title class_">Book</span>::<span class="title function_ invoke__">select</span>([<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;title&#x27;</span>, <span class="string">&#x27;author_id&#x27;</span>])</span><br><span class="line">             -&gt;<span class="title function_ invoke__">with</span>(<span class="string">&#x27;author:id,name&#x27;</span>)</span><br><span class="line">             -&gt;<span class="title function_ invoke__">paginate</span>(<span class="number">15</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-缓存策略优化"><a href="#4-3-缓存策略优化" class="headerlink" title="4.3 缓存策略优化"></a>4.3 缓存策略优化</h3><h4 id="9-Redis-缓存配置"><a href="#9-Redis-缓存配置" class="headerlink" title="9. Redis 缓存配置"></a>9. Redis 缓存配置</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/cache.php</span></span><br><span class="line"><span class="string">&#x27;redis&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;redis&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;connection&#x27;</span> =&gt; <span class="string">&#x27;cache&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;lock_connection&#x27;</span> =&gt; <span class="string">&#x27;default&#x27;</span>,</span><br><span class="line">],</span><br><span class="line"></span><br><span class="line"><span class="comment">// config/database.php</span></span><br><span class="line"><span class="string">&#x27;redis&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;cache&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;url&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;REDIS_URL&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;host&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;REDIS_HOST&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;password&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;REDIS_PASSWORD&#x27;</span>, <span class="literal">null</span>),</span><br><span class="line">        <span class="string">&#x27;port&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;REDIS_PORT&#x27;</span>, <span class="string">&#x27;6379&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;database&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;REDIS_CACHE_DB&#x27;</span>, <span class="string">&#x27;1&#x27;</span>),</span><br><span class="line">    ],</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-模型缓存"><a href="#10-模型缓存" class="headerlink" title="10. 模型缓存"></a>10. 模型缓存</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Book</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$cacheMinutes</span> = <span class="number">60</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getCachedBooks</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Cache</span>::<span class="title function_ invoke__">remember</span>(</span><br><span class="line">            <span class="string">&#x27;books_all_&#x27;</span> . <span class="variable">$this</span>-&gt;cacheMinutes,</span><br><span class="line">            <span class="variable">$this</span>-&gt;cacheMinutes,</span><br><span class="line">            function () &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">all</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 模型事件清除缓存</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">parent</span>::<span class="title function_ invoke__">boot</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">static</span>::<span class="title function_ invoke__">saved</span>(function () &#123;</span><br><span class="line">            <span class="title class_">Cache</span>::<span class="title function_ invoke__">forget</span>(<span class="string">&#x27;books_all_60&#x27;</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-队列和异步处理"><a href="#4-4-队列和异步处理" class="headerlink" title="4.4 队列和异步处理"></a>4.4 队列和异步处理</h3><h4 id="11-队列配置优化"><a href="#11-队列配置优化" class="headerlink" title="11. 队列配置优化"></a>11. 队列配置优化</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 邮件发送队列化</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SendWelcomeEmail</span> <span class="keyword">implements</span> <span class="title">ShouldQueue</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">Dispatchable</span>, <span class="title">InteractsWithQueue</span>, <span class="title">Queueable</span>, <span class="title">SerializesModels</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$tries</span> = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$timeout</span> = <span class="number">120</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 发送邮件逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">failed</span>(<span class="params"><span class="built_in">Exception</span> <span class="variable">$exception</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 处理失败逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 分发任务</span></span><br><span class="line"><span class="title class_">SendWelcomeEmail</span>::<span class="title function_ invoke__">dispatch</span>(<span class="variable">$user</span>)-&gt;<span class="title function_ invoke__">delay</span>(<span class="title function_ invoke__">now</span>()-&gt;<span class="title function_ invoke__">addMinutes</span>(<span class="number">5</span>));</span><br></pre></td></tr></table></figure>
+
+<h4 id="12-Supervisor-进程管理"><a href="#12-Supervisor-进程管理" class="headerlink" title="12. Supervisor 进程管理"></a>12. Supervisor 进程管理</h4><p>创建 <code>/etc/supervisor/conf.d/laravel-worker.conf</code>：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[program:laravel-worker]</span></span><br><span class="line"><span class="attr">process_name</span>=%(program_name)s_%(process_num)<span class="number">02</span>d</span><br><span class="line"><span class="attr">command</span>=php /var/www/laravel-app/artisan queue:work --sleep=<span class="number">3</span> --tries=<span class="number">3</span> --max-time=<span class="number">3600</span></span><br><span class="line"><span class="attr">autostart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">autorestart</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">user</span>=www-data</span><br><span class="line"><span class="attr">numprocs</span>=<span class="number">8</span></span><br><span class="line"><span class="attr">redirect_stderr</span>=<span class="literal">true</span></span><br><span class="line"><span class="attr">stdout_logfile</span>=/var/www/laravel-app/storage/logs/worker.log</span><br><span class="line"><span class="attr">stopwaitsecs</span>=<span class="number">3600</span></span><br></pre></td></tr></table></figure>
+
+<p>启动 Supervisor：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">sudo</span> supervisorctl reread</span><br><span class="line"><span class="built_in">sudo</span> supervisorctl update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动队列进程</span></span><br><span class="line"><span class="built_in">sudo</span> supervisorctl start laravel-worker:*</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看状态</span></span><br><span class="line"><span class="built_in">sudo</span> supervisorctl status</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-5-前端资源优化"><a href="#4-5-前端资源优化" class="headerlink" title="4.5 前端资源优化"></a>4.5 前端资源优化</h3><h4 id="13-资源压缩和合并"><a href="#13-资源压缩和合并" class="headerlink" title="13. 资源压缩和合并"></a>13. 资源压缩和合并</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.mix.js</span></span><br><span class="line"><span class="keyword">const</span> mix = <span class="built_in">require</span>(<span class="string">&#x27;laravel-mix&#x27;</span>);</span><br><span class="line"></span><br><span class="line">mix.<span class="title function_">js</span>(<span class="string">&#x27;resources/js/app.js&#x27;</span>, <span class="string">&#x27;public/js&#x27;</span>)</span><br><span class="line">   .<span class="title function_">sass</span>(<span class="string">&#x27;resources/sass/app.scss&#x27;</span>, <span class="string">&#x27;public/css&#x27;</span>)</span><br><span class="line">   .<span class="title function_">options</span>(&#123;</span><br><span class="line">       <span class="attr">processCssUrls</span>: <span class="literal">false</span></span><br><span class="line">   &#125;)</span><br><span class="line">   .<span class="title function_">version</span>(); <span class="comment">// 版本控制</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 生产环境压缩</span></span><br><span class="line"><span class="keyword">if</span> (mix.<span class="title function_">inProduction</span>()) &#123;</span><br><span class="line">    mix.<span class="title function_">version</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="14-CDN-配置"><a href="#14-CDN-配置" class="headerlink" title="14. CDN 配置"></a>14. CDN 配置</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/app.php</span></span><br><span class="line"><span class="string">&#x27;asset_url&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;ASSET_URL&#x27;</span>, <span class="literal">null</span>),</span><br><span class="line"></span><br><span class="line"><span class="comment">// .env</span></span><br><span class="line">ASSET_URL=https:<span class="comment">//cdn.your-domain.com</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 CDN</span></span><br><span class="line">&lt;link href=<span class="string">&quot;&#123;&#123; mix(&#x27;css/app.css&#x27;) &#125;&#125;&quot;</span> rel=<span class="string">&quot;stylesheet&quot;</span>&gt;</span><br><span class="line">&lt;script src=<span class="string">&quot;&#123;&#123; mix(&#x27;js/app.js&#x27;) &#125;&#125;&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-6-服务器级优化"><a href="#4-6-服务器级优化" class="headerlink" title="4.6 服务器级优化"></a>4.6 服务器级优化</h3><h4 id="15-OPcache-配置"><a href="#15-OPcache-配置" class="headerlink" title="15. OPcache 配置"></a>15. OPcache 配置</h4><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; php.ini</span></span><br><span class="line"><span class="attr">opcache.enable</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">opcache.enable_cli</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">opcache.memory_consumption</span>=<span class="number">256</span></span><br><span class="line"><span class="attr">opcache.interned_strings_buffer</span>=<span class="number">16</span></span><br><span class="line"><span class="attr">opcache.max_accelerated_files</span>=<span class="number">10000</span></span><br><span class="line"><span class="attr">opcache.revalidate_freq</span>=<span class="number">2</span></span><br><span class="line"><span class="attr">opcache.fast_shutdown</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="16-PHP-FPM-优化"><a href="#16-PHP-FPM-优化" class="headerlink" title="16. PHP-FPM 优化"></a>16. PHP-FPM 优化</h4><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; /etc/php/8.1/fpm/pool.d/www.conf</span></span><br><span class="line"><span class="attr">pm</span> = dynamic</span><br><span class="line"><span class="attr">pm.max_children</span> = <span class="number">50</span></span><br><span class="line"><span class="attr">pm.start_servers</span> = <span class="number">10</span></span><br><span class="line"><span class="attr">pm.min_spare_servers</span> = <span class="number">5</span></span><br><span class="line"><span class="attr">pm.max_spare_servers</span> = <span class="number">20</span></span><br><span class="line"><span class="attr">pm.max_requests</span> = <span class="number">1000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">; 进程管理</span></span><br><span class="line"><span class="attr">request_terminate_timeout</span> = <span class="number">300</span></span><br><span class="line"><span class="attr">rlimit_files</span> = <span class="number">65536</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="17-内存使用优化"><a href="#17-内存使用优化" class="headerlink" title="17. 内存使用优化"></a>17. 内存使用优化</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 大数据处理时使用 chunk</span></span><br><span class="line"><span class="title class_">Book</span>::<span class="title function_ invoke__">chunk</span>(<span class="number">1000</span>, function (<span class="variable">$books</span>) &#123;</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="variable">$books</span> <span class="keyword">as</span> <span class="variable">$book</span>) &#123;</span><br><span class="line">        <span class="comment">// 处理每本书</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 lazy 集合</span></span><br><span class="line"><span class="title class_">Book</span>::<span class="title function_ invoke__">lazy</span>()-&gt;<span class="title function_ invoke__">each</span>(function (<span class="variable">$book</span>) &#123;</span><br><span class="line">    <span class="comment">// 处理逻辑</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 及时释放内存</span></span><br><span class="line"><span class="keyword">unset</span>(<span class="variable">$largeArray</span>);</span><br><span class="line"><span class="title function_ invoke__">gc_collect_cycles</span>();</span><br></pre></td></tr></table></figure>
+
+<h4 id="18-监控和日志优化"><a href="#18-监控和日志优化" class="headerlink" title="18. 监控和日志优化"></a>18. 监控和日志优化</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 配置日志驱动</span></span><br><span class="line"><span class="comment">// config/logging.php</span></span><br><span class="line"><span class="string">&#x27;channels&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;stack&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;stack&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;channels&#x27;</span> =&gt; [<span class="string">&#x27;daily&#x27;</span>, <span class="string">&#x27;slack&#x27;</span>],</span><br><span class="line">        <span class="string">&#x27;ignore_exceptions&#x27;</span> =&gt; <span class="literal">false</span>,</span><br><span class="line">    ],</span><br><span class="line">    </span><br><span class="line">    <span class="string">&#x27;daily&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;daily&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;path&#x27;</span> =&gt; <span class="title function_ invoke__">storage_path</span>(<span class="string">&#x27;logs/laravel.log&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;level&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;LOG_LEVEL&#x27;</span>, <span class="string">&#x27;debug&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;days&#x27;</span> =&gt; <span class="number">14</span>,</span><br><span class="line">    ],</span><br><span class="line">],</span><br><span class="line"></span><br><span class="line"><span class="comment">// 性能监控中间件</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PerformanceMonitor</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, <span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$start</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$duration</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>) - <span class="variable">$start</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$duration</span> &gt; <span class="number">1.0</span>) &#123; <span class="comment">// 超过1秒记录日志</span></span><br><span class="line">            <span class="title class_">Log</span>::<span class="title function_ invoke__">warning</span>(<span class="string">&#x27;Slow request detected&#x27;</span>, [</span><br><span class="line">                <span class="string">&#x27;url&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">fullUrl</span>(),</span><br><span class="line">                <span class="string">&#x27;duration&#x27;</span> =&gt; <span class="variable">$duration</span>,</span><br><span class="line">                <span class="string">&#x27;memory&#x27;</span> =&gt; <span class="title function_ invoke__">memory_get_peak_usage</span>(<span class="literal">true</span>),</span><br><span class="line">            ]);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$response</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、部署脚本自动化"><a href="#五、部署脚本自动化" class="headerlink" title="五、部署脚本自动化"></a>五、部署脚本自动化</h2><h3 id="5-1-部署脚本示例"><a href="#5-1-部署脚本示例" class="headerlink" title="5.1 部署脚本示例"></a>5.1 部署脚本示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Laravel 自动部署脚本</span></span><br><span class="line"><span class="built_in">set</span> -e</span><br><span class="line"></span><br><span class="line">APP_DIR=<span class="string">&quot;/var/www/laravel-app&quot;</span></span><br><span class="line">BACKUP_DIR=<span class="string">&quot;/var/backups/laravel&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;开始部署 Laravel 应用...&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 备份当前版本</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;备份当前版本...&quot;</span></span><br><span class="line"><span class="built_in">cp</span> -r <span class="variable">$APP_DIR</span> <span class="variable">$BACKUP_DIR</span>/backup-$(<span class="built_in">date</span> +%Y%m%d-%H%M%S)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 拉取最新代码</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;拉取最新代码...&quot;</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$APP_DIR</span></span><br><span class="line">git pull origin main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 安装依赖</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;安装 Composer 依赖...&quot;</span></span><br><span class="line">composer install --prefer-dist --no-dev -o</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 运行迁移</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;运行数据库迁移...&quot;</span></span><br><span class="line">php artisan migrate --force</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 清除并重建缓存</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;重建缓存...&quot;</span></span><br><span class="line">php artisan config:clear</span><br><span class="line">php artisan route:clear</span><br><span class="line">php artisan view:clear</span><br><span class="line">php artisan cache:clear</span><br><span class="line"></span><br><span class="line">php artisan config:cache</span><br><span class="line">php artisan route:cache</span><br><span class="line">php artisan view:cache</span><br><span class="line">php artisan event:cache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 优化自动加载</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;优化自动加载...&quot;</span></span><br><span class="line">composer dump-autoload -o</span><br><span class="line"></span><br><span class="line"><span class="comment"># 7. 重启服务</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;重启服务...&quot;</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl reload php8.1-fpm</span><br><span class="line"><span class="built_in">sudo</span> systemctl reload nginx</span><br><span class="line"><span class="built_in">sudo</span> supervisorctl restart laravel-worker:*</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;部署完成！&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-零停机部署"><a href="#5-2-零停机部署" class="headerlink" title="5.2 零停机部署"></a>5.2 零停机部署</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 零停机部署脚本</span></span><br><span class="line">APP_NAME=<span class="string">&quot;laravel-app&quot;</span></span><br><span class="line">DEPLOY_DIR=<span class="string">&quot;/var/www/deployments&quot;</span></span><br><span class="line">CURRENT_DIR=<span class="string">&quot;/var/www/current&quot;</span></span><br><span class="line">RELEASE_DIR=<span class="string">&quot;<span class="variable">$DEPLOY_DIR</span>/<span class="subst">$(date +%Y%m%d-%H%M%S)</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新版本目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$RELEASE_DIR</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 克隆代码</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/your-repo/laravel-app.git <span class="variable">$RELEASE_DIR</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接共享文件</span></span><br><span class="line"><span class="built_in">ln</span> -nfs /var/www/shared/.env <span class="variable">$RELEASE_DIR</span>/.env</span><br><span class="line"><span class="built_in">ln</span> -nfs /var/www/shared/storage <span class="variable">$RELEASE_DIR</span>/storage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖和优化</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$RELEASE_DIR</span></span><br><span class="line">composer install --prefer-dist --no-dev -o</span><br><span class="line">php artisan migrate --force</span><br><span class="line">php artisan config:cache</span><br><span class="line">php artisan route:cache</span><br><span class="line">php artisan view:cache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 原子性切换</span></span><br><span class="line"><span class="built_in">ln</span> -nfs <span class="variable">$RELEASE_DIR</span> <span class="variable">$CURRENT_DIR</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl reload php8.1-fpm</span><br><span class="line"><span class="built_in">sudo</span> supervisorctl restart laravel-worker:*</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理旧版本（保留最近5个版本）</span></span><br><span class="line"><span class="built_in">ls</span> -t <span class="variable">$DEPLOY_DIR</span> | <span class="built_in">tail</span> -n +6 | xargs -I &#123;&#125; <span class="built_in">rm</span> -rf <span class="variable">$DEPLOY_DIR</span>/&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="六、监控和维护"><a href="#六、监控和维护" class="headerlink" title="六、监控和维护"></a>六、监控和维护</h2><h3 id="6-1-应用监控"><a href="#6-1-应用监控" class="headerlink" title="6.1 应用监控"></a>6.1 应用监控</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 健康检查路由</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/health&#x27;</span>, function () &#123;</span><br><span class="line">    <span class="variable">$checks</span> = [</span><br><span class="line">        <span class="string">&#x27;database&#x27;</span> =&gt; DB::<span class="title function_ invoke__">connection</span>()-&gt;<span class="title function_ invoke__">getPdo</span>() ? <span class="string">&#x27;ok&#x27;</span> : <span class="string">&#x27;failed&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;cache&#x27;</span> =&gt; <span class="title class_">Cache</span>::<span class="title function_ invoke__">store</span>()-&gt;<span class="title function_ invoke__">getStore</span>()-&gt;<span class="title function_ invoke__">connection</span>()-&gt;<span class="title function_ invoke__">ping</span>() ? <span class="string">&#x27;ok&#x27;</span> : <span class="string">&#x27;failed&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;queue&#x27;</span> =&gt; <span class="title class_">Queue</span>::<span class="title function_ invoke__">size</span>() &lt; <span class="number">1000</span> ? <span class="string">&#x27;ok&#x27;</span> : <span class="string">&#x27;warning&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;storage&#x27;</span> =&gt; <span class="title class_">Storage</span>::<span class="title function_ invoke__">disk</span>(<span class="string">&#x27;local&#x27;</span>)-&gt;<span class="title function_ invoke__">exists</span>(<span class="string">&#x27;test&#x27;</span>) ? <span class="string">&#x27;ok&#x27;</span> : <span class="string">&#x27;failed&#x27;</span>,</span><br><span class="line">    ];</span><br><span class="line">    </span><br><span class="line">    <span class="variable">$status</span> = <span class="title function_ invoke__">in_array</span>(<span class="string">&#x27;failed&#x27;</span>, <span class="variable">$checks</span>) ? <span class="number">500</span> : <span class="number">200</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([</span><br><span class="line">        <span class="string">&#x27;status&#x27;</span> =&gt; <span class="variable">$status</span> === <span class="number">200</span> ? <span class="string">&#x27;healthy&#x27;</span> : <span class="string">&#x27;unhealthy&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;checks&#x27;</span> =&gt; <span class="variable">$checks</span>,</span><br><span class="line">        <span class="string">&#x27;timestamp&#x27;</span> =&gt; <span class="title function_ invoke__">now</span>()-&gt;<span class="title function_ invoke__">toISOString</span>(),</span><br><span class="line">    ], <span class="variable">$status</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-性能监控"><a href="#6-2-性能监控" class="headerlink" title="6.2 性能监控"></a>6.2 性能监控</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 安装 Laravel Telescope（开发环境）</span></span><br><span class="line">composer <span class="keyword">require</span> laravel/telescope --dev</span><br><span class="line">php artisan telescope:install</span><br><span class="line">php artisan migrate</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生产环境使用 Laravel Horizon（队列监控）</span></span><br><span class="line">composer <span class="keyword">require</span> laravel/horizon</span><br><span class="line">php artisan horizon:install</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Laravel 生产环境部署和性能优化是一个系统性工程，需要从多个维度进行考虑：</p>
+<ol>
+<li><strong>部署配置</strong>：正确的 Nginx&#x2F;Apache 配置、SSL 证书、防火墙设置</li>
+<li><strong>性能优化</strong>：缓存策略、数据库优化、队列处理、资源压缩</li>
+<li><strong>监控维护</strong>：日志管理、性能监控、健康检查、自动化部署</li>
+<li><strong>安全防护</strong>：环境变量保护、文件权限、访问控制</li>
+</ol>
+<p>通过实施这些最佳实践，你的 Laravel 应用将能够在生产环境中稳定、高效地运行，为用户提供优质的服务体验。记住，性能优化是一个持续的过程，需要根据实际的业务需求和用户反馈不断调整和改进。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Laravel/">Laravel</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E9%83%A8%E7%BD%B2/">部署</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83/">生产环境</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Nginx/">Nginx</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Docker/">Docker</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/thinkphp/thinkphp6-docker-microservices/"
+                                   title="ThinkPHP6/8 容器化部署与微服务架构实战指南"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">ThinkPHP6/8 容器化部署与微服务架构实战指南</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/laravel/laravel-testing-security-comprehensive-guide/"
+                                   title="Laravel 测试与安全防护：构建可靠安全的Web应用"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Laravel 测试与安全防护：构建可靠安全的Web应用</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2%E5%87%86%E5%A4%87"><span class="nav-text">一、生产环境部署准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-text">1.1 环境配置检查清单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86%E4%BC%98%E5%8C%96"><span class="nav-text">1.2 依赖管理优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Nginx-%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE"><span class="nav-text">二、Nginx 部署配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Nginx-%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE"><span class="nav-text">2.1 Nginx 虚拟主机配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-SSL-HTTPS-%E9%85%8D%E7%BD%AE"><span class="nav-text">2.2 SSL&#x2F;HTTPS 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81Docker-%E5%AE%B9%E5%99%A8%E5%8C%96%E9%83%A8%E7%BD%B2"><span class="nav-text">三、Docker 容器化部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Dockerfile-%E9%85%8D%E7%BD%AE"><span class="nav-text">3.1 Dockerfile 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Docker-Compose-%E9%85%8D%E7%BD%AE"><span class="nav-text">3.2 Docker Compose 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%8118%E4%B8%AA%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">四、18个性能优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%9F%BA%E7%A1%80%E4%BC%98%E5%8C%96%EF%BC%88%E7%AB%8B%E5%8D%B3%E7%94%9F%E6%95%88%EF%BC%89"><span class="nav-text">4.1 基础优化（立即生效）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%B7%AF%E7%94%B1%E7%BC%93%E5%AD%98"><span class="nav-text">1. 路由缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E7%BC%93%E5%AD%98"><span class="nav-text">2. 配置缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%A7%86%E5%9B%BE%E7%BC%93%E5%AD%98"><span class="nav-text">3. 视图缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%BA%8B%E4%BB%B6%E7%BC%93%E5%AD%98"><span class="nav-text">4. 事件缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96"><span class="nav-text">4.2 数据库优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E9%A2%84%E5%8A%A0%E8%BD%BD%E5%85%B3%E8%81%94%E6%95%B0%E6%8D%AE%EF%BC%88%E8%A7%A3%E5%86%B3-N-1-%E9%97%AE%E9%A2%98%EF%BC%89"><span class="nav-text">5. 预加载关联数据（解决 N+1 问题）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E7%BC%93%E5%AD%98"><span class="nav-text">6. 查询结果缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96"><span class="nav-text">7. 数据库索引优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-%E5%88%86%E9%A1%B5%E4%BC%98%E5%8C%96"><span class="nav-text">8. 分页优化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96"><span class="nav-text">4.3 缓存策略优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#9-Redis-%E7%BC%93%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="nav-text">9. Redis 缓存配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-%E6%A8%A1%E5%9E%8B%E7%BC%93%E5%AD%98"><span class="nav-text">10. 模型缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E9%98%9F%E5%88%97%E5%92%8C%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86"><span class="nav-text">4.4 队列和异步处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#11-%E9%98%9F%E5%88%97%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96"><span class="nav-text">11. 队列配置优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-Supervisor-%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-text">12. Supervisor 进程管理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90%E4%BC%98%E5%8C%96"><span class="nav-text">4.5 前端资源优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#13-%E8%B5%84%E6%BA%90%E5%8E%8B%E7%BC%A9%E5%92%8C%E5%90%88%E5%B9%B6"><span class="nav-text">13. 资源压缩和合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-CDN-%E9%85%8D%E7%BD%AE"><span class="nav-text">14. CDN 配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BA%A7%E4%BC%98%E5%8C%96"><span class="nav-text">4.6 服务器级优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#15-OPcache-%E9%85%8D%E7%BD%AE"><span class="nav-text">15. OPcache 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#16-PHP-FPM-%E4%BC%98%E5%8C%96"><span class="nav-text">16. PHP-FPM 优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#17-%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E4%BC%98%E5%8C%96"><span class="nav-text">17. 内存使用优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#18-%E7%9B%91%E6%8E%A7%E5%92%8C%E6%97%A5%E5%BF%97%E4%BC%98%E5%8C%96"><span class="nav-text">18. 监控和日志优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC%E8%87%AA%E5%8A%A8%E5%8C%96"><span class="nav-text">五、部署脚本自动化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B"><span class="nav-text">5.1 部署脚本示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E9%9B%B6%E5%81%9C%E6%9C%BA%E9%83%A8%E7%BD%B2"><span class="nav-text">5.2 零停机部署</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%9B%91%E6%8E%A7%E5%92%8C%E7%BB%B4%E6%8A%A4"><span class="nav-text">六、监控和维护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%BA%94%E7%94%A8%E7%9B%91%E6%8E%A7"><span class="nav-text">6.1 应用监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="nav-text">6.2 性能监控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%83%A8%E7%BD%B2%E5%87%86%E5%A4%87"><span class="nav-text">一、生产环境部署准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-text">1.1 环境配置检查清单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86%E4%BC%98%E5%8C%96"><span class="nav-text">1.2 依赖管理优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Nginx-%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE"><span class="nav-text">二、Nginx 部署配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Nginx-%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE"><span class="nav-text">2.1 Nginx 虚拟主机配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-SSL-HTTPS-%E9%85%8D%E7%BD%AE"><span class="nav-text">2.2 SSL&#x2F;HTTPS 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81Docker-%E5%AE%B9%E5%99%A8%E5%8C%96%E9%83%A8%E7%BD%B2"><span class="nav-text">三、Docker 容器化部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Dockerfile-%E9%85%8D%E7%BD%AE"><span class="nav-text">3.1 Dockerfile 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Docker-Compose-%E9%85%8D%E7%BD%AE"><span class="nav-text">3.2 Docker Compose 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%8118%E4%B8%AA%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">四、18个性能优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%9F%BA%E7%A1%80%E4%BC%98%E5%8C%96%EF%BC%88%E7%AB%8B%E5%8D%B3%E7%94%9F%E6%95%88%EF%BC%89"><span class="nav-text">4.1 基础优化（立即生效）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%B7%AF%E7%94%B1%E7%BC%93%E5%AD%98"><span class="nav-text">1. 路由缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E7%BC%93%E5%AD%98"><span class="nav-text">2. 配置缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%A7%86%E5%9B%BE%E7%BC%93%E5%AD%98"><span class="nav-text">3. 视图缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%BA%8B%E4%BB%B6%E7%BC%93%E5%AD%98"><span class="nav-text">4. 事件缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96"><span class="nav-text">4.2 数据库优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E9%A2%84%E5%8A%A0%E8%BD%BD%E5%85%B3%E8%81%94%E6%95%B0%E6%8D%AE%EF%BC%88%E8%A7%A3%E5%86%B3-N-1-%E9%97%AE%E9%A2%98%EF%BC%89"><span class="nav-text">5. 预加载关联数据（解决 N+1 问题）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E7%BC%93%E5%AD%98"><span class="nav-text">6. 查询结果缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96"><span class="nav-text">7. 数据库索引优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-%E5%88%86%E9%A1%B5%E4%BC%98%E5%8C%96"><span class="nav-text">8. 分页优化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96"><span class="nav-text">4.3 缓存策略优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#9-Redis-%E7%BC%93%E5%AD%98%E9%85%8D%E7%BD%AE"><span class="nav-text">9. Redis 缓存配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-%E6%A8%A1%E5%9E%8B%E7%BC%93%E5%AD%98"><span class="nav-text">10. 模型缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E9%98%9F%E5%88%97%E5%92%8C%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86"><span class="nav-text">4.4 队列和异步处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#11-%E9%98%9F%E5%88%97%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96"><span class="nav-text">11. 队列配置优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-Supervisor-%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-text">12. Supervisor 进程管理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E5%89%8D%E7%AB%AF%E8%B5%84%E6%BA%90%E4%BC%98%E5%8C%96"><span class="nav-text">4.5 前端资源优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#13-%E8%B5%84%E6%BA%90%E5%8E%8B%E7%BC%A9%E5%92%8C%E5%90%88%E5%B9%B6"><span class="nav-text">13. 资源压缩和合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-CDN-%E9%85%8D%E7%BD%AE"><span class="nav-text">14. CDN 配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BA%A7%E4%BC%98%E5%8C%96"><span class="nav-text">4.6 服务器级优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#15-OPcache-%E9%85%8D%E7%BD%AE"><span class="nav-text">15. OPcache 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#16-PHP-FPM-%E4%BC%98%E5%8C%96"><span class="nav-text">16. PHP-FPM 优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#17-%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E4%BC%98%E5%8C%96"><span class="nav-text">17. 内存使用优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#18-%E7%9B%91%E6%8E%A7%E5%92%8C%E6%97%A5%E5%BF%97%E4%BC%98%E5%8C%96"><span class="nav-text">18. 监控和日志优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC%E8%87%AA%E5%8A%A8%E5%8C%96"><span class="nav-text">五、部署脚本自动化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B"><span class="nav-text">5.1 部署脚本示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E9%9B%B6%E5%81%9C%E6%9C%BA%E9%83%A8%E7%BD%B2"><span class="nav-text">5.2 零停机部署</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%9B%91%E6%8E%A7%E5%92%8C%E7%BB%B4%E6%8A%A4"><span class="nav-text">六、监控和维护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%BA%94%E7%94%A8%E7%9B%91%E6%8E%A7"><span class="nav-text">6.1 应用监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="nav-text">6.2 性能监控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

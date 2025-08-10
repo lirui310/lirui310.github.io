@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            ThinkPHP6/8 模型关联高级用法：一对一、一对多、多对多关联实战 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        ThinkPHP6/8 模型关联高级用法：一对一、一对多、多对多关联实战
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2024-03-15 10:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/thinkphp/">thinkphp</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/">数据库优化</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ORM/">ORM</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ThinkPHP6/">ThinkPHP6</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ThinkPHP8/">ThinkPHP8</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%A8%A1%E5%9E%8B%E5%85%B3%E8%81%94/">模型关联</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>ThinkPHP6&#x2F;8的模型关联功能是ORM的核心特性之一，通过对象化的方式处理表与表之间的关联关系，相比传统的JOIN查询更加智能和高效。本文将深入探讨模型关联的高级用法、性能优化技巧和实战案例。</p>
+<span id="more"></span>
+
+<h2 id="模型关联基础概念"><a href="#模型关联基础概念" class="headerlink" title="模型关联基础概念"></a>模型关联基础概念</h2><h3 id="关联类型概述"><a href="#关联类型概述" class="headerlink" title="关联类型概述"></a>关联类型概述</h3><p>ThinkPHP支持以下几种关联类型：</p>
+<ul>
+<li><strong>hasOne</strong>：一对一关联</li>
+<li><strong>belongsTo</strong>：反向一对一关联</li>
+<li><strong>hasMany</strong>：一对多关联</li>
+<li><strong>belongsToMany</strong>：多对多关联</li>
+<li><strong>hasManyThrough</strong>：远程一对多关联</li>
+<li><strong>morphOne</strong>：多态一对一关联</li>
+<li><strong>morphMany</strong>：多态一对多关联</li>
+</ul>
+<h3 id="关联的优势"><a href="#关联的优势" class="headerlink" title="关联的优势"></a>关联的优势</h3><ol>
+<li><strong>对象化操作</strong>：将表关联转换为对象属性访问</li>
+<li><strong>延迟加载</strong>：按需加载关联数据，提高性能</li>
+<li><strong>预载入</strong>：批量加载关联数据，减少SQL查询次数</li>
+<li><strong>智能缓存</strong>：自动处理关联数据缓存</li>
+</ol>
+<h2 id="一对一关联详解"><a href="#一对一关联详解" class="headerlink" title="一对一关联详解"></a>一对一关联详解</h2><h3 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">app</span>\<span class="title class_">model</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Model</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户资料关联（一对一）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasOne</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">profile</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// hasOne(关联模型, 外键, 主键)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasOne</span>(<span class="title class_">UserProfile</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户钱包关联（一对一）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasOne</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">wallet</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasOne</span>(<span class="title class_">UserWallet</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户资料模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserProfile</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 反向关联到用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\BelongsTo</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">user</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// belongsTo(关联模型, 外键, 主键)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">belongsTo</span>(<span class="title class_">User</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="高级配置"><a href="#高级配置" class="headerlink" title="高级配置"></a>高级配置</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 带条件的关联</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 激活状态的用户资料</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasOne</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">activeProfile</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasOne</span>(<span class="title class_">UserProfile</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;status&#x27;</span>, <span class="number">1</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">field</span>(<span class="string">&#x27;user_id,nickname,avatar,gender,birthday&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 带默认值的关联</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasOne</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">profileWithDefault</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasOne</span>(<span class="title class_">UserProfile</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">withDefault</span>([</span><br><span class="line">                        <span class="string">&#x27;nickname&#x27;</span> =&gt; <span class="string">&#x27;未设置&#x27;</span>,</span><br><span class="line">                        <span class="string">&#x27;avatar&#x27;</span> =&gt; <span class="string">&#x27;/default/avatar.png&#x27;</span>,</span><br><span class="line">                        <span class="string">&#x27;gender&#x27;</span> =&gt; <span class="number">0</span></span><br><span class="line">                    ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 控制器中的使用</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取用户详情（包含资料）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $id 用户ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUserDetail</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$id</span></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 方式1：延迟加载</span></span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">find</span>(<span class="variable">$id</span>);</span><br><span class="line">        <span class="variable">$profile</span> = <span class="variable">$user</span>-&gt;profile; <span class="comment">// 这时才执行关联查询</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 方式2：预载入（推荐）</span></span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">with</span>(<span class="string">&#x27;profile&#x27;</span>)-&gt;<span class="title function_ invoke__">find</span>(<span class="variable">$id</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 方式3：多个关联预载入</span></span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">with</span>([<span class="string">&#x27;profile&#x27;</span>, <span class="string">&#x27;wallet&#x27;</span>])-&gt;<span class="title function_ invoke__">find</span>(<span class="variable">$id</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;user&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">toArray</span>(),</span><br><span class="line">            <span class="string">&#x27;profile&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;profile ? <span class="variable">$user</span>-&gt;profile-&gt;<span class="title function_ invoke__">toArray</span>() : <span class="literal">null</span></span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建用户及资料</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $userData 用户数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $profileData 资料数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> User</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createUserWithProfile</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$userData</span>, <span class="keyword">array</span> <span class="variable">$profileData</span></span>): <span class="title">User</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 开启事务</span></span><br><span class="line">        <span class="title class_">Db</span>::<span class="title function_ invoke__">startTrans</span>();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 创建用户</span></span><br><span class="line">            <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">create</span>(<span class="variable">$userData</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 创建用户资料</span></span><br><span class="line">            <span class="variable">$profileData</span>[<span class="string">&#x27;user_id&#x27;</span>] = <span class="variable">$user</span>-&gt;id;</span><br><span class="line">            <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">profile</span>()-&gt;<span class="title function_ invoke__">save</span>(<span class="keyword">new</span> <span class="title class_">UserProfile</span>(<span class="variable">$profileData</span>));</span><br><span class="line">            </span><br><span class="line">            <span class="title class_">Db</span>::<span class="title function_ invoke__">commit</span>();</span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$user</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (\<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="title class_">Db</span>::<span class="title function_ invoke__">rollback</span>();</span><br><span class="line">            <span class="keyword">throw</span> <span class="variable">$e</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="一对多关联详解"><a href="#一对多关联详解" class="headerlink" title="一对多关联详解"></a>一对多关联详解</h2><h3 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户订单关联（一对多）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">orders</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasMany</span>(<span class="title class_">Order</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户文章关联</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">articles</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasMany</span>(<span class="title class_">Article</span>::<span class="variable language_">class</span>, <span class="string">&#x27;author_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 已发布的文章</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">publishedArticles</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasMany</span>(<span class="title class_">Article</span>::<span class="variable language_">class</span>, <span class="string">&#x27;author_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;status&#x27;</span>, <span class="string">&#x27;published&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">order</span>(<span class="string">&#x27;created_at desc&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 订单模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Order</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 反向关联到用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\BelongsTo</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">user</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">belongsTo</span>(<span class="title class_">User</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 订单商品关联（一对多）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">items</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasMany</span>(<span class="title class_">OrderItem</span>::<span class="variable language_">class</span>, <span class="string">&#x27;order_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="高级查询技巧"><a href="#高级查询技巧" class="headerlink" title="高级查询技巧"></a>高级查询技巧</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取用户及其订单统计</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $userId 用户ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUserOrderStats</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$userId</span></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">with</span>([</span><br><span class="line">            // 预载入最近<span class="number">5</span>个订单</span><br><span class="line">            <span class="string">&#x27;orders&#x27;</span> =&gt; function(<span class="variable">$query</span>) &#123;</span><br><span class="line">                <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">order</span>(<span class="string">&#x27;created_at desc&#x27;</span>)-&gt;<span class="title function_ invoke__">limit</span>(<span class="number">5</span>);</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="comment">// 预载入订单商品</span></span><br><span class="line">            <span class="string">&#x27;orders.items&#x27;</span></span><br><span class="line">        ])-&gt;<span class="title function_ invoke__">find</span>(<span class="variable">$userId</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 统计数据</span></span><br><span class="line">        <span class="variable">$stats</span> = [</span><br><span class="line">            <span class="string">&#x27;total_orders&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">orders</span>()-&gt;<span class="title function_ invoke__">count</span>(),</span><br><span class="line">            <span class="string">&#x27;total_amount&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">orders</span>()-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;total_amount&#x27;</span>),</span><br><span class="line">            <span class="string">&#x27;pending_orders&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">orders</span>()-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;status&#x27;</span>, <span class="string">&#x27;pending&#x27;</span>)-&gt;<span class="title function_ invoke__">count</span>(),</span><br><span class="line">            <span class="string">&#x27;completed_orders&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">orders</span>()-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;status&#x27;</span>, <span class="string">&#x27;completed&#x27;</span>)-&gt;<span class="title function_ invoke__">count</span>(),</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;user&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">toArray</span>(),</span><br><span class="line">            <span class="string">&#x27;stats&#x27;</span> =&gt; <span class="variable">$stats</span></span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 批量获取用户及订单数量</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUsersWithOrderCount</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 使用withCount统计关联数量</span></span><br><span class="line">        <span class="variable">$users</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">withCount</span>([<span class="string">&#x27;orders&#x27;</span>, <span class="string">&#x27;articles&#x27;</span>])</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">select</span>()</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$users</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="多对多关联详解"><a href="#多对多关联详解" class="headerlink" title="多对多关联详解"></a>多对多关联详解</h2><h3 id="基础配置-1"><a href="#基础配置-1" class="headerlink" title="基础配置"></a>基础配置</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户角色关联（多对多）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\BelongsToMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">roles</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// belongsToMany(关联模型, 中间表, 外键, 关联键)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">belongsToMany</span>(<span class="title class_">Role</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_role&#x27;</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;role_id&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">withPivot</span>([<span class="string">&#x27;created_at&#x27;</span>, <span class="string">&#x27;status&#x27;</span>]) <span class="comment">// 获取中间表字段</span></span><br><span class="line">                    -&gt;<span class="title function_ invoke__">wherePivot</span>(<span class="string">&#x27;status&#x27;</span>, <span class="number">1</span>); <span class="comment">// 中间表条件</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户标签关联</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\BelongsToMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">tags</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">belongsToMany</span>(<span class="title class_">Tag</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_tag&#x27;</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;tag_id&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">withPivot</span>([<span class="string">&#x27;weight&#x27;</span>, <span class="string">&#x27;created_at&#x27;</span>])</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">orderByPivot</span>(<span class="string">&#x27;weight&#x27;</span>, <span class="string">&#x27;desc&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 角色模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Role</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 角色用户关联</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\BelongsToMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">users</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">belongsToMany</span>(<span class="title class_">User</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_role&#x27;</span>, <span class="string">&#x27;role_id&#x27;</span>, <span class="string">&#x27;user_id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 角色权限关联</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\BelongsToMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">permissions</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">belongsToMany</span>(<span class="title class_">Permission</span>::<span class="variable language_">class</span>, <span class="string">&#x27;role_permission&#x27;</span>, <span class="string">&#x27;role_id&#x27;</span>, <span class="string">&#x27;permission_id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="中间表操作"><a href="#中间表操作" class="headerlink" title="中间表操作"></a>中间表操作</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserRoleController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 为用户分配角色</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $userId 用户ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $roleIds 角色ID数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> bool</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">assignRoles</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$userId</span>, <span class="keyword">array</span> <span class="variable">$roleIds</span></span>): <span class="title">bool</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">find</span>(<span class="variable">$userId</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 方式1：直接关联</span></span><br><span class="line">        <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">roles</span>()-&gt;<span class="title function_ invoke__">attach</span>(<span class="variable">$roleIds</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 方式2：带中间表数据关联</span></span><br><span class="line">        <span class="variable">$pivotData</span> = [];</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable">$roleIds</span> <span class="keyword">as</span> <span class="variable">$roleId</span>) &#123;</span><br><span class="line">            <span class="variable">$pivotData</span>[<span class="variable">$roleId</span>] = [</span><br><span class="line">                <span class="string">&#x27;created_at&#x27;</span> =&gt; <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d H:i:s&#x27;</span>),</span><br><span class="line">                <span class="string">&#x27;status&#x27;</span> =&gt; <span class="number">1</span></span><br><span class="line">            ];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">roles</span>()-&gt;<span class="title function_ invoke__">attach</span>(<span class="variable">$pivotData</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 同步用户角色</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $userId 用户ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $roleIds 角色ID数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> bool</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">syncRoles</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$userId</span>, <span class="keyword">array</span> <span class="variable">$roleIds</span></span>): <span class="title">bool</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">find</span>(<span class="variable">$userId</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// sync会删除不在数组中的关联，添加新的关联</span></span><br><span class="line">        <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">roles</span>()-&gt;<span class="title function_ invoke__">sync</span>(<span class="variable">$roleIds</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 移除用户角色</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $userId 用户ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $roleIds 角色ID数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> bool</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">removeRoles</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$userId</span>, <span class="keyword">array</span> <span class="variable">$roleIds</span></span>): <span class="title">bool</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">find</span>(<span class="variable">$userId</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 移除指定角色</span></span><br><span class="line">        <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">roles</span>()-&gt;<span class="title function_ invoke__">detach</span>(<span class="variable">$roleIds</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 移除所有角色</span></span><br><span class="line">        <span class="comment">// $user-&gt;roles()-&gt;detach();</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="远程关联和多态关联"><a href="#远程关联和多态关联" class="headerlink" title="远程关联和多态关联"></a>远程关联和多态关联</h2><h3 id="远程一对多关联"><a href="#远程一对多关联" class="headerlink" title="远程一对多关联"></a>远程一对多关联</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 国家模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Country</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 国家的所有文章（通过用户）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasManyThrough</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">articles</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// hasManyThrough(最终模型, 中间模型, 中间表外键, 最终表外键, 本表主键, 中间表主键)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasManyThrough</span>(</span><br><span class="line">            <span class="title class_">Article</span>::<span class="variable language_">class</span>,  // 最终要关联的模型</span><br><span class="line">            <span class="title class_">User</span>::<span class="variable language_">class</span>,     // 中间模型</span><br><span class="line">            <span class="string">&#x27;country_id&#x27;</span>,    // 中间表(users)的外键</span><br><span class="line">            <span class="string">&#x27;author_id&#x27;</span>,     <span class="comment">// 最终表(articles)的外键</span></span><br><span class="line">            <span class="string">&#x27;id&#x27;</span>,            <span class="comment">// 本表(countries)的主键</span></span><br><span class="line">            <span class="string">&#x27;id&#x27;</span>             <span class="comment">// 中间表(users)的主键</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="多态关联"><a href="#多态关联" class="headerlink" title="多态关联"></a>多态关联</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 评论模型（多态）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comment</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 可评论的模型（多态关联）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\MorphTo</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">commentable</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// morphTo(外键前缀)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">morphTo</span>(<span class="string">&#x27;commentable&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 文章模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Article</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 文章评论（多态一对多）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\MorphMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">comments</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// morphMany(关联模型, 多态名称)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">morphMany</span>(<span class="title class_">Comment</span>::<span class="variable language_">class</span>, <span class="string">&#x27;commentable&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 视频模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Video</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 视频评论（多态一对多）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\MorphMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">comments</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">morphMany</span>(<span class="title class_">Comment</span>::<span class="variable language_">class</span>, <span class="string">&#x27;commentable&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能优化技巧"><a href="#性能优化技巧" class="headerlink" title="性能优化技巧"></a>性能优化技巧</h2><h3 id="1-预载入优化"><a href="#1-预载入优化" class="headerlink" title="1. 预载入优化"></a>1. 预载入优化</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OptimizedController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 优化的用户列表查询</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUserList</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 错误示例：N+1查询问题</span></span><br><span class="line">        <span class="comment">// $users = User::select();</span></span><br><span class="line">        <span class="comment">// foreach ($users as $user) &#123;</span></span><br><span class="line">        <span class="comment">//     echo $user-&gt;profile-&gt;nickname; // 每次循环都会执行一次查询</span></span><br><span class="line">        <span class="comment">// &#125;</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 正确示例：使用预载入</span></span><br><span class="line">        <span class="variable">$users</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">with</span>([</span><br><span class="line">            <span class="string">&#x27;profile&#x27;</span> =&gt; function(<span class="variable">$query</span>) &#123;</span><br><span class="line">                <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">field</span>(<span class="string">&#x27;user_id,nickname,avatar&#x27;</span>);</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">&#x27;roles&#x27;</span> =&gt; <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$query</span></span>) </span>&#123;</span><br><span class="line">                <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">field</span>(<span class="string">&#x27;id,name,display_name&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        ])-&gt;<span class="title function_ invoke__">select</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$users</span>-&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 条件预载入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getActiveUsersWithOrders</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$users</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">with</span>([</span><br><span class="line">            <span class="string">&#x27;orders&#x27;</span> =&gt; function(<span class="variable">$query</span>) &#123;</span><br><span class="line">                <span class="comment">// 只加载最近30天的订单</span></span><br><span class="line">                <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;created_at&#x27;</span>, <span class="string">&#x27;&gt;=&#x27;</span>, <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d&#x27;</span>, <span class="title function_ invoke__">strtotime</span>(<span class="string">&#x27;-30 days&#x27;</span>)))</span><br><span class="line">                      -&gt;<span class="title function_ invoke__">field</span>(<span class="string">&#x27;id,user_id,total_amount,status,created_at&#x27;</span>)</span><br><span class="line">                      -&gt;<span class="title function_ invoke__">order</span>(<span class="string">&#x27;created_at desc&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        ])</span><br><span class="line">        -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;status&#x27;</span>, <span class="string">&#x27;active&#x27;</span>)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">select</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$users</span>-&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-关联查询缓存"><a href="#2-关联查询缓存" class="headerlink" title="2. 关联查询缓存"></a>2. 关联查询缓存</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 带缓存的用户模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 缓存的用户资料关联</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasOne</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">cachedProfile</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasOne</span>(<span class="title class_">UserProfile</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">cache</span>(<span class="string">&#x27;user_profile_&#x27;</span> . <span class="variable">$this</span>-&gt;id, <span class="number">3600</span>); <span class="comment">// 缓存1小时</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取用户权限（带缓存）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getPermissions</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$cacheKey</span> = <span class="string">&#x27;user_permissions_&#x27;</span> . <span class="variable language_">$this</span>-&gt;id;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">cache</span>(<span class="variable">$cacheKey</span>, function() &#123;</span><br><span class="line">            <span class="variable">$permissions</span> = [];</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="variable language_">$this</span>-&gt;roles <span class="keyword">as</span> <span class="variable">$role</span>) &#123;</span><br><span class="line">                <span class="keyword">foreach</span> (<span class="variable">$role</span>-&gt;permissions <span class="keyword">as</span> <span class="variable">$permission</span>) &#123;</span><br><span class="line">                    <span class="variable">$permissions</span>[] = <span class="variable">$permission</span>-&gt;name;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">array_unique</span>(<span class="variable">$permissions</span>);</span><br><span class="line">        &#125;, <span class="number">1800</span>); <span class="comment">// 缓存30分钟</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-分页优化"><a href="#3-分页优化" class="headerlink" title="3. 分页优化"></a>3. 分页优化</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 优化的用户分页查询</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $page 页码</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $limit 每页数量</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUsersPaginated</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$page</span> = <span class="number">1</span>, <span class="keyword">int</span> <span class="variable">$limit</span> = <span class="number">20</span></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 使用简单分页，避免count查询</span></span><br><span class="line">        <span class="variable">$users</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">with</span>([</span><br><span class="line">            <span class="string">&#x27;profile&#x27;</span> =&gt; function(<span class="variable">$query</span>) &#123;</span><br><span class="line">                <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">field</span>(<span class="string">&#x27;user_id,nickname,avatar&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        ])</span><br><span class="line">        -&gt;<span class="title function_ invoke__">field</span>(<span class="string">&#x27;id,username,email,status,created_at&#x27;</span>)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">order</span>(<span class="string">&#x27;id desc&#x27;</span>)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">paginate</span>([</span><br><span class="line">            <span class="string">&#x27;list_rows&#x27;</span> =&gt; <span class="variable">$limit</span>,</span><br><span class="line">            <span class="string">&#x27;page&#x27;</span> =&gt; <span class="variable">$page</span>,</span><br><span class="line">            <span class="string">&#x27;simple&#x27;</span> =&gt; <span class="literal">true</span> // 简单分页，不查询总数</span><br><span class="line">        ]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$users</span>-&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="实战案例：电商订单系统"><a href="#实战案例：电商订单系统" class="headerlink" title="实战案例：电商订单系统"></a>实战案例：电商订单系统</h2><h3 id="模型设计"><a href="#模型设计" class="headerlink" title="模型设计"></a>模型设计</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 订单模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Order</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 订单用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\BelongsTo</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">user</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">belongsTo</span>(<span class="title class_">User</span>::<span class="variable language_">class</span>, <span class="string">&#x27;user_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 订单商品</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">items</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasMany</span>(<span class="title class_">OrderItem</span>::<span class="variable language_">class</span>, <span class="string">&#x27;order_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 订单地址</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasOne</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">address</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasOne</span>(<span class="title class_">OrderAddress</span>::<span class="variable language_">class</span>, <span class="string">&#x27;order_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 订单支付记录</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\HasMany</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">payments</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">hasMany</span>(<span class="title class_">OrderPayment</span>::<span class="variable language_">class</span>, <span class="string">&#x27;order_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 订单商品模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrderItem</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 关联商品</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\BelongsTo</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">product</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">belongsTo</span>(<span class="title class_">Product</span>::<span class="variable language_">class</span>, <span class="string">&#x27;product_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 关联商品SKU</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \think\model\relation\BelongsTo</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">sku</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">belongsTo</span>(<span class="title class_">ProductSku</span>::<span class="variable language_">class</span>, <span class="string">&#x27;sku_id&#x27;</span>, <span class="string">&#x27;id&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="业务逻辑实现"><a href="#业务逻辑实现" class="headerlink" title="业务逻辑实现"></a>业务逻辑实现</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrderService</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取订单详情</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $orderId 订单ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getOrderDetail</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$orderId</span></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$order</span> = <span class="title class_">Order</span>::<span class="title function_ invoke__">with</span>([</span><br><span class="line">            <span class="string">&#x27;user:id,username,nickname&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;items.product:id,name,image&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;items.sku:id,name,price&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;address&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;payments&#x27;</span> =&gt; function(<span class="variable">$query</span>) &#123;</span><br><span class="line">                <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;status&#x27;</span>, <span class="string">&#x27;success&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        ])-&gt;<span class="title function_ invoke__">find</span>(<span class="variable">$orderId</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable">$order</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">\Exception</span>(<span class="string">&#x27;订单不存在&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;order&#x27;</span> =&gt; <span class="variable">$order</span>-&gt;<span class="title function_ invoke__">toArray</span>(),</span><br><span class="line">            <span class="string">&#x27;total_paid&#x27;</span> =&gt; <span class="variable">$order</span>-&gt;payments-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;amount&#x27;</span>),</span><br><span class="line">            <span class="string">&#x27;item_count&#x27;</span> =&gt; <span class="variable">$order</span>-&gt;items-&gt;<span class="title function_ invoke__">sum</span>(<span class="string">&#x27;quantity&#x27;</span>)</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建订单</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $orderData 订单数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> Order</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createOrder</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$orderData</span></span>): <span class="title">Order</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="title class_">Db</span>::<span class="title function_ invoke__">startTrans</span>();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 创建订单</span></span><br><span class="line">            <span class="variable">$order</span> = <span class="title class_">Order</span>::<span class="title function_ invoke__">create</span>([</span><br><span class="line">                <span class="string">&#x27;order_no&#x27;</span> =&gt; <span class="variable">$this</span>-&gt;<span class="title function_ invoke__">generateOrderNo</span>(),</span><br><span class="line">                <span class="string">&#x27;user_id&#x27;</span> =&gt; <span class="variable">$orderData</span>[<span class="string">&#x27;user_id&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;total_amount&#x27;</span> =&gt; <span class="variable">$orderData</span>[<span class="string">&#x27;total_amount&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;status&#x27;</span> =&gt; <span class="string">&#x27;pending&#x27;</span></span><br><span class="line">            ]);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 创建订单商品</span></span><br><span class="line">            <span class="variable">$items</span> = [];</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="variable">$orderData</span>[<span class="string">&#x27;items&#x27;</span>] <span class="keyword">as</span> <span class="variable">$item</span>) &#123;</span><br><span class="line">                <span class="variable">$items</span>[] = <span class="keyword">new</span> <span class="title class_">OrderItem</span>([</span><br><span class="line">                    <span class="string">&#x27;product_id&#x27;</span> =&gt; <span class="variable">$item</span>[<span class="string">&#x27;product_id&#x27;</span>],</span><br><span class="line">                    <span class="string">&#x27;sku_id&#x27;</span> =&gt; <span class="variable">$item</span>[<span class="string">&#x27;sku_id&#x27;</span>],</span><br><span class="line">                    <span class="string">&#x27;quantity&#x27;</span> =&gt; <span class="variable">$item</span>[<span class="string">&#x27;quantity&#x27;</span>],</span><br><span class="line">                    <span class="string">&#x27;price&#x27;</span> =&gt; <span class="variable">$item</span>[<span class="string">&#x27;price&#x27;</span>],</span><br><span class="line">                    <span class="string">&#x27;total_price&#x27;</span> =&gt; <span class="variable">$item</span>[<span class="string">&#x27;quantity&#x27;</span>] * <span class="variable">$item</span>[<span class="string">&#x27;price&#x27;</span>]</span><br><span class="line">                ]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="variable">$order</span>-&gt;<span class="title function_ invoke__">items</span>()-&gt;<span class="title function_ invoke__">saveAll</span>(<span class="variable">$items</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 创建订单地址</span></span><br><span class="line">            <span class="variable">$order</span>-&gt;<span class="title function_ invoke__">address</span>()-&gt;<span class="title function_ invoke__">save</span>(<span class="keyword">new</span> <span class="title class_">OrderAddress</span>(<span class="variable">$orderData</span>[<span class="string">&#x27;address&#x27;</span>]));</span><br><span class="line">            </span><br><span class="line">            <span class="title class_">Db</span>::<span class="title function_ invoke__">commit</span>();</span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$order</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (\<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="title class_">Db</span>::<span class="title function_ invoke__">rollback</span>();</span><br><span class="line">            <span class="keyword">throw</span> <span class="variable">$e</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 生成订单号</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">generateOrderNo</span>(<span class="params"></span>): <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">date</span>(<span class="string">&#x27;YmdHis&#x27;</span>) . <span class="title function_ invoke__">mt_rand</span>(<span class="number">1000</span>, <span class="number">9999</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最佳实践总结"><a href="#最佳实践总结" class="headerlink" title="最佳实践总结"></a>最佳实践总结</h2><h3 id="1-关联设计原则"><a href="#1-关联设计原则" class="headerlink" title="1. 关联设计原则"></a>1. 关联设计原则</h3><ul>
+<li><strong>明确关联关系</strong>：准确定义表之间的关联类型</li>
+<li><strong>合理设置外键</strong>：遵循数据库设计规范</li>
+<li><strong>避免过深嵌套</strong>：关联层级不宜超过3层</li>
+<li><strong>使用软删除</strong>：重要数据使用软删除机制</li>
+</ul>
+<h3 id="2-性能优化建议"><a href="#2-性能优化建议" class="headerlink" title="2. 性能优化建议"></a>2. 性能优化建议</h3><ul>
+<li><strong>预载入优先</strong>：避免N+1查询问题</li>
+<li><strong>字段筛选</strong>：只查询需要的字段</li>
+<li><strong>适当缓存</strong>：对频繁查询的关联数据进行缓存</li>
+<li><strong>分页处理</strong>：大数据量使用分页查询</li>
+</ul>
+<h3 id="3-代码规范"><a href="#3-代码规范" class="headerlink" title="3. 代码规范"></a>3. 代码规范</h3><ul>
+<li><strong>统一命名</strong>：关联方法使用驼峰命名</li>
+<li><strong>添加注释</strong>：为关联方法添加详细注释</li>
+<li><strong>异常处理</strong>：合理处理关联查询异常</li>
+<li><strong>事务控制</strong>：复杂操作使用数据库事务</li>
+</ul>
+<h3 id="4-调试技巧"><a href="#4-调试技巧" class="headerlink" title="4. 调试技巧"></a>4. 调试技巧</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 开启SQL日志</span></span><br><span class="line"><span class="title class_">Db</span>::<span class="title function_ invoke__">listen</span>(function(<span class="variable">$sql</span>, <span class="variable">$time</span>, <span class="variable">$explain</span>)&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="variable">$sql</span> . <span class="string">&#x27; [&#x27;</span> . <span class="variable">$time</span> . <span class="string">&#x27;s]&#x27;</span> . PHP_EOL;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查看关联查询SQL</span></span><br><span class="line"><span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">with</span>(<span class="string">&#x27;profile&#x27;</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$user</span>-&gt;<span class="title function_ invoke__">getLastSql</span>(); <span class="comment">// 查看最后执行的SQL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 调试关联数据</span></span><br><span class="line"><span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">find</span>(<span class="number">1</span>);</span><br><span class="line"><span class="title function_ invoke__">dump</span>(<span class="variable">$user</span>-&gt;profile); <span class="comment">// 查看关联数据结构</span></span><br></pre></td></tr></table></figure>
+
+<p>ThinkPHP的模型关联功能强大且灵活，合理使用可以大大提高开发效率和代码质量。在实际项目中，应该根据业务需求选择合适的关联类型，并注意性能优化，避免常见的查询陷阱。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/">数据库优化</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/ORM/">ORM</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/ThinkPHP6/">ThinkPHP6</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/ThinkPHP8/">ThinkPHP8</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%A8%A1%E5%9E%8B%E5%85%B3%E8%81%94/">模型关联</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2024/laravel/laravel-11-new-features-comprehensive-guide/"
+                                   title="Laravel 11 新特性全面解析：简化应用结构与现代化开发体验"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Laravel 11 新特性全面解析：简化应用结构与现代化开发体验</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2024/mysql/mysql-cluster-configuration/"
+                                   title="MySQL集群配置与高可用架构实战"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">MySQL集群配置与高可用架构实战</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%85%B3%E8%81%94%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">模型关联基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E7%B1%BB%E5%9E%8B%E6%A6%82%E8%BF%B0"><span class="nav-text">关联类型概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-text">关联的优势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E4%B8%80%E5%85%B3%E8%81%94%E8%AF%A6%E8%A7%A3"><span class="nav-text">一对一关联详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="nav-text">基础用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE"><span class="nav-text">高级配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-text">使用示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%85%B3%E8%81%94%E8%AF%A6%E8%A7%A3"><span class="nav-text">一对多关联详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="nav-text">基础配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E6%8A%80%E5%B7%A7"><span class="nav-text">高级查询技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E8%81%94%E8%AF%A6%E8%A7%A3"><span class="nav-text">多对多关联详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE-1"><span class="nav-text">基础配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E8%A1%A8%E6%93%8D%E4%BD%9C"><span class="nav-text">中间表操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E5%85%B3%E8%81%94%E5%92%8C%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94"><span class="nav-text">远程关联和多态关联</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%85%B3%E8%81%94"><span class="nav-text">远程一对多关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94"><span class="nav-text">多态关联</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">性能优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%A2%84%E8%BD%BD%E5%85%A5%E4%BC%98%E5%8C%96"><span class="nav-text">1. 预载入优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">2. 关联查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%86%E9%A1%B5%E4%BC%98%E5%8C%96"><span class="nav-text">3. 分页优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%EF%BC%9A%E7%94%B5%E5%95%86%E8%AE%A2%E5%8D%95%E7%B3%BB%E7%BB%9F"><span class="nav-text">实战案例：电商订单系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1"><span class="nav-text">模型设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E5%AE%9E%E7%8E%B0"><span class="nav-text">业务逻辑实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93"><span class="nav-text">最佳实践总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%85%B3%E8%81%94%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-text">1. 关联设计原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-text">2. 性能优化建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83"><span class="nav-text">3. 代码规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="nav-text">4. 调试技巧</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%85%B3%E8%81%94%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">模型关联基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E7%B1%BB%E5%9E%8B%E6%A6%82%E8%BF%B0"><span class="nav-text">关联类型概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-text">关联的优势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E4%B8%80%E5%85%B3%E8%81%94%E8%AF%A6%E8%A7%A3"><span class="nav-text">一对一关联详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="nav-text">基础用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE"><span class="nav-text">高级配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-text">使用示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%85%B3%E8%81%94%E8%AF%A6%E8%A7%A3"><span class="nav-text">一对多关联详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE"><span class="nav-text">基础配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E6%8A%80%E5%B7%A7"><span class="nav-text">高级查询技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%AF%B9%E5%A4%9A%E5%85%B3%E8%81%94%E8%AF%A6%E8%A7%A3"><span class="nav-text">多对多关联详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE-1"><span class="nav-text">基础配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E8%A1%A8%E6%93%8D%E4%BD%9C"><span class="nav-text">中间表操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E5%85%B3%E8%81%94%E5%92%8C%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94"><span class="nav-text">远程关联和多态关联</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%85%B3%E8%81%94"><span class="nav-text">远程一对多关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94"><span class="nav-text">多态关联</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">性能优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%A2%84%E8%BD%BD%E5%85%A5%E4%BC%98%E5%8C%96"><span class="nav-text">1. 预载入优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">2. 关联查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%86%E9%A1%B5%E4%BC%98%E5%8C%96"><span class="nav-text">3. 分页优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%EF%BC%9A%E7%94%B5%E5%95%86%E8%AE%A2%E5%8D%95%E7%B3%BB%E7%BB%9F"><span class="nav-text">实战案例：电商订单系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1"><span class="nav-text">模型设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E5%AE%9E%E7%8E%B0"><span class="nav-text">业务逻辑实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93"><span class="nav-text">最佳实践总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%85%B3%E8%81%94%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-text">1. 关联设计原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-text">2. 性能优化建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83"><span class="nav-text">3. 代码规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="nav-text">4. 调试技巧</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

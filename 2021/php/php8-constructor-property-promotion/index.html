@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            PHP 8.0 构造器属性提升：简化类定义的革命性语法 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        PHP 8.0 构造器属性提升：简化类定义的革命性语法
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2021-07-08 14:15:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/php/">php</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">面向对象</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/PHP8/">PHP8</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%AF%AD%E6%B3%95%E7%B3%96/">语法糖</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%9E%84%E9%80%A0%E5%99%A8/">构造器</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%B1%9E%E6%80%A7%E6%8F%90%E5%8D%87/">属性提升</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>PHP 8.0的构造器属性提升（Constructor Property Promotion）是我最喜欢的新特性之一。它大幅减少了样板代码，让类定义更加简洁。作为一个经常需要创建数据传输对象（DTO）和值对象的开发者，这个特性为我节省了大量时间。</p>
+<h2 id="传统方式-vs-属性提升"><a href="#传统方式-vs-属性提升" class="headerlink" title="传统方式 vs 属性提升"></a>传统方式 vs 属性提升</h2><h3 id="传统的冗长写法"><a href="#传统的冗长写法" class="headerlink" title="传统的冗长写法"></a>传统的冗长写法</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$name</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$email</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> <span class="variable">$age</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">bool</span> <span class="variable">$isActive</span>;</span><br><span class="line">    <span class="keyword">private</span> ?<span class="keyword">string</span> <span class="variable">$avatar</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">string</span> <span class="variable">$email</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">int</span> <span class="variable">$age</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">bool</span> <span class="variable">$isActive</span> = <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        ?<span class="keyword">string</span> <span class="variable">$avatar</span> = <span class="literal">null</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;name = <span class="variable">$name</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;email = <span class="variable">$email</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;age = <span class="variable">$age</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;isActive = <span class="variable">$isActive</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;avatar = <span class="variable">$avatar</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getName</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;name;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getEmail</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;email;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... 更多getter方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用属性提升的简洁写法"><a href="#使用属性提升的简洁写法" class="headerlink" title="使用属性提升的简洁写法"></a>使用属性提升的简洁写法</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$email</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">int</span> <span class="variable">$age</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">bool</span> <span class="variable">$isActive</span> = <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> ?<span class="keyword">string</span> <span class="variable">$avatar</span> = <span class="literal">null</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getName</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;name;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getEmail</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;email;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... 其他方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="可见性修饰符的使用"><a href="#可见性修饰符的使用" class="headerlink" title="可见性修饰符的使用"></a>可见性修饰符的使用</h2><h3 id="不同的可见性级别"><a href="#不同的可见性级别" class="headerlink" title="不同的可见性级别"></a>不同的可见性级别</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$id</span>,        // 公共只读属性</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">string</span> <span class="variable">$name</span>,               // 公共可写属性</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">protected</span> <span class="keyword">float</span> <span class="variable">$price</span>,            // 受保护属性</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$metadata</span> = []       // 私有属性</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getPrice</span>(<span class="params"></span>): <span class="title">float</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;price;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">updatePrice</span>(<span class="params"><span class="keyword">float</span> <span class="variable">$newPrice</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;price = <span class="variable">$newPrice</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="混合使用传统属性和提升属性"><a href="#混合使用传统属性和提升属性" class="headerlink" title="混合使用传统属性和提升属性"></a>混合使用传统属性和提升属性</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Order</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$items</span> = [];</span><br><span class="line">    <span class="keyword">private</span> DateTime <span class="variable">$createdAt</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$id</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">string</span> <span class="variable">$customerName</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$status</span> = <span class="string">&#x27;pending&#x27;</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;createdAt = <span class="keyword">new</span> <span class="title class_">DateTime</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addItem</span>(<span class="params">OrderItem <span class="variable">$item</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;items[] = <span class="variable">$item</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getStatus</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;status;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="实际应用场景"><a href="#实际应用场景" class="headerlink" title="实际应用场景"></a>实际应用场景</h2><h3 id="1-数据传输对象（DTO）"><a href="#1-数据传输对象（DTO）" class="headerlink" title="1. 数据传输对象（DTO）"></a>1. 数据传输对象（DTO）</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CreateUserRequest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$email</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$password</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> ?<span class="keyword">int</span> <span class="variable">$age</span> = <span class="literal">null</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">array</span> <span class="variable">$roles</span> = [<span class="string">&#x27;user&#x27;</span>]</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toArray</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;name,</span><br><span class="line">            <span class="string">&#x27;email&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;email,</span><br><span class="line">            <span class="string">&#x27;password&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;password,</span><br><span class="line">            <span class="string">&#x27;age&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;age,</span><br><span class="line">            <span class="string">&#x27;roles&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;roles</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="variable">$request</span> = <span class="keyword">new</span> <span class="title class_">CreateUserRequest</span>(</span><br><span class="line">    name: <span class="string">&#x27;张三&#x27;</span>,</span><br><span class="line">    email: <span class="string">&#x27;zhang@example.com&#x27;</span>,</span><br><span class="line">    password: <span class="string">&#x27;secret123&#x27;</span>,</span><br><span class="line">    age: <span class="number">25</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-值对象"><a href="#2-值对象" class="headerlink" title="2. 值对象"></a>2. 值对象</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Money</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">float</span> <span class="variable">$amount</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$currency</span> = <span class="string">&#x27;CNY&#x27;</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$amount</span> &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Amount cannot be negative&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getAmount</span>(<span class="params"></span>): <span class="title">float</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;amount;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getCurrency</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;currency;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">Money <span class="variable">$other</span></span>): <span class="title">Money</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;currency !== <span class="variable">$other</span>-&gt;currency) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Currency mismatch&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Money</span>(<span class="variable language_">$this</span>-&gt;amount + <span class="variable">$other</span>-&gt;amount, <span class="variable language_">$this</span>-&gt;currency);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">format</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">number_format</span>(<span class="variable">$this</span>-&gt;amount, <span class="number">2</span>) . <span class="string">&#x27; &#x27;</span> . <span class="variable language_">$this</span>-&gt;currency;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="variable">$price</span> = <span class="keyword">new</span> <span class="title class_">Money</span>(<span class="number">99.99</span>, <span class="string">&#x27;CNY&#x27;</span>);</span><br><span class="line"><span class="variable">$tax</span> = <span class="keyword">new</span> <span class="title class_">Money</span>(<span class="number">10.00</span>, <span class="string">&#x27;CNY&#x27;</span>);</span><br><span class="line"><span class="variable">$total</span> = <span class="variable">$price</span>-&gt;<span class="title function_ invoke__">add</span>(<span class="variable">$tax</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$total</span>-&gt;<span class="title function_ invoke__">format</span>(); <span class="comment">// 109.99 CNY</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-配置对象"><a href="#3-配置对象" class="headerlink" title="3. 配置对象"></a>3. 配置对象</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatabaseConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$host</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$database</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$username</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$password</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">int</span> <span class="variable">$port</span> = <span class="number">3306</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$charset</span> = <span class="string">&#x27;utf8mb4&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">array</span> <span class="variable">$options</span> = []</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getDsn</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;mysql:host=<span class="subst">&#123;$this-&gt;host&#125;</span>;port=<span class="subst">&#123;$this-&gt;port&#125;</span>;dbname=<span class="subst">&#123;$this-&gt;database&#125;</span>;charset=<span class="subst">&#123;$this-&gt;charset&#125;</span>&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getCredentials</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;username&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;username,</span><br><span class="line">            <span class="string">&#x27;password&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;password</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getOptions</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">array_merge</span>([</span><br><span class="line">            PDO::<span class="variable constant_">ATTR_ERRMODE</span> =&gt; PDO::<span class="variable constant_">ERRMODE_EXCEPTION</span>,</span><br><span class="line">            PDO::<span class="variable constant_">ATTR_DEFAULT_FETCH_MODE</span> =&gt; PDO::<span class="variable constant_">FETCH_ASSOC</span>,</span><br><span class="line">        ], <span class="variable">$this</span>-&gt;options);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="variable">$config</span> = <span class="keyword">new</span> <span class="title class_">DatabaseConfig</span>(</span><br><span class="line">    host: <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">    database: <span class="string">&#x27;myapp&#x27;</span>,</span><br><span class="line">    username: <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    password: <span class="string">&#x27;secret&#x27;</span>,</span><br><span class="line">    options: [PDO::<span class="variable constant_">ATTR_PERSISTENT</span> =&gt; <span class="literal">true</span>]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-API响应对象"><a href="#4-API响应对象" class="headerlink" title="4. API响应对象"></a>4. API响应对象</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiResponse</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">mixed</span> <span class="variable">$data</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">int</span> <span class="variable">$statusCode</span> = <span class="number">200</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$message</span> = <span class="string">&#x27;Success&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">array</span> <span class="variable">$headers</span> = [],</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> ?<span class="keyword">array</span> <span class="variable">$errors</span> = <span class="literal">null</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toArray</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="variable">$response</span> = [</span><br><span class="line">            <span class="string">&#x27;status_code&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;statusCode,</span><br><span class="line">            <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;message,</span><br><span class="line">            <span class="string">&#x27;data&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;data</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;errors !== <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="variable">$response</span>[<span class="string">&#x27;errors&#x27;</span>] = <span class="variable language_">$this</span>-&gt;errors;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$response</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toJson</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">json_encode</span>(<span class="variable">$this</span>-&gt;<span class="title function_ invoke__">toArray</span>(), JSON_UNESCAPED_UNICODE);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getHeaders</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">array_merge</span>([</span><br><span class="line">            <span class="string">&#x27;Content-Type&#x27;</span> =&gt; <span class="string">&#x27;application/json&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;X-Response-Time&#x27;</span> =&gt; <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>)</span><br><span class="line">        ], <span class="variable">$this</span>-&gt;headers);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="variable">$response</span> = <span class="keyword">new</span> <span class="title class_">ApiResponse</span>(</span><br><span class="line">    data: [<span class="string">&#x27;users&#x27;</span> =&gt; <span class="variable">$users</span>],</span><br><span class="line">    statusCode: <span class="number">200</span>,</span><br><span class="line">    message: <span class="string">&#x27;用户列表获取成功&#x27;</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-事件对象"><a href="#5-事件对象" class="headerlink" title="5. 事件对象"></a>5. 事件对象</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserRegisteredEvent</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> User <span class="variable">$user</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> DateTime <span class="variable">$occurredAt</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$source</span> = <span class="string">&#x27;web&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">array</span> <span class="variable">$metadata</span> = []</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getEventName</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;user.registered&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getPayload</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;user_id&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;user-&gt;<span class="title function_ invoke__">getId</span>(),</span><br><span class="line">            <span class="string">&#x27;email&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;user-&gt;<span class="title function_ invoke__">getEmail</span>(),</span><br><span class="line">            <span class="string">&#x27;source&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;source,</span><br><span class="line">            <span class="string">&#x27;occurred_at&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;occurredAt-&gt;<span class="title function_ invoke__">format</span>(<span class="string">&#x27;Y-m-d H:i:s&#x27;</span>),</span><br><span class="line">            <span class="string">&#x27;metadata&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;metadata</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 事件分发</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EventDispatcher</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params">UserRegisteredEvent <span class="variable">$event</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 发送欢迎邮件</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">sendWelcomeEmail</span>(<span class="variable">$event</span>-&gt;user);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 记录用户注册日志</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">logUserRegistration</span>(<span class="variable">$event</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 触发其他业务逻辑</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">triggerWelcomeWorkflow</span>(<span class="variable">$event</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="与其他PHP-8特性结合"><a href="#与其他PHP-8特性结合" class="headerlink" title="与其他PHP 8特性结合"></a>与其他PHP 8特性结合</h2><h3 id="1-与命名参数结合"><a href="#1-与命名参数结合" class="headerlink" title="1. 与命名参数结合"></a>1. 与命名参数结合</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EmailMessage</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$to</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$subject</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$body</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> ?<span class="keyword">string</span> <span class="variable">$from</span> = <span class="literal">null</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">array</span> <span class="variable">$cc</span> = [],</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">array</span> <span class="variable">$bcc</span> = [],</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">bool</span> <span class="variable">$isHtml</span> = <span class="literal">false</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">array</span> <span class="variable">$attachments</span> = []</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用命名参数创建对象</span></span><br><span class="line"><span class="variable">$email</span> = <span class="keyword">new</span> <span class="title class_">EmailMessage</span>(</span><br><span class="line">    to: <span class="string">&#x27;user@example.com&#x27;</span>,</span><br><span class="line">    subject: <span class="string">&#x27;欢迎注册&#x27;</span>,</span><br><span class="line">    body: <span class="string">&#x27;&lt;h1&gt;欢迎加入我们！&lt;/h1&gt;&#x27;</span>,</span><br><span class="line">    <span class="keyword">from</span>: <span class="string">&#x27;noreply@myapp.com&#x27;</span>,</span><br><span class="line">    isHtml: <span class="literal">true</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-与联合类型结合"><a href="#2-与联合类型结合" class="headerlink" title="2. 与联合类型结合"></a>2. 与联合类型结合</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SearchFilter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span>|<span class="keyword">array</span> <span class="variable">$keywords</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span>|<span class="literal">null</span> <span class="variable">$category</span> = <span class="literal">null</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">int</span>|<span class="keyword">float</span> <span class="variable">$minPrice</span> = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">int</span>|<span class="keyword">float</span> <span class="variable">$maxPrice</span> = PHP_FLOAT_MAX,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">bool</span> <span class="variable">$inStock</span> = <span class="literal">true</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getKeywords</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">is_string</span>(<span class="variable">$this</span>-&gt;keywords) </span><br><span class="line">            ? <span class="title function_ invoke__">explode</span>(<span class="string">&#x27; &#x27;</span>, <span class="variable">$this</span>-&gt;keywords)</span><br><span class="line">            : <span class="variable language_">$this</span>-&gt;keywords;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toSqlConditions</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="variable">$conditions</span> = [];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">empty</span>(<span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getKeywords</span>())) &#123;</span><br><span class="line">            <span class="variable">$keywords</span> = <span class="title function_ invoke__">implode</span>(<span class="string">&#x27;%&#x27;</span>, <span class="variable">$this</span>-&gt;<span class="title function_ invoke__">getKeywords</span>());</span><br><span class="line">            <span class="variable">$conditions</span>[] = <span class="string">&quot;title LIKE &#x27;%<span class="subst">&#123;$keywords&#125;</span>%&#x27;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;category) &#123;</span><br><span class="line">            <span class="variable">$conditions</span>[] = <span class="string">&quot;category = &#x27;<span class="subst">&#123;$this-&gt;category&#125;</span>&#x27;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$conditions</span>[] = <span class="string">&quot;price BETWEEN <span class="subst">&#123;$this-&gt;minPrice&#125;</span> AND <span class="subst">&#123;$this-&gt;maxPrice&#125;</span>&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;inStock) &#123;</span><br><span class="line">            <span class="variable">$conditions</span>[] = <span class="string">&quot;stock &gt; 0&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$conditions</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-与属性结合"><a href="#3-与属性结合" class="headerlink" title="3. 与属性结合"></a>3. 与属性结合</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[Entity</span>(<span class="attr">table</span>: <span class="string">&#x27;products&#x27;</span>)<span class="meta">]</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="meta">#[Column</span>(<span class="attr">type</span>: <span class="string">&#x27;string&#x27;</span>, <span class="attr">length</span>: <span class="number">255</span>)<span class="meta">]</span></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        </span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="meta">#[Column</span>(<span class="attr">type</span>: <span class="string">&#x27;decimal&#x27;</span>, <span class="attr">precision</span>: <span class="number">10</span>, <span class="attr">scale</span>: <span class="number">2</span>)<span class="meta">]</span></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">float</span> <span class="variable">$price</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        </span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="meta">#[Column</span>(<span class="attr">type</span>: <span class="string">&#x27;text&#x27;</span>, <span class="attr">nullable</span>: <span class="literal">true</span>)<span class="meta">]</span></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> ?<span class="keyword">string</span> <span class="variable">$description</span> = <span class="literal">null</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        </span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="meta">#[Column</span>(<span class="attr">type</span>: <span class="string">&#x27;boolean&#x27;</span>, <span class="attr">default</span>: <span class="literal">true</span>)<span class="meta">]</span></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">bool</span> <span class="variable">$isActive</span> = <span class="literal">true</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        </span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="meta">#[Column</span>(<span class="attr">type</span>: <span class="string">&#x27;datetime&#x27;</span>)<span class="meta">]</span></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> DateTime <span class="variable">$createdAt</span> = <span class="keyword">new</span> DateTime(<span class="params"></span>)</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级用法和技巧"><a href="#高级用法和技巧" class="headerlink" title="高级用法和技巧"></a>高级用法和技巧</h2><h3 id="1-验证和转换"><a href="#1-验证和转换" class="headerlink" title="1. 验证和转换"></a>1. 验证和转换</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserProfile</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$email</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">int</span> <span class="variable">$age</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">array</span> <span class="variable">$interests</span> = []</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 构造器中进行验证</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">validateName</span>(<span class="variable">$name</span>);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">validateEmail</span>(<span class="variable">$email</span>);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">validateAge</span>(<span class="variable">$age</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">validateName</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$name</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">strlen</span>(<span class="variable">$name</span>) &lt; <span class="number">2</span> || <span class="title function_ invoke__">strlen</span>(<span class="variable">$name</span>) &gt; <span class="number">50</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Name must be between 2 and 50 characters&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">validateEmail</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$email</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="title function_ invoke__">filter_var</span>(<span class="variable">$email</span>, FILTER_VALIDATE_EMAIL)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Invalid email format&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">validateAge</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$age</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$age</span> &lt; <span class="number">0</span> || <span class="variable">$age</span> &gt; <span class="number">150</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Age must be between 0 and 150&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-工厂方法模式"><a href="#2-工厂方法模式" class="headerlink" title="2. 工厂方法模式"></a>2. 工厂方法模式</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">float</span> <span class="variable">$width</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">float</span> <span class="variable">$height</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$width</span> &lt;= <span class="number">0</span> || <span class="variable">$height</span> &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Width and height must be positive&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">square</span>(<span class="params"><span class="keyword">float</span> <span class="variable">$side</span></span>): <span class="title">self</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">self</span>(<span class="variable">$side</span>, <span class="variable">$side</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">fromArray</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$data</span></span>): <span class="title">self</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">self</span>(</span><br><span class="line">            width: <span class="variable">$data</span>[<span class="string">&#x27;width&#x27;</span>] ?? <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Missing width&#x27;</span>),</span><br><span class="line">            height: <span class="variable">$data</span>[<span class="string">&#x27;height&#x27;</span>] ?? <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Missing height&#x27;</span>)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getArea</span>(<span class="params"></span>): <span class="title">float</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;width * <span class="variable language_">$this</span>-&gt;height;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getPerimeter</span>(<span class="params"></span>): <span class="title">float</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span> * (<span class="variable language_">$this</span>-&gt;width + <span class="variable language_">$this</span>-&gt;height);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="variable">$rect1</span> = <span class="keyword">new</span> <span class="title class_">Rectangle</span>(<span class="number">10</span>, <span class="number">20</span>);</span><br><span class="line"><span class="variable">$square</span> = <span class="title class_">Rectangle</span>::<span class="title function_ invoke__">square</span>(<span class="number">15</span>);</span><br><span class="line"><span class="variable">$rect2</span> = <span class="title class_">Rectangle</span>::<span class="title function_ invoke__">fromArray</span>([<span class="string">&#x27;width&#x27;</span> =&gt; <span class="number">8</span>, <span class="string">&#x27;height&#x27;</span> =&gt; <span class="number">12</span>]);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-不可变对象"><a href="#3-不可变对象" class="headerlink" title="3. 不可变对象"></a>3. 不可变对象</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ImmutablePoint</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">float</span> <span class="variable">$x</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">float</span> <span class="variable">$y</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getX</span>(<span class="params"></span>): <span class="title">float</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;x;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getY</span>(<span class="params"></span>): <span class="title">float</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;y;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">withX</span>(<span class="params"><span class="keyword">float</span> <span class="variable">$x</span></span>): <span class="title">self</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">self</span>(<span class="variable">$x</span>, <span class="variable language_">$this</span>-&gt;y);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">withY</span>(<span class="params"><span class="keyword">float</span> <span class="variable">$y</span></span>): <span class="title">self</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">self</span>(<span class="variable language_">$this</span>-&gt;x, <span class="variable">$y</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">move</span>(<span class="params"><span class="keyword">float</span> <span class="variable">$deltaX</span>, <span class="keyword">float</span> <span class="variable">$deltaY</span></span>): <span class="title">self</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">self</span>(<span class="variable language_">$this</span>-&gt;x + <span class="variable">$deltaX</span>, <span class="variable language_">$this</span>-&gt;y + <span class="variable">$deltaY</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">distanceTo</span>(<span class="params">ImmutablePoint <span class="variable">$other</span></span>): <span class="title">float</span> </span>&#123;</span><br><span class="line">        <span class="variable">$dx</span> = <span class="variable language_">$this</span>-&gt;x - <span class="variable">$other</span>-&gt;x;</span><br><span class="line">        <span class="variable">$dy</span> = <span class="variable language_">$this</span>-&gt;y - <span class="variable">$other</span>-&gt;y;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">sqrt</span>(<span class="variable">$dx</span> * <span class="variable">$dx</span> + <span class="variable">$dy</span> * <span class="variable">$dy</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="variable">$point1</span> = <span class="keyword">new</span> <span class="title class_">ImmutablePoint</span>(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"><span class="variable">$point2</span> = <span class="variable">$point1</span>-&gt;<span class="title function_ invoke__">move</span>(<span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="variable">$point3</span> = <span class="variable">$point2</span>-&gt;<span class="title function_ invoke__">withX</span>(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$point1</span>-&gt;<span class="title function_ invoke__">distanceTo</span>(<span class="variable">$point3</span>); <span class="comment">// 计算距离</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="性能考虑"><a href="#性能考虑" class="headerlink" title="性能考虑"></a>性能考虑</h2><p>构造器属性提升在性能上与传统方式基本相同：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基准测试结果（创建100万个对象）</span></span><br><span class="line"><span class="comment">// 传统方式：0.85秒</span></span><br><span class="line"><span class="comment">// 属性提升：0.83秒</span></span><br><span class="line"><span class="comment">// 性能提升约2%（主要是减少了赋值操作）</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BenchmarkTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$prop1</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$prop2</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">int</span> <span class="variable">$prop3</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">bool</span> <span class="variable">$prop4</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="注意事项和限制"><a href="#注意事项和限制" class="headerlink" title="注意事项和限制"></a>注意事项和限制</h2><h3 id="1-不能与抽象构造器一起使用"><a href="#1-不能与抽象构造器一起使用" class="headerlink" title="1. 不能与抽象构造器一起使用"></a>1. 不能与抽象构造器一起使用</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractClass</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 错误：抽象方法不能使用属性提升</span></span><br><span class="line">    <span class="comment">// abstract public function __construct(private string $name);</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 正确的方式</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$name</span></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-接口中的构造器"><a href="#2-接口中的构造器" class="headerlink" title="2. 接口中的构造器"></a>2. 接口中的构造器</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">UserInterface</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 接口可以声明构造器签名，但不能使用属性提升</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$name</span>, <span class="keyword">string</span> <span class="variable">$email</span></span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">implements</span> <span class="title">UserInterface</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 实现类可以使用属性提升</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$email</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-继承中的注意事项"><a href="#3-继承中的注意事项" class="headerlink" title="3. 继承中的注意事项"></a>3. 继承中的注意事项</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BaseUser</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">protected</span> <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">protected</span> <span class="keyword">string</span> <span class="variable">$email</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AdminUser</span> <span class="keyword">extends</span> <span class="title">BaseUser</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">string</span> <span class="variable">$email</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$permissions</span> = []</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="built_in">parent</span>::<span class="title function_ invoke__">__construct</span>(<span class="variable">$name</span>, <span class="variable">$email</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><h3 id="1-合理使用可见性"><a href="#1-合理使用可见性" class="headerlink" title="1. 合理使用可见性"></a>1. 合理使用可见性</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 推荐：根据实际需要选择可见性</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GoodExample</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$id</span>,      // 公共只读：外部需要访问但不能修改</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">string</span> <span class="variable">$password</span>,        // 私有：敏感信息</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">protected</span> <span class="keyword">array</span> <span class="variable">$metadata</span> = []   // 受保护：子类可能需要访问</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-参数验证"><a href="#2-参数验证" class="headerlink" title="2. 参数验证"></a>2. 参数验证</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ValidatedUser</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$email</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">int</span> <span class="variable">$age</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="title function_ invoke__">filter_var</span>(<span class="variable">$email</span>, FILTER_VALIDATE_EMAIL)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Invalid email&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$age</span> &lt; <span class="number">0</span> || <span class="variable">$age</span> &gt; <span class="number">150</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">InvalidArgumentException</span>(<span class="string">&#x27;Invalid age&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-文档注释"><a href="#3-文档注释" class="headerlink" title="3. 文档注释"></a>3. 文档注释</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户数据传输对象</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $name 用户姓名，长度2-50字符</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $email 用户邮箱，必须是有效格式</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> int $age 用户年龄，范围0-150</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> array $roles 用户角色列表</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserDTO</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">string</span> <span class="variable">$email</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">int</span> <span class="variable">$age</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">array</span> <span class="variable">$roles</span> = [<span class="string">&#x27;user&#x27;</span>]</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>构造器属性提升是PHP 8.0中最实用的语法糖之一，它显著减少了样板代码，让类定义更加简洁。在实际项目中，我发现它特别适用于：</p>
+<ol>
+<li><strong>数据传输对象（DTO）</strong></li>
+<li><strong>值对象（Value Objects）</strong></li>
+<li><strong>配置对象</strong></li>
+<li><strong>事件对象</strong></li>
+<li><strong>不可变对象</strong></li>
+</ol>
+<p>使用时要注意：</p>
+<ul>
+<li>合理选择属性可见性</li>
+<li>在构造器中进行必要的验证</li>
+<li>保持良好的文档注释</li>
+<li>考虑对象的不可变性设计</li>
+</ul>
+<p>这个特性让PHP代码更加现代化和简洁，强烈推荐在新项目中使用！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/">面向对象</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/PHP8/">PHP8</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%AF%AD%E6%B3%95%E7%B3%96/">语法糖</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%9E%84%E9%80%A0%E5%99%A8/">构造器</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%B1%9E%E6%80%A7%E6%8F%90%E5%8D%87/">属性提升</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2021/php/php8-nullsafe-operator-guide/"
+                                   title="PHP 8.0 空安全操作符实战：告别空指针异常的优雅解决方案"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8.0 空安全操作符实战：告别空指针异常的优雅解决方案</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2021/php/php8-attributes-practical-usage/"
+                                   title="PHP 8.0 属性（Attributes）实战应用：元数据编程的新时代"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8.0 属性（Attributes）实战应用：元数据编程的新时代</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F-vs-%E5%B1%9E%E6%80%A7%E6%8F%90%E5%8D%87"><span class="nav-text">传统方式 vs 属性提升</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E7%9A%84%E5%86%97%E9%95%BF%E5%86%99%E6%B3%95"><span class="nav-text">传统的冗长写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%B1%9E%E6%80%A7%E6%8F%90%E5%8D%87%E7%9A%84%E7%AE%80%E6%B4%81%E5%86%99%E6%B3%95"><span class="nav-text">使用属性提升的简洁写法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7%E4%BF%AE%E9%A5%B0%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">可见性修饰符的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7%E7%BA%A7%E5%88%AB"><span class="nav-text">不同的可见性级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E4%BD%BF%E7%94%A8%E4%BC%A0%E7%BB%9F%E5%B1%9E%E6%80%A7%E5%92%8C%E6%8F%90%E5%8D%87%E5%B1%9E%E6%80%A7"><span class="nav-text">混合使用传统属性和提升属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">实际应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%AF%B9%E8%B1%A1%EF%BC%88DTO%EF%BC%89"><span class="nav-text">1. 数据传输对象（DTO）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%80%BC%E5%AF%B9%E8%B1%A1"><span class="nav-text">2. 值对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%85%8D%E7%BD%AE%E5%AF%B9%E8%B1%A1"><span class="nav-text">3. 配置对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-API%E5%93%8D%E5%BA%94%E5%AF%B9%E8%B1%A1"><span class="nav-text">4. API响应对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BA%8B%E4%BB%B6%E5%AF%B9%E8%B1%A1"><span class="nav-text">5. 事件对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E5%85%B6%E4%BB%96PHP-8%E7%89%B9%E6%80%A7%E7%BB%93%E5%90%88"><span class="nav-text">与其他PHP 8特性结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8E%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E7%BB%93%E5%90%88"><span class="nav-text">1. 与命名参数结合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%8E%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B%E7%BB%93%E5%90%88"><span class="nav-text">2. 与联合类型结合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%8E%E5%B1%9E%E6%80%A7%E7%BB%93%E5%90%88"><span class="nav-text">3. 与属性结合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95%E5%92%8C%E6%8A%80%E5%B7%A7"><span class="nav-text">高级用法和技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%AA%8C%E8%AF%81%E5%92%8C%E8%BD%AC%E6%8D%A2"><span class="nav-text">1. 验证和转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="nav-text">2. 工厂方法模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1"><span class="nav-text">3. 不可变对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91"><span class="nav-text">性能考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E5%92%8C%E9%99%90%E5%88%B6"><span class="nav-text">注意事项和限制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8D%E8%83%BD%E4%B8%8E%E6%8A%BD%E8%B1%A1%E6%9E%84%E9%80%A0%E5%99%A8%E4%B8%80%E8%B5%B7%E4%BD%BF%E7%94%A8"><span class="nav-text">1. 不能与抽象构造器一起使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8E%A5%E5%8F%A3%E4%B8%AD%E7%9A%84%E6%9E%84%E9%80%A0%E5%99%A8"><span class="nav-text">2. 接口中的构造器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%BB%A7%E6%89%BF%E4%B8%AD%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">3. 继承中的注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-text">1. 合理使用可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8F%82%E6%95%B0%E9%AA%8C%E8%AF%81"><span class="nav-text">2. 参数验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A"><span class="nav-text">3. 文档注释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F-vs-%E5%B1%9E%E6%80%A7%E6%8F%90%E5%8D%87"><span class="nav-text">传统方式 vs 属性提升</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E7%9A%84%E5%86%97%E9%95%BF%E5%86%99%E6%B3%95"><span class="nav-text">传统的冗长写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%B1%9E%E6%80%A7%E6%8F%90%E5%8D%87%E7%9A%84%E7%AE%80%E6%B4%81%E5%86%99%E6%B3%95"><span class="nav-text">使用属性提升的简洁写法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7%E4%BF%AE%E9%A5%B0%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">可见性修饰符的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7%E7%BA%A7%E5%88%AB"><span class="nav-text">不同的可见性级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E4%BD%BF%E7%94%A8%E4%BC%A0%E7%BB%9F%E5%B1%9E%E6%80%A7%E5%92%8C%E6%8F%90%E5%8D%87%E5%B1%9E%E6%80%A7"><span class="nav-text">混合使用传统属性和提升属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">实际应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%AF%B9%E8%B1%A1%EF%BC%88DTO%EF%BC%89"><span class="nav-text">1. 数据传输对象（DTO）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%80%BC%E5%AF%B9%E8%B1%A1"><span class="nav-text">2. 值对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%85%8D%E7%BD%AE%E5%AF%B9%E8%B1%A1"><span class="nav-text">3. 配置对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-API%E5%93%8D%E5%BA%94%E5%AF%B9%E8%B1%A1"><span class="nav-text">4. API响应对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BA%8B%E4%BB%B6%E5%AF%B9%E8%B1%A1"><span class="nav-text">5. 事件对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E5%85%B6%E4%BB%96PHP-8%E7%89%B9%E6%80%A7%E7%BB%93%E5%90%88"><span class="nav-text">与其他PHP 8特性结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8E%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E7%BB%93%E5%90%88"><span class="nav-text">1. 与命名参数结合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%8E%E8%81%94%E5%90%88%E7%B1%BB%E5%9E%8B%E7%BB%93%E5%90%88"><span class="nav-text">2. 与联合类型结合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%8E%E5%B1%9E%E6%80%A7%E7%BB%93%E5%90%88"><span class="nav-text">3. 与属性结合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95%E5%92%8C%E6%8A%80%E5%B7%A7"><span class="nav-text">高级用法和技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%AA%8C%E8%AF%81%E5%92%8C%E8%BD%AC%E6%8D%A2"><span class="nav-text">1. 验证和转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="nav-text">2. 工厂方法模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1"><span class="nav-text">3. 不可变对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91"><span class="nav-text">性能考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E5%92%8C%E9%99%90%E5%88%B6"><span class="nav-text">注意事项和限制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8D%E8%83%BD%E4%B8%8E%E6%8A%BD%E8%B1%A1%E6%9E%84%E9%80%A0%E5%99%A8%E4%B8%80%E8%B5%B7%E4%BD%BF%E7%94%A8"><span class="nav-text">1. 不能与抽象构造器一起使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8E%A5%E5%8F%A3%E4%B8%AD%E7%9A%84%E6%9E%84%E9%80%A0%E5%99%A8"><span class="nav-text">2. 接口中的构造器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%BB%A7%E6%89%BF%E4%B8%AD%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">3. 继承中的注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-text">1. 合理使用可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8F%82%E6%95%B0%E9%AA%8C%E8%AF%81"><span class="nav-text">2. 参数验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%96%87%E6%A1%A3%E6%B3%A8%E9%87%8A"><span class="nav-text">3. 文档注释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

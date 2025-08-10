@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Linux定时任务与日志管理实战指南：自动化运维的核心技能 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Linux定时任务与日志管理实战指南：自动化运维的核心技能
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2024-01-20 14:20:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/linux/">linux</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">定时任务</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/">系统管理</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/crontab/">crontab</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/">日志管理</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4/">自动化运维</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Linux定时任务与日志管理实战指南：自动化运维的核心技能"><a href="#Linux定时任务与日志管理实战指南：自动化运维的核心技能" class="headerlink" title="Linux定时任务与日志管理实战指南：自动化运维的核心技能"></a>Linux定时任务与日志管理实战指南：自动化运维的核心技能</h1><p>在Linux系统运维中，定时任务和日志管理是实现自动化运维的重要基础。本文将深入介绍Linux定时任务的配置和管理，以及日志系统的管理和分析技巧，帮助运维人员提升自动化运维能力。</p>
+<h2 id="一、Linux定时任务基础"><a href="#一、Linux定时任务基础" class="headerlink" title="一、Linux定时任务基础"></a>一、Linux定时任务基础</h2><h3 id="1-1-定时任务概述"><a href="#1-1-定时任务概述" class="headerlink" title="1.1 定时任务概述"></a>1.1 定时任务概述</h3><p>Linux系统提供了多种定时任务解决方案：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>适用场景</th>
+<th>特点</th>
+<th>配置方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>crontab</td>
+<td>周期性任务</td>
+<td>功能强大，使用广泛</td>
+<td>crontab -e</td>
+</tr>
+<tr>
+<td>at</td>
+<td>一次性任务</td>
+<td>简单易用</td>
+<td>at 时间</td>
+</tr>
+<tr>
+<td>systemd timer</td>
+<td>现代化定时器</td>
+<td>与systemd集成</td>
+<td>.timer文件</td>
+</tr>
+<tr>
+<td>anacron</td>
+<td>非连续运行系统</td>
+<td>适合桌面系统</td>
+<td>&#x2F;etc&#x2F;anacrontab</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-cron服务管理"><a href="#1-2-cron服务管理" class="headerlink" title="1.2 cron服务管理"></a>1.2 cron服务管理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看cron服务状态</span></span><br><span class="line">systemctl status crond        <span class="comment"># CentOS/RHEL</span></span><br><span class="line">systemctl status cron         <span class="comment"># Ubuntu/Debian</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动/停止/重启cron服务</span></span><br><span class="line">systemctl start crond</span><br><span class="line">systemctl stop crond</span><br><span class="line">systemctl restart crond</span><br><span class="line">systemctl reload crond</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置开机自启</span></span><br><span class="line">systemctl <span class="built_in">enable</span> crond</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看cron服务日志</span></span><br><span class="line">journalctl -u crond</span><br><span class="line"><span class="built_in">tail</span> -f /var/log/cron</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-crontab配置文件结构"><a href="#1-3-crontab配置文件结构" class="headerlink" title="1.3 crontab配置文件结构"></a>1.3 crontab配置文件结构</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看系统crontab配置</span></span><br><span class="line"><span class="built_in">cat</span> /etc/crontab</span><br><span class="line"></span><br><span class="line"><span class="comment"># 典型的/etc/crontab内容</span></span><br><span class="line">SHELL=/bin/bash</span><br><span class="line">PATH=/sbin:/bin:/usr/sbin:/usr/bin</span><br><span class="line">MAILTO=root</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分 时 日 月 周 用户 命令</span></span><br><span class="line"><span class="comment"># m  h  dom mon dow user command</span></span><br><span class="line">01 * * * * root run-parts /etc/cron.hourly</span><br><span class="line">02 4 * * * root run-parts /etc/cron.daily</span><br><span class="line">22 4 * * 0 root run-parts /etc/cron.weekly</span><br><span class="line">42 4 1 * * root run-parts /etc/cron.monthly</span><br></pre></td></tr></table></figure>
+
+<p><strong>crontab时间格式详解：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 字段说明</span></span><br><span class="line"><span class="comment"># ┌───────────── 分钟 (0-59)</span></span><br><span class="line"><span class="comment"># │ ┌───────────── 小时 (0-23)</span></span><br><span class="line"><span class="comment"># │ │ ┌───────────── 日 (1-31)</span></span><br><span class="line"><span class="comment"># │ │ │ ┌───────────── 月 (1-12)</span></span><br><span class="line"><span class="comment"># │ │ │ │ ┌───────────── 周 (0-6，0=周日)</span></span><br><span class="line"><span class="comment"># │ │ │ │ │</span></span><br><span class="line"><span class="comment"># * * * * * 命令</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 特殊字符说明</span></span><br><span class="line">*     <span class="comment"># 匹配所有值</span></span><br><span class="line">,     <span class="comment"># 分隔多个值</span></span><br><span class="line">-     <span class="comment"># 指定范围</span></span><br><span class="line">/     <span class="comment"># 指定间隔</span></span><br><span class="line">?     <span class="comment"># 不指定值（仅在日和周字段使用）</span></span><br><span class="line">L     <span class="comment"># 最后（月的最后一天或周的最后一天）</span></span><br><span class="line">W     <span class="comment"># 工作日</span></span><br><span class="line"><span class="comment">#     # 第几个（如3#2表示第二个周三）</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、crontab实战应用"><a href="#二、crontab实战应用" class="headerlink" title="二、crontab实战应用"></a>二、crontab实战应用</h2><h3 id="2-1-基本crontab操作"><a href="#2-1-基本crontab操作" class="headerlink" title="2.1 基本crontab操作"></a>2.1 基本crontab操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编辑当前用户的crontab</span></span><br><span class="line">crontab -e</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看当前用户的crontab</span></span><br><span class="line">crontab -l</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除当前用户的crontab</span></span><br><span class="line">crontab -r</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除前确认</span></span><br><span class="line">crontab -i -r</span><br><span class="line"></span><br><span class="line"><span class="comment"># 管理其他用户的crontab（需要root权限）</span></span><br><span class="line">crontab -u username -e</span><br><span class="line">crontab -u username -l</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从文件导入crontab</span></span><br><span class="line">crontab filename</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-常用定时任务示例"><a href="#2-2-常用定时任务示例" class="headerlink" title="2.2 常用定时任务示例"></a>2.2 常用定时任务示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 每分钟执行</span></span><br><span class="line">* * * * * /path/to/script.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每5分钟执行</span></span><br><span class="line">*/5 * * * * /path/to/script.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每小时的第30分钟执行</span></span><br><span class="line">30 * * * * /path/to/script.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每天凌晨2点执行</span></span><br><span class="line">0 2 * * * /path/to/script.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每周一凌晨3点执行</span></span><br><span class="line">0 3 * * 1 /path/to/script.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每月1号凌晨4点执行</span></span><br><span class="line">0 4 1 * * /path/to/script.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 工作日每天上午9点执行</span></span><br><span class="line">0 9 * * 1-5 /path/to/script.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每天上午8点到下午6点，每2小时执行一次</span></span><br><span class="line">0 8-18/2 * * * /path/to/script.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每年1月1日凌晨执行</span></span><br><span class="line">0 0 1 1 * /path/to/script.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-高级crontab技巧"><a href="#2-3-高级crontab技巧" class="headerlink" title="2.3 高级crontab技巧"></a>2.3 高级crontab技巧</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用环境变量</span></span><br><span class="line">PATH=/usr/local/bin:/usr/bin:/bin</span><br><span class="line">SHELL=/bin/bash</span><br><span class="line">MAILTO=admin@example.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置任务执行目录</span></span><br><span class="line">0 2 * * * <span class="built_in">cd</span> /var/backups &amp;&amp; ./backup.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重定向输出</span></span><br><span class="line">0 2 * * * /path/to/script.sh &gt; /var/log/backup.log 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 静默执行（不发送邮件）</span></span><br><span class="line">0 2 * * * /path/to/script.sh &gt;/dev/null 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 只记录错误</span></span><br><span class="line">0 2 * * * /path/to/script.sh &gt;/dev/null</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用锁文件防止重复执行</span></span><br><span class="line">0 2 * * * flock -n /tmp/backup.lock /path/to/backup.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 条件执行</span></span><br><span class="line">0 2 * * * [ -f /tmp/enable_backup ] &amp;&amp; /path/to/backup.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-crontab最佳实践"><a href="#2-4-crontab最佳实践" class="headerlink" title="2.4 crontab最佳实践"></a>2.4 crontab最佳实践</h3><p><strong>1. 标准化脚本模板：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 脚本名称: backup_database.sh</span></span><br><span class="line"><span class="comment"># 作者: Admin</span></span><br><span class="line"><span class="comment"># 创建时间: 2024-01-20</span></span><br><span class="line"><span class="comment"># 描述: 数据库备份脚本</span></span><br><span class="line"><span class="comment"># 执行频率: 每天凌晨2点</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置环境变量</span></span><br><span class="line"><span class="built_in">export</span> PATH=/usr/local/bin:/usr/bin:/bin</span><br><span class="line"><span class="built_in">export</span> LANG=en_US.UTF-8</span><br><span class="line"></span><br><span class="line"><span class="comment"># 脚本配置</span></span><br><span class="line">SCRIPT_NAME=$(<span class="built_in">basename</span> <span class="variable">$0</span>)</span><br><span class="line">LOG_DIR=<span class="string">&quot;/var/log/cron&quot;</span></span><br><span class="line">LOG_FILE=<span class="string">&quot;<span class="variable">$LOG_DIR</span>/<span class="variable">$&#123;SCRIPT_NAME%.*&#125;</span>.log&quot;</span></span><br><span class="line">LOCK_FILE=<span class="string">&quot;/tmp/<span class="variable">$&#123;SCRIPT_NAME%.*&#125;</span>.lock&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建日志目录</span></span><br><span class="line">[ ! -d <span class="string">&quot;<span class="variable">$LOG_DIR</span>&quot;</span> ] &amp;&amp; <span class="built_in">mkdir</span> -p <span class="string">&quot;<span class="variable">$LOG_DIR</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 日志函数</span></span><br><span class="line"><span class="function"><span class="title">log</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;[<span class="subst">$(date &#x27;+%Y-%m-%d %H:%M:%S&#x27;)</span>] <span class="variable">$1</span>&quot;</span> | <span class="built_in">tee</span> -a <span class="string">&quot;<span class="variable">$LOG_FILE</span>&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 错误处理函数</span></span><br><span class="line"><span class="function"><span class="title">error_exit</span></span>() &#123;</span><br><span class="line">    <span class="built_in">log</span> <span class="string">&quot;ERROR: <span class="variable">$1</span>&quot;</span></span><br><span class="line">    <span class="built_in">rm</span> -f <span class="string">&quot;<span class="variable">$LOCK_FILE</span>&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查锁文件</span></span><br><span class="line"><span class="keyword">if</span> [ -f <span class="string">&quot;<span class="variable">$LOCK_FILE</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">log</span> <span class="string">&quot;Script is already running. Exiting.&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建锁文件</span></span><br><span class="line"><span class="built_in">echo</span> $$ &gt; <span class="string">&quot;<span class="variable">$LOCK_FILE</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理函数</span></span><br><span class="line"><span class="function"><span class="title">cleanup</span></span>() &#123;</span><br><span class="line">    <span class="built_in">rm</span> -f <span class="string">&quot;<span class="variable">$LOCK_FILE</span>&quot;</span></span><br><span class="line">    <span class="built_in">log</span> <span class="string">&quot;Script completed.&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置信号处理</span></span><br><span class="line"><span class="built_in">trap</span> cleanup EXIT</span><br><span class="line"><span class="built_in">trap</span> <span class="string">&#x27;error_exit &quot;Script interrupted&quot;&#x27;</span> INT TERM</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主要逻辑</span></span><br><span class="line"><span class="built_in">log</span> <span class="string">&quot;Starting database backup...&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据库备份逻辑</span></span><br><span class="line">mysqldump -u backup_user -p<span class="string">&#x27;password&#x27;</span> --all-databases &gt; <span class="string">&quot;/backup/mysql_<span class="subst">$(date +%Y%m%d_%H%M%S)</span>.sql&quot;</span> || error_exit <span class="string">&quot;Database backup failed&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">log</span> <span class="string">&quot;Database backup completed successfully.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 定时任务配置规范：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在crontab中添加注释</span></span><br><span class="line"><span class="comment"># 数据库备份 - 每天凌晨2点执行</span></span><br><span class="line"><span class="comment"># 添加人: admin, 添加时间: 2024-01-20</span></span><br><span class="line">0 2 * * * /usr/local/scripts/backup_database.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 日志清理 - 每周日凌晨3点执行</span></span><br><span class="line"><span class="comment"># 清理7天前的日志文件</span></span><br><span class="line">0 3 * * 0 /usr/local/scripts/cleanup_logs.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 系统监控 - 每5分钟执行</span></span><br><span class="line"><span class="comment"># 监控系统资源使用情况</span></span><br><span class="line">*/5 * * * * /usr/local/scripts/system_monitor.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、at命令一次性任务"><a href="#三、at命令一次性任务" class="headerlink" title="三、at命令一次性任务"></a>三、at命令一次性任务</h2><h3 id="3-1-at命令基础"><a href="#3-1-at命令基础" class="headerlink" title="3.1 at命令基础"></a>3.1 at命令基础</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装at服务</span></span><br><span class="line"><span class="built_in">sudo</span> yum install at        <span class="comment"># CentOS/RHEL</span></span><br><span class="line"><span class="built_in">sudo</span> apt install at        <span class="comment"># Ubuntu/Debian</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动at服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl start atd</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> atd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看at服务状态</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status atd</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-at命令使用"><a href="#3-2-at命令使用" class="headerlink" title="3.2 at命令使用"></a>3.2 at命令使用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在指定时间执行命令</span></span><br><span class="line">at 15:30</span><br><span class="line">at&gt; <span class="built_in">echo</span> <span class="string">&quot;Hello World&quot;</span> &gt; /tmp/hello.txt</span><br><span class="line">at&gt; &lt;Ctrl+D&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定日期和时间</span></span><br><span class="line">at 15:30 2024-01-25</span><br><span class="line">at 3:30pm Jan 25</span><br><span class="line">at now + 5 minutes</span><br><span class="line">at now + 1 hour</span><br><span class="line">at now + 1 day</span><br><span class="line">at now + 1 week</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看待执行的任务</span></span><br><span class="line">atq</span><br><span class="line">at -l</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看任务详情</span></span><br><span class="line">at -c job_number</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除任务</span></span><br><span class="line">atrm job_number</span><br><span class="line">at -d job_number</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从文件读取命令</span></span><br><span class="line">at now + 1 hour -f /path/to/commands.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-at命令实例"><a href="#3-3-at命令实例" class="headerlink" title="3.3 at命令实例"></a>3.3 at命令实例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定时重启服务</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;systemctl restart nginx&quot;</span> | at now + 10 minutes</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定时发送邮件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;echo &#x27;System maintenance completed&#x27; | mail -s &#x27;Maintenance&#x27; admin@example.com&quot;</span> | at 18:00</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定时备份</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;/usr/local/scripts/backup.sh&quot;</span> | at 02:00 tomorrow</span><br><span class="line"></span><br><span class="line"><span class="comment"># 批量任务</span></span><br><span class="line"><span class="built_in">cat</span> &lt;&lt; <span class="string">EOF | at now + 5 minutes</span></span><br><span class="line"><span class="string">/usr/local/scripts/stop_services.sh</span></span><br><span class="line"><span class="string">sleep 60</span></span><br><span class="line"><span class="string">/usr/local/scripts/start_services.sh</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="四、systemd定时器"><a href="#四、systemd定时器" class="headerlink" title="四、systemd定时器"></a>四、systemd定时器</h2><h3 id="4-1-systemd-timer基础"><a href="#4-1-systemd-timer基础" class="headerlink" title="4.1 systemd timer基础"></a>4.1 systemd timer基础</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有定时器</span></span><br><span class="line">systemctl list-timers</span><br><span class="line">systemctl list-timers --all</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定定时器状态</span></span><br><span class="line">systemctl status timer_name.timer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动/停止定时器</span></span><br><span class="line">systemctl start timer_name.timer</span><br><span class="line">systemctl stop timer_name.timer</span><br><span class="line">systemctl <span class="built_in">enable</span> timer_name.timer</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-创建systemd定时器"><a href="#4-2-创建systemd定时器" class="headerlink" title="4.2 创建systemd定时器"></a>4.2 创建systemd定时器</h3><p><strong>1. 创建服务文件：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/systemd/system/backup.service</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=Database Backup Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=oneshot</span><br><span class="line">User=backup</span><br><span class="line">ExecStart=/usr/local/scripts/backup.sh</span><br><span class="line">StandardOutput=journal</span><br><span class="line">StandardError=journal</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 创建定时器文件：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/systemd/system/backup.timer</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=Run backup service daily</span><br><span class="line">Requires=backup.service</span><br><span class="line"></span><br><span class="line">[Timer]</span><br><span class="line">OnCalendar=daily</span><br><span class="line">RandomizedDelaySec=30m</span><br><span class="line">Persistent=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=timers.target</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 启用定时器：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新加载systemd配置</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用并启动定时器</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> backup.timer</span><br><span class="line"><span class="built_in">sudo</span> systemctl start backup.timer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看定时器状态</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status backup.timer</span><br><span class="line"><span class="built_in">sudo</span> systemctl list-timers backup.timer</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-systemd定时器时间格式"><a href="#4-3-systemd定时器时间格式" class="headerlink" title="4.3 systemd定时器时间格式"></a>4.3 systemd定时器时间格式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># OnCalendar时间格式示例</span></span><br><span class="line">OnCalendar=*-*-* 02:00:00     <span class="comment"># 每天凌晨2点</span></span><br><span class="line">OnCalendar=Mon *-*-* 02:00:00 <span class="comment"># 每周一凌晨2点</span></span><br><span class="line">OnCalendar=*-*-01 02:00:00    <span class="comment"># 每月1号凌晨2点</span></span><br><span class="line">OnCalendar=*-01-01 02:00:00   <span class="comment"># 每年1月1号凌晨2点</span></span><br><span class="line">OnCalendar=*:0/15             <span class="comment"># 每15分钟</span></span><br><span class="line">OnCalendar=hourly             <span class="comment"># 每小时</span></span><br><span class="line">OnCalendar=daily              <span class="comment"># 每天</span></span><br><span class="line">OnCalendar=weekly             <span class="comment"># 每周</span></span><br><span class="line">OnCalendar=monthly            <span class="comment"># 每月</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试时间格式</span></span><br><span class="line">systemd-analyze calendar <span class="string">&quot;Mon *-*-* 02:00:00&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、日志管理基础"><a href="#五、日志管理基础" class="headerlink" title="五、日志管理基础"></a>五、日志管理基础</h2><h3 id="5-1-Linux日志系统概述"><a href="#5-1-Linux日志系统概述" class="headerlink" title="5.1 Linux日志系统概述"></a>5.1 Linux日志系统概述</h3><p><strong>传统日志系统：</strong></p>
+<ul>
+<li>syslog：传统的系统日志服务</li>
+<li>rsyslog：增强版syslog</li>
+<li>syslog-ng：另一个增强版syslog</li>
+</ul>
+<p><strong>现代日志系统：</strong></p>
+<ul>
+<li>systemd-journald：systemd的日志服务</li>
+<li>集中式日志：ELK Stack、Fluentd等</li>
+</ul>
+<h3 id="5-2-主要日志文件"><a href="#5-2-主要日志文件" class="headerlink" title="5.2 主要日志文件"></a>5.2 主要日志文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 系统日志文件位置</span></span><br><span class="line">/var/log/messages      <span class="comment"># 系统主日志（CentOS/RHEL）</span></span><br><span class="line">/var/log/syslog        <span class="comment"># 系统主日志（Ubuntu/Debian）</span></span><br><span class="line">/var/log/secure        <span class="comment"># 安全相关日志</span></span><br><span class="line">/var/log/auth.log      <span class="comment"># 认证日志（Ubuntu/Debian）</span></span><br><span class="line">/var/log/cron          <span class="comment"># cron任务日志</span></span><br><span class="line">/var/log/maillog       <span class="comment"># 邮件系统日志</span></span><br><span class="line">/var/log/boot.log      <span class="comment"># 系统启动日志</span></span><br><span class="line">/var/log/dmesg         <span class="comment"># 内核消息</span></span><br><span class="line">/var/log/kern.log      <span class="comment"># 内核日志</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 应用日志</span></span><br><span class="line">/var/log/httpd/        <span class="comment"># Apache日志</span></span><br><span class="line">/var/log/nginx/        <span class="comment"># Nginx日志</span></span><br><span class="line">/var/log/mysql/        <span class="comment"># MySQL日志</span></span><br><span class="line">/var/log/postgresql/   <span class="comment"># PostgreSQL日志</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-rsyslog配置"><a href="#5-3-rsyslog配置" class="headerlink" title="5.3 rsyslog配置"></a>5.3 rsyslog配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看rsyslog配置</span></span><br><span class="line"><span class="built_in">cat</span> /etc/rsyslog.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基本配置格式</span></span><br><span class="line"><span class="comment"># facility.priority    action</span></span><br><span class="line"><span class="comment"># 设施.优先级         动作</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例配置</span></span><br><span class="line">*.info;mail.none;authpriv.none;cron.none    /var/log/messages</span><br><span class="line">authpriv.*                                  /var/log/secure</span><br><span class="line">mail.*                                      /var/log/maillog</span><br><span class="line">cron.*                                      /var/log/cron</span><br><span class="line">*.emerg                                     :omusrmsg:*</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启rsyslog服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart rsyslog</span><br></pre></td></tr></table></figure>
+
+<p><strong>日志级别说明：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">emerg    <span class="comment"># 0 - 紧急情况</span></span><br><span class="line">alert    <span class="comment"># 1 - 需要立即处理</span></span><br><span class="line">crit     <span class="comment"># 2 - 严重错误</span></span><br><span class="line">err      <span class="comment"># 3 - 一般错误</span></span><br><span class="line">warning  <span class="comment"># 4 - 警告信息</span></span><br><span class="line">notice   <span class="comment"># 5 - 注意信息</span></span><br><span class="line">info     <span class="comment"># 6 - 一般信息</span></span><br><span class="line">debug    <span class="comment"># 7 - 调试信息</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="六、日志查看和分析"><a href="#六、日志查看和分析" class="headerlink" title="六、日志查看和分析"></a>六、日志查看和分析</h2><h3 id="6-1-基本日志查看命令"><a href="#6-1-基本日志查看命令" class="headerlink" title="6.1 基本日志查看命令"></a>6.1 基本日志查看命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看日志文件</span></span><br><span class="line"><span class="built_in">cat</span> /var/log/messages</span><br><span class="line">less /var/log/messages</span><br><span class="line">more /var/log/messages</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实时查看日志</span></span><br><span class="line"><span class="built_in">tail</span> -f /var/log/messages</span><br><span class="line"><span class="built_in">tail</span> -f /var/log/messages | grep ERROR</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看最后N行</span></span><br><span class="line"><span class="built_in">tail</span> -n 100 /var/log/messages</span><br><span class="line"><span class="built_in">head</span> -n 50 /var/log/messages</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按时间范围查看</span></span><br><span class="line">sed -n <span class="string">&#x27;/Jan 20 10:00/,/Jan 20 11:00/p&#x27;</span> /var/log/messages</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用grep过滤</span></span><br><span class="line">grep <span class="string">&quot;ERROR&quot;</span> /var/log/messages</span><br><span class="line">grep -i <span class="string">&quot;failed&quot;</span> /var/log/messages</span><br><span class="line">grep -v <span class="string">&quot;INFO&quot;</span> /var/log/messages</span><br><span class="line">grep -A 5 -B 5 <span class="string">&quot;ERROR&quot;</span> /var/log/messages</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-journalctl命令详解"><a href="#6-2-journalctl命令详解" class="headerlink" title="6.2 journalctl命令详解"></a>6.2 journalctl命令详解</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有日志</span></span><br><span class="line">journalctl</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实时查看日志</span></span><br><span class="line">journalctl -f</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定服务日志</span></span><br><span class="line">journalctl -u nginx</span><br><span class="line">journalctl -u nginx -f</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按时间范围查看</span></span><br><span class="line">journalctl --since <span class="string">&quot;2024-01-20 10:00:00&quot;</span></span><br><span class="line">journalctl --since <span class="string">&quot;1 hour ago&quot;</span></span><br><span class="line">journalctl --since yesterday</span><br><span class="line">journalctl --<span class="keyword">until</span> <span class="string">&quot;2024-01-20 18:00:00&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 按优先级过滤</span></span><br><span class="line">journalctl -p err</span><br><span class="line">journalctl -p warning</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看内核消息</span></span><br><span class="line">journalctl -k</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看启动日志</span></span><br><span class="line">journalctl -b</span><br><span class="line">journalctl -b -1  <span class="comment"># 上次启动</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出格式</span></span><br><span class="line">journalctl -o json</span><br><span class="line">journalctl -o json-pretty</span><br><span class="line">journalctl -o <span class="built_in">cat</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看磁盘使用</span></span><br><span class="line">journalctl --disk-usage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理日志</span></span><br><span class="line">journalctl --vacuum-time=7d</span><br><span class="line">journalctl --vacuum-size=100M</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-日志分析脚本"><a href="#6-3-日志分析脚本" class="headerlink" title="6.3 日志分析脚本"></a>6.3 日志分析脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 日志分析脚本</span></span><br><span class="line"><span class="comment"># 文件名: log_analysis.sh</span></span><br><span class="line"></span><br><span class="line">LOG_FILE=<span class="string">&quot;/var/log/messages&quot;</span></span><br><span class="line">REPORT_FILE=<span class="string">&quot;/tmp/log_analysis_<span class="subst">$(date +%Y%m%d)</span>.txt&quot;</span></span><br><span class="line">DATE=$(<span class="built_in">date</span> <span class="string">&#x27;+%Y-%m-%d&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;=== 日志分析报告 - <span class="variable">$DATE</span> ===&quot;</span> &gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计今日日志条数</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;今日日志总数:&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line">grep <span class="string">&quot;<span class="variable">$DATE</span>&quot;</span> <span class="variable">$LOG_FILE</span> | <span class="built_in">wc</span> -l &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计错误日志</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;错误日志统计:&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line">grep <span class="string">&quot;<span class="variable">$DATE</span>&quot;</span> <span class="variable">$LOG_FILE</span> | grep -i error | <span class="built_in">wc</span> -l &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计警告日志</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;警告日志统计:&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line">grep <span class="string">&quot;<span class="variable">$DATE</span>&quot;</span> <span class="variable">$LOG_FILE</span> | grep -i warning | <span class="built_in">wc</span> -l &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最频繁的错误</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;最频繁的错误（Top 10）:&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line">grep <span class="string">&quot;<span class="variable">$DATE</span>&quot;</span> <span class="variable">$LOG_FILE</span> | grep -i error | awk <span class="string">&#x27;&#123;for(i=6;i&lt;=NF;i++) printf &quot;%s &quot;, $i; print &quot;&quot;&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr | <span class="built_in">head</span> -10 &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SSH登录统计</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;SSH登录统计:&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line">grep <span class="string">&quot;<span class="variable">$DATE</span>&quot;</span> /var/log/secure | grep <span class="string">&quot;Accepted&quot;</span> | <span class="built_in">wc</span> -l &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 失败的SSH登录</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;失败的SSH登录:&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line">grep <span class="string">&quot;<span class="variable">$DATE</span>&quot;</span> /var/log/secure | grep <span class="string">&quot;Failed&quot;</span> | <span class="built_in">wc</span> -l &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 磁盘空间检查</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;磁盘空间使用:&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="built_in">df</span> -h &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送报告</span></span><br><span class="line"><span class="keyword">if</span> [ -s <span class="variable">$REPORT_FILE</span> ]; <span class="keyword">then</span></span><br><span class="line">    mail -s <span class="string">&quot;日志分析报告 - <span class="variable">$DATE</span>&quot;</span> admin@example.com &lt; <span class="variable">$REPORT_FILE</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;日志分析完成，报告已生成: <span class="variable">$REPORT_FILE</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="七、日志轮转管理"><a href="#七、日志轮转管理" class="headerlink" title="七、日志轮转管理"></a>七、日志轮转管理</h2><h3 id="7-1-logrotate配置"><a href="#7-1-logrotate配置" class="headerlink" title="7.1 logrotate配置"></a>7.1 logrotate配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看logrotate配置</span></span><br><span class="line"><span class="built_in">cat</span> /etc/logrotate.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基本配置示例</span></span><br><span class="line">/var/log/myapp/*.<span class="built_in">log</span> &#123;</span><br><span class="line">    daily                <span class="comment"># 每天轮转</span></span><br><span class="line">    missingok           <span class="comment"># 文件不存在不报错</span></span><br><span class="line">    rotate 52           <span class="comment"># 保留52个文件</span></span><br><span class="line">    compress            <span class="comment"># 压缩旧文件</span></span><br><span class="line">    delaycompress       <span class="comment"># 延迟压缩</span></span><br><span class="line">    notifempty          <span class="comment"># 空文件不轮转</span></span><br><span class="line">    create 644 root root <span class="comment"># 创建新文件的权限</span></span><br><span class="line">    postrotate          <span class="comment"># 轮转后执行的命令</span></span><br><span class="line">        systemctl reload nginx</span><br><span class="line">    endscript</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试logrotate配置</span></span><br><span class="line"><span class="built_in">sudo</span> logrotate -d /etc/logrotate.conf</span><br><span class="line"><span class="built_in">sudo</span> logrotate -f /etc/logrotate.d/myapp</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-自定义日志轮转"><a href="#7-2-自定义日志轮转" class="headerlink" title="7.2 自定义日志轮转"></a>7.2 自定义日志轮转</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建应用日志轮转配置</span></span><br><span class="line"><span class="built_in">sudo</span> nano /etc/logrotate.d/myapp</span><br><span class="line"></span><br><span class="line">/var/log/myapp/*.<span class="built_in">log</span> &#123;</span><br><span class="line">    weekly</span><br><span class="line">    missingok</span><br><span class="line">    rotate 12</span><br><span class="line">    compress</span><br><span class="line">    delaycompress</span><br><span class="line">    notifempty</span><br><span class="line">    create 644 myapp myapp</span><br><span class="line">    sharedscripts</span><br><span class="line">    postrotate</span><br><span class="line">        /bin/kill -USR1 $(<span class="built_in">cat</span> /var/run/myapp.pid 2&gt;/dev/null) 2&gt;/dev/null || <span class="literal">true</span></span><br><span class="line">    endscript</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Nginx日志轮转配置</span></span><br><span class="line">/var/log/nginx/*.<span class="built_in">log</span> &#123;</span><br><span class="line">    daily</span><br><span class="line">    missingok</span><br><span class="line">    rotate 30</span><br><span class="line">    compress</span><br><span class="line">    delaycompress</span><br><span class="line">    notifempty</span><br><span class="line">    create 644 nginx nginx</span><br><span class="line">    sharedscripts</span><br><span class="line">    prerotate</span><br><span class="line">        <span class="keyword">if</span> [ -d /etc/logrotate.d/httpd-prerotate ]; <span class="keyword">then</span> \</span><br><span class="line">            run-parts /etc/logrotate.d/httpd-prerotate; \</span><br><span class="line">        <span class="keyword">fi</span> \</span><br><span class="line">    endscript</span><br><span class="line">    postrotate</span><br><span class="line">        invoke-rc.d nginx rotate &gt;/dev/null 2&gt;&amp;1</span><br><span class="line">    endscript</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-日志清理脚本"><a href="#7-3-日志清理脚本" class="headerlink" title="7.3 日志清理脚本"></a>7.3 日志清理脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 日志清理脚本</span></span><br><span class="line"><span class="comment"># 文件名: log_cleanup.sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置参数</span></span><br><span class="line">LOG_DIRS=(</span><br><span class="line">    <span class="string">&quot;/var/log/nginx&quot;</span></span><br><span class="line">    <span class="string">&quot;/var/log/apache2&quot;</span></span><br><span class="line">    <span class="string">&quot;/var/log/myapp&quot;</span></span><br><span class="line">    <span class="string">&quot;/tmp&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">DAYS_TO_KEEP=7</span><br><span class="line">SIZE_LIMIT=<span class="string">&quot;100M&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 日志函数</span></span><br><span class="line"><span class="function"><span class="title">log</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;[<span class="subst">$(date &#x27;+%Y-%m-%d %H:%M:%S&#x27;)</span>] <span class="variable">$1</span>&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">log</span> <span class="string">&quot;开始清理日志文件...&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 按时间清理</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">dir</span> <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$&#123;LOG_DIRS[@]&#125;</span>&quot;</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">if</span> [ -d <span class="string">&quot;<span class="variable">$dir</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">log</span> <span class="string">&quot;清理目录: <span class="variable">$dir</span>&quot;</span></span><br><span class="line">        find <span class="string">&quot;<span class="variable">$dir</span>&quot;</span> -name <span class="string">&quot;*.log&quot;</span> -<span class="built_in">type</span> f -mtime +<span class="variable">$DAYS_TO_KEEP</span> -delete</span><br><span class="line">        find <span class="string">&quot;<span class="variable">$dir</span>&quot;</span> -name <span class="string">&quot;*.log.*&quot;</span> -<span class="built_in">type</span> f -mtime +<span class="variable">$DAYS_TO_KEEP</span> -delete</span><br><span class="line">        find <span class="string">&quot;<span class="variable">$dir</span>&quot;</span> -name <span class="string">&quot;*.gz&quot;</span> -<span class="built_in">type</span> f -mtime +<span class="variable">$DAYS_TO_KEEP</span> -delete</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理大文件</span></span><br><span class="line"><span class="built_in">log</span> <span class="string">&quot;清理大于<span class="variable">$&#123;SIZE_LIMIT&#125;</span>的日志文件...&quot;</span></span><br><span class="line">find /var/log -name <span class="string">&quot;*.log&quot;</span> -<span class="built_in">type</span> f -size +<span class="variable">$SIZE_LIMIT</span> -<span class="built_in">exec</span> <span class="built_in">truncate</span> -s 0 &#123;&#125; \;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理临时文件</span></span><br><span class="line"><span class="built_in">log</span> <span class="string">&quot;清理临时文件...&quot;</span></span><br><span class="line">find /tmp -name <span class="string">&quot;*.tmp&quot;</span> -<span class="built_in">type</span> f -mtime +1 -delete</span><br><span class="line">find /tmp -name <span class="string">&quot;*.log&quot;</span> -<span class="built_in">type</span> f -mtime +1 -delete</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理journal日志</span></span><br><span class="line"><span class="built_in">log</span> <span class="string">&quot;清理systemd journal日志...&quot;</span></span><br><span class="line">journalctl --vacuum-time=7d</span><br><span class="line">journalctl --vacuum-size=100M</span><br><span class="line"></span><br><span class="line"><span class="built_in">log</span> <span class="string">&quot;日志清理完成&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成清理报告</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;磁盘使用情况:&quot;</span> &gt; /tmp/cleanup_report.txt</span><br><span class="line"><span class="built_in">df</span> -h &gt;&gt; /tmp/cleanup_report.txt</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; /tmp/cleanup_report.txt</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;日志目录大小:&quot;</span> &gt;&gt; /tmp/cleanup_report.txt</span><br><span class="line"><span class="built_in">du</span> -sh /var/log/* &gt;&gt; /tmp/cleanup_report.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送报告</span></span><br><span class="line">mail -s <span class="string">&quot;日志清理报告 - <span class="subst">$(date +%Y-%m-%d)</span>&quot;</span> admin@example.com &lt; /tmp/cleanup_report.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="八、日志监控和告警"><a href="#八、日志监控和告警" class="headerlink" title="八、日志监控和告警"></a>八、日志监控和告警</h2><h3 id="8-1-实时日志监控"><a href="#8-1-实时日志监控" class="headerlink" title="8.1 实时日志监控"></a>8.1 实时日志监控</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 实时日志监控脚本</span></span><br><span class="line"><span class="comment"># 文件名: log_monitor.sh</span></span><br><span class="line"></span><br><span class="line">LOG_FILE=<span class="string">&quot;/var/log/messages&quot;</span></span><br><span class="line">ALERT_EMAIL=<span class="string">&quot;admin@example.com&quot;</span></span><br><span class="line">ERROR_THRESHOLD=10</span><br><span class="line">WARNING_THRESHOLD=20</span><br><span class="line"></span><br><span class="line"><span class="comment"># 监控关键词</span></span><br><span class="line">ERROR_KEYWORDS=(<span class="string">&quot;ERROR&quot;</span> <span class="string">&quot;CRITICAL&quot;</span> <span class="string">&quot;FATAL&quot;</span> <span class="string">&quot;PANIC&quot;</span>)</span><br><span class="line">WARNING_KEYWORDS=(<span class="string">&quot;WARNING&quot;</span> <span class="string">&quot;WARN&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计数器</span></span><br><span class="line">ERROR_COUNT=0</span><br><span class="line">WARNING_COUNT=0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 监控函数</span></span><br><span class="line"><span class="function"><span class="title">monitor_logs</span></span>() &#123;</span><br><span class="line">    <span class="built_in">tail</span> -f <span class="string">&quot;<span class="variable">$LOG_FILE</span>&quot;</span> | <span class="keyword">while</span> <span class="built_in">read</span> line; <span class="keyword">do</span></span><br><span class="line">        <span class="comment"># 检查错误关键词</span></span><br><span class="line">        <span class="keyword">for</span> keyword <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$&#123;ERROR_KEYWORDS[@]&#125;</span>&quot;</span>; <span class="keyword">do</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$line</span>&quot;</span> | grep -qi <span class="string">&quot;<span class="variable">$keyword</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line">                ((ERROR_COUNT++))</span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&quot;[<span class="subst">$(date)</span>] ERROR detected: <span class="variable">$line</span>&quot;</span></span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> [ <span class="variable">$ERROR_COUNT</span> -ge <span class="variable">$ERROR_THRESHOLD</span> ]; <span class="keyword">then</span></span><br><span class="line">                    <span class="built_in">echo</span> <span class="string">&quot;ERROR threshold reached: <span class="variable">$ERROR_COUNT</span>&quot;</span> | \</span><br><span class="line">                    mail -s <span class="string">&quot;ALERT: High error rate&quot;</span> <span class="string">&quot;<span class="variable">$ALERT_EMAIL</span>&quot;</span></span><br><span class="line">                    ERROR_COUNT=0</span><br><span class="line">                <span class="keyword">fi</span></span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">            <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">done</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 检查警告关键词</span></span><br><span class="line">        <span class="keyword">for</span> keyword <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$&#123;WARNING_KEYWORDS[@]&#125;</span>&quot;</span>; <span class="keyword">do</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$line</span>&quot;</span> | grep -qi <span class="string">&quot;<span class="variable">$keyword</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line">                ((WARNING_COUNT++))</span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&quot;[<span class="subst">$(date)</span>] WARNING detected: <span class="variable">$line</span>&quot;</span></span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> [ <span class="variable">$WARNING_COUNT</span> -ge <span class="variable">$WARNING_THRESHOLD</span> ]; <span class="keyword">then</span></span><br><span class="line">                    <span class="built_in">echo</span> <span class="string">&quot;WARNING threshold reached: <span class="variable">$WARNING_COUNT</span>&quot;</span> | \</span><br><span class="line">                    mail -s <span class="string">&quot;ALERT: High warning rate&quot;</span> <span class="string">&quot;<span class="variable">$ALERT_EMAIL</span>&quot;</span></span><br><span class="line">                    WARNING_COUNT=0</span><br><span class="line">                <span class="keyword">fi</span></span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">            <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">done</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动监控</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;开始监控日志文件: <span class="variable">$LOG_FILE</span>&quot;</span></span><br><span class="line">monitor_logs</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-2-日志异常检测"><a href="#8-2-日志异常检测" class="headerlink" title="8.2 日志异常检测"></a>8.2 日志异常检测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 日志异常检测脚本</span></span><br><span class="line"><span class="comment"># 文件名: log_anomaly_detection.sh</span></span><br><span class="line"></span><br><span class="line">LOG_FILE=<span class="string">&quot;/var/log/messages&quot;</span></span><br><span class="line">BASELINE_FILE=<span class="string">&quot;/tmp/log_baseline.txt&quot;</span></span><br><span class="line">ANOMALY_REPORT=<span class="string">&quot;/tmp/anomaly_report.txt&quot;</span></span><br><span class="line">DATE=$(<span class="built_in">date</span> <span class="string">&#x27;+%Y-%m-%d&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成基线数据（正常情况下的日志模式）</span></span><br><span class="line"><span class="function"><span class="title">generate_baseline</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;生成基线数据...&quot;</span></span><br><span class="line">    <span class="comment"># 分析过去7天的日志模式</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> &#123;1..7&#125;; <span class="keyword">do</span></span><br><span class="line">        past_date=$(<span class="built_in">date</span> -d <span class="string">&quot;<span class="variable">$i</span> days ago&quot;</span> <span class="string">&#x27;+%Y-%m-%d&#x27;</span>)</span><br><span class="line">        grep <span class="string">&quot;<span class="variable">$past_date</span>&quot;</span> <span class="string">&quot;<span class="variable">$LOG_FILE</span>&quot;</span> | \</span><br><span class="line">        awk <span class="string">&#x27;&#123;print $5&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr</span><br><span class="line">    <span class="keyword">done</span> &gt; <span class="string">&quot;<span class="variable">$BASELINE_FILE</span>&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检测异常</span></span><br><span class="line"><span class="function"><span class="title">detect_anomalies</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;检测今日异常...&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 今日日志模式</span></span><br><span class="line">    grep <span class="string">&quot;<span class="variable">$DATE</span>&quot;</span> <span class="string">&quot;<span class="variable">$LOG_FILE</span>&quot;</span> | \</span><br><span class="line">    awk <span class="string">&#x27;&#123;print $5&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr &gt; /tmp/today_pattern.txt</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 比较基线和今日模式</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;=== 日志异常检测报告 - <span class="variable">$DATE</span> ===&quot;</span> &gt; <span class="string">&quot;<span class="variable">$ANOMALY_REPORT</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="string">&quot;<span class="variable">$ANOMALY_REPORT</span>&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 检查新出现的错误模式</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;新出现的日志模式:&quot;</span> &gt;&gt; <span class="string">&quot;<span class="variable">$ANOMALY_REPORT</span>&quot;</span></span><br><span class="line">    <span class="built_in">comm</span> -13 &lt;(awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> <span class="string">&quot;<span class="variable">$BASELINE_FILE</span>&quot;</span> | <span class="built_in">sort</span>) \</span><br><span class="line">             &lt;(awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> /tmp/today_pattern.txt | <span class="built_in">sort</span>) &gt;&gt; <span class="string">&quot;<span class="variable">$ANOMALY_REPORT</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&quot;</span> &gt;&gt; <span class="string">&quot;<span class="variable">$ANOMALY_REPORT</span>&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 检查频率异常增加的模式</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;频率异常增加的模式:&quot;</span> &gt;&gt; <span class="string">&quot;<span class="variable">$ANOMALY_REPORT</span>&quot;</span></span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">read</span> count pattern; <span class="keyword">do</span></span><br><span class="line">        baseline_count=$(grep <span class="string">&quot;<span class="variable">$pattern</span>&quot;</span> <span class="string">&quot;<span class="variable">$BASELINE_FILE</span>&quot;</span> | awk <span class="string">&#x27;&#123;sum+=$1&#125; END &#123;print sum/7&#125;&#x27;</span> || <span class="built_in">echo</span> 0)</span><br><span class="line">        <span class="keyword">if</span> (( $(echo &quot;<span class="variable">$count</span> &gt; <span class="variable">$baseline_count</span> * <span class="number">2</span>&quot; | bc -l) )); <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$pattern</span>: 今日<span class="variable">$count</span>次, 平均<span class="variable">$&#123;baseline_count&#125;</span>次&quot;</span> &gt;&gt; <span class="string">&quot;<span class="variable">$ANOMALY_REPORT</span>&quot;</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">done</span> &lt; /tmp/today_pattern.txt</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 发送报告</span></span><br><span class="line">    <span class="keyword">if</span> [ -s <span class="string">&quot;<span class="variable">$ANOMALY_REPORT</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        mail -s <span class="string">&quot;日志异常检测报告 - <span class="variable">$DATE</span>&quot;</span> admin@example.com &lt; <span class="string">&quot;<span class="variable">$ANOMALY_REPORT</span>&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主程序</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f <span class="string">&quot;<span class="variable">$BASELINE_FILE</span>&quot;</span> ] || [ $(find <span class="string">&quot;<span class="variable">$BASELINE_FILE</span>&quot;</span> -mtime +7) ]; <span class="keyword">then</span></span><br><span class="line">    generate_baseline</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">detect_anomalies</span><br></pre></td></tr></table></figure>
+
+<h2 id="九、集中化日志管理"><a href="#九、集中化日志管理" class="headerlink" title="九、集中化日志管理"></a>九、集中化日志管理</h2><h3 id="9-1-rsyslog远程日志"><a href="#9-1-rsyslog远程日志" class="headerlink" title="9.1 rsyslog远程日志"></a>9.1 rsyslog远程日志</h3><p><strong>服务端配置：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编辑/etc/rsyslog.conf</span></span><br><span class="line"><span class="comment"># 启用UDP接收</span></span><br><span class="line"><span class="variable">$ModLoad</span> imudp</span><br><span class="line"><span class="variable">$UDPServerRun</span> 514</span><br><span class="line"><span class="variable">$UDPServerAddress</span> 0.0.0.0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用TCP接收</span></span><br><span class="line"><span class="variable">$ModLoad</span> imtcp</span><br><span class="line"><span class="variable">$InputTCPServerRun</span> 514</span><br><span class="line"></span><br><span class="line"><span class="comment"># 远程日志存储</span></span><br><span class="line"><span class="variable">$template</span> RemoteLogs,<span class="string">&quot;/var/log/remote/%HOSTNAME%/%PROGRAMNAME%.log&quot;</span></span><br><span class="line">*.* ?RemoteLogs</span><br><span class="line">&amp; stop</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启rsyslog</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart rsyslog</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端配置：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编辑/etc/rsyslog.conf</span></span><br><span class="line"><span class="comment"># 发送所有日志到远程服务器</span></span><br><span class="line">*.* @@log-server:514</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送特定日志</span></span><br><span class="line">mail.* @@log-server:514</span><br><span class="line">auth.* @@log-server:514</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启rsyslog</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart rsyslog</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-2-使用ELK-Stack"><a href="#9-2-使用ELK-Stack" class="headerlink" title="9.2 使用ELK Stack"></a>9.2 使用ELK Stack</h3><p><strong>Filebeat配置：</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/filebeat/filebeat.yml</span></span><br><span class="line"><span class="attr">filebeat.inputs:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">type:</span> <span class="string">log</span></span><br><span class="line">  <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">paths:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">/var/log/*.log</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">/var/log/messages</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">/var/log/secure</span></span><br><span class="line">  <span class="attr">fields:</span></span><br><span class="line">    <span class="attr">logtype:</span> <span class="string">system</span></span><br><span class="line">    <span class="attr">environment:</span> <span class="string">production</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> <span class="attr">type:</span> <span class="string">log</span></span><br><span class="line">  <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">paths:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">/var/log/nginx/*.log</span></span><br><span class="line">  <span class="attr">fields:</span></span><br><span class="line">    <span class="attr">logtype:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">environment:</span> <span class="string">production</span></span><br><span class="line"></span><br><span class="line"><span class="attr">output.elasticsearch:</span></span><br><span class="line">  <span class="attr">hosts:</span> [<span class="string">&quot;elasticsearch:9200&quot;</span>]</span><br><span class="line">  <span class="attr">index:</span> <span class="string">&quot;filebeat-<span class="template-variable">%&#123;+yyyy.MM.dd&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">logging.level:</span> <span class="string">info</span></span><br><span class="line"><span class="attr">logging.to_files:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">logging.files:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">/var/log/filebeat</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">filebeat</span></span><br><span class="line">  <span class="attr">keepfiles:</span> <span class="number">7</span></span><br><span class="line">  <span class="attr">permissions:</span> <span class="number">0644</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="十、定时任务和日志管理最佳实践"><a href="#十、定时任务和日志管理最佳实践" class="headerlink" title="十、定时任务和日志管理最佳实践"></a>十、定时任务和日志管理最佳实践</h2><h3 id="10-1-定时任务最佳实践"><a href="#10-1-定时任务最佳实践" class="headerlink" title="10.1 定时任务最佳实践"></a>10.1 定时任务最佳实践</h3><ol>
+<li><p><strong>脚本规范化</strong>：</p>
+<ul>
+<li>使用绝对路径</li>
+<li>设置适当的环境变量</li>
+<li>添加详细注释</li>
+<li>实现错误处理和日志记录</li>
+</ul>
+</li>
+<li><p><strong>安全考虑</strong>：</p>
+<ul>
+<li>使用专用用户执行任务</li>
+<li>限制脚本权限</li>
+<li>避免在脚本中硬编码密码</li>
+<li>定期审查定时任务</li>
+</ul>
+</li>
+<li><p><strong>监控和告警</strong>：</p>
+<ul>
+<li>监控任务执行状态</li>
+<li>设置执行时间告警</li>
+<li>记录任务执行日志</li>
+<li>定期检查任务输出</li>
+</ul>
+</li>
+</ol>
+<h3 id="10-2-日志管理最佳实践"><a href="#10-2-日志管理最佳实践" class="headerlink" title="10.2 日志管理最佳实践"></a>10.2 日志管理最佳实践</h3><ol>
+<li><p><strong>日志策略</strong>：</p>
+<ul>
+<li>制定统一的日志格式</li>
+<li>设置合适的日志级别</li>
+<li>实施日志轮转策略</li>
+<li>建立日志保留政策</li>
+</ul>
+</li>
+<li><p><strong>性能优化</strong>：</p>
+<ul>
+<li>避免过度日志记录</li>
+<li>使用异步日志写入</li>
+<li>定期清理历史日志</li>
+<li>监控日志磁盘使用</li>
+</ul>
+</li>
+<li><p><strong>安全和合规</strong>：</p>
+<ul>
+<li>保护敏感信息</li>
+<li>实施访问控制</li>
+<li>建立审计跟踪</li>
+<li>满足合规要求</li>
+</ul>
+</li>
+</ol>
+<h3 id="10-3-故障排查指南"><a href="#10-3-故障排查指南" class="headerlink" title="10.3 故障排查指南"></a>10.3 故障排查指南</h3><p><strong>定时任务不执行：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查步骤</span></span><br><span class="line">1. 检查cron服务状态：systemctl status crond</span><br><span class="line">2. 查看cron日志：<span class="built_in">tail</span> -f /var/log/cron</span><br><span class="line">3. 验证crontab语法：crontab -l</span><br><span class="line">4. 检查脚本权限：<span class="built_in">ls</span> -la /path/to/script</span><br><span class="line">5. 手动执行脚本测试：/path/to/script</span><br><span class="line">6. 检查环境变量：<span class="built_in">env</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>日志不记录：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查步骤</span></span><br><span class="line">1. 检查rsyslog服务：systemctl status rsyslog</span><br><span class="line">2. 验证配置文件：rsyslogd -N1</span><br><span class="line">3. 检查磁盘空间：<span class="built_in">df</span> -h /var/log</span><br><span class="line">4. 查看权限设置：<span class="built_in">ls</span> -la /var/log</span><br><span class="line">5. 检查SELinux状态：getenforce</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Linux定时任务和日志管理是系统运维的重要组成部分，需要掌握：</p>
+<ol>
+<li><strong>定时任务管理</strong>：熟练使用crontab、at、systemd timer等工具</li>
+<li><strong>日志系统理解</strong>：掌握rsyslog、journald等日志系统的配置和使用</li>
+<li><strong>自动化运维</strong>：编写高质量的脚本实现自动化管理</li>
+<li><strong>监控和告警</strong>：建立完善的监控体系，及时发现和处理问题</li>
+<li><strong>最佳实践应用</strong>：遵循安全、性能、可维护性等最佳实践</li>
+</ol>
+<p>通过系统性的学习和实践，可以有效提升Linux系统的自动化运维能力，确保系统稳定可靠运行。建议在实际工作中结合具体业务需求，制定适合的定时任务和日志管理策略。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/">定时任务</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/">系统管理</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/crontab/">crontab</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/">日志管理</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4/">自动化运维</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2024/linux/linux-network-configuration-guide/"
+                                   title="Linux网络配置与管理实战指南：从基础到高级的网络运维技能"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Linux网络配置与管理实战指南：从基础到高级的网络运维技能</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2024/thinkphp/thinkphp8-event-queue-system/"
+                                   title="ThinkPHP8 事件系统与队列处理实战指南：高效异步处理解决方案"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">ThinkPHP8 事件系统与队列处理实战指南：高效异步处理解决方案</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E4%B8%8E%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97%EF%BC%9A%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%80%E8%83%BD"><span class="nav-text">Linux定时任务与日志管理实战指南：自动化运维的核心技能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%9F%BA%E7%A1%80"><span class="nav-text">一、Linux定时任务基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%A6%82%E8%BF%B0"><span class="nav-text">1.1 定时任务概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-cron%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-text">1.2 cron服务管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-crontab%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-text">1.3 crontab配置文件结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81crontab%E5%AE%9E%E6%88%98%E5%BA%94%E7%94%A8"><span class="nav-text">二、crontab实战应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%9F%BA%E6%9C%ACcrontab%E6%93%8D%E4%BD%9C"><span class="nav-text">2.1 基本crontab操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%B8%B8%E7%94%A8%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.2 常用定时任务示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E9%AB%98%E7%BA%A7crontab%E6%8A%80%E5%B7%A7"><span class="nav-text">2.3 高级crontab技巧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-crontab%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">2.4 crontab最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81at%E5%91%BD%E4%BB%A4%E4%B8%80%E6%AC%A1%E6%80%A7%E4%BB%BB%E5%8A%A1"><span class="nav-text">三、at命令一次性任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-at%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80"><span class="nav-text">3.1 at命令基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-at%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8"><span class="nav-text">3.2 at命令使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-at%E5%91%BD%E4%BB%A4%E5%AE%9E%E4%BE%8B"><span class="nav-text">3.3 at命令实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81systemd%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-text">四、systemd定时器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-systemd-timer%E5%9F%BA%E7%A1%80"><span class="nav-text">4.1 systemd timer基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%88%9B%E5%BB%BAsystemd%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-text">4.2 创建systemd定时器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-systemd%E5%AE%9A%E6%97%B6%E5%99%A8%E6%97%B6%E9%97%B4%E6%A0%BC%E5%BC%8F"><span class="nav-text">4.3 systemd定时器时间格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80"><span class="nav-text">五、日志管理基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-Linux%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0"><span class="nav-text">5.1 Linux日志系统概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E4%B8%BB%E8%A6%81%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6"><span class="nav-text">5.2 主要日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-rsyslog%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3 rsyslog配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B%E5%92%8C%E5%88%86%E6%9E%90"><span class="nav-text">六、日志查看和分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B%E5%91%BD%E4%BB%A4"><span class="nav-text">6.1 基本日志查看命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-journalctl%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3"><span class="nav-text">6.2 journalctl命令详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E8%84%9A%E6%9C%AC"><span class="nav-text">6.3 日志分析脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%97%A5%E5%BF%97%E8%BD%AE%E8%BD%AC%E7%AE%A1%E7%90%86"><span class="nav-text">七、日志轮转管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-logrotate%E9%85%8D%E7%BD%AE"><span class="nav-text">7.1 logrotate配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E8%BD%AE%E8%BD%AC"><span class="nav-text">7.2 自定义日志轮转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-%E6%97%A5%E5%BF%97%E6%B8%85%E7%90%86%E8%84%9A%E6%9C%AC"><span class="nav-text">7.3 日志清理脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7%E5%92%8C%E5%91%8A%E8%AD%A6"><span class="nav-text">八、日志监控和告警</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-%E5%AE%9E%E6%97%B6%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7"><span class="nav-text">8.1 实时日志监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-%E6%97%A5%E5%BF%97%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="nav-text">8.2 日志异常检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E9%9B%86%E4%B8%AD%E5%8C%96%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86"><span class="nav-text">九、集中化日志管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-rsyslog%E8%BF%9C%E7%A8%8B%E6%97%A5%E5%BF%97"><span class="nav-text">9.1 rsyslog远程日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-%E4%BD%BF%E7%94%A8ELK-Stack"><span class="nav-text">9.2 使用ELK Stack</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%92%8C%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">十、定时任务和日志管理最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">10.1 定时任务最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">10.2 日志管理最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97"><span class="nav-text">10.3 故障排查指南</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E4%B8%8E%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97%EF%BC%9A%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%80%E8%83%BD"><span class="nav-text">Linux定时任务与日志管理实战指南：自动化运维的核心技能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%9F%BA%E7%A1%80"><span class="nav-text">一、Linux定时任务基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%A6%82%E8%BF%B0"><span class="nav-text">1.1 定时任务概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-cron%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-text">1.2 cron服务管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-crontab%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-text">1.3 crontab配置文件结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81crontab%E5%AE%9E%E6%88%98%E5%BA%94%E7%94%A8"><span class="nav-text">二、crontab实战应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%9F%BA%E6%9C%ACcrontab%E6%93%8D%E4%BD%9C"><span class="nav-text">2.1 基本crontab操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%B8%B8%E7%94%A8%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.2 常用定时任务示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E9%AB%98%E7%BA%A7crontab%E6%8A%80%E5%B7%A7"><span class="nav-text">2.3 高级crontab技巧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-crontab%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">2.4 crontab最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81at%E5%91%BD%E4%BB%A4%E4%B8%80%E6%AC%A1%E6%80%A7%E4%BB%BB%E5%8A%A1"><span class="nav-text">三、at命令一次性任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-at%E5%91%BD%E4%BB%A4%E5%9F%BA%E7%A1%80"><span class="nav-text">3.1 at命令基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-at%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8"><span class="nav-text">3.2 at命令使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-at%E5%91%BD%E4%BB%A4%E5%AE%9E%E4%BE%8B"><span class="nav-text">3.3 at命令实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81systemd%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-text">四、systemd定时器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-systemd-timer%E5%9F%BA%E7%A1%80"><span class="nav-text">4.1 systemd timer基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%88%9B%E5%BB%BAsystemd%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-text">4.2 创建systemd定时器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-systemd%E5%AE%9A%E6%97%B6%E5%99%A8%E6%97%B6%E9%97%B4%E6%A0%BC%E5%BC%8F"><span class="nav-text">4.3 systemd定时器时间格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80"><span class="nav-text">五、日志管理基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-Linux%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0"><span class="nav-text">5.1 Linux日志系统概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E4%B8%BB%E8%A6%81%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6"><span class="nav-text">5.2 主要日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-rsyslog%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3 rsyslog配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B%E5%92%8C%E5%88%86%E6%9E%90"><span class="nav-text">六、日志查看和分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B%E5%91%BD%E4%BB%A4"><span class="nav-text">6.1 基本日志查看命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-journalctl%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3"><span class="nav-text">6.2 journalctl命令详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E8%84%9A%E6%9C%AC"><span class="nav-text">6.3 日志分析脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%97%A5%E5%BF%97%E8%BD%AE%E8%BD%AC%E7%AE%A1%E7%90%86"><span class="nav-text">七、日志轮转管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-logrotate%E9%85%8D%E7%BD%AE"><span class="nav-text">7.1 logrotate配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E8%BD%AE%E8%BD%AC"><span class="nav-text">7.2 自定义日志轮转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-%E6%97%A5%E5%BF%97%E6%B8%85%E7%90%86%E8%84%9A%E6%9C%AC"><span class="nav-text">7.3 日志清理脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7%E5%92%8C%E5%91%8A%E8%AD%A6"><span class="nav-text">八、日志监控和告警</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-%E5%AE%9E%E6%97%B6%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7"><span class="nav-text">8.1 实时日志监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-%E6%97%A5%E5%BF%97%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="nav-text">8.2 日志异常检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E9%9B%86%E4%B8%AD%E5%8C%96%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86"><span class="nav-text">九、集中化日志管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-rsyslog%E8%BF%9C%E7%A8%8B%E6%97%A5%E5%BF%97"><span class="nav-text">9.1 rsyslog远程日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-%E4%BD%BF%E7%94%A8ELK-Stack"><span class="nav-text">9.2 使用ELK Stack</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%92%8C%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">十、定时任务和日志管理最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">10.1 定时任务最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">10.2 日志管理最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5%E6%8C%87%E5%8D%97"><span class="nav-text">10.3 故障排查指南</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

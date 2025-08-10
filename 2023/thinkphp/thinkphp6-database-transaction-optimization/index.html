@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            ThinkPHP6/8 数据库事务处理与性能优化实战 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        ThinkPHP6/8 数据库事务处理与性能优化实战
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-09-15 14:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/thinkphp/">thinkphp</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ThinkPHP6/">ThinkPHP6</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ThinkPHP8/">ThinkPHP8</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/">数据库事务</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/SQL%E4%BC%98%E5%8C%96/">SQL优化</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>在高并发的Web应用开发中，数据库事务处理和性能优化是确保数据一致性和系统稳定性的关键技术。本文将深入探讨ThinkPHP6&#x2F;8框架中的数据库事务处理机制，并分享一系列实用的性能优化技巧。</p>
+<h2 id="数据库事务处理基础"><a href="#数据库事务处理基础" class="headerlink" title="数据库事务处理基础"></a>数据库事务处理基础</h2><h3 id="事务的ACID特性"><a href="#事务的ACID特性" class="headerlink" title="事务的ACID特性"></a>事务的ACID特性</h3><p>数据库事务必须满足ACID特性：</p>
+<ul>
+<li><strong>原子性(Atomicity)</strong>：事务中的所有操作要么全部成功，要么全部失败</li>
+<li><strong>一致性(Consistency)</strong>：事务执行前后，数据库状态保持一致</li>
+<li><strong>隔离性(Isolation)</strong>：并发事务之间相互隔离，不会互相影响</li>
+<li><strong>持久性(Durability)</strong>：事务提交后，数据修改是永久性的</li>
+</ul>
+<h3 id="数据库引擎要求"><a href="#数据库引擎要求" class="headerlink" title="数据库引擎要求"></a>数据库引擎要求</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 确保数据表使用InnoDB引擎</span></span><br><span class="line"><span class="comment">// CREATE TABLE users (</span></span><br><span class="line"><span class="comment">//     id INT PRIMARY KEY AUTO_INCREMENT,</span></span><br><span class="line"><span class="comment">//     username VARCHAR(50) NOT NULL,</span></span><br><span class="line"><span class="comment">//     balance DECIMAL(10,2) DEFAULT 0.00</span></span><br><span class="line"><span class="comment">// ) ENGINE=InnoDB;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ThinkPHP6-8-事务处理方式"><a href="#ThinkPHP6-8-事务处理方式" class="headerlink" title="ThinkPHP6&#x2F;8 事务处理方式"></a>ThinkPHP6&#x2F;8 事务处理方式</h2><h3 id="1-自动事务处理"><a href="#1-自动事务处理" class="headerlink" title="1. 自动事务处理"></a>1. 自动事务处理</h3><p>自动事务处理是最简单的方式，框架会自动处理事务的开启、提交和回滚：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">app</span>\<span class="title class_">service</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Db</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Exception</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TransferService</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 转账操作 - 自动事务处理</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $fromUserId 转出用户ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $toUserId 转入用户ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> float $amount 转账金额</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> bool</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">transfer</span>(<span class="params"><span class="variable">$fromUserId</span>, <span class="variable">$toUserId</span>, <span class="variable">$amount</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Db</span>::<span class="title function_ invoke__">transaction</span>(function () <span class="keyword">use</span> ($<span class="title">fromUserId</span>, $<span class="title">toUserId</span>, $<span class="title">amount</span>) &#123;</span><br><span class="line">            // 检查转出用户余额</span><br><span class="line">            $<span class="title">fromUser</span> = <span class="title">Db</span>::<span class="title">name</span>(&#x27;<span class="title">users</span>&#x27;)-&gt;<span class="title">where</span>(&#x27;<span class="title">id</span>&#x27;, $<span class="title">fromUserId</span>)-&gt;<span class="title">find</span>();</span><br><span class="line">            <span class="keyword">if</span> (!<span class="variable">$fromUser</span> || <span class="variable">$fromUser</span>[<span class="string">&#x27;balance&#x27;</span>] &lt; <span class="variable">$amount</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&#x27;余额不足&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 扣减转出用户余额</span></span><br><span class="line">            <span class="variable">$result1</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">                -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;id&#x27;</span>, <span class="variable">$fromUserId</span>)</span><br><span class="line">                -&gt;<span class="title function_ invoke__">dec</span>(<span class="string">&#x27;balance&#x27;</span>, <span class="variable">$amount</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 增加转入用户余额</span></span><br><span class="line">            <span class="variable">$result2</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">                -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;id&#x27;</span>, <span class="variable">$toUserId</span>)</span><br><span class="line">                -&gt;<span class="title function_ invoke__">inc</span>(<span class="string">&#x27;balance&#x27;</span>, <span class="variable">$amount</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 记录转账日志</span></span><br><span class="line">            <span class="variable">$logResult</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;transfer_logs&#x27;</span>)-&gt;<span class="title function_ invoke__">insert</span>([</span><br><span class="line">                <span class="string">&#x27;from_user_id&#x27;</span> =&gt; <span class="variable">$fromUserId</span>,</span><br><span class="line">                <span class="string">&#x27;to_user_id&#x27;</span> =&gt; <span class="variable">$toUserId</span>,</span><br><span class="line">                <span class="string">&#x27;amount&#x27;</span> =&gt; <span class="variable">$amount</span>,</span><br><span class="line">                <span class="string">&#x27;status&#x27;</span> =&gt; <span class="number">1</span>,</span><br><span class="line">                <span class="string">&#x27;create_time&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>()</span><br><span class="line">            ]);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (!<span class="variable">$result1</span> || !<span class="variable">$result2</span> || !<span class="variable">$logResult</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&#x27;转账失败&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-手动事务处理"><a href="#2-手动事务处理" class="headerlink" title="2. 手动事务处理"></a>2. 手动事务处理</h3><p>手动事务处理提供了更精细的控制，可以自定义错误处理逻辑：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">app</span>\<span class="title class_">service</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Db</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">Exception</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Log</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrderService</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建订单 - 手动事务处理</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $orderData 订单数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $orderItems 订单商品</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createOrder</span>(<span class="params"><span class="variable">$orderData</span>, <span class="variable">$orderItems</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 开启事务</span></span><br><span class="line">        <span class="title class_">Db</span>::<span class="title function_ invoke__">startTrans</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 1. 创建订单主表记录</span></span><br><span class="line">            <span class="variable">$orderId</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;orders&#x27;</span>)-&gt;<span class="title function_ invoke__">insertGetId</span>([</span><br><span class="line">                <span class="string">&#x27;user_id&#x27;</span> =&gt; <span class="variable">$orderData</span>[<span class="string">&#x27;user_id&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;order_no&#x27;</span> =&gt; <span class="variable">$this</span>-&gt;<span class="title function_ invoke__">generateOrderNo</span>(),</span><br><span class="line">                <span class="string">&#x27;total_amount&#x27;</span> =&gt; <span class="variable">$orderData</span>[<span class="string">&#x27;total_amount&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;status&#x27;</span> =&gt; <span class="number">0</span>,</span><br><span class="line">                <span class="string">&#x27;create_time&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>()</span><br><span class="line">            ]);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (!<span class="variable">$orderId</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&#x27;创建订单失败&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 2. 创建订单商品记录并扣减库存</span></span><br><span class="line">            <span class="keyword">foreach</span> (<span class="variable">$orderItems</span> <span class="keyword">as</span> <span class="variable">$item</span>) &#123;</span><br><span class="line">                <span class="comment">// 检查库存</span></span><br><span class="line">                <span class="variable">$product</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;products&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;id&#x27;</span>, <span class="variable">$item</span>[<span class="string">&#x27;product_id&#x27;</span>])</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">find</span>();</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (!<span class="variable">$product</span> || <span class="variable">$product</span>[<span class="string">&#x27;stock&#x27;</span>] &lt; <span class="variable">$item</span>[<span class="string">&#x27;quantity&#x27;</span>]) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;商品 <span class="subst">&#123;$product[&#x27;name&#x27;]&#125;</span> 库存不足&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 扣减库存</span></span><br><span class="line">                <span class="variable">$stockResult</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;products&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;id&#x27;</span>, <span class="variable">$item</span>[<span class="string">&#x27;product_id&#x27;</span>])</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">dec</span>(<span class="string">&#x27;stock&#x27;</span>, <span class="variable">$item</span>[<span class="string">&#x27;quantity&#x27;</span>]);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (!<span class="variable">$stockResult</span>) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&#x27;库存扣减失败&#x27;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 创建订单商品记录</span></span><br><span class="line">                <span class="variable">$itemResult</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;order_items&#x27;</span>)-&gt;<span class="title function_ invoke__">insert</span>([</span><br><span class="line">                    <span class="string">&#x27;order_id&#x27;</span> =&gt; <span class="variable">$orderId</span>,</span><br><span class="line">                    <span class="string">&#x27;product_id&#x27;</span> =&gt; <span class="variable">$item</span>[<span class="string">&#x27;product_id&#x27;</span>],</span><br><span class="line">                    <span class="string">&#x27;quantity&#x27;</span> =&gt; <span class="variable">$item</span>[<span class="string">&#x27;quantity&#x27;</span>],</span><br><span class="line">                    <span class="string">&#x27;price&#x27;</span> =&gt; <span class="variable">$item</span>[<span class="string">&#x27;price&#x27;</span>],</span><br><span class="line">                    <span class="string">&#x27;create_time&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>()</span><br><span class="line">                ]);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (!<span class="variable">$itemResult</span>) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&#x27;创建订单商品记录失败&#x27;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 3. 扣减用户余额（如果使用余额支付）</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$orderData</span>[<span class="string">&#x27;pay_type&#x27;</span>] == <span class="string">&#x27;balance&#x27;</span>) &#123;</span><br><span class="line">                <span class="variable">$balanceResult</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;id&#x27;</span>, <span class="variable">$orderData</span>[<span class="string">&#x27;user_id&#x27;</span>])</span><br><span class="line">                    -&gt;<span class="title function_ invoke__">dec</span>(<span class="string">&#x27;balance&#x27;</span>, <span class="variable">$orderData</span>[<span class="string">&#x27;total_amount&#x27;</span>]);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (!<span class="variable">$balanceResult</span>) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&#x27;余额扣减失败&#x27;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 提交事务</span></span><br><span class="line">            <span class="title class_">Db</span>::<span class="title function_ invoke__">commit</span>();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> [</span><br><span class="line">                <span class="string">&#x27;code&#x27;</span> =&gt; <span class="number">200</span>,</span><br><span class="line">                <span class="string">&#x27;message&#x27;</span> =&gt; <span class="string">&#x27;订单创建成功&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;data&#x27;</span> =&gt; [<span class="string">&#x27;order_id&#x27;</span> =&gt; <span class="variable">$orderId</span>]</span><br><span class="line">            ];</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="comment">// 回滚事务</span></span><br><span class="line">            <span class="title class_">Db</span>::<span class="title function_ invoke__">rollback</span>();</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 记录错误日志</span></span><br><span class="line">            <span class="title class_">Log</span>::<span class="title function_ invoke__">error</span>(<span class="string">&#x27;订单创建失败: &#x27;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>(), [</span><br><span class="line">                <span class="string">&#x27;order_data&#x27;</span> =&gt; <span class="variable">$orderData</span>,</span><br><span class="line">                <span class="string">&#x27;order_items&#x27;</span> =&gt; <span class="variable">$orderItems</span>,</span><br><span class="line">                <span class="string">&#x27;trace&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getTraceAsString</span>()</span><br><span class="line">            ]);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> [</span><br><span class="line">                <span class="string">&#x27;code&#x27;</span> =&gt; <span class="number">500</span>,</span><br><span class="line">                <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>(),</span><br><span class="line">                <span class="string">&#x27;data&#x27;</span> =&gt; <span class="literal">null</span></span><br><span class="line">            ];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 生成订单号</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">generateOrderNo</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">date</span>(<span class="string">&#x27;YmdHis&#x27;</span>) . <span class="title function_ invoke__">mt_rand</span>(<span class="number">1000</span>, <span class="number">9999</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据库性能优化策略"><a href="#数据库性能优化策略" class="headerlink" title="数据库性能优化策略"></a>数据库性能优化策略</h2><h3 id="1-查询缓存优化"><a href="#1-查询缓存优化" class="headerlink" title="1. 查询缓存优化"></a>1. 查询缓存优化</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">app</span>\<span class="title class_">service</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Db</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Cache</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProductService</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取商品列表（带缓存）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $categoryId 分类ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $page 页码</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $limit 每页数量</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getProductList</span>(<span class="params"><span class="variable">$categoryId</span> = <span class="number">0</span>, <span class="variable">$page</span> = <span class="number">1</span>, <span class="variable">$limit</span> = <span class="number">20</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$cacheKey</span> = <span class="string">&quot;product_list_<span class="subst">&#123;$categoryId&#125;</span>_<span class="subst">&#123;$page&#125;</span>_<span class="subst">&#123;$limit&#125;</span>&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 尝试从缓存获取</span></span><br><span class="line">        <span class="variable">$result</span> = <span class="title class_">Cache</span>::<span class="title function_ invoke__">get</span>(<span class="variable">$cacheKey</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$result</span> !== <span class="literal">false</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 构建查询</span></span><br><span class="line">        <span class="variable">$query</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;products&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">field</span>(<span class="string">&#x27;id,name,price,stock,category_id,image,create_time&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;status&#x27;</span>, <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$categoryId</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;category_id&#x27;</span>, <span class="variable">$categoryId</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 分页查询</span></span><br><span class="line">        <span class="variable">$list</span> = <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">order</span>(<span class="string">&#x27;sort desc, id desc&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">page</span>(<span class="variable">$page</span>, <span class="variable">$limit</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">select</span>()</span><br><span class="line">            -&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 获取总数</span></span><br><span class="line">        <span class="variable">$total</span> = <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">count</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$result</span> = [</span><br><span class="line">            <span class="string">&#x27;list&#x27;</span> =&gt; <span class="variable">$list</span>,</span><br><span class="line">            <span class="string">&#x27;total&#x27;</span> =&gt; <span class="variable">$total</span>,</span><br><span class="line">            <span class="string">&#x27;page&#x27;</span> =&gt; <span class="variable">$page</span>,</span><br><span class="line">            <span class="string">&#x27;limit&#x27;</span> =&gt; <span class="variable">$limit</span></span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 缓存结果（缓存5分钟）</span></span><br><span class="line">        <span class="title class_">Cache</span>::<span class="title function_ invoke__">set</span>(<span class="variable">$cacheKey</span>, <span class="variable">$result</span>, <span class="number">300</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 更新商品时清除相关缓存</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $productId 商品ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $data 更新数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> bool</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">updateProduct</span>(<span class="params"><span class="variable">$productId</span>, <span class="variable">$data</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$result</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;products&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;id&#x27;</span>, <span class="variable">$productId</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">update</span>(<span class="variable">$data</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$result</span>) &#123;</span><br><span class="line">            <span class="comment">// 清除相关缓存</span></span><br><span class="line">            <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">clearProductCache</span>(<span class="variable">$productId</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 清除商品相关缓存</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $productId 商品ID</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">clearProductCache</span>(<span class="params"><span class="variable">$productId</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 获取商品信息</span></span><br><span class="line">        <span class="variable">$product</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;products&#x27;</span>)-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;id&#x27;</span>, <span class="variable">$productId</span>)-&gt;<span class="title function_ invoke__">find</span>();</span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable">$product</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 清除分类相关的缓存</span></span><br><span class="line">        <span class="variable">$cacheKeys</span> = [];</span><br><span class="line">        <span class="keyword">for</span> (<span class="variable">$page</span> = <span class="number">1</span>; <span class="variable">$page</span> &lt;= <span class="number">10</span>; <span class="variable">$page</span>++) &#123;</span><br><span class="line">            <span class="variable">$cacheKeys</span>[] = <span class="string">&quot;product_list_0_<span class="subst">&#123;$page&#125;</span>_20&quot;</span>;</span><br><span class="line">            <span class="variable">$cacheKeys</span>[] = <span class="string">&quot;product_list_<span class="subst">&#123;$product[&#x27;category_id&#x27;]&#125;</span>_<span class="subst">&#123;$page&#125;</span>_20&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="title class_">Cache</span>::<span class="title function_ invoke__">delete</span>(<span class="variable">$cacheKeys</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数据库连接池优化"><a href="#2-数据库连接池优化" class="headerlink" title="2. 数据库连接池优化"></a>2. 数据库连接池优化</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// config/database.php</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">    <span class="comment">// 默认数据库连接</span></span><br><span class="line">    <span class="string">&#x27;default&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.driver&#x27;</span>, <span class="string">&#x27;mysql&#x27;</span>),</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 数据库连接配置</span></span><br><span class="line">    <span class="string">&#x27;connections&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;mysql&#x27;</span> =&gt; [</span><br><span class="line">            <span class="string">&#x27;type&#x27;</span> =&gt; <span class="string">&#x27;mysql&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;hostname&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.hostname&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>),</span><br><span class="line">            <span class="string">&#x27;database&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.database&#x27;</span>, <span class="string">&#x27;&#x27;</span>),</span><br><span class="line">            <span class="string">&#x27;username&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.username&#x27;</span>, <span class="string">&#x27;root&#x27;</span>),</span><br><span class="line">            <span class="string">&#x27;password&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.password&#x27;</span>, <span class="string">&#x27;&#x27;</span>),</span><br><span class="line">            <span class="string">&#x27;hostport&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.hostport&#x27;</span>, <span class="string">&#x27;3306&#x27;</span>),</span><br><span class="line">            <span class="string">&#x27;charset&#x27;</span> =&gt; <span class="string">&#x27;utf8mb4&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;prefix&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.prefix&#x27;</span>, <span class="string">&#x27;&#x27;</span>),</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 连接池配置</span></span><br><span class="line">            <span class="string">&#x27;pool&#x27;</span> =&gt; [</span><br><span class="line">                <span class="string">&#x27;enable&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">                <span class="string">&#x27;max_connections&#x27;</span> =&gt; <span class="number">20</span>,    <span class="comment">// 最大连接数</span></span><br><span class="line">                <span class="string">&#x27;min_connections&#x27;</span> =&gt; <span class="number">5</span>,     <span class="comment">// 最小连接数</span></span><br><span class="line">                <span class="string">&#x27;max_idle_time&#x27;</span> =&gt; <span class="number">60</span>,      <span class="comment">// 最大空闲时间（秒）</span></span><br><span class="line">                <span class="string">&#x27;max_wait_time&#x27;</span> =&gt; <span class="number">3</span>,       <span class="comment">// 最大等待时间（秒）</span></span><br><span class="line">            ],</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 读写分离配置</span></span><br><span class="line">            <span class="string">&#x27;deploy&#x27;</span> =&gt; <span class="number">1</span>,                  <span class="comment">// 启用读写分离</span></span><br><span class="line">            <span class="string">&#x27;rw_separate&#x27;</span> =&gt; <span class="literal">true</span>,          <span class="comment">// 读写分离</span></span><br><span class="line">            <span class="string">&#x27;master_num&#x27;</span> =&gt; <span class="number">1</span>,              <span class="comment">// 主服务器数量</span></span><br><span class="line">            <span class="string">&#x27;slave_no&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,               <span class="comment">// 指定从服务器序号</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 从服务器配置</span></span><br><span class="line">            <span class="string">&#x27;read&#x27;</span> =&gt; [</span><br><span class="line">                <span class="string">&#x27;hostname&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.read.hostname&#x27;</span>, <span class="string">&#x27;127.0.0.1&#x27;</span>),</span><br><span class="line">                <span class="string">&#x27;username&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.read.username&#x27;</span>, <span class="string">&#x27;root&#x27;</span>),</span><br><span class="line">                <span class="string">&#x27;password&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;database.read.password&#x27;</span>, <span class="string">&#x27;&#x27;</span>),</span><br><span class="line">            ],</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 性能优化配置</span></span><br><span class="line">            <span class="string">&#x27;fields_strict&#x27;</span> =&gt; <span class="literal">false</span>,       <span class="comment">// 关闭字段严格检查</span></span><br><span class="line">            <span class="string">&#x27;break_reconnect&#x27;</span> =&gt; <span class="literal">true</span>,      <span class="comment">// 启用断线重连</span></span><br><span class="line">            <span class="string">&#x27;trigger_sql&#x27;</span> =&gt; <span class="literal">false</span>,         <span class="comment">// 关闭SQL监听（生产环境）</span></span><br><span class="line">            <span class="string">&#x27;fields_cache&#x27;</span> =&gt; <span class="literal">true</span>,         <span class="comment">// 启用字段缓存</span></span><br><span class="line">        ],</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-SQL查询优化"><a href="#3-SQL查询优化" class="headerlink" title="3. SQL查询优化"></a>3. SQL查询优化</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">app</span>\<span class="title class_">service</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Db</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OptimizedQueryService</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 优化的用户订单查询</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $userId 用户ID</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $params 查询参数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUserOrders</span>(<span class="params"><span class="variable">$userId</span>, <span class="variable">$params</span> = []</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 使用索引优化查询</span></span><br><span class="line">        <span class="variable">$query</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;orders&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">alias</span>(<span class="string">&#x27;o&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">field</span>([</span><br><span class="line">                <span class="string">&#x27;o.id&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;o.order_no&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;o.total_amount&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;o.status&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;o.create_time&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;COUNT(oi.id) as item_count&#x27;</span></span><br><span class="line">            ])</span><br><span class="line">            -&gt;<span class="title function_ invoke__">leftJoin</span>(<span class="string">&#x27;order_items oi&#x27;</span>, <span class="string">&#x27;o.id = oi.order_id&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;o.user_id&#x27;</span>, <span class="variable">$userId</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">group</span>(<span class="string">&#x27;o.id&#x27;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 状态筛选</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$params</span>[<span class="string">&#x27;status&#x27;</span>]) &amp;&amp; <span class="variable">$params</span>[<span class="string">&#x27;status&#x27;</span>] !== <span class="string">&#x27;&#x27;</span>) &#123;</span><br><span class="line">            <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;o.status&#x27;</span>, <span class="variable">$params</span>[<span class="string">&#x27;status&#x27;</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 时间范围筛选</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$params</span>[<span class="string">&#x27;start_time&#x27;</span>]) &amp;&amp; <span class="variable">$params</span>[<span class="string">&#x27;start_time&#x27;</span>]) &#123;</span><br><span class="line">            <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;o.create_time&#x27;</span>, <span class="string">&#x27;&gt;=&#x27;</span>, <span class="title function_ invoke__">strtotime</span>(<span class="variable">$params</span>[<span class="string">&#x27;start_time&#x27;</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$params</span>[<span class="string">&#x27;end_time&#x27;</span>]) &amp;&amp; <span class="variable">$params</span>[<span class="string">&#x27;end_time&#x27;</span>]) &#123;</span><br><span class="line">            <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;o.create_time&#x27;</span>, <span class="string">&#x27;&lt;=&#x27;</span>, <span class="title function_ invoke__">strtotime</span>(<span class="variable">$params</span>[<span class="string">&#x27;end_time&#x27;</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 分页查询</span></span><br><span class="line">        <span class="variable">$page</span> = <span class="variable">$params</span>[<span class="string">&#x27;page&#x27;</span>] ?? <span class="number">1</span>;</span><br><span class="line">        <span class="variable">$limit</span> = <span class="variable">$params</span>[<span class="string">&#x27;limit&#x27;</span>] ?? <span class="number">20</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$list</span> = <span class="variable">$query</span>-&gt;<span class="title function_ invoke__">order</span>(<span class="string">&#x27;o.create_time desc&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">page</span>(<span class="variable">$page</span>, <span class="variable">$limit</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">select</span>()</span><br><span class="line">            -&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$list</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 批量查询优化</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $userIds 用户ID数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">batchGetUserInfo</span>(<span class="params"><span class="variable">$userIds</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$userIds</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> [];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 使用IN查询替代多次单独查询</span></span><br><span class="line">        <span class="variable">$users</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">name</span>(<span class="string">&#x27;users&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">field</span>(<span class="string">&#x27;id,username,nickname,avatar,status&#x27;</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">where</span>(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;in&#x27;</span>, <span class="variable">$userIds</span>)</span><br><span class="line">            -&gt;<span class="title function_ invoke__">select</span>()</span><br><span class="line">            -&gt;<span class="title function_ invoke__">toArray</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 转换为以ID为键的数组</span></span><br><span class="line">        <span class="variable">$result</span> = [];</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable">$users</span> <span class="keyword">as</span> <span class="variable">$user</span>) &#123;</span><br><span class="line">            <span class="variable">$result</span>[<span class="variable">$user</span>[<span class="string">&#x27;id&#x27;</span>]] = <span class="variable">$user</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用原生SQL进行复杂查询优化</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $params 查询参数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getComplexStatistics</span>(<span class="params"><span class="variable">$params</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$sql</span> = <span class="string">&quot;</span></span><br><span class="line"><span class="string">            SELECT </span></span><br><span class="line"><span class="string">                DATE(FROM_UNIXTIME(create_time)) as date,</span></span><br><span class="line"><span class="string">                COUNT(*) as order_count,</span></span><br><span class="line"><span class="string">                SUM(total_amount) as total_amount,</span></span><br><span class="line"><span class="string">                AVG(total_amount) as avg_amount,</span></span><br><span class="line"><span class="string">                COUNT(DISTINCT user_id) as user_count</span></span><br><span class="line"><span class="string">            FROM orders </span></span><br><span class="line"><span class="string">            WHERE create_time &gt;= :start_time </span></span><br><span class="line"><span class="string">                AND create_time &lt;= :end_time</span></span><br><span class="line"><span class="string">                AND status IN (1,2,3)</span></span><br><span class="line"><span class="string">            GROUP BY DATE(FROM_UNIXTIME(create_time))</span></span><br><span class="line"><span class="string">            ORDER BY date DESC</span></span><br><span class="line"><span class="string">        &quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$result</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">query</span>(<span class="variable">$sql</span>, [</span><br><span class="line">            <span class="string">&#x27;start_time&#x27;</span> =&gt; <span class="variable">$params</span>[<span class="string">&#x27;start_time&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;end_time&#x27;</span> =&gt; <span class="variable">$params</span>[<span class="string">&#x27;end_time&#x27;</span>]</span><br><span class="line">        ]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-数据库索引优化建议"><a href="#4-数据库索引优化建议" class="headerlink" title="4. 数据库索引优化建议"></a>4. 数据库索引优化建议</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 用户表索引优化</span></span><br><span class="line"><span class="keyword">ALTER TABLE</span> users <span class="keyword">ADD</span> INDEX idx_username (username);</span><br><span class="line"><span class="keyword">ALTER TABLE</span> users <span class="keyword">ADD</span> INDEX idx_email (email);</span><br><span class="line"><span class="keyword">ALTER TABLE</span> users <span class="keyword">ADD</span> INDEX idx_status_create_time (status, create_time);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 订单表索引优化</span></span><br><span class="line"><span class="keyword">ALTER TABLE</span> orders <span class="keyword">ADD</span> INDEX idx_user_id_status (user_id, status);</span><br><span class="line"><span class="keyword">ALTER TABLE</span> orders <span class="keyword">ADD</span> INDEX idx_order_no (order_no);</span><br><span class="line"><span class="keyword">ALTER TABLE</span> orders <span class="keyword">ADD</span> INDEX idx_create_time (create_time);</span><br><span class="line"><span class="keyword">ALTER TABLE</span> orders <span class="keyword">ADD</span> INDEX idx_status_create_time (status, create_time);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 订单商品表索引优化</span></span><br><span class="line"><span class="keyword">ALTER TABLE</span> order_items <span class="keyword">ADD</span> INDEX idx_order_id (order_id);</span><br><span class="line"><span class="keyword">ALTER TABLE</span> order_items <span class="keyword">ADD</span> INDEX idx_product_id (product_id);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 商品表索引优化</span></span><br><span class="line"><span class="keyword">ALTER TABLE</span> products <span class="keyword">ADD</span> INDEX idx_category_status (category_id, status);</span><br><span class="line"><span class="keyword">ALTER TABLE</span> products <span class="keyword">ADD</span> INDEX idx_status_sort (status, sort);</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能监控与调试"><a href="#性能监控与调试" class="headerlink" title="性能监控与调试"></a>性能监控与调试</h2><h3 id="1-SQL性能监控中间件"><a href="#1-SQL性能监控中间件" class="headerlink" title="1. SQL性能监控中间件"></a>1. SQL性能监控中间件</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">app</span>\<span class="title class_">middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Log</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Db</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SqlMonitor</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * SQL性能监控中间件</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> \think\Request $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> \Closure $next</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="variable">$request</span>, \<span class="built_in">Closure</span> <span class="variable">$next</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$startTime</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line">        <span class="variable">$startMemory</span> = <span class="title function_ invoke__">memory_get_usage</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 开启SQL监听</span></span><br><span class="line">        <span class="title class_">Db</span>::<span class="title function_ invoke__">listen</span>(function (<span class="variable">$sql</span>, <span class="variable">$time</span>, <span class="variable">$explain</span>) &#123;</span><br><span class="line">            <span class="comment">// 记录慢查询（超过100ms）</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$time</span> &gt; <span class="number">0.1</span>) &#123;</span><br><span class="line">                <span class="title class_">Log</span>::<span class="title function_ invoke__">warning</span>(<span class="string">&#x27;慢查询检测&#x27;</span>, [</span><br><span class="line">                    <span class="string">&#x27;sql&#x27;</span> =&gt; <span class="variable">$sql</span>,</span><br><span class="line">                    <span class="string">&#x27;time&#x27;</span> =&gt; <span class="variable">$time</span>,</span><br><span class="line">                    <span class="string">&#x27;explain&#x27;</span> =&gt; <span class="variable">$explain</span></span><br><span class="line">                ]);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 记录所有SQL（开发环境）</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="title function_ invoke__">env</span>(<span class="string">&#x27;app_debug&#x27;</span>)) &#123;</span><br><span class="line">                <span class="title class_">Log</span>::<span class="title function_ invoke__">info</span>(<span class="string">&#x27;SQL执行&#x27;</span>, [</span><br><span class="line">                    <span class="string">&#x27;sql&#x27;</span> =&gt; <span class="variable">$sql</span>,</span><br><span class="line">                    <span class="string">&#x27;time&#x27;</span> =&gt; <span class="variable">$time</span></span><br><span class="line">                ]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$response</span> = <span class="variable">$next</span>(<span class="variable">$request</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$endTime</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line">        <span class="variable">$endMemory</span> = <span class="title function_ invoke__">memory_get_usage</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 记录请求性能数据</span></span><br><span class="line">        <span class="variable">$performanceData</span> = [</span><br><span class="line">            <span class="string">&#x27;url&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">url</span>(),</span><br><span class="line">            <span class="string">&#x27;method&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">method</span>(),</span><br><span class="line">            <span class="string">&#x27;execution_time&#x27;</span> =&gt; <span class="title function_ invoke__">round</span>((<span class="variable">$endTime</span> - <span class="variable">$startTime</span>) * <span class="number">1000</span>, <span class="number">2</span>),</span><br><span class="line">            <span class="string">&#x27;memory_usage&#x27;</span> =&gt; <span class="title function_ invoke__">round</span>((<span class="variable">$endMemory</span> - <span class="variable">$startMemory</span>) / <span class="number">1024</span> / <span class="number">1024</span>, <span class="number">2</span>),</span><br><span class="line">            <span class="string">&#x27;peak_memory&#x27;</span> =&gt; <span class="title function_ invoke__">round</span>(<span class="title function_ invoke__">memory_get_peak_usage</span>() / <span class="number">1024</span> / <span class="number">1024</span>, <span class="number">2</span>)</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 记录性能较差的请求（超过1秒或内存使用超过10MB）</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$performanceData</span>[<span class="string">&#x27;execution_time&#x27;</span>] &gt; <span class="number">1000</span> || <span class="variable">$performanceData</span>[<span class="string">&#x27;memory_usage&#x27;</span>] &gt; <span class="number">10</span>) &#123;</span><br><span class="line">            <span class="title class_">Log</span>::<span class="title function_ invoke__">warning</span>(<span class="string">&#x27;性能警告&#x27;</span>, <span class="variable">$performanceData</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$response</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数据库性能分析工具"><a href="#2-数据库性能分析工具" class="headerlink" title="2. 数据库性能分析工具"></a>2. 数据库性能分析工具</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">app</span>\<span class="title class_">service</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Db</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">think</span>\<span class="title">facade</span>\<span class="title">Cache</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatabaseAnalyzer</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分析慢查询</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">analyzeSlowQueries</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 获取慢查询日志</span></span><br><span class="line">        <span class="variable">$slowQueries</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">query</span>(<span class="string">&quot;SHOW VARIABLES LIKE &#x27;slow_query_log&#x27;&quot;</span>);</span><br><span class="line">        <span class="variable">$slowQueryFile</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">query</span>(<span class="string">&quot;SHOW VARIABLES LIKE &#x27;slow_query_log_file&#x27;&quot;</span>);</span><br><span class="line">        <span class="variable">$longQueryTime</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">query</span>(<span class="string">&quot;SHOW VARIABLES LIKE &#x27;long_query_time&#x27;&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;slow_query_log&#x27;</span> =&gt; <span class="variable">$slowQueries</span>[<span class="number">0</span>][<span class="string">&#x27;Value&#x27;</span>] ?? <span class="string">&#x27;OFF&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;slow_query_log_file&#x27;</span> =&gt; <span class="variable">$slowQueryFile</span>[<span class="number">0</span>][<span class="string">&#x27;Value&#x27;</span>] ?? <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;long_query_time&#x27;</span> =&gt; <span class="variable">$longQueryTime</span>[<span class="number">0</span>][<span class="string">&#x27;Value&#x27;</span>] ?? <span class="string">&#x27;10&#x27;</span></span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分析数据库连接状态</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">analyzeConnections</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$processlist</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">query</span>(<span class="string">&#x27;SHOW PROCESSLIST&#x27;</span>);</span><br><span class="line">        <span class="variable">$status</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">query</span>(<span class="string">&quot;SHOW STATUS LIKE &#x27;Threads_%&#x27;&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$connections</span> = [</span><br><span class="line">            <span class="string">&#x27;active_connections&#x27;</span> =&gt; <span class="title function_ invoke__">count</span>(<span class="variable">$processlist</span>),</span><br><span class="line">            <span class="string">&#x27;connection_details&#x27;</span> =&gt; <span class="variable">$processlist</span></span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable">$status</span> <span class="keyword">as</span> <span class="variable">$item</span>) &#123;</span><br><span class="line">            <span class="variable">$connections</span>[<span class="title function_ invoke__">strtolower</span>(<span class="variable">$item</span>[<span class="string">&#x27;Variable_name&#x27;</span>])] = <span class="variable">$item</span>[<span class="string">&#x27;Value&#x27;</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$connections</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分析表索引使用情况</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $tableName 表名</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">analyzeTableIndexes</span>(<span class="params"><span class="variable">$tableName</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 获取表索引信息</span></span><br><span class="line">        <span class="variable">$indexes</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">query</span>(<span class="string">&quot;SHOW INDEX FROM <span class="subst">&#123;$tableName&#125;</span>&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 获取索引使用统计</span></span><br><span class="line">        <span class="variable">$indexStats</span> = <span class="title class_">Db</span>::<span class="title function_ invoke__">query</span>(<span class="string">&quot;</span></span><br><span class="line"><span class="string">            SELECT </span></span><br><span class="line"><span class="string">                table_name,</span></span><br><span class="line"><span class="string">                index_name,</span></span><br><span class="line"><span class="string">                seq_in_index,</span></span><br><span class="line"><span class="string">                column_name,</span></span><br><span class="line"><span class="string">                cardinality</span></span><br><span class="line"><span class="string">            FROM information_schema.statistics </span></span><br><span class="line"><span class="string">            WHERE table_schema = DATABASE() </span></span><br><span class="line"><span class="string">                AND table_name = &#x27;<span class="subst">&#123;$tableName&#125;</span>&#x27;</span></span><br><span class="line"><span class="string">            ORDER BY table_name, index_name, seq_in_index</span></span><br><span class="line"><span class="string">        &quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;indexes&#x27;</span> =&gt; <span class="variable">$indexes</span>,</span><br><span class="line">            <span class="string">&#x27;index_statistics&#x27;</span> =&gt; <span class="variable">$indexStats</span></span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最佳实践总结"><a href="#最佳实践总结" class="headerlink" title="最佳实践总结"></a>最佳实践总结</h2><h3 id="事务处理最佳实践"><a href="#事务处理最佳实践" class="headerlink" title="事务处理最佳实践"></a>事务处理最佳实践</h3><ol>
+<li><strong>合理使用事务范围</strong>：事务应该尽可能小，只包含必要的操作</li>
+<li><strong>避免长事务</strong>：长时间的事务会导致锁等待和死锁问题</li>
+<li><strong>异常处理</strong>：确保所有可能的异常都能正确回滚事务</li>
+<li><strong>日志记录</strong>：记录事务执行过程中的关键信息，便于问题排查</li>
+</ol>
+<h3 id="性能优化最佳实践"><a href="#性能优化最佳实践" class="headerlink" title="性能优化最佳实践"></a>性能优化最佳实践</h3><ol>
+<li><p><strong>查询优化</strong>：</p>
+<ul>
+<li>使用合适的索引</li>
+<li>避免SELECT *，只查询需要的字段</li>
+<li>使用LIMIT限制查询结果数量</li>
+<li>合理使用JOIN，避免N+1查询问题</li>
+</ul>
+</li>
+<li><p><strong>缓存策略</strong>：</p>
+<ul>
+<li>对频繁查询的数据进行缓存</li>
+<li>设置合理的缓存过期时间</li>
+<li>及时清理过期和无效缓存</li>
+</ul>
+</li>
+<li><p><strong>数据库配置</strong>：</p>
+<ul>
+<li>启用查询缓存</li>
+<li>配置合适的连接池大小</li>
+<li>使用读写分离减轻主库压力</li>
+</ul>
+</li>
+<li><p><strong>监控与调试</strong>：</p>
+<ul>
+<li>监控慢查询</li>
+<li>分析数据库性能指标</li>
+<li>定期优化数据库结构</li>
+</ul>
+</li>
+</ol>
+<p>通过合理的事务处理和性能优化策略，可以显著提升ThinkPHP应用的数据库操作效率和系统稳定性。在实际项目中，需要根据具体的业务场景和数据量选择合适的优化方案。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/ThinkPHP6/">ThinkPHP6</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/ThinkPHP8/">ThinkPHP8</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/">数据库事务</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/SQL%E4%BC%98%E5%8C%96/">SQL优化</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/vue/vue3-microfrontend-module-federation/"
+                                   title="Vue 3 微前端架构实战：Module Federation 与 qiankun 深度解析"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Vue 3 微前端架构实战：Module Federation 与 qiankun 深度解析</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/linux/linux-basic-commands-guide/"
+                                   title="Linux基本命令使用技巧：新手必备的60个实用命令详解"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Linux基本命令使用技巧：新手必备的60个实用命令详解</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80"><span class="nav-text">数据库事务处理基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84ACID%E7%89%B9%E6%80%A7"><span class="nav-text">事务的ACID特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%95%E6%93%8E%E8%A6%81%E6%B1%82"><span class="nav-text">数据库引擎要求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP6-8-%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="nav-text">ThinkPHP6&#x2F;8 事务处理方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%87%AA%E5%8A%A8%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86"><span class="nav-text">1. 自动事务处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%89%8B%E5%8A%A8%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86"><span class="nav-text">2. 手动事务处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5"><span class="nav-text">数据库性能优化策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%E4%BC%98%E5%8C%96"><span class="nav-text">1. 查询缓存优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E4%BC%98%E5%8C%96"><span class="nav-text">2. 数据库连接池优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-SQL%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">3. SQL查询优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-text">4. 数据库索引优化建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%B0%83%E8%AF%95"><span class="nav-text">性能监控与调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-SQL%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">1. SQL性能监控中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-text">2. 数据库性能分析工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93"><span class="nav-text">最佳实践总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">事务处理最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">性能优化最佳实践</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80"><span class="nav-text">数据库事务处理基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84ACID%E7%89%B9%E6%80%A7"><span class="nav-text">事务的ACID特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%95%E6%93%8E%E8%A6%81%E6%B1%82"><span class="nav-text">数据库引擎要求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP6-8-%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="nav-text">ThinkPHP6&#x2F;8 事务处理方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%87%AA%E5%8A%A8%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86"><span class="nav-text">1. 自动事务处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%89%8B%E5%8A%A8%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86"><span class="nav-text">2. 手动事务处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5"><span class="nav-text">数据库性能优化策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%E4%BC%98%E5%8C%96"><span class="nav-text">1. 查询缓存优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E4%BC%98%E5%8C%96"><span class="nav-text">2. 数据库连接池优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-SQL%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">3. SQL查询优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-text">4. 数据库索引优化建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%B0%83%E8%AF%95"><span class="nav-text">性能监控与调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-SQL%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-text">1. SQL性能监控中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-text">2. 数据库性能分析工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93"><span class="nav-text">最佳实践总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">事务处理最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">性能优化最佳实践</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

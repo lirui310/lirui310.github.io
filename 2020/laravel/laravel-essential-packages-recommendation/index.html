@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Laravel 开发必备：精选扩展包推荐与实用工具指南 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Laravel 开发必备：精选扩展包推荐与实用工具指南
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2020-03-20 14:15:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/laravel/">laravel</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Laravel/">Laravel</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%89%A9%E5%B1%95%E5%8C%85/">扩展包</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Composer/">Composer</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/">实用工具</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Laravel-开发必备：精选扩展包推荐与实用工具指南"><a href="#Laravel-开发必备：精选扩展包推荐与实用工具指南" class="headerlink" title="Laravel 开发必备：精选扩展包推荐与实用工具指南"></a>Laravel 开发必备：精选扩展包推荐与实用工具指南</h1><p>Laravel 拥有活跃的开发者社区和繁华的扩展包生态系统。本文精选了在实际项目开发中最实用、最受欢迎的扩展包，帮助你提高开发效率，解放双手，让你有更多时间去享受生活。<mcreference link="https://learnku.com/laravel/t/2530/the-highest-amount-of-downloads-of-the-100-laravel-extensions-recommended" index="1">1</mcreference></p>
+<h2 id="开发调试类扩展包"><a href="#开发调试类扩展包" class="headerlink" title="开发调试类扩展包"></a>开发调试类扩展包</h2><h3 id="1-Laravel-Debugbar-页面调试神器"><a href="#1-Laravel-Debugbar-页面调试神器" class="headerlink" title="1. Laravel Debugbar - 页面调试神器"></a>1. Laravel Debugbar - 页面调试神器</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require barryvdh/laravel-debugbar --dev</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>Laravel Debugbar 是每个 Laravel 开发者必不可少的入门级工具之一，它在页面底部显示一个调试工具栏，包含查询信息、路由信息、视图数据等。<mcreference link="https://learnku.com/laravel/t/2530/the-highest-amount-of-downloads-of-the-100-laravel-extensions-recommended" index="1">1</mcreference></p>
+<p><strong>主要功能：</strong></p>
+<ul>
+<li>SQL 查询监控和分析</li>
+<li>路由信息显示</li>
+<li>视图和变量查看</li>
+<li>缓存和会话信息</li>
+<li>邮件预览</li>
+<li>异常和日志查看</li>
+</ul>
+<p><strong>配置示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/debugbar.php</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">    <span class="string">&#x27;enabled&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;DEBUGBAR_ENABLED&#x27;</span>, <span class="literal">null</span>),</span><br><span class="line">    <span class="string">&#x27;except&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;telescope*&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;horizon*&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&#x27;collectors&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;phpinfo&#x27;</span>         =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;messages&#x27;</span>        =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;time&#x27;</span>            =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;memory&#x27;</span>          =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;exceptions&#x27;</span>      =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;log&#x27;</span>             =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;db&#x27;</span>              =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;views&#x27;</span>           =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;route&#x27;</span>           =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;auth&#x27;</span>            =&gt; <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&#x27;gate&#x27;</span>            =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;session&#x27;</span>         =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;symfony_request&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;mail&#x27;</span>            =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;laravel&#x27;</span>         =&gt; <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&#x27;events&#x27;</span>          =&gt; <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&#x27;default_request&#x27;</span> =&gt; <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&#x27;logs&#x27;</span>            =&gt; <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&#x27;files&#x27;</span>           =&gt; <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&#x27;config&#x27;</span>          =&gt; <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&#x27;cache&#x27;</span>           =&gt; <span class="literal">false</span>,</span><br><span class="line">        <span class="string">&#x27;models&#x27;</span>          =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;livewire&#x27;</span>        =&gt; <span class="literal">true</span>,</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Laravel-IDE-Helper-智能提示助手"><a href="#2-Laravel-IDE-Helper-智能提示助手" class="headerlink" title="2. Laravel IDE Helper - 智能提示助手"></a>2. Laravel IDE Helper - 智能提示助手</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require --dev barryvdh/laravel-ide-helper</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>这个包的功能是在项目的根目录下生成一个 IDE 能理解的文件，以便它实现自动完成、代码智能提示和代码跟踪等功能。<mcreference link="https://learnku.com/articles/5512/laravel-recommend-easy-to-use-integrated-version-of-the-expansion-package" index="4">4</mcreference></p>
+<p><strong>使用命令：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 生成 Facade 的 PHPDoc</span></span><br><span class="line">php artisan ide-helper:generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成模型的 PHPDoc</span></span><br><span class="line">php artisan ide-helper:models</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成 PhpStorm Meta 文件</span></span><br><span class="line">php artisan ide-helper:meta</span><br></pre></td></tr></table></figure>
+
+<p><strong>自动化配置：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app/Providers/AppServiceProvider.php</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">register</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">environment</span>() !== <span class="string">&#x27;production&#x27;</span>) &#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">register</span>(<span class="title class_">\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider</span>::<span class="variable language_">class</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Clockwork-Chrome-调试工具"><a href="#3-Clockwork-Chrome-调试工具" class="headerlink" title="3. Clockwork - Chrome 调试工具"></a>3. Clockwork - Chrome 调试工具</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require itsgoingd/clockwork</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>Clockwork 是一个配合 Chrome 浏览器同名插件的调试工具，提供了更加详细的性能分析和调试信息。<mcreference link="https://learnku.com/articles/5512/laravel-recommend-easy-to-use-integrated-version-of-the-expansion-package" index="4">4</mcreference></p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>详细的时间线分析</li>
+<li>数据库查询优化建议</li>
+<li>缓存命中率统计</li>
+<li>队列任务监控</li>
+</ul>
+<h2 id="图片处理类扩展包"><a href="#图片处理类扩展包" class="headerlink" title="图片处理类扩展包"></a>图片处理类扩展包</h2><h3 id="4-Intervention-Image-强大的图片处理库"><a href="#4-Intervention-Image-强大的图片处理库" class="headerlink" title="4. Intervention Image - 强大的图片处理库"></a>4. Intervention Image - 强大的图片处理库</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require intervention/image</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>Intervention Image 是一个强大的图片处理扩展包，支持裁剪、水印、缩放等各种图片操作。<mcreference link="https://learnku.com/laravel/t/2530/the-highest-amount-of-downloads-of-the-100-laravel-extensions-recommended" index="1">1</mcreference></p>
+<p><strong>使用示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Intervention</span>\<span class="title">Image</span>\<span class="title">Facades</span>\<span class="title">Image</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 处理用户头像上传</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> \Illuminate\Http\UploadedFile $file</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> string 返回处理后的文件路径</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">processAvatar</span>(<span class="params"><span class="variable">$file</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="variable">$filename</span> = <span class="title function_ invoke__">time</span>() . <span class="string">&#x27;_&#x27;</span> . <span class="variable">$file</span>-&gt;<span class="title function_ invoke__">getClientOriginalName</span>();</span><br><span class="line">    <span class="variable">$path</span> = <span class="title function_ invoke__">public_path</span>(<span class="string">&#x27;uploads/avatars/&#x27;</span> . <span class="variable">$filename</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建图片实例并处理</span></span><br><span class="line">    <span class="variable">$image</span> = <span class="title class_">Image</span>::<span class="title function_ invoke__">make</span>(<span class="variable">$file</span>)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">resize</span>(<span class="number">300</span>, <span class="number">300</span>, function (<span class="variable">$constraint</span>) &#123;</span><br><span class="line">            <span class="variable">$constraint</span>-&gt;<span class="title function_ invoke__">aspectRatio</span>();</span><br><span class="line">            <span class="variable">$constraint</span>-&gt;<span class="title function_ invoke__">upsize</span>();</span><br><span class="line">        &#125;)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">sharpen</span>(<span class="number">10</span>)</span><br><span class="line">        -&gt;<span class="title function_ invoke__">save</span>(<span class="variable">$path</span>, <span class="number">90</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;uploads/avatars/&#x27;</span> . <span class="variable">$filename</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 添加水印</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $imagePath</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $watermarkPath</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addWatermark</span>(<span class="params"><span class="variable">$imagePath</span>, <span class="variable">$watermarkPath</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="variable">$image</span> = <span class="title class_">Image</span>::<span class="title function_ invoke__">make</span>(<span class="variable">$imagePath</span>);</span><br><span class="line">    <span class="variable">$watermark</span> = <span class="title class_">Image</span>::<span class="title function_ invoke__">make</span>(<span class="variable">$watermarkPath</span>)-&gt;<span class="title function_ invoke__">resize</span>(<span class="number">100</span>, <span class="number">100</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="variable">$image</span>-&gt;<span class="title function_ invoke__">insert</span>(<span class="variable">$watermark</span>, <span class="string">&#x27;bottom-right&#x27;</span>, <span class="number">10</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="variable">$image</span>-&gt;<span class="title function_ invoke__">save</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-BaconQrCode-二维码生成器"><a href="#5-BaconQrCode-二维码生成器" class="headerlink" title="5. BaconQrCode - 二维码生成器"></a>5. BaconQrCode - 二维码生成器</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require bacon/bacon-qr-code</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>BaconQrCode 是一个功能强大的二维码生成扩展包，支持多种格式和自定义样式。<mcreference link="https://blog.csdn.net/qq_32019789/article/details/111625461" index="3">3</mcreference></p>
+<p><strong>使用示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">BaconQrCode</span>\<span class="title">Renderer</span>\<span class="title">ImageRenderer</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">BaconQrCode</span>\<span class="title">Renderer</span>\<span class="title">Image</span>\<span class="title">ImagickImageBackEnd</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">BaconQrCode</span>\<span class="title">Renderer</span>\<span class="title">RendererStyle</span>\<span class="title">RendererStyle</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">BaconQrCode</span>\<span class="title">Writer</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生成二维码</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $content 二维码内容</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> int $size 尺寸</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> string 返回base64编码的图片</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">generateQrCode</span>(<span class="params"><span class="variable">$content</span>, <span class="variable">$size</span> = <span class="number">300</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="variable">$renderer</span> = <span class="keyword">new</span> <span class="title class_">ImageRenderer</span>(</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">RendererStyle</span>(<span class="variable">$size</span>),</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">ImagickImageBackEnd</span>()</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    <span class="variable">$writer</span> = <span class="keyword">new</span> <span class="title class_">Writer</span>(<span class="variable">$renderer</span>);</span><br><span class="line">    <span class="variable">$qrCode</span> = <span class="variable">$writer</span>-&gt;<span class="title function_ invoke__">writeString</span>(<span class="variable">$content</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;data:image/png;base64,&#x27;</span> . <span class="title function_ invoke__">base64_encode</span>(<span class="variable">$qrCode</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生成带Logo的二维码</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $content</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $logoPath</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">generateQrCodeWithLogo</span>(<span class="params"><span class="variable">$content</span>, <span class="variable">$logoPath</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 生成基础二维码</span></span><br><span class="line">    <span class="variable">$qrCode</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">generateQrCode</span>(<span class="variable">$content</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 使用 Intervention Image 添加 Logo</span></span><br><span class="line">    <span class="variable">$qrImage</span> = <span class="title class_">Image</span>::<span class="title function_ invoke__">make</span>(<span class="variable">$qrCode</span>);</span><br><span class="line">    <span class="variable">$logo</span> = <span class="title class_">Image</span>::<span class="title function_ invoke__">make</span>(<span class="variable">$logoPath</span>)-&gt;<span class="title function_ invoke__">resize</span>(<span class="number">60</span>, <span class="number">60</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="variable">$qrImage</span>-&gt;<span class="title function_ invoke__">insert</span>(<span class="variable">$logo</span>, <span class="string">&#x27;center&#x27;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$qrImage</span>-&gt;<span class="title function_ invoke__">encode</span>(<span class="string">&#x27;data-url&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="认证授权类扩展包"><a href="#认证授权类扩展包" class="headerlink" title="认证授权类扩展包"></a>认证授权类扩展包</h2><h3 id="6-JWT-Auth-JSON-Web-Token-认证"><a href="#6-JWT-Auth-JSON-Web-Token-认证" class="headerlink" title="6. JWT Auth - JSON Web Token 认证"></a>6. JWT Auth - JSON Web Token 认证</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require tymon/jwt-auth</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>JWT Auth 提供了完整的 JSON Web Token 认证解决方案，特别适用于 API 开发和单页应用。<mcreference link="https://blog.csdn.net/qq_32019789/article/details/111625461" index="3">3</mcreference></p>
+<p><strong>配置示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/jwt.php</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">    <span class="string">&#x27;secret&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;JWT_SECRET&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;keys&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;public&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;JWT_PUBLIC_KEY&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;private&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;JWT_PRIVATE_KEY&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;passphrase&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;JWT_PASSPHRASE&#x27;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&#x27;ttl&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;JWT_TTL&#x27;</span>, <span class="number">60</span>),</span><br><span class="line">    <span class="string">&#x27;refresh_ttl&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;JWT_REFRESH_TTL&#x27;</span>, <span class="number">20160</span>),</span><br><span class="line">    <span class="string">&#x27;algo&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;JWT_ALGO&#x27;</span>, <span class="string">&#x27;HS256&#x27;</span>),</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Tymon</span>\<span class="title">JWTAuth</span>\<span class="title">Facades</span>\<span class="title">JWTAuth</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Tymon</span>\<span class="title">JWTAuth</span>\<span class="title">Exceptions</span>\<span class="title">JWTException</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AuthController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户登录</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> \Illuminate\Http\Request $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Http\JsonResponse</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">login</span>(<span class="params">Request <span class="variable">$request</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$credentials</span> = <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">only</span>(<span class="string">&#x27;email&#x27;</span>, <span class="string">&#x27;password&#x27;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="variable">$token</span> = <span class="title class_">JWTAuth</span>::<span class="title function_ invoke__">attempt</span>(<span class="variable">$credentials</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([<span class="string">&#x27;error&#x27;</span> =&gt; <span class="string">&#x27;用户名或密码错误&#x27;</span>], <span class="number">401</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (JWTException <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([<span class="string">&#x27;error&#x27;</span> =&gt; <span class="string">&#x27;无法创建token&#x27;</span>], <span class="number">500</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([</span><br><span class="line">            <span class="string">&#x27;token&#x27;</span> =&gt; <span class="variable">$token</span>,</span><br><span class="line">            <span class="string">&#x27;user&#x27;</span> =&gt; <span class="title function_ invoke__">auth</span>()-&gt;<span class="title function_ invoke__">user</span>(),</span><br><span class="line">            <span class="string">&#x27;expires_in&#x27;</span> =&gt; <span class="title function_ invoke__">auth</span>()-&gt;<span class="title function_ invoke__">factory</span>()-&gt;<span class="title function_ invoke__">getTTL</span>() * <span class="number">60</span></span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 刷新token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Http\JsonResponse</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">refresh</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="variable">$token</span> = <span class="title class_">JWTAuth</span>::<span class="title function_ invoke__">refresh</span>();</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([<span class="string">&#x27;token&#x27;</span> =&gt; <span class="variable">$token</span>]);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (JWTException <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([<span class="string">&#x27;error&#x27;</span> =&gt; <span class="string">&#x27;无法刷新token&#x27;</span>], <span class="number">401</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户登出</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Http\JsonResponse</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">logout</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="title class_">JWTAuth</span>::<span class="title function_ invoke__">invalidate</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([<span class="string">&#x27;message&#x27;</span> =&gt; <span class="string">&#x27;成功登出&#x27;</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-Laravel-Permission-权限管理系统"><a href="#7-Laravel-Permission-权限管理系统" class="headerlink" title="7. Laravel Permission - 权限管理系统"></a>7. Laravel Permission - 权限管理系统</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require spatie/laravel-permission</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>Laravel Permission 是一个强大的权限管理包，支持角色和权限的灵活管理。<mcreference link="https://learnku.com/articles/5512/laravel-recommend-easy-to-use-integrated-version-of-the-expansion-package" index="4">4</mcreference></p>
+<p><strong>使用示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Spatie</span>\<span class="title">Permission</span>\<span class="title">Models</span>\<span class="title">Role</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Spatie</span>\<span class="title">Permission</span>\<span class="title">Models</span>\<span class="title">Permission</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建权限</span></span><br><span class="line"><span class="variable">$permission</span> = <span class="title class_">Permission</span>::<span class="title function_ invoke__">create</span>([<span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;edit articles&#x27;</span>]);</span><br><span class="line"><span class="variable">$permission</span> = <span class="title class_">Permission</span>::<span class="title function_ invoke__">create</span>([<span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;delete articles&#x27;</span>]);</span><br><span class="line"><span class="variable">$permission</span> = <span class="title class_">Permission</span>::<span class="title function_ invoke__">create</span>([<span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;publish articles&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建角色并分配权限</span></span><br><span class="line"><span class="variable">$role</span> = <span class="title class_">Role</span>::<span class="title function_ invoke__">create</span>([<span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;writer&#x27;</span>]);</span><br><span class="line"><span class="variable">$role</span>-&gt;<span class="title function_ invoke__">givePermissionTo</span>(<span class="string">&#x27;edit articles&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$role</span> = <span class="title class_">Role</span>::<span class="title function_ invoke__">create</span>([<span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;admin&#x27;</span>]);</span><br><span class="line"><span class="variable">$role</span>-&gt;<span class="title function_ invoke__">givePermissionTo</span>(<span class="title class_">Permission</span>::<span class="title function_ invoke__">all</span>());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用户模型中使用</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">Spatie</span>\<span class="title">Permission</span>\<span class="title">Traits</span>\<span class="title">HasRoles</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Authenticatable</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">HasRoles</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 分配角色和权限</span></span><br><span class="line"><span class="variable">$user</span>-&gt;<span class="title function_ invoke__">assignRole</span>(<span class="string">&#x27;writer&#x27;</span>);</span><br><span class="line"><span class="variable">$user</span>-&gt;<span class="title function_ invoke__">givePermissionTo</span>(<span class="string">&#x27;edit articles&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查权限</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$user</span>-&gt;<span class="title function_ invoke__">can</span>(<span class="string">&#x27;edit articles&#x27;</span>)) &#123;</span><br><span class="line">    <span class="comment">// 用户有编辑文章的权限</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$user</span>-&gt;<span class="title function_ invoke__">hasRole</span>(<span class="string">&#x27;admin&#x27;</span>)) &#123;</span><br><span class="line">    <span class="comment">// 用户是管理员</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据处理类扩展包"><a href="#数据处理类扩展包" class="headerlink" title="数据处理类扩展包"></a>数据处理类扩展包</h2><h3 id="8-Laravel-Excel-Excel-文件处理"><a href="#8-Laravel-Excel-Excel-文件处理" class="headerlink" title="8. Laravel Excel - Excel 文件处理"></a>8. Laravel Excel - Excel 文件处理</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require maatwebsite/excel</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>Laravel Excel 是一个强大的 Excel 文件处理工具，支持导入导出、数据验证等功能。<mcreference link="https://learnku.com/laravel/t/2530/the-highest-amount-of-downloads-of-the-100-laravel-extensions-recommended" index="1">1</mcreference></p>
+<p><strong>导出示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Maatwebsite</span>\<span class="title">Excel</span>\<span class="title">Facades</span>\<span class="title">Excel</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Exports</span>\<span class="title">UsersExport</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 导出用户数据</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> \Symfony\Component\HttpFoundation\BinaryFileResponse</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">exportUsers</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Excel</span>::<span class="title function_ invoke__">download</span>(<span class="keyword">new</span> <span class="title class_">UsersExport</span>, <span class="string">&#x27;users.xlsx&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// app/Exports/UsersExport.php</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">Maatwebsite</span>\<span class="title">Excel</span>\<span class="title">Concerns</span>\<span class="title">FromCollection</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Maatwebsite</span>\<span class="title">Excel</span>\<span class="title">Concerns</span>\<span class="title">WithHeadings</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Maatwebsite</span>\<span class="title">Excel</span>\<span class="title">Concerns</span>\<span class="title">WithMapping</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UsersExport</span> <span class="keyword">implements</span> <span class="title">FromCollection</span>, <span class="title">WithHeadings</span>, <span class="title">WithMapping</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取数据集合</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Support\Collection</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">collection</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">User</span>::<span class="title function_ invoke__">with</span>(<span class="string">&#x27;profile&#x27;</span>)-&gt;<span class="title function_ invoke__">get</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 设置表头</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">headings</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;ID&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;姓名&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;邮箱&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;注册时间&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;状态&#x27;</span></span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 数据映射</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> mixed $user</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">map</span>(<span class="params"><span class="variable">$user</span></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="variable">$user</span>-&gt;id,</span><br><span class="line">            <span class="variable">$user</span>-&gt;name,</span><br><span class="line">            <span class="variable">$user</span>-&gt;email,</span><br><span class="line">            <span class="variable">$user</span>-&gt;created_at-&gt;<span class="title function_ invoke__">format</span>(<span class="string">&#x27;Y-m-d H:i:s&#x27;</span>),</span><br><span class="line">            <span class="variable">$user</span>-&gt;is_active ? <span class="string">&#x27;激活&#x27;</span> : <span class="string">&#x27;未激活&#x27;</span></span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>导入示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app/Imports/UsersImport.php</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">Maatwebsite</span>\<span class="title">Excel</span>\<span class="title">Concerns</span>\<span class="title">ToModel</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Maatwebsite</span>\<span class="title">Excel</span>\<span class="title">Concerns</span>\<span class="title">WithHeadingRow</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Maatwebsite</span>\<span class="title">Excel</span>\<span class="title">Concerns</span>\<span class="title">WithValidation</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UsersImport</span> <span class="keyword">implements</span> <span class="title">ToModel</span>, <span class="title">WithHeadingRow</span>, <span class="title">WithValidation</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将行数据转换为模型</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> array $row</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Database\Eloquent\Model|null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">model</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$row</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">User</span>([</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span> =&gt; <span class="variable">$row</span>[<span class="string">&#x27;name&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;email&#x27;</span> =&gt; <span class="variable">$row</span>[<span class="string">&#x27;email&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;password&#x27;</span> =&gt; <span class="title class_">Hash</span>::<span class="title function_ invoke__">make</span>(<span class="variable">$row</span>[<span class="string">&#x27;password&#x27;</span>]),</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 数据验证规则</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">rules</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;required|string|max:255&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;email&#x27;</span> =&gt; <span class="string">&#x27;required|email|unique:users,email&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;password&#x27;</span> =&gt; <span class="string">&#x27;required|min:6&#x27;</span>,</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 控制器中使用</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">importUsers</span>(<span class="params">Request <span class="variable">$request</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="title class_">Excel</span>::<span class="title function_ invoke__">import</span>(<span class="keyword">new</span> <span class="title class_">UsersImport</span>, <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">file</span>(<span class="string">&#x27;excel&#x27;</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">back</span>()-&gt;<span class="title function_ invoke__">with</span>(<span class="string">&#x27;success&#x27;</span>, <span class="string">&#x27;用户导入成功！&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-高性能-CSV-导出包"><a href="#9-高性能-CSV-导出包" class="headerlink" title="9. 高性能 CSV 导出包"></a>9. 高性能 CSV 导出包</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require haveyb/export-csv</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>这是一个专门用于处理大数据量 CSV 导出的扩展包，采用 PHP 迭代器 yield，可以导出百万级数据而不会拖慢服务器。<mcreference link="https://blog.csdn.net/qq_32019789/article/details/111625461" index="3">3</mcreference></p>
+<p><strong>使用示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Haveyb</span>\<span class="title">ExportCsv</span>\<span class="title">ExportCsv</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 导出大量用户数据</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> \Symfony\Component\HttpFoundation\StreamedResponse</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">exportLargeUserData</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="variable">$headers</span> = [<span class="string">&#x27;ID&#x27;</span>, <span class="string">&#x27;姓名&#x27;</span>, <span class="string">&#x27;邮箱&#x27;</span>, <span class="string">&#x27;注册时间&#x27;</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="variable">$dataGenerator</span> = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 使用 chunk 分批处理数据</span></span><br><span class="line">        <span class="title class_">User</span>::<span class="title function_ invoke__">chunk</span>(<span class="number">1000</span>, function(<span class="variable">$users</span>) &#123;</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="variable">$users</span> <span class="keyword">as</span> <span class="variable">$user</span>) &#123;</span><br><span class="line">                <span class="keyword">yield</span> [</span><br><span class="line">                    <span class="variable">$user</span>-&gt;id,</span><br><span class="line">                    <span class="variable">$user</span>-&gt;name,</span><br><span class="line">                    <span class="variable">$user</span>-&gt;email,</span><br><span class="line">                    <span class="variable">$user</span>-&gt;created_at-&gt;<span class="title function_ invoke__">format</span>(<span class="string">&#x27;Y-m-d H:i:s&#x27;</span>)</span><br><span class="line">                ];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">ExportCsv</span>::<span class="title function_ invoke__">export</span>(<span class="string">&#x27;users.csv&#x27;</span>, <span class="variable">$headers</span>, <span class="variable">$dataGenerator</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="支付集成类扩展包"><a href="#支付集成类扩展包" class="headerlink" title="支付集成类扩展包"></a>支付集成类扩展包</h2><h3 id="10-Yansongda-Pay-统一支付SDK"><a href="#10-Yansongda-Pay-统一支付SDK" class="headerlink" title="10. Yansongda Pay - 统一支付SDK"></a>10. Yansongda Pay - 统一支付SDK</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require yansongda/pay</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>这是一个集成了微信支付和支付宝支付的统一 SDK，使用简单，文档清晰。<mcreference link="https://blog.csdn.net/qq_32019789/article/details/111625461" index="3">3</mcreference></p>
+<p><strong>配置示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/pay.php</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">    <span class="string">&#x27;alipay&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;app_id&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;ALIPAY_APP_ID&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;ali_public_key&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;ALIPAY_PUBLIC_KEY&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;private_key&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;ALIPAY_PRIVATE_KEY&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;log&#x27;</span> =&gt; [</span><br><span class="line">            <span class="string">&#x27;file&#x27;</span> =&gt; <span class="title function_ invoke__">storage_path</span>(<span class="string">&#x27;logs/alipay.log&#x27;</span>),</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">&#x27;mode&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;ALIPAY_MODE&#x27;</span>, <span class="string">&#x27;normal&#x27;</span>), <span class="comment">// normal or dev</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&#x27;wechat&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;app_id&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;WECHAT_APP_ID&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;mch_id&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;WECHAT_MCH_ID&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;key&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;WECHAT_KEY&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;cert_client&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;WECHAT_CERT_CLIENT&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;cert_key&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;WECHAT_CERT_KEY&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;log&#x27;</span> =&gt; [</span><br><span class="line">            <span class="string">&#x27;file&#x27;</span> =&gt; <span class="title function_ invoke__">storage_path</span>(<span class="string">&#x27;logs/wechat.log&#x27;</span>),</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">&#x27;mode&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;WECHAT_MODE&#x27;</span>, <span class="string">&#x27;normal&#x27;</span>), <span class="comment">// normal or dev</span></span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Yansongda</span>\<span class="title">Pay</span>\<span class="title">Pay</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PaymentController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 支付宝支付</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> \Illuminate\Http\Request $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> mixed</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">alipay</span>(<span class="params">Request <span class="variable">$request</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$order</span> = [</span><br><span class="line">            <span class="string">&#x27;out_trade_no&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>(),</span><br><span class="line">            <span class="string">&#x27;total_amount&#x27;</span> =&gt; <span class="string">&#x27;0.01&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;subject&#x27;</span> =&gt; <span class="string">&#x27;测试订单&#x27;</span>,</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$alipay</span> = <span class="title class_">Pay</span>::<span class="title function_ invoke__">alipay</span>(<span class="title function_ invoke__">config</span>(<span class="string">&#x27;pay.alipay&#x27;</span>));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$alipay</span>-&gt;<span class="title function_ invoke__">web</span>(<span class="variable">$order</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 微信支付</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> \Illuminate\Http\Request $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Http\JsonResponse</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">wechatPay</span>(<span class="params">Request <span class="variable">$request</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$order</span> = [</span><br><span class="line">            <span class="string">&#x27;out_trade_no&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>(),</span><br><span class="line">            <span class="string">&#x27;total_fee&#x27;</span> =&gt; <span class="string">&#x27;1&#x27;</span>, <span class="comment">// 单位：分</span></span><br><span class="line">            <span class="string">&#x27;body&#x27;</span> =&gt; <span class="string">&#x27;测试订单&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;openid&#x27;</span> =&gt; <span class="variable">$request</span>-&gt;openid,</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$wechat</span> = <span class="title class_">Pay</span>::<span class="title function_ invoke__">wechat</span>(<span class="title function_ invoke__">config</span>(<span class="string">&#x27;pay.wechat&#x27;</span>));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>(<span class="variable">$wechat</span>-&gt;<span class="title function_ invoke__">mp</span>(<span class="variable">$order</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 支付回调处理</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> \Illuminate\Http\Request $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Http\Response</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">notify</span>(<span class="params">Request <span class="variable">$request</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$alipay</span> = <span class="title class_">Pay</span>::<span class="title function_ invoke__">alipay</span>(<span class="title function_ invoke__">config</span>(<span class="string">&#x27;pay.alipay&#x27;</span>));</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="variable">$data</span> = <span class="variable">$alipay</span>-&gt;<span class="title function_ invoke__">verify</span>(); <span class="comment">// 验证签名</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 处理订单逻辑</span></span><br><span class="line">            <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">handleOrder</span>(<span class="variable">$data</span>-&gt;out_trade_no, <span class="variable">$data</span>-&gt;trade_status);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$alipay</span>-&gt;<span class="title function_ invoke__">success</span>();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$alipay</span>-&gt;<span class="title function_ invoke__">success</span>(); <span class="comment">// 为了防止重复通知，即使处理失败也返回成功</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理订单状态</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $orderNo</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $status</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">handleOrder</span>(<span class="params"><span class="variable">$orderNo</span>, <span class="variable">$status</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$order</span> = <span class="title class_">Order</span>::<span class="title function_ invoke__">where</span>(<span class="string">&#x27;order_no&#x27;</span>, <span class="variable">$orderNo</span>)-&gt;<span class="title function_ invoke__">first</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$order</span> &amp;&amp; <span class="variable">$status</span> === <span class="string">&#x27;TRADE_SUCCESS&#x27;</span>) &#123;</span><br><span class="line">            <span class="variable">$order</span>-&gt;<span class="title function_ invoke__">update</span>([<span class="string">&#x27;status&#x27;</span> =&gt; <span class="string">&#x27;paid&#x27;</span>]);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 触发支付成功事件</span></span><br><span class="line">            <span class="title function_ invoke__">event</span>(<span class="keyword">new</span> <span class="title class_">OrderPaid</span>(<span class="variable">$order</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="API-开发类扩展包"><a href="#API-开发类扩展包" class="headerlink" title="API 开发类扩展包"></a>API 开发类扩展包</h2><h3 id="11-Dingo-API-API-开发框架"><a href="#11-Dingo-API-API-开发框架" class="headerlink" title="11. Dingo API - API 开发框架"></a>11. Dingo API - API 开发框架</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require dingo/api</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>Dingo API 是一个构建 API 服务器的完整解决方案，提供了版本控制、限流、转换器等功能。<mcreference link="https://learnku.com/laravel/t/2530/the-highest-amount-of-downloads-of-the-100-laravel-extensions-recommended" index="1">1</mcreference></p>
+<p><strong>配置示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/api.php</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">    <span class="string">&#x27;standardsTree&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_STANDARDS_TREE&#x27;</span>, <span class="string">&#x27;vnd&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;subtype&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_SUBTYPE&#x27;</span>, <span class="string">&#x27;myapp&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;version&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_VERSION&#x27;</span>, <span class="string">&#x27;v1&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;prefix&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_PREFIX&#x27;</span>, <span class="string">&#x27;api&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;domain&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_DOMAIN&#x27;</span>, <span class="literal">null</span>),</span><br><span class="line">    <span class="string">&#x27;name&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_NAME&#x27;</span>, <span class="string">&#x27;My API&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;conditionalRequest&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_CONDITIONAL_REQUEST&#x27;</span>, <span class="literal">true</span>),</span><br><span class="line">    <span class="string">&#x27;strict&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_STRICT&#x27;</span>, <span class="literal">false</span>),</span><br><span class="line">    <span class="string">&#x27;debug&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_DEBUG&#x27;</span>, <span class="literal">false</span>),</span><br><span class="line">    <span class="string">&#x27;errorFormat&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;message&#x27;</span> =&gt; <span class="string">&#x27;:message&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;errors&#x27;</span> =&gt; <span class="string">&#x27;:errors&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;code&#x27;</span> =&gt; <span class="string">&#x27;:code&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;status_code&#x27;</span> =&gt; <span class="string">&#x27;:status_code&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;debug&#x27;</span> =&gt; <span class="string">&#x27;:debug&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&#x27;middleware&#x27;</span> =&gt; [],</span><br><span class="line">    <span class="string">&#x27;auth&#x27;</span> =&gt; [],</span><br><span class="line">    <span class="string">&#x27;throttling&#x27;</span> =&gt; [],</span><br><span class="line">    <span class="string">&#x27;transformer&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_TRANSFORMER&#x27;</span>, <span class="title class_">Dingo\Api\Transformer\Adapter\Fractal</span>::<span class="variable language_">class</span>),</span><br><span class="line">    <span class="string">&#x27;defaultFormat&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;API_DEFAULT_FORMAT&#x27;</span>, <span class="string">&#x27;json&#x27;</span>),</span><br><span class="line">    <span class="string">&#x27;formats&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;json&#x27;</span> =&gt; <span class="title class_">Dingo\Api\Http\Response\Format\Json</span>::<span class="variable language_">class</span>,</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Dingo</span>\<span class="title">Api</span>\<span class="title">Routing</span>\<span class="title">Helpers</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">Helpers</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取用户列表</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Dingo\Api\Http\Response</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$users</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">paginate</span>(<span class="number">15</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;response-&gt;<span class="title function_ invoke__">paginator</span>(<span class="variable">$users</span>, <span class="keyword">new</span> <span class="title class_">UserTransformer</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取单个用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Dingo\Api\Http\Response</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span>(<span class="params"><span class="variable">$id</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">findOrFail</span>(<span class="variable">$id</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;response-&gt;<span class="title function_ invoke__">item</span>(<span class="variable">$user</span>, <span class="keyword">new</span> <span class="title class_">UserTransformer</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> \Illuminate\Http\Request $request</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Dingo\Api\Http\Response</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">store</span>(<span class="params">Request <span class="variable">$request</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">create</span>(<span class="variable">$request</span>-&gt;<span class="title function_ invoke__">validated</span>());</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;response-&gt;<span class="title function_ invoke__">item</span>(<span class="variable">$user</span>, <span class="keyword">new</span> <span class="title class_">UserTransformer</span>)</span><br><span class="line">                            -&gt;<span class="title function_ invoke__">setStatusCode</span>(<span class="number">201</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理API异常</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $message</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int $statusCode</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> \Symfony\Component\HttpKernel\Exception\HttpException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">errorResponse</span>(<span class="params"><span class="variable">$message</span>, <span class="variable">$statusCode</span> = <span class="number">400</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;response-&gt;<span class="title function_ invoke__">error</span>(<span class="variable">$message</span>, <span class="variable">$statusCode</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据转换器</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">League</span>\<span class="title">Fractal</span>\<span class="title">TransformerAbstract</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserTransformer</span> <span class="keyword">extends</span> <span class="title">TransformerAbstract</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 转换用户数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> \App\Models\User $user</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">transform</span>(<span class="params">User <span class="variable">$user</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;id&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;id,</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;name,</span><br><span class="line">            <span class="string">&#x27;email&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;email,</span><br><span class="line">            <span class="string">&#x27;created_at&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;created_at-&gt;<span class="title function_ invoke__">toISOString</span>(),</span><br><span class="line">            <span class="string">&#x27;updated_at&#x27;</span> =&gt; <span class="variable">$user</span>-&gt;updated_at-&gt;<span class="title function_ invoke__">toISOString</span>(),</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="12-Laravel-CORS-跨域支持"><a href="#12-Laravel-CORS-跨域支持" class="headerlink" title="12. Laravel CORS - 跨域支持"></a>12. Laravel CORS - 跨域支持</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require barryvdh/laravel-cors</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>Laravel CORS 提供了跨域资源共享的支持，对于前后端分离的项目非常有用。<mcreference link="https://learnku.com/laravel/t/2530/the-highest-amount-of-downloads-of-the-100-laravel-extensions-recommended" index="1">1</mcreference></p>
+<p><strong>配置示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/cors.php</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">    <span class="string">&#x27;paths&#x27;</span> =&gt; [<span class="string">&#x27;api/*&#x27;</span>, <span class="string">&#x27;sanctum/csrf-cookie&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;allowed_methods&#x27;</span> =&gt; [<span class="string">&#x27;*&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;allowed_origins&#x27;</span> =&gt; [<span class="string">&#x27;*&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;allowed_origins_patterns&#x27;</span> =&gt; [],</span><br><span class="line">    <span class="string">&#x27;allowed_headers&#x27;</span> =&gt; [<span class="string">&#x27;*&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;exposed_headers&#x27;</span> =&gt; [],</span><br><span class="line">    <span class="string">&#x27;max_age&#x27;</span> =&gt; <span class="number">0</span>,</span><br><span class="line">    <span class="string">&#x27;supports_credentials&#x27;</span> =&gt; <span class="literal">false</span>,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h2 id="实用工具类扩展包"><a href="#实用工具类扩展包" class="headerlink" title="实用工具类扩展包"></a>实用工具类扩展包</h2><h3 id="13-Laravel-Log-Viewer-日志查看器"><a href="#13-Laravel-Log-Viewer-日志查看器" class="headerlink" title="13. Laravel Log Viewer - 日志查看器"></a>13. Laravel Log Viewer - 日志查看器</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require rap2hpoutre/laravel-log-viewer</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>这是一个非常方便的页面日志查看工具，可以在浏览器中直接查看应用日志。<mcreference link="https://learnku.com/articles/5512/laravel-recommend-easy-to-use-integrated-version-of-the-expansion-package" index="4">4</mcreference></p>
+<p><strong>路由配置：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// routes/web.php</span></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;logs&#x27;</span>, <span class="string">&#x27;\Rap2hpoutre\LaravelLogViewer\LogViewerController@index&#x27;</span>)</span><br><span class="line">    -&gt;<span class="title function_ invoke__">middleware</span>(<span class="string">&#x27;auth&#x27;</span>)</span><br><span class="line">    -&gt;<span class="title function_ invoke__">name</span>(<span class="string">&#x27;logs&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="14-Laravel-Socialite-第三方登录"><a href="#14-Laravel-Socialite-第三方登录" class="headerlink" title="14. Laravel Socialite - 第三方登录"></a>14. Laravel Socialite - 第三方登录</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require laravel/socialite</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>Laravel Socialite 提供了 OAuth 认证的简单、便捷的方法，支持 Facebook、Twitter、Google、GitHub 等平台。<mcreference link="https://learnku.com/articles/5512/laravel-recommend-easy-to-use-integrated-version-of-the-expansion-package" index="4">4</mcreference></p>
+<p><strong>配置示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/services.php</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">    <span class="string">&#x27;github&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;client_id&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;GITHUB_CLIENT_ID&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;client_secret&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;GITHUB_CLIENT_SECRET&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;redirect&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;GITHUB_REDIRECT_URL&#x27;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&#x27;google&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;client_id&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;GOOGLE_CLIENT_ID&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;client_secret&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;GOOGLE_CLIENT_SECRET&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;redirect&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;GOOGLE_REDIRECT_URL&#x27;</span>),</span><br><span class="line">    ],</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用示例：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Laravel</span>\<span class="title">Socialite</span>\<span class="title">Facades</span>\<span class="title">Socialite</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SocialAuthController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 重定向到第三方认证页面</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $provider</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Symfony\Component\HttpFoundation\RedirectResponse</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">redirectToProvider</span>(<span class="params"><span class="variable">$provider</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Socialite</span>::<span class="title function_ invoke__">driver</span>(<span class="variable">$provider</span>)-&gt;<span class="title function_ invoke__">redirect</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 处理第三方认证回调</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $provider</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Http\RedirectResponse</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handleProviderCallback</span>(<span class="params"><span class="variable">$provider</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="variable">$socialUser</span> = <span class="title class_">Socialite</span>::<span class="title function_ invoke__">driver</span>(<span class="variable">$provider</span>)-&gt;<span class="title function_ invoke__">user</span>();</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 查找或创建用户</span></span><br><span class="line">            <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">where</span>(<span class="string">&#x27;email&#x27;</span>, <span class="variable">$socialUser</span>-&gt;<span class="title function_ invoke__">getEmail</span>())-&gt;<span class="title function_ invoke__">first</span>();</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (!<span class="variable">$user</span>) &#123;</span><br><span class="line">                <span class="variable">$user</span> = <span class="title class_">User</span>::<span class="title function_ invoke__">create</span>([</span><br><span class="line">                    <span class="string">&#x27;name&#x27;</span> =&gt; <span class="variable">$socialUser</span>-&gt;<span class="title function_ invoke__">getName</span>(),</span><br><span class="line">                    <span class="string">&#x27;email&#x27;</span> =&gt; <span class="variable">$socialUser</span>-&gt;<span class="title function_ invoke__">getEmail</span>(),</span><br><span class="line">                    <span class="string">&#x27;avatar&#x27;</span> =&gt; <span class="variable">$socialUser</span>-&gt;<span class="title function_ invoke__">getAvatar</span>(),</span><br><span class="line">                    <span class="string">&#x27;provider&#x27;</span> =&gt; <span class="variable">$provider</span>,</span><br><span class="line">                    <span class="string">&#x27;provider_id&#x27;</span> =&gt; <span class="variable">$socialUser</span>-&gt;<span class="title function_ invoke__">getId</span>(),</span><br><span class="line">                ]);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="title class_">Auth</span>::<span class="title function_ invoke__">login</span>(<span class="variable">$user</span>, <span class="literal">true</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">redirect</span>()-&gt;<span class="title function_ invoke__">intended</span>(<span class="string">&#x27;/dashboard&#x27;</span>);</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">redirect</span>(<span class="string">&#x27;/login&#x27;</span>)-&gt;<span class="title function_ invoke__">with</span>(<span class="string">&#x27;error&#x27;</span>, <span class="string">&#x27;第三方登录失败&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能优化类扩展包"><a href="#性能优化类扩展包" class="headerlink" title="性能优化类扩展包"></a>性能优化类扩展包</h2><h3 id="15-Laravel-OPcache-操作码缓存"><a href="#15-Laravel-OPcache-操作码缓存" class="headerlink" title="15. Laravel OPcache - 操作码缓存"></a>15. Laravel OPcache - 操作码缓存</h3><p><strong>安装：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require appstract/laravel-opcache</span><br></pre></td></tr></table></figure>
+
+<p><strong>简介：</strong><br>Laravel OPcache 包提供了 OPcache 的管理功能，可以显著提升应用性能。<mcreference link="https://learnku.com/articles/5512/laravel-recommend-easy-to-use-integrated-version-of-the-expansion-package" index="4">4</mcreference></p>
+<p><strong>使用命令：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 清除 OPcache</span></span><br><span class="line">php artisan opcache:clear</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 OPcache 状态</span></span><br><span class="line">php artisan opcache:status</span><br><span class="line"></span><br><span class="line"><span class="comment"># 预编译文件</span></span><br><span class="line">php artisan opcache:compile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看配置</span></span><br><span class="line">php artisan opcache:config</span><br></pre></td></tr></table></figure>
+
+<p><strong>在控制器中使用：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Appstract</span>\<span class="title">Opcache</span>\<span class="title">OpcacheFacade</span> <span class="keyword">as</span> <span class="title">OPcache</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SystemController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 清除缓存</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Http\JsonResponse</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">clearCache</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 清除应用缓存</span></span><br><span class="line">        <span class="title class_">Artisan</span>::<span class="title function_ invoke__">call</span>(<span class="string">&#x27;cache:clear&#x27;</span>);</span><br><span class="line">        <span class="title class_">Artisan</span>::<span class="title function_ invoke__">call</span>(<span class="string">&#x27;config:clear&#x27;</span>);</span><br><span class="line">        <span class="title class_">Artisan</span>::<span class="title function_ invoke__">call</span>(<span class="string">&#x27;route:clear&#x27;</span>);</span><br><span class="line">        <span class="title class_">Artisan</span>::<span class="title function_ invoke__">call</span>(<span class="string">&#x27;view:clear&#x27;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 清除 OPcache</span></span><br><span class="line">        <span class="title class_">OPcache</span>::<span class="title function_ invoke__">clear</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([<span class="string">&#x27;message&#x27;</span> =&gt; <span class="string">&#x27;缓存清除成功&#x27;</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取系统状态</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> \Illuminate\Http\JsonResponse</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getSystemStatus</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">response</span>()-&gt;<span class="title function_ invoke__">json</span>([</span><br><span class="line">            <span class="string">&#x27;opcache_status&#x27;</span> =&gt; <span class="title class_">OPcache</span>::<span class="title function_ invoke__">getStatus</span>(),</span><br><span class="line">            <span class="string">&#x27;opcache_config&#x27;</span> =&gt; <span class="title class_">OPcache</span>::<span class="title function_ invoke__">getConfig</span>(),</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="扩展包选择建议"><a href="#扩展包选择建议" class="headerlink" title="扩展包选择建议"></a>扩展包选择建议</h2><h3 id="按使用频率分类"><a href="#按使用频率分类" class="headerlink" title="按使用频率分类"></a>按使用频率分类</h3><p><strong>必装扩展包（开发阶段）：</strong></p>
+<ul>
+<li><code>barryvdh/laravel-debugbar</code> - 调试工具栏</li>
+<li><code>barryvdh/laravel-ide-helper</code> - IDE 智能提示</li>
+<li><code>laravel/telescope</code> - 应用洞察工具</li>
+</ul>
+<p><strong>常用功能扩展包：</strong></p>
+<ul>
+<li><code>intervention/image</code> - 图片处理</li>
+<li><code>maatwebsite/excel</code> - Excel 处理</li>
+<li><code>tymon/jwt-auth</code> - JWT 认证</li>
+<li><code>spatie/laravel-permission</code> - 权限管理</li>
+</ul>
+<p><strong>特定需求扩展包：</strong></p>
+<ul>
+<li><code>yansongda/pay</code> - 支付集成</li>
+<li><code>bacon/bacon-qr-code</code> - 二维码生成</li>
+<li><code>laravel/socialite</code> - 第三方登录</li>
+<li><code>dingo/api</code> - API 开发</li>
+</ul>
+<h3 id="选择原则"><a href="#选择原则" class="headerlink" title="选择原则"></a>选择原则</h3><ol>
+<li><strong>优先选择官方或知名开发者的包</strong></li>
+<li><strong>查看包的维护状态和更新频率</strong></li>
+<li><strong>考虑包的文档完整性</strong></li>
+<li><strong>评估包的性能影响</strong></li>
+<li><strong>检查包的 Laravel 版本兼容性</strong></li>
+</ol>
+<h3 id="安装建议"><a href="#安装建议" class="headerlink" title="安装建议"></a>安装建议</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开发环境依赖</span></span><br><span class="line">composer require --dev barryvdh/laravel-debugbar</span><br><span class="line">composer require --dev barryvdh/laravel-ide-helper</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生产环境依赖</span></span><br><span class="line">composer require intervention/image</span><br><span class="line">composer require tymon/jwt-auth</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这些扩展包都是经过实际项目验证的优秀工具，能够显著提升开发效率。在选择扩展包时，建议：</p>
+<ol>
+<li><strong>根据项目需求选择</strong>：不要盲目安装所有扩展包</li>
+<li><strong>关注包的维护状态</strong>：选择活跃维护的包</li>
+<li><strong>阅读官方文档</strong>：确保正确使用</li>
+<li><strong>测试兼容性</strong>：在开发环境充分测试</li>
+<li><strong>关注性能影响</strong>：避免过度依赖扩展包</li>
+</ol>
+<p>记住，好的扩展包能让你事半功倍，但过度依赖也可能带来维护负担。选择适合的工具，写出优雅的代码！</p>
+<hr>
+<p><em>本文推荐的扩展包都是基于实际项目经验，建议结合具体需求选择使用。</em></p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Laravel/">Laravel</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%89%A9%E5%B1%95%E5%8C%85/">扩展包</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Composer/">Composer</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7/">实用工具</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2021/php/php8-union-types-practical-guide/"
+                                   title="PHP 8.0 联合类型实战指南：让你的代码更灵活"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8.0 联合类型实战指南：让你的代码更灵活</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2019/laravel/laravel-best-practices-development-guide/"
+                                   title="Laravel 开发最佳实践：18个提升代码质量的黄金法则"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Laravel 开发最佳实践：18个提升代码质量的黄金法则</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Laravel-%E5%BC%80%E5%8F%91%E5%BF%85%E5%A4%87%EF%BC%9A%E7%B2%BE%E9%80%89%E6%89%A9%E5%B1%95%E5%8C%85%E6%8E%A8%E8%8D%90%E4%B8%8E%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7%E6%8C%87%E5%8D%97"><span class="nav-text">Laravel 开发必备：精选扩展包推荐与实用工具指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E8%B0%83%E8%AF%95%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">开发调试类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Laravel-Debugbar-%E9%A1%B5%E9%9D%A2%E8%B0%83%E8%AF%95%E7%A5%9E%E5%99%A8"><span class="nav-text">1. Laravel Debugbar - 页面调试神器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Laravel-IDE-Helper-%E6%99%BA%E8%83%BD%E6%8F%90%E7%A4%BA%E5%8A%A9%E6%89%8B"><span class="nav-text">2. Laravel IDE Helper - 智能提示助手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Clockwork-Chrome-%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-text">3. Clockwork - Chrome 调试工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">图片处理类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Intervention-Image-%E5%BC%BA%E5%A4%A7%E7%9A%84%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86%E5%BA%93"><span class="nav-text">4. Intervention Image - 强大的图片处理库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-BaconQrCode-%E4%BA%8C%E7%BB%B4%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-text">5. BaconQrCode - 二维码生成器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">认证授权类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-JWT-Auth-JSON-Web-Token-%E8%AE%A4%E8%AF%81"><span class="nav-text">6. JWT Auth - JSON Web Token 认证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Laravel-Permission-%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="nav-text">7. Laravel Permission - 权限管理系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">数据处理类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-Laravel-Excel-Excel-%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86"><span class="nav-text">8. Laravel Excel - Excel 文件处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E9%AB%98%E6%80%A7%E8%83%BD-CSV-%E5%AF%BC%E5%87%BA%E5%8C%85"><span class="nav-text">9. 高性能 CSV 导出包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E4%BB%98%E9%9B%86%E6%88%90%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">支付集成类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-Yansongda-Pay-%E7%BB%9F%E4%B8%80%E6%94%AF%E4%BB%98SDK"><span class="nav-text">10. Yansongda Pay - 统一支付SDK</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-%E5%BC%80%E5%8F%91%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">API 开发类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#11-Dingo-API-API-%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6"><span class="nav-text">11. Dingo API - API 开发框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-Laravel-CORS-%E8%B7%A8%E5%9F%9F%E6%94%AF%E6%8C%81"><span class="nav-text">12. Laravel CORS - 跨域支持</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">实用工具类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#13-Laravel-Log-Viewer-%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B%E5%99%A8"><span class="nav-text">13. Laravel Log Viewer - 日志查看器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-Laravel-Socialite-%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95"><span class="nav-text">14. Laravel Socialite - 第三方登录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">性能优化类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#15-Laravel-OPcache-%E6%93%8D%E4%BD%9C%E7%A0%81%E7%BC%93%E5%AD%98"><span class="nav-text">15. Laravel OPcache - 操作码缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E5%8C%85%E9%80%89%E6%8B%A9%E5%BB%BA%E8%AE%AE"><span class="nav-text">扩展包选择建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E4%BD%BF%E7%94%A8%E9%A2%91%E7%8E%87%E5%88%86%E7%B1%BB"><span class="nav-text">按使用频率分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%8E%9F%E5%88%99"><span class="nav-text">选择原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%BB%BA%E8%AE%AE"><span class="nav-text">安装建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Laravel-%E5%BC%80%E5%8F%91%E5%BF%85%E5%A4%87%EF%BC%9A%E7%B2%BE%E9%80%89%E6%89%A9%E5%B1%95%E5%8C%85%E6%8E%A8%E8%8D%90%E4%B8%8E%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7%E6%8C%87%E5%8D%97"><span class="nav-text">Laravel 开发必备：精选扩展包推荐与实用工具指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E8%B0%83%E8%AF%95%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">开发调试类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Laravel-Debugbar-%E9%A1%B5%E9%9D%A2%E8%B0%83%E8%AF%95%E7%A5%9E%E5%99%A8"><span class="nav-text">1. Laravel Debugbar - 页面调试神器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Laravel-IDE-Helper-%E6%99%BA%E8%83%BD%E6%8F%90%E7%A4%BA%E5%8A%A9%E6%89%8B"><span class="nav-text">2. Laravel IDE Helper - 智能提示助手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Clockwork-Chrome-%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-text">3. Clockwork - Chrome 调试工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">图片处理类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Intervention-Image-%E5%BC%BA%E5%A4%A7%E7%9A%84%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86%E5%BA%93"><span class="nav-text">4. Intervention Image - 强大的图片处理库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-BaconQrCode-%E4%BA%8C%E7%BB%B4%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-text">5. BaconQrCode - 二维码生成器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A4%E8%AF%81%E6%8E%88%E6%9D%83%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">认证授权类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-JWT-Auth-JSON-Web-Token-%E8%AE%A4%E8%AF%81"><span class="nav-text">6. JWT Auth - JSON Web Token 认证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Laravel-Permission-%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="nav-text">7. Laravel Permission - 权限管理系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">数据处理类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-Laravel-Excel-Excel-%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86"><span class="nav-text">8. Laravel Excel - Excel 文件处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E9%AB%98%E6%80%A7%E8%83%BD-CSV-%E5%AF%BC%E5%87%BA%E5%8C%85"><span class="nav-text">9. 高性能 CSV 导出包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E4%BB%98%E9%9B%86%E6%88%90%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">支付集成类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-Yansongda-Pay-%E7%BB%9F%E4%B8%80%E6%94%AF%E4%BB%98SDK"><span class="nav-text">10. Yansongda Pay - 统一支付SDK</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API-%E5%BC%80%E5%8F%91%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">API 开发类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#11-Dingo-API-API-%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6"><span class="nav-text">11. Dingo API - API 开发框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-Laravel-CORS-%E8%B7%A8%E5%9F%9F%E6%94%AF%E6%8C%81"><span class="nav-text">12. Laravel CORS - 跨域支持</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">实用工具类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#13-Laravel-Log-Viewer-%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B%E5%99%A8"><span class="nav-text">13. Laravel Log Viewer - 日志查看器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-Laravel-Socialite-%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95"><span class="nav-text">14. Laravel Socialite - 第三方登录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%B1%BB%E6%89%A9%E5%B1%95%E5%8C%85"><span class="nav-text">性能优化类扩展包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#15-Laravel-OPcache-%E6%93%8D%E4%BD%9C%E7%A0%81%E7%BC%93%E5%AD%98"><span class="nav-text">15. Laravel OPcache - 操作码缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E5%8C%85%E9%80%89%E6%8B%A9%E5%BB%BA%E8%AE%AE"><span class="nav-text">扩展包选择建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%89%E4%BD%BF%E7%94%A8%E9%A2%91%E7%8E%87%E5%88%86%E7%B1%BB"><span class="nav-text">按使用频率分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%8E%9F%E5%88%99"><span class="nav-text">选择原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%BB%BA%E8%AE%AE"><span class="nav-text">安装建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

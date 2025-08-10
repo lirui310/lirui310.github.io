@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Linux系统监控与进程管理实战指南：掌握系统运行状态的核心技能 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Linux系统监控与进程管理实战指南：掌握系统运行状态的核心技能
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2024-01-15 10:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/linux/">linux</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/">故障排查</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7/">系统监控</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/">运维管理</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Linux系统监控与进程管理实战指南：掌握系统运行状态的核心技能"><a href="#Linux系统监控与进程管理实战指南：掌握系统运行状态的核心技能" class="headerlink" title="Linux系统监控与进程管理实战指南：掌握系统运行状态的核心技能"></a>Linux系统监控与进程管理实战指南：掌握系统运行状态的核心技能</h1><p>在Linux系统运维中，系统监控和进程管理是确保系统稳定运行的核心技能。本文将深入介绍Linux系统监控的各种工具和技术，以及进程管理的实用方法，帮助运维人员更好地掌握系统运行状态。</p>
+<h2 id="一、系统监控基础概念"><a href="#一、系统监控基础概念" class="headerlink" title="一、系统监控基础概念"></a>一、系统监控基础概念</h2><h3 id="1-1-核心监控指标"><a href="#1-1-核心监控指标" class="headerlink" title="1.1 核心监控指标"></a>1.1 核心监控指标</h3><p>系统监控主要关注以下几个核心指标：</p>
+<table>
+<thead>
+<tr>
+<th>监控指标</th>
+<th>监控工具</th>
+<th>典型阈值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU使用率</td>
+<td>top, htop, sar</td>
+<td>&gt;70%（持续5分钟）</td>
+<td>处理器负载情况</td>
+</tr>
+<tr>
+<td>内存使用率</td>
+<td>free, vmstat</td>
+<td>&gt;80%（可用内存&lt;10%）</td>
+<td>内存资源占用</td>
+</tr>
+<tr>
+<td>磁盘I&#x2F;O</td>
+<td>iostat, iotop</td>
+<td>&gt;50%（读写延迟&gt;20ms）</td>
+<td>磁盘读写性能</td>
+</tr>
+<tr>
+<td>网络流量</td>
+<td>iftop, nload</td>
+<td>&gt;1Gbps（持续10分钟）</td>
+<td>网络带宽使用</td>
+</tr>
+<tr>
+<td>进程数量</td>
+<td>ps, systemd</td>
+<td>&gt;500（异常进程数）</td>
+<td>系统进程状态</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-监控工具分类"><a href="#1-2-监控工具分类" class="headerlink" title="1.2 监控工具分类"></a>1.2 监控工具分类</h3><p><strong>实时监控工具：</strong></p>
+<ul>
+<li><code>top</code>、<code>htop</code>：实时显示系统进程信息</li>
+<li><code>iotop</code>：实时显示磁盘I&#x2F;O使用情况</li>
+<li><code>iftop</code>：实时显示网络流量</li>
+<li><code>glances</code>：综合系统监控工具</li>
+</ul>
+<p><strong>历史数据分析工具：</strong></p>
+<ul>
+<li><code>sar</code>：系统活动报告器</li>
+<li><code>vmstat</code>：虚拟内存统计</li>
+<li><code>iostat</code>：I&#x2F;O统计信息</li>
+<li><code>netstat</code>：网络连接统计</li>
+</ul>
+<h2 id="二、实时监控工具详解"><a href="#二、实时监控工具详解" class="headerlink" title="二、实时监控工具详解"></a>二、实时监控工具详解</h2><h3 id="2-1-top命令详解"><a href="#2-1-top命令详解" class="headerlink" title="2.1 top命令详解"></a>2.1 top命令详解</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 基本使用</span></span><br><span class="line">top</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按CPU使用率排序</span></span><br><span class="line">top -o %CPU</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按内存使用率排序</span></span><br><span class="line">top -o %MEM</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示指定用户的进程</span></span><br><span class="line">top -u username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 批处理模式，输出到文件</span></span><br><span class="line">top -b -n 1 &gt; system_status.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实时监控特定进程</span></span><br><span class="line">top -p 1234,5678</span><br></pre></td></tr></table></figure>
+
+<p><strong>top命令交互操作：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在top运行时的快捷键</span></span><br><span class="line">P    <span class="comment"># 按CPU使用率排序</span></span><br><span class="line">M    <span class="comment"># 按内存使用率排序</span></span><br><span class="line">T    <span class="comment"># 按运行时间排序</span></span><br><span class="line">k    <span class="comment"># 终止进程</span></span><br><span class="line">r    <span class="comment"># 重新设置进程优先级</span></span><br><span class="line">q    <span class="comment"># 退出top</span></span><br><span class="line">1    <span class="comment"># 显示所有CPU核心</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-htop增强版监控"><a href="#2-2-htop增强版监控" class="headerlink" title="2.2 htop增强版监控"></a>2.2 htop增强版监控</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装htop</span></span><br><span class="line"><span class="built_in">sudo</span> yum install htop     <span class="comment"># CentOS/RHEL</span></span><br><span class="line"><span class="built_in">sudo</span> apt install htop     <span class="comment"># Ubuntu/Debian</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动htop</span></span><br><span class="line">htop</span><br><span class="line"></span><br><span class="line"><span class="comment"># htop配置文件</span></span><br><span class="line">~/.config/htop/htoprc</span><br></pre></td></tr></table></figure>
+
+<p><strong>htop优势特性：</strong></p>
+<ul>
+<li>彩色显示，界面更友好</li>
+<li>支持鼠标操作</li>
+<li>可以横向和纵向滚动</li>
+<li>树状显示进程关系</li>
+<li>支持多种排序方式</li>
+</ul>
+<h3 id="2-3-系统资源监控脚本"><a href="#2-3-系统资源监控脚本" class="headerlink" title="2.3 系统资源监控脚本"></a>2.3 系统资源监控脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 系统资源监控脚本</span></span><br><span class="line"><span class="comment"># 文件名: system_monitor.sh</span></span><br><span class="line"></span><br><span class="line">LOG_FILE=<span class="string">&quot;/var/log/system_monitor.log&quot;</span></span><br><span class="line">DATE=$(<span class="built_in">date</span> <span class="string">&#x27;+%Y-%m-%d %H:%M:%S&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取CPU使用率</span></span><br><span class="line">CPU_USAGE=$(top -bn1 | grep <span class="string">&quot;Cpu(s)&quot;</span> | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> | <span class="built_in">cut</span> -d<span class="string">&#x27;%&#x27;</span> -f1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取内存使用率</span></span><br><span class="line">MEM_TOTAL=$(free -m | awk <span class="string">&#x27;NR==2&#123;printf &quot;%.2f&quot;, $3*100/$2&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取磁盘使用率</span></span><br><span class="line">DISK_USAGE=$(<span class="built_in">df</span> -h | awk <span class="string">&#x27;$NF==&quot;/&quot;&#123;printf &quot;%s&quot;, $5&#125;&#x27;</span> | sed <span class="string">&#x27;s/%//&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取系统负载</span></span><br><span class="line">LOAD_AVG=$(<span class="built_in">uptime</span> | awk -F<span class="string">&#x27;load average:&#x27;</span> <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 记录到日志文件</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;[<span class="variable">$DATE</span>] CPU: <span class="variable">$&#123;CPU_USAGE&#125;</span>%, Memory: <span class="variable">$&#123;MEM_TOTAL&#125;</span>%, Disk: <span class="variable">$&#123;DISK_USAGE&#125;</span>%, Load: <span class="variable">$&#123;LOAD_AVG&#125;</span>&quot;</span> &gt;&gt; <span class="variable">$LOG_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查阈值并发送告警</span></span><br><span class="line"><span class="keyword">if</span> (( $(echo &quot;<span class="variable">$CPU_USAGE</span> &gt; <span class="number">80</span>&quot; | bc -l) )); <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;WARNING: High CPU usage: <span class="variable">$&#123;CPU_USAGE&#125;</span>%&quot;</span> | mail -s <span class="string">&quot;CPU Alert&quot;</span> admin@example.com</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (( $(echo &quot;<span class="variable">$MEM_TOTAL</span> &gt; <span class="number">85</span>&quot; | bc -l) )); <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;WARNING: High Memory usage: <span class="variable">$&#123;MEM_TOTAL&#125;</span>%&quot;</span> | mail -s <span class="string">&quot;Memory Alert&quot;</span> admin@example.com</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$DISK_USAGE</span>&quot;</span> -gt 90 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;WARNING: High Disk usage: <span class="variable">$&#123;DISK_USAGE&#125;</span>%&quot;</span> | mail -s <span class="string">&quot;Disk Alert&quot;</span> admin@example.com</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、进程管理详解"><a href="#三、进程管理详解" class="headerlink" title="三、进程管理详解"></a>三、进程管理详解</h2><h3 id="3-1-进程查看和管理"><a href="#3-1-进程查看和管理" class="headerlink" title="3.1 进程查看和管理"></a>3.1 进程查看和管理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看所有进程</span></span><br><span class="line">ps aux</span><br><span class="line">ps -ef</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看进程树</span></span><br><span class="line">pstree</span><br><span class="line">pstree -p  <span class="comment"># 显示PID</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定用户的进程</span></span><br><span class="line">ps -u username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定进程</span></span><br><span class="line">ps -p 1234</span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据进程名查找</span></span><br><span class="line">ps aux | grep nginx</span><br><span class="line">pgrep nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看进程详细信息</span></span><br><span class="line"><span class="built_in">cat</span> /proc/1234/status</span><br><span class="line"><span class="built_in">cat</span> /proc/1234/cmdline</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-进程控制和信号"><a href="#3-2-进程控制和信号" class="headerlink" title="3.2 进程控制和信号"></a>3.2 进程控制和信号</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 终止进程</span></span><br><span class="line"><span class="built_in">kill</span> PID</span><br><span class="line"><span class="built_in">kill</span> -9 PID        <span class="comment"># 强制终止</span></span><br><span class="line"><span class="built_in">kill</span> -15 PID       <span class="comment"># 正常终止（默认）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据进程名终止</span></span><br><span class="line">killall nginx</span><br><span class="line">pkill nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送信号给进程</span></span><br><span class="line"><span class="built_in">kill</span> -HUP PID      <span class="comment"># 重新加载配置</span></span><br><span class="line"><span class="built_in">kill</span> -USR1 PID     <span class="comment"># 用户自定义信号1</span></span><br><span class="line"><span class="built_in">kill</span> -USR2 PID     <span class="comment"># 用户自定义信号2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看可用信号</span></span><br><span class="line"><span class="built_in">kill</span> -l</span><br></pre></td></tr></table></figure>
+
+<p><strong>常用信号说明：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SIGTERM (15)  <span class="comment"># 正常终止信号</span></span><br><span class="line">SIGKILL (9)   <span class="comment"># 强制终止信号</span></span><br><span class="line">SIGHUP (1)    <span class="comment"># 挂起信号，通常用于重新加载配置</span></span><br><span class="line">SIGUSR1 (10)  <span class="comment"># 用户自定义信号1</span></span><br><span class="line">SIGUSR2 (12)  <span class="comment"># 用户自定义信号2</span></span><br><span class="line">SIGSTOP (19)  <span class="comment"># 停止进程</span></span><br><span class="line">SIGCONT (18)  <span class="comment"># 继续进程</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-进程优先级管理"><a href="#3-3-进程优先级管理" class="headerlink" title="3.3 进程优先级管理"></a>3.3 进程优先级管理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看进程优先级</span></span><br><span class="line">ps -eo pid,ppid,ni,<span class="built_in">comm</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动时设置优先级</span></span><br><span class="line"><span class="built_in">nice</span> -n 10 <span class="built_in">command</span></span><br><span class="line"><span class="built_in">nice</span> -10 <span class="built_in">command</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改运行中进程的优先级</span></span><br><span class="line">renice 5 -p 1234</span><br><span class="line">renice -5 -u username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实时调整优先级（在top中）</span></span><br><span class="line">r  <span class="comment"># 然后输入PID和新的nice值</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>优先级说明：</strong></p>
+<ul>
+<li>nice值范围：-20到19</li>
+<li>-20：最高优先级</li>
+<li>0：默认优先级</li>
+<li>19：最低优先级</li>
+</ul>
+<h3 id="3-4-后台进程管理"><a href="#3-4-后台进程管理" class="headerlink" title="3.4 后台进程管理"></a>3.4 后台进程管理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 后台运行进程</span></span><br><span class="line"><span class="built_in">command</span> &amp;</span><br><span class="line"><span class="built_in">nohup</span> <span class="built_in">command</span> &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看后台任务</span></span><br><span class="line"><span class="built_in">jobs</span></span><br><span class="line"><span class="built_in">jobs</span> -l  <span class="comment"># 显示PID</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将后台任务调到前台</span></span><br><span class="line"><span class="built_in">fg</span> %1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将前台任务放到后台</span></span><br><span class="line">Ctrl+Z  <span class="comment"># 暂停</span></span><br><span class="line"><span class="built_in">bg</span> %1   <span class="comment"># 后台继续</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用screen管理长期任务</span></span><br><span class="line">screen -S session_name</span><br><span class="line">screen -<span class="built_in">ls</span>              <span class="comment"># 列出会话</span></span><br><span class="line">screen -r session_name  <span class="comment"># 恢复会话</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用tmux管理会话</span></span><br><span class="line">tmux new -s session_name</span><br><span class="line">tmux <span class="built_in">ls</span>                 <span class="comment"># 列出会话</span></span><br><span class="line">tmux attach -t session_name</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、系统性能分析"><a href="#四、系统性能分析" class="headerlink" title="四、系统性能分析"></a>四、系统性能分析</h2><h3 id="4-1-CPU性能分析"><a href="#4-1-CPU性能分析" class="headerlink" title="4.1 CPU性能分析"></a>4.1 CPU性能分析</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看CPU信息</span></span><br><span class="line">lscpu</span><br><span class="line"><span class="built_in">cat</span> /proc/cpuinfo</span><br><span class="line"></span><br><span class="line"><span class="comment"># CPU使用率统计</span></span><br><span class="line">sar -u 1 10          <span class="comment"># 每秒采样，共10次</span></span><br><span class="line">sar -u -f /var/log/sa/sa01  <span class="comment"># 查看历史数据</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看CPU负载</span></span><br><span class="line"><span class="built_in">uptime</span></span><br><span class="line">w</span><br><span class="line"><span class="built_in">cat</span> /proc/loadavg</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实时CPU监控</span></span><br><span class="line">watch -n 1 <span class="string">&#x27;cat /proc/loadavg&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>CPU性能分析脚本：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># CPU性能分析脚本</span></span><br><span class="line"><span class="comment"># 文件名: cpu_analysis.sh</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;=== CPU信息 ===&quot;</span></span><br><span class="line">lscpu | grep -E <span class="string">&quot;CPU\(s\)|Model name|CPU MHz&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== CPU使用率（最近1分钟） ===&quot;</span></span><br><span class="line">sar -u 1 60 | <span class="built_in">tail</span> -1</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 系统负载 ===&quot;</span></span><br><span class="line"><span class="built_in">uptime</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 高CPU使用率进程（Top 10） ===&quot;</span></span><br><span class="line">ps aux --<span class="built_in">sort</span>=-%cpu | <span class="built_in">head</span> -11</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== CPU核心使用情况 ===&quot;</span></span><br><span class="line">mpstat -P ALL 1 1</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-内存性能分析"><a href="#4-2-内存性能分析" class="headerlink" title="4.2 内存性能分析"></a>4.2 内存性能分析</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 内存使用情况</span></span><br><span class="line">free -h</span><br><span class="line">free -m -s 5         <span class="comment"># 每5秒刷新</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 详细内存信息</span></span><br><span class="line"><span class="built_in">cat</span> /proc/meminfo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 内存使用统计</span></span><br><span class="line">sar -r 1 10</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看内存使用最多的进程</span></span><br><span class="line">ps aux --<span class="built_in">sort</span>=-%mem | <span class="built_in">head</span> -10</span><br><span class="line"></span><br><span class="line"><span class="comment"># 内存碎片信息</span></span><br><span class="line"><span class="built_in">cat</span> /proc/buddyinfo</span><br></pre></td></tr></table></figure>
+
+<p><strong>内存监控脚本：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 内存监控脚本</span></span><br><span class="line"><span class="comment"># 文件名: memory_monitor.sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取内存使用情况</span></span><br><span class="line">MEM_INFO=$(free -m)</span><br><span class="line">MEM_TOTAL=$(<span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$MEM_INFO</span>&quot;</span> | awk <span class="string">&#x27;NR==2&#123;print $2&#125;&#x27;</span>)</span><br><span class="line">MEM_USED=$(<span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$MEM_INFO</span>&quot;</span> | awk <span class="string">&#x27;NR==2&#123;print $3&#125;&#x27;</span>)</span><br><span class="line">MEM_FREE=$(<span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$MEM_INFO</span>&quot;</span> | awk <span class="string">&#x27;NR==2&#123;print $4&#125;&#x27;</span>)</span><br><span class="line">MEM_USAGE=$(<span class="built_in">echo</span> <span class="string">&quot;scale=2; <span class="variable">$MEM_USED</span>*100/<span class="variable">$MEM_TOTAL</span>&quot;</span> | bc)</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;内存总量: <span class="variable">$&#123;MEM_TOTAL&#125;</span>MB&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;已使用: <span class="variable">$&#123;MEM_USED&#125;</span>MB (<span class="variable">$&#123;MEM_USAGE&#125;</span>%)&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;可用内存: <span class="variable">$&#123;MEM_FREE&#125;</span>MB&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查内存使用率</span></span><br><span class="line"><span class="keyword">if</span> (( $(echo &quot;<span class="variable">$MEM_USAGE</span> &gt; <span class="number">80</span>&quot; | bc -l) )); <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;警告：内存使用率过高！&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;内存使用率最高的进程：&quot;</span></span><br><span class="line">    ps aux --<span class="built_in">sort</span>=-%mem | <span class="built_in">head</span> -5</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查swap使用情况</span></span><br><span class="line">SWAP_INFO=$(free -m | grep Swap)</span><br><span class="line">SWAP_USED=$(<span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$SWAP_INFO</span>&quot;</span> | awk <span class="string">&#x27;&#123;print $3&#125;&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$SWAP_USED</span>&quot;</span> -gt 0 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;警告：系统正在使用Swap空间！&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Swap使用情况：&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$SWAP_INFO</span>&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-磁盘I-O性能分析"><a href="#4-3-磁盘I-O性能分析" class="headerlink" title="4.3 磁盘I&#x2F;O性能分析"></a>4.3 磁盘I&#x2F;O性能分析</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 磁盘使用情况</span></span><br><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"><span class="built_in">df</span> -i                <span class="comment"># inode使用情况</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 磁盘I/O统计</span></span><br><span class="line">iostat -x 1 10</span><br><span class="line">iostat -d 2          <span class="comment"># 每2秒显示设备统计</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 实时I/O监控</span></span><br><span class="line">iotop</span><br><span class="line">iotop -o             <span class="comment"># 只显示有I/O活动的进程</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看磁盘I/O等待</span></span><br><span class="line">sar -d 1 10</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件系统读写测试</span></span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=/dev/zero of=testfile bs=1M count=1024</span><br><span class="line"><span class="built_in">dd</span> <span class="keyword">if</span>=testfile of=/dev/null bs=1M</span><br></pre></td></tr></table></figure>
+
+<p><strong>磁盘监控脚本：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 磁盘监控脚本</span></span><br><span class="line"><span class="comment"># 文件名: disk_monitor.sh</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;=== 磁盘使用情况 ===&quot;</span></span><br><span class="line"><span class="built_in">df</span> -h | grep -vE <span class="string">&#x27;^Filesystem|tmpfs|cdrom&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 磁盘I/O统计 ===&quot;</span></span><br><span class="line">iostat -x 1 1 | grep -A 20 <span class="string">&quot;Device&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 高I/O进程 ===&quot;</span></span><br><span class="line">iotop -b -n 1 | <span class="built_in">head</span> -10</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查磁盘使用率</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 磁盘使用率检查 ===&quot;</span></span><br><span class="line"><span class="built_in">df</span> -h | awk <span class="string">&#x27;NR&gt;1 &#123;gsub(/%/,&quot;&quot;); if($5 &gt; 80) print $0 &quot; - 警告：使用率过高！&quot;&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查inode使用情况</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== Inode使用情况 ===&quot;</span></span><br><span class="line"><span class="built_in">df</span> -i | awk <span class="string">&#x27;NR&gt;1 &#123;gsub(/%/,&quot;&quot;); if($5 &gt; 80) print $0 &quot; - 警告：Inode使用率过高！&quot;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、网络监控"><a href="#五、网络监控" class="headerlink" title="五、网络监控"></a>五、网络监控</h2><h3 id="5-1-网络连接监控"><a href="#5-1-网络连接监控" class="headerlink" title="5.1 网络连接监控"></a>5.1 网络连接监控</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看网络连接</span></span><br><span class="line">netstat -tuln        <span class="comment"># 监听端口</span></span><br><span class="line">netstat -an          <span class="comment"># 所有连接</span></span><br><span class="line">netstat -i           <span class="comment"># 网络接口统计</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用ss命令（推荐）</span></span><br><span class="line">ss -tuln             <span class="comment"># 监听端口</span></span><br><span class="line">ss -an               <span class="comment"># 所有连接</span></span><br><span class="line">ss -s                <span class="comment"># 统计信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 实时网络流量</span></span><br><span class="line">iftop -i eth0</span><br><span class="line">nload eth0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 网络统计</span></span><br><span class="line">sar -n DEV 1 10      <span class="comment"># 网络设备统计</span></span><br><span class="line">sar -n TCP 1 10      <span class="comment"># TCP统计</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-网络性能测试"><a href="#5-2-网络性能测试" class="headerlink" title="5.2 网络性能测试"></a>5.2 网络性能测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 网络连通性测试</span></span><br><span class="line">ping -c 4 google.com</span><br><span class="line">traceroute google.com</span><br><span class="line">mtr google.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># 端口连通性测试</span></span><br><span class="line">telnet host port</span><br><span class="line">nc -zv host port</span><br><span class="line"></span><br><span class="line"><span class="comment"># 带宽测试</span></span><br><span class="line">iperf3 -s            <span class="comment"># 服务端</span></span><br><span class="line">iperf3 -c server_ip  <span class="comment"># 客户端</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># DNS解析测试</span></span><br><span class="line">nslookup domain.com</span><br><span class="line">dig domain.com</span><br></pre></td></tr></table></figure>
+
+<h2 id="六、日志监控"><a href="#六、日志监控" class="headerlink" title="六、日志监控"></a>六、日志监控</h2><h3 id="6-1-系统日志分析"><a href="#6-1-系统日志分析" class="headerlink" title="6.1 系统日志分析"></a>6.1 系统日志分析</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看系统日志</span></span><br><span class="line"><span class="built_in">tail</span> -f /var/log/messages</span><br><span class="line"><span class="built_in">tail</span> -f /var/log/syslog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用journalctl（systemd系统）</span></span><br><span class="line">journalctl -f        <span class="comment"># 实时查看</span></span><br><span class="line">journalctl -u nginx  <span class="comment"># 查看特定服务</span></span><br><span class="line">journalctl --since <span class="string">&quot;2024-01-01&quot;</span> --<span class="keyword">until</span> <span class="string">&quot;2024-01-02&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 日志统计分析</span></span><br><span class="line">grep <span class="string">&quot;ERROR&quot;</span> /var/log/messages | <span class="built_in">wc</span> -l</span><br><span class="line">awk <span class="string">&#x27;/ERROR/ &#123;count++&#125; END &#123;print &quot;错误数量:&quot;, count&#125;&#x27;</span> /var/log/messages</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-日志监控脚本"><a href="#6-2-日志监控脚本" class="headerlink" title="6.2 日志监控脚本"></a>6.2 日志监控脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 日志监控脚本</span></span><br><span class="line"><span class="comment"># 文件名: log_monitor.sh</span></span><br><span class="line"></span><br><span class="line">LOG_FILE=<span class="string">&quot;/var/log/messages&quot;</span></span><br><span class="line">ERROR_LOG=<span class="string">&quot;/tmp/error_summary.log&quot;</span></span><br><span class="line">DATE=$(<span class="built_in">date</span> <span class="string">&#x27;+%Y-%m-%d&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计今日错误日志</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;=== <span class="variable">$DATE</span> 错误日志统计 ===&quot;</span> &gt; <span class="variable">$ERROR_LOG</span></span><br><span class="line">grep <span class="string">&quot;<span class="variable">$DATE</span>&quot;</span> <span class="variable">$LOG_FILE</span> | grep -i error | <span class="built_in">wc</span> -l &gt;&gt; <span class="variable">$ERROR_LOG</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计各类错误</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\n=== 错误类型分布 ===&quot;</span> &gt;&gt; <span class="variable">$ERROR_LOG</span></span><br><span class="line">grep <span class="string">&quot;<span class="variable">$DATE</span>&quot;</span> <span class="variable">$LOG_FILE</span> | grep -i error | awk <span class="string">&#x27;&#123;print $5&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -nr &gt;&gt; <span class="variable">$ERROR_LOG</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查关键服务状态</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\n=== 关键服务状态 ===&quot;</span> &gt;&gt; <span class="variable">$ERROR_LOG</span></span><br><span class="line"><span class="keyword">for</span> service <span class="keyword">in</span> sshd nginx mysql; <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">if</span> systemctl is-active <span class="variable">$service</span> &gt;/dev/null 2&gt;&amp;1; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$service</span>: 运行中&quot;</span> &gt;&gt; <span class="variable">$ERROR_LOG</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$service</span>: 已停止 - 警告！&quot;</span> &gt;&gt; <span class="variable">$ERROR_LOG</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送报告</span></span><br><span class="line"><span class="keyword">if</span> [ -s <span class="variable">$ERROR_LOG</span> ]; <span class="keyword">then</span></span><br><span class="line">    mail -s <span class="string">&quot;系统日志监控报告 - <span class="variable">$DATE</span>&quot;</span> admin@example.com &lt; <span class="variable">$ERROR_LOG</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="七、自动化监控"><a href="#七、自动化监控" class="headerlink" title="七、自动化监控"></a>七、自动化监控</h2><h3 id="7-1-使用crontab定时监控"><a href="#7-1-使用crontab定时监控" class="headerlink" title="7.1 使用crontab定时监控"></a>7.1 使用crontab定时监控</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编辑定时任务</span></span><br><span class="line">crontab -e</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加监控任务</span></span><br><span class="line"><span class="comment"># 每5分钟检查系统资源</span></span><br><span class="line">*/5 * * * * /usr/local/bin/system_monitor.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每小时生成性能报告</span></span><br><span class="line">0 * * * * /usr/local/bin/performance_report.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每天凌晨清理日志</span></span><br><span class="line">0 2 * * * /usr/local/bin/log_cleanup.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看定时任务</span></span><br><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-systemd定时器"><a href="#7-2-systemd定时器" class="headerlink" title="7.2 systemd定时器"></a>7.2 systemd定时器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建服务文件</span></span><br><span class="line"><span class="built_in">sudo</span> nano /etc/systemd/system/system-monitor.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=System Monitor</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=oneshot</span><br><span class="line">ExecStart=/usr/local/bin/system_monitor.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建定时器文件</span></span><br><span class="line"><span class="built_in">sudo</span> nano /etc/systemd/system/system-monitor.timer</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Run System Monitor every 5 minutes</span><br><span class="line">Requires=system-monitor.service</span><br><span class="line"></span><br><span class="line">[Timer]</span><br><span class="line">OnCalendar=*:0/5</span><br><span class="line">Persistent=<span class="literal">true</span></span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=timers.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用定时器</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> system-monitor.timer</span><br><span class="line"><span class="built_in">sudo</span> systemctl start system-monitor.timer</span><br></pre></td></tr></table></figure>
+
+<h2 id="八、监控工具集成"><a href="#八、监控工具集成" class="headerlink" title="八、监控工具集成"></a>八、监控工具集成</h2><h3 id="8-1-Prometheus-Grafana"><a href="#8-1-Prometheus-Grafana" class="headerlink" title="8.1 Prometheus + Grafana"></a>8.1 Prometheus + Grafana</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装node_exporter</span></span><br><span class="line">wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz</span><br><span class="line">tar xvfz node_exporter-1.3.1.linux-amd64.tar.gz</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> node_exporter-1.3.1.linux-amd64/node_exporter /usr/local/bin/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建systemd服务</span></span><br><span class="line"><span class="built_in">sudo</span> nano /etc/systemd/system/node_exporter.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Node Exporter</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=prometheus</span><br><span class="line">Group=prometheus</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/local/bin/node_exporter</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> node_exporter</span><br><span class="line"><span class="built_in">sudo</span> systemctl start node_exporter</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-2-Zabbix-Agent配置"><a href="#8-2-Zabbix-Agent配置" class="headerlink" title="8.2 Zabbix Agent配置"></a>8.2 Zabbix Agent配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Zabbix Agent</span></span><br><span class="line"><span class="built_in">sudo</span> yum install zabbix-agent</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置文件</span></span><br><span class="line"><span class="built_in">sudo</span> nano /etc/zabbix/zabbix_agentd.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关键配置项</span></span><br><span class="line">Server=zabbix_server_ip</span><br><span class="line">ServerActive=zabbix_server_ip</span><br><span class="line">Hostname=your_hostname</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> zabbix-agent</span><br><span class="line"><span class="built_in">sudo</span> systemctl start zabbix-agent</span><br></pre></td></tr></table></figure>
+
+<h2 id="九、故障排查实战"><a href="#九、故障排查实战" class="headerlink" title="九、故障排查实战"></a>九、故障排查实战</h2><h3 id="9-1-高CPU使用率排查"><a href="#9-1-高CPU使用率排查" class="headerlink" title="9.1 高CPU使用率排查"></a>9.1 高CPU使用率排查</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 高CPU使用率排查脚本</span></span><br><span class="line"><span class="comment"># 文件名: high_cpu_debug.sh</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;=== 系统负载情况 ===&quot;</span></span><br><span class="line"><span class="built_in">uptime</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== CPU使用率最高的进程 ===&quot;</span></span><br><span class="line">ps aux --<span class="built_in">sort</span>=-%cpu | <span class="built_in">head</span> -10</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 实时CPU使用情况 ===&quot;</span></span><br><span class="line">top -bn1 | grep <span class="string">&quot;Cpu(s)&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 检查是否有僵尸进程 ===&quot;</span></span><br><span class="line">ps aux | awk <span class="string">&#x27;$8 ~ /^Z/ &#123;print $0&#125;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 系统中断情况 ===&quot;</span></span><br><span class="line"><span class="built_in">cat</span> /proc/interrupts | <span class="built_in">head</span> -10</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 内核线程情况 ===&quot;</span></span><br><span class="line">ps aux | grep <span class="string">&quot;\[.*\]&quot;</span> | <span class="built_in">head</span> -10</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-2-内存泄漏排查"><a href="#9-2-内存泄漏排查" class="headerlink" title="9.2 内存泄漏排查"></a>9.2 内存泄漏排查</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 内存泄漏排查脚本</span></span><br><span class="line"><span class="comment"># 文件名: memory_leak_debug.sh</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;=== 内存使用情况 ===&quot;</span></span><br><span class="line">free -h</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 内存使用最多的进程 ===&quot;</span></span><br><span class="line">ps aux --<span class="built_in">sort</span>=-%mem | <span class="built_in">head</span> -10</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 检查内存映射 ===&quot;</span></span><br><span class="line"><span class="keyword">for</span> pid <span class="keyword">in</span> $(ps aux --<span class="built_in">sort</span>=-%mem | awk <span class="string">&#x27;NR&gt;1 &amp;&amp; NR&lt;=6 &#123;print $2&#125;&#x27;</span>); <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;PID <span class="variable">$pid</span> 内存映射：&quot;</span></span><br><span class="line">    <span class="built_in">cat</span> /proc/<span class="variable">$pid</span>/status | grep -E <span class="string">&quot;VmSize|VmRSS|VmData|VmStk&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;---&quot;</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== Swap使用情况 ===&quot;</span></span><br><span class="line"><span class="built_in">cat</span> /proc/swaps</span><br><span class="line">swapon -s</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">&quot;\n=== 内存碎片情况 ===&quot;</span></span><br><span class="line"><span class="built_in">cat</span> /proc/buddyinfo</span><br></pre></td></tr></table></figure>
+
+<h2 id="十、最佳实践和建议"><a href="#十、最佳实践和建议" class="headerlink" title="十、最佳实践和建议"></a>十、最佳实践和建议</h2><h3 id="10-1-监控策略"><a href="#10-1-监控策略" class="headerlink" title="10.1 监控策略"></a>10.1 监控策略</h3><ol>
+<li><p><strong>分层监控</strong>：</p>
+<ul>
+<li>基础设施层：CPU、内存、磁盘、网络</li>
+<li>应用层：服务状态、响应时间、错误率</li>
+<li>业务层：关键业务指标</li>
+</ul>
+</li>
+<li><p><strong>告警策略</strong>：</p>
+<ul>
+<li>设置合理的阈值</li>
+<li>避免告警风暴</li>
+<li>分级告警处理</li>
+</ul>
+</li>
+<li><p><strong>数据保留</strong>：</p>
+<ul>
+<li>实时数据：保留1-7天</li>
+<li>历史数据：保留30-90天</li>
+<li>趋势数据：保留1年以上</li>
+</ul>
+</li>
+</ol>
+<h3 id="10-2-性能优化建议"><a href="#10-2-性能优化建议" class="headerlink" title="10.2 性能优化建议"></a>10.2 性能优化建议</h3><ol>
+<li><p><strong>CPU优化</strong>：</p>
+<ul>
+<li>合理设置进程优先级</li>
+<li>避免CPU密集型任务同时运行</li>
+<li>使用CPU亲和性绑定</li>
+</ul>
+</li>
+<li><p><strong>内存优化</strong>：</p>
+<ul>
+<li>定期清理缓存</li>
+<li>合理配置swap</li>
+<li>监控内存泄漏</li>
+</ul>
+</li>
+<li><p><strong>I&#x2F;O优化</strong>：</p>
+<ul>
+<li>使用合适的文件系统</li>
+<li>调整I&#x2F;O调度器</li>
+<li>监控磁盘健康状态</li>
+</ul>
+</li>
+</ol>
+<h3 id="10-3-常见问题解决"><a href="#10-3-常见问题解决" class="headerlink" title="10.3 常见问题解决"></a>10.3 常见问题解决</h3><p><strong>问题1：系统响应缓慢</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 排查步骤</span></span><br><span class="line">1. 检查系统负载：<span class="built_in">uptime</span></span><br><span class="line">2. 查看CPU使用：top</span><br><span class="line">3. 检查内存使用：free -h</span><br><span class="line">4. 查看I/O等待：iostat -x</span><br><span class="line">5. 检查网络状态：netstat -i</span><br></pre></td></tr></table></figure>
+
+<p><strong>问题2：进程无法启动</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 排查步骤</span></span><br><span class="line">1. 检查进程是否已存在：ps aux | grep process_name</span><br><span class="line">2. 查看系统资源：free -h &amp;&amp; <span class="built_in">df</span> -h</span><br><span class="line">3. 检查端口占用：netstat -tuln | grep port</span><br><span class="line">4. 查看错误日志：journalctl -u service_name</span><br><span class="line">5. 检查文件权限：<span class="built_in">ls</span> -la /path/to/executable</span><br></pre></td></tr></table></figure>
+
+<p><strong>问题3：网络连接异常</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 排查步骤</span></span><br><span class="line">1. 检查网络接口：ip addr show</span><br><span class="line">2. 测试网络连通性：ping gateway</span><br><span class="line">3. 查看路由表：ip route show</span><br><span class="line">4. 检查DNS解析：nslookup domain</span><br><span class="line">5. 查看防火墙规则：iptables -L</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Linux系统监控和进程管理是运维工作的核心技能，需要掌握：</p>
+<ol>
+<li><strong>监控工具的使用</strong>：熟练使用top、htop、sar、iostat等工具</li>
+<li><strong>进程管理技巧</strong>：掌握进程查看、控制、优先级调整等操作</li>
+<li><strong>性能分析方法</strong>：能够分析CPU、内存、磁盘、网络性能</li>
+<li><strong>自动化监控</strong>：建立完善的监控体系和告警机制</li>
+<li><strong>故障排查能力</strong>：快速定位和解决系统性能问题</li>
+</ol>
+<p>通过系统性的学习和实践，可以有效提升Linux系统运维能力，确保系统稳定高效运行。建议在实际工作中结合具体业务场景，制定适合的监控策略和优化方案。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5/">故障排查</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7/">系统监控</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/">运维管理</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2024/linux/linux-file-management-permissions/"
+                                   title="Linux文件管理与权限控制实战指南：掌握文件操作的核心技能"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Linux文件管理与权限控制实战指南：掌握文件操作的核心技能</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2024/linux/linux-performance-optimization-guide/"
+                                   title="Linux系统性能优化实战指南：7个核心优化策略提升服务器效率"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Linux系统性能优化实战指南：7个核心优化策略提升服务器效率</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97%EF%BC%9A%E6%8E%8C%E6%8F%A1%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%80%E8%83%BD"><span class="nav-text">Linux系统监控与进程管理实战指南：掌握系统运行状态的核心技能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">一、系统监控基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87"><span class="nav-text">1.1 核心监控指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7%E5%88%86%E7%B1%BB"><span class="nav-text">1.2 监控工具分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3"><span class="nav-text">二、实时监控工具详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-top%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3"><span class="nav-text">2.1 top命令详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-htop%E5%A2%9E%E5%BC%BA%E7%89%88%E7%9B%91%E6%8E%A7"><span class="nav-text">2.2 htop增强版监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7%E8%84%9A%E6%9C%AC"><span class="nav-text">2.3 系统资源监控脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E8%AF%A6%E8%A7%A3"><span class="nav-text">三、进程管理详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E8%BF%9B%E7%A8%8B%E6%9F%A5%E7%9C%8B%E5%92%8C%E7%AE%A1%E7%90%86"><span class="nav-text">3.1 进程查看和管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6%E5%92%8C%E4%BF%A1%E5%8F%B7"><span class="nav-text">3.2 进程控制和信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E8%BF%9B%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7%E7%AE%A1%E7%90%86"><span class="nav-text">3.3 进程优先级管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%90%8E%E5%8F%B0%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-text">3.4 后台进程管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">四、系统性能分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-CPU%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.1 CPU性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%86%85%E5%AD%98%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.2 内存性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E7%A3%81%E7%9B%98I-O%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.3 磁盘I&#x2F;O性能分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7"><span class="nav-text">五、网络监控</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E7%9B%91%E6%8E%A7"><span class="nav-text">5.1 网络连接监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E7%BD%91%E7%BB%9C%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-text">5.2 网络性能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7"><span class="nav-text">六、日志监控</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E7%B3%BB%E7%BB%9F%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="nav-text">6.1 系统日志分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7%E8%84%9A%E6%9C%AC"><span class="nav-text">6.2 日志监控脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9B%91%E6%8E%A7"><span class="nav-text">七、自动化监控</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E4%BD%BF%E7%94%A8crontab%E5%AE%9A%E6%97%B6%E7%9B%91%E6%8E%A7"><span class="nav-text">7.1 使用crontab定时监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-systemd%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-text">7.2 systemd定时器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7%E9%9B%86%E6%88%90"><span class="nav-text">八、监控工具集成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-Prometheus-Grafana"><span class="nav-text">8.1 Prometheus + Grafana</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-Zabbix-Agent%E9%85%8D%E7%BD%AE"><span class="nav-text">8.2 Zabbix Agent配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5%E5%AE%9E%E6%88%98"><span class="nav-text">九、故障排查实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-%E9%AB%98CPU%E4%BD%BF%E7%94%A8%E7%8E%87%E6%8E%92%E6%9F%A5"><span class="nav-text">9.1 高CPU使用率排查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E6%8E%92%E6%9F%A5"><span class="nav-text">9.2 内存泄漏排查</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E5%92%8C%E5%BB%BA%E8%AE%AE"><span class="nav-text">十、最佳实践和建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-%E7%9B%91%E6%8E%A7%E7%AD%96%E7%95%A5"><span class="nav-text">10.1 监控策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-text">10.2 性能优化建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-text">10.3 常见问题解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97%EF%BC%9A%E6%8E%8C%E6%8F%A1%E7%B3%BB%E7%BB%9F%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8A%80%E8%83%BD"><span class="nav-text">Linux系统监控与进程管理实战指南：掌握系统运行状态的核心技能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="nav-text">一、系统监控基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%A0%B8%E5%BF%83%E7%9B%91%E6%8E%A7%E6%8C%87%E6%A0%87"><span class="nav-text">1.1 核心监控指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7%E5%88%86%E7%B1%BB"><span class="nav-text">1.2 监控工具分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3"><span class="nav-text">二、实时监控工具详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-top%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3"><span class="nav-text">2.1 top命令详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-htop%E5%A2%9E%E5%BC%BA%E7%89%88%E7%9B%91%E6%8E%A7"><span class="nav-text">2.2 htop增强版监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7%E8%84%9A%E6%9C%AC"><span class="nav-text">2.3 系统资源监控脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E8%AF%A6%E8%A7%A3"><span class="nav-text">三、进程管理详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E8%BF%9B%E7%A8%8B%E6%9F%A5%E7%9C%8B%E5%92%8C%E7%AE%A1%E7%90%86"><span class="nav-text">3.1 进程查看和管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6%E5%92%8C%E4%BF%A1%E5%8F%B7"><span class="nav-text">3.2 进程控制和信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E8%BF%9B%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7%E7%AE%A1%E7%90%86"><span class="nav-text">3.3 进程优先级管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%90%8E%E5%8F%B0%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-text">3.4 后台进程管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">四、系统性能分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-CPU%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.1 CPU性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%86%85%E5%AD%98%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.2 内存性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E7%A3%81%E7%9B%98I-O%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.3 磁盘I&#x2F;O性能分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7"><span class="nav-text">五、网络监控</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E7%9B%91%E6%8E%A7"><span class="nav-text">5.1 网络连接监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E7%BD%91%E7%BB%9C%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-text">5.2 网络性能测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7"><span class="nav-text">六、日志监控</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E7%B3%BB%E7%BB%9F%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="nav-text">6.1 系统日志分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7%E8%84%9A%E6%9C%AC"><span class="nav-text">6.2 日志监控脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9B%91%E6%8E%A7"><span class="nav-text">七、自动化监控</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E4%BD%BF%E7%94%A8crontab%E5%AE%9A%E6%97%B6%E7%9B%91%E6%8E%A7"><span class="nav-text">7.1 使用crontab定时监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-systemd%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="nav-text">7.2 systemd定时器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7%E9%9B%86%E6%88%90"><span class="nav-text">八、监控工具集成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-1-Prometheus-Grafana"><span class="nav-text">8.1 Prometheus + Grafana</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-Zabbix-Agent%E9%85%8D%E7%BD%AE"><span class="nav-text">8.2 Zabbix Agent配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5%E5%AE%9E%E6%88%98"><span class="nav-text">九、故障排查实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-%E9%AB%98CPU%E4%BD%BF%E7%94%A8%E7%8E%87%E6%8E%92%E6%9F%A5"><span class="nav-text">9.1 高CPU使用率排查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E6%8E%92%E6%9F%A5"><span class="nav-text">9.2 内存泄漏排查</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E5%92%8C%E5%BB%BA%E8%AE%AE"><span class="nav-text">十、最佳实践和建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-1-%E7%9B%91%E6%8E%A7%E7%AD%96%E7%95%A5"><span class="nav-text">10.1 监控策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-text">10.2 性能优化建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-text">10.3 常见问题解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

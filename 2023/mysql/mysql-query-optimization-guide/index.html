@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            MySQL查询优化深度指南：SQL性能调优实战技巧 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        MySQL查询优化深度指南：SQL性能调优实战技巧
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-07-18 16:45:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/mysql/">mysql</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/">查询优化</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">性能分析</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/SQL%E8%B0%83%E4%BC%98/">SQL调优</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/EXPLAIN/">EXPLAIN</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92/">执行计划</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>查询优化是MySQL性能调优的核心环节，一个优化良好的查询可以将执行时间从几秒缩短到几毫秒。本文将深入探讨MySQL查询优化的各种技巧和最佳实践。</p>
+<h2 id="查询分析基础"><a href="#查询分析基础" class="headerlink" title="查询分析基础"></a>查询分析基础</h2><h3 id="1-EXPLAIN-执行计划详解"><a href="#1-EXPLAIN-执行计划详解" class="headerlink" title="1. EXPLAIN 执行计划详解"></a>1. EXPLAIN 执行计划详解</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建测试表</span></span><br><span class="line"><span class="keyword">CREATE TABLE</span> employees (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span> AUTO_INCREMENT,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    department_id <span class="type">INT</span> <span class="keyword">NOT NULL</span>,</span><br><span class="line">    salary <span class="type">DECIMAL</span>(<span class="number">10</span>,<span class="number">2</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    hire_date <span class="type">DATE</span> <span class="keyword">NOT NULL</span>,</span><br><span class="line">    email <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">UNIQUE</span>,</span><br><span class="line">    INDEX idx_dept_salary (department_id, salary),</span><br><span class="line">    INDEX idx_hire_date (hire_date)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> departments (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span> AUTO_INCREMENT,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    manager_id <span class="type">INT</span>,</span><br><span class="line">    budget <span class="type">DECIMAL</span>(<span class="number">12</span>,<span class="number">2</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 插入测试数据</span></span><br><span class="line"><span class="keyword">INSERT INTO</span> departments (name, manager_id, budget) <span class="keyword">VALUES</span></span><br><span class="line">(<span class="string">&#x27;Engineering&#x27;</span>, <span class="number">1</span>, <span class="number">1000000.00</span>),</span><br><span class="line">(<span class="string">&#x27;Marketing&#x27;</span>, <span class="number">2</span>, <span class="number">500000.00</span>),</span><br><span class="line">(<span class="string">&#x27;Sales&#x27;</span>, <span class="number">3</span>, <span class="number">750000.00</span>),</span><br><span class="line">(<span class="string">&#x27;HR&#x27;</span>, <span class="number">4</span>, <span class="number">300000.00</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 基础 EXPLAIN 分析</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 详细的 JSON 格式分析</span></span><br><span class="line">EXPLAIN FORMAT<span class="operator">=</span>JSON </span><br><span class="line"><span class="keyword">SELECT</span> e.name, e.salary, d.name <span class="keyword">as</span> dept_name</span><br><span class="line"><span class="keyword">FROM</span> employees e</span><br><span class="line"><span class="keyword">JOIN</span> departments d <span class="keyword">ON</span> e.department_id <span class="operator">=</span> d.id</span><br><span class="line"><span class="keyword">WHERE</span> e.salary <span class="operator">&gt;</span> <span class="number">50000</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> e.salary <span class="keyword">DESC</span></span><br><span class="line">LIMIT <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- EXPLAIN 关键字段解释</span></span><br><span class="line"><span class="comment">-- id: 查询序列号</span></span><br><span class="line"><span class="comment">-- select_type: 查询类型 (SIMPLE, PRIMARY, SUBQUERY, DERIVED等)</span></span><br><span class="line"><span class="comment">-- table: 表名</span></span><br><span class="line"><span class="comment">-- type: 连接类型 (system &gt; const &gt; eq_ref &gt; ref &gt; range &gt; index &gt; ALL)</span></span><br><span class="line"><span class="comment">-- possible_keys: 可能使用的索引</span></span><br><span class="line"><span class="comment">-- key: 实际使用的索引</span></span><br><span class="line"><span class="comment">-- key_len: 索引长度</span></span><br><span class="line"><span class="comment">-- ref: 索引引用</span></span><br><span class="line"><span class="comment">-- rows: 扫描行数估计</span></span><br><span class="line"><span class="comment">-- Extra: 额外信息</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-查询性能分析工具"><a href="#2-查询性能分析工具" class="headerlink" title="2. 查询性能分析工具"></a>2. 查询性能分析工具</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 开启查询分析</span></span><br><span class="line"><span class="keyword">SET</span> profiling <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 执行查询</span></span><br><span class="line"><span class="keyword">SELECT</span> e.name, e.salary, d.name <span class="keyword">as</span> dept_name</span><br><span class="line"><span class="keyword">FROM</span> employees e</span><br><span class="line"><span class="keyword">JOIN</span> departments d <span class="keyword">ON</span> e.department_id <span class="operator">=</span> d.id</span><br><span class="line"><span class="keyword">WHERE</span> e.salary <span class="keyword">BETWEEN</span> <span class="number">40000</span> <span class="keyword">AND</span> <span class="number">80000</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> e.salary <span class="keyword">DESC</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看查询性能分析</span></span><br><span class="line"><span class="keyword">SHOW</span> PROFILES;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看详细的性能分析</span></span><br><span class="line"><span class="keyword">SHOW</span> PROFILE <span class="keyword">FOR</span> QUERY <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看特定资源的使用情况</span></span><br><span class="line"><span class="keyword">SHOW</span> PROFILE CPU, MEMORY <span class="keyword">FOR</span> QUERY <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- MySQL 8.0+ 使用 Performance Schema</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    EVENT_NAME,</span><br><span class="line">    COUNT_STAR,</span><br><span class="line">    SUM_TIMER_WAIT<span class="operator">/</span><span class="number">1000000000</span> <span class="keyword">as</span> SUM_TIMER_WAIT_SEC,</span><br><span class="line">    AVG_TIMER_WAIT<span class="operator">/</span><span class="number">1000000000</span> <span class="keyword">as</span> AVG_TIMER_WAIT_SEC</span><br><span class="line"><span class="keyword">FROM</span> performance_schema.events_statements_summary_by_digest</span><br><span class="line"><span class="keyword">WHERE</span> DIGEST_TEXT <span class="keyword">LIKE</span> <span class="string">&#x27;%employees%&#x27;</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> SUM_TIMER_WAIT <span class="keyword">DESC</span></span><br><span class="line">LIMIT <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="SQL-重写优化技巧"><a href="#SQL-重写优化技巧" class="headerlink" title="SQL 重写优化技巧"></a>SQL 重写优化技巧</h2><h3 id="1-子查询优化"><a href="#1-子查询优化" class="headerlink" title="1. 子查询优化"></a>1. 子查询优化</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 低效的子查询</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="keyword">IN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> id <span class="keyword">FROM</span> departments <span class="keyword">WHERE</span> budget <span class="operator">&gt;</span> <span class="number">500000</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化为 JOIN</span></span><br><span class="line"><span class="keyword">SELECT</span> e.<span class="operator">*</span> <span class="keyword">FROM</span> employees e</span><br><span class="line"><span class="keyword">JOIN</span> departments d <span class="keyword">ON</span> e.department_id <span class="operator">=</span> d.id</span><br><span class="line"><span class="keyword">WHERE</span> d.budget <span class="operator">&gt;</span> <span class="number">500000</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- EXISTS vs IN 优化</span></span><br><span class="line"><span class="comment">-- 当子查询结果集较小时，使用 IN</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="keyword">IN</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 当子查询结果集较大时，使用 EXISTS</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees e</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">EXISTS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">FROM</span> departments d </span><br><span class="line">    <span class="keyword">WHERE</span> d.id <span class="operator">=</span> e.department_id <span class="keyword">AND</span> d.budget <span class="operator">&gt;</span> <span class="number">500000</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 相关子查询优化</span></span><br><span class="line"><span class="comment">-- 低效的相关子查询</span></span><br><span class="line"><span class="keyword">SELECT</span> e1.name, e1.salary</span><br><span class="line"><span class="keyword">FROM</span> employees e1</span><br><span class="line"><span class="keyword">WHERE</span> e1.salary <span class="operator">&gt;</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">AVG</span>(e2.salary) </span><br><span class="line">    <span class="keyword">FROM</span> employees e2 </span><br><span class="line">    <span class="keyword">WHERE</span> e2.department_id <span class="operator">=</span> e1.department_id</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化为窗口函数 (MySQL 8.0+)</span></span><br><span class="line"><span class="keyword">SELECT</span> name, salary</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        name, </span><br><span class="line">        salary,</span><br><span class="line">        department_id,</span><br><span class="line">        <span class="built_in">AVG</span>(salary) <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> department_id) <span class="keyword">as</span> avg_dept_salary</span><br><span class="line">    <span class="keyword">FROM</span> employees</span><br><span class="line">) t</span><br><span class="line"><span class="keyword">WHERE</span> salary <span class="operator">&gt;</span> avg_dept_salary;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-JOIN-优化技巧"><a href="#2-JOIN-优化技巧" class="headerlink" title="2. JOIN 优化技巧"></a>2. JOIN 优化技巧</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建更多测试表</span></span><br><span class="line"><span class="keyword">CREATE TABLE</span> projects (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span> AUTO_INCREMENT,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT NULL</span>,</span><br><span class="line">    department_id <span class="type">INT</span> <span class="keyword">NOT NULL</span>,</span><br><span class="line">    start_date <span class="type">DATE</span>,</span><br><span class="line">    end_date <span class="type">DATE</span>,</span><br><span class="line">    INDEX idx_dept_dates (department_id, start_date, end_date)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE TABLE</span> employee_projects (</span><br><span class="line">    employee_id <span class="type">INT</span>,</span><br><span class="line">    project_id <span class="type">INT</span>,</span><br><span class="line">    role <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    <span class="keyword">PRIMARY KEY</span> (employee_id, project_id),</span><br><span class="line">    INDEX idx_project (project_id)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- JOIN 顺序优化</span></span><br><span class="line"><span class="comment">-- MySQL 会自动优化 JOIN 顺序，但了解原理很重要</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 小表驱动大表</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="comment">/*+ STRAIGHT_JOIN */</span> </span><br><span class="line">    d.name <span class="keyword">as</span> dept_name,</span><br><span class="line">    <span class="built_in">COUNT</span>(e.id) <span class="keyword">as</span> employee_count</span><br><span class="line"><span class="keyword">FROM</span> departments d  <span class="comment">-- 小表</span></span><br><span class="line"><span class="keyword">JOIN</span> employees e <span class="keyword">ON</span> d.id <span class="operator">=</span> e.department_id  <span class="comment">-- 大表</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> d.id, d.name;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 多表 JOIN 优化</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    e.name <span class="keyword">as</span> employee_name,</span><br><span class="line">    d.name <span class="keyword">as</span> dept_name,</span><br><span class="line">    p.name <span class="keyword">as</span> project_name,</span><br><span class="line">    ep.role</span><br><span class="line"><span class="keyword">FROM</span> employees e</span><br><span class="line"><span class="keyword">JOIN</span> departments d <span class="keyword">ON</span> e.department_id <span class="operator">=</span> d.id</span><br><span class="line"><span class="keyword">JOIN</span> employee_projects ep <span class="keyword">ON</span> e.id <span class="operator">=</span> ep.employee_id</span><br><span class="line"><span class="keyword">JOIN</span> projects p <span class="keyword">ON</span> ep.project_id <span class="operator">=</span> p.id</span><br><span class="line"><span class="keyword">WHERE</span> d.budget <span class="operator">&gt;</span> <span class="number">500000</span></span><br><span class="line">    <span class="keyword">AND</span> p.start_date <span class="operator">&gt;=</span> <span class="string">&#x27;2023-01-01&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 使用索引提示优化</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="comment">/*+ USE_INDEX(e, idx_dept_salary) */</span></span><br><span class="line">    e.name, e.salary</span><br><span class="line"><span class="keyword">FROM</span> employees e</span><br><span class="line"><span class="keyword">WHERE</span> e.department_id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">AND</span> e.salary <span class="operator">&gt;</span> <span class="number">50000</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-分页查询优化"><a href="#3-分页查询优化" class="headerlink" title="3. 分页查询优化"></a>3. 分页查询优化</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 传统分页的问题</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> id </span><br><span class="line">LIMIT <span class="number">10000</span>, <span class="number">20</span>;  <span class="comment">-- 需要扫描前10000行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化方案1: 使用索引覆盖</span></span><br><span class="line"><span class="keyword">SELECT</span> e.<span class="operator">*</span> <span class="keyword">FROM</span> employees e</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> id <span class="keyword">FROM</span> employees </span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> id </span><br><span class="line">    LIMIT <span class="number">10000</span>, <span class="number">20</span></span><br><span class="line">) t <span class="keyword">ON</span> e.id <span class="operator">=</span> t.id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化方案2: 游标分页</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> id <span class="operator">&gt;</span> <span class="number">10000</span>  <span class="comment">-- 上一页的最后一个ID</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> id </span><br><span class="line">LIMIT <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化方案3: 延迟关联</span></span><br><span class="line"><span class="keyword">SELECT</span> e.<span class="operator">*</span> <span class="keyword">FROM</span> employees e</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> id <span class="keyword">FROM</span> employees </span><br><span class="line">    <span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span></span><br><span class="line">    LIMIT <span class="number">1000</span>, <span class="number">20</span></span><br><span class="line">) t <span class="keyword">ON</span> e.id <span class="operator">=</span> t.id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 复杂条件的分页优化</span></span><br><span class="line"><span class="comment">-- 创建复合索引支持排序和过滤</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_dept_salary_id <span class="keyword">ON</span> employees(department_id, salary <span class="keyword">DESC</span>, id);</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span> </span><br><span class="line">    <span class="keyword">AND</span> (salary <span class="operator">&lt;</span> <span class="number">60000</span> <span class="keyword">OR</span> (salary <span class="operator">=</span> <span class="number">60000</span> <span class="keyword">AND</span> id <span class="operator">&gt;</span> <span class="number">1000</span>))</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span>, id</span><br><span class="line">LIMIT <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级优化技巧"><a href="#高级优化技巧" class="headerlink" title="高级优化技巧"></a>高级优化技巧</h2><h3 id="1-窗口函数优化-MySQL-8-0"><a href="#1-窗口函数优化-MySQL-8-0" class="headerlink" title="1. 窗口函数优化 (MySQL 8.0+)"></a>1. 窗口函数优化 (MySQL 8.0+)</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 排名查询优化</span></span><br><span class="line"><span class="comment">-- 传统方式：使用子查询</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    name,</span><br><span class="line">    salary,</span><br><span class="line">    (<span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> employees e2 </span><br><span class="line">     <span class="keyword">WHERE</span> e2.department_id <span class="operator">=</span> e1.department_id </span><br><span class="line">     <span class="keyword">AND</span> e2.salary <span class="operator">&gt;=</span> e1.salary) <span class="keyword">as</span> salary_rank</span><br><span class="line"><span class="keyword">FROM</span> employees e1</span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化：使用窗口函数</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    name,</span><br><span class="line">    salary,</span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> department_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> salary <span class="keyword">DESC</span>) <span class="keyword">as</span> salary_rank</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 移动平均计算</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    name,</span><br><span class="line">    salary,</span><br><span class="line">    hire_date,</span><br><span class="line">    <span class="built_in">AVG</span>(salary) <span class="keyword">OVER</span> (</span><br><span class="line">        <span class="keyword">PARTITION</span> <span class="keyword">BY</span> department_id </span><br><span class="line">        <span class="keyword">ORDER</span> <span class="keyword">BY</span> hire_date </span><br><span class="line">        <span class="keyword">ROWS</span> <span class="keyword">BETWEEN</span> <span class="number">2</span> PRECEDING <span class="keyword">AND</span> <span class="keyword">CURRENT</span> <span class="type">ROW</span></span><br><span class="line">    ) <span class="keyword">as</span> moving_avg_salary</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> department_id, hire_date;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 累计统计</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    name,</span><br><span class="line">    salary,</span><br><span class="line">    <span class="built_in">SUM</span>(salary) <span class="keyword">OVER</span> (</span><br><span class="line">        <span class="keyword">PARTITION</span> <span class="keyword">BY</span> department_id </span><br><span class="line">        <span class="keyword">ORDER</span> <span class="keyword">BY</span> salary </span><br><span class="line">        <span class="keyword">ROWS</span> UNBOUNDED PRECEDING</span><br><span class="line">    ) <span class="keyword">as</span> cumulative_salary</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> department_id, salary;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-条件优化技巧"><a href="#2-条件优化技巧" class="headerlink" title="2. 条件优化技巧"></a>2. 条件优化技巧</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 避免在 WHERE 子句中使用函数</span></span><br><span class="line"><span class="comment">-- 低效查询</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">YEAR</span>(hire_date) <span class="operator">=</span> <span class="number">2023</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化后</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> hire_date <span class="operator">&gt;=</span> <span class="string">&#x27;2023-01-01&#x27;</span> </span><br><span class="line">    <span class="keyword">AND</span> hire_date <span class="operator">&lt;</span> <span class="string">&#x27;2024-01-01&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 避免隐式类型转换</span></span><br><span class="line"><span class="comment">-- 低效查询（如果 department_id 是 INT 类型）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化后</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- OR 条件优化</span></span><br><span class="line"><span class="comment">-- 低效查询</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">OR</span> department_id <span class="operator">=</span> <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化为 IN</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="keyword">IN</span> (<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 复杂 OR 条件优化为 UNION</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> salary <span class="operator">&gt;</span> <span class="number">80000</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- LIKE 查询优化</span></span><br><span class="line"><span class="comment">-- 低效查询</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> name <span class="keyword">LIKE</span> <span class="string">&#x27;%john%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 如果只需要前缀匹配，使用前缀索引</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> name <span class="keyword">LIKE</span> <span class="string">&#x27;john%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 全文搜索优化</span></span><br><span class="line"><span class="keyword">ALTER TABLE</span> employees <span class="keyword">ADD</span> FULLTEXT(name);</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> <span class="keyword">MATCH</span>(name) AGAINST(<span class="string">&#x27;john&#x27;</span> <span class="keyword">IN</span> <span class="keyword">NATURAL</span> <span class="keyword">LANGUAGE</span> MODE);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-聚合查询优化"><a href="#3-聚合查询优化" class="headerlink" title="3. 聚合查询优化"></a>3. 聚合查询优化</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- COUNT 优化</span></span><br><span class="line"><span class="comment">-- 低效查询</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 如果不需要精确计数，可以使用估算</span></span><br><span class="line"><span class="keyword">SELECT</span> TABLE_ROWS <span class="keyword">FROM</span> information_schema.TABLES </span><br><span class="line"><span class="keyword">WHERE</span> TABLE_SCHEMA <span class="operator">=</span> <span class="string">&#x27;your_database&#x27;</span> <span class="keyword">AND</span> TABLE_NAME <span class="operator">=</span> <span class="string">&#x27;employees&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- GROUP BY 优化</span></span><br><span class="line"><span class="comment">-- 创建支持 GROUP BY 的索引</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_dept_hire_date <span class="keyword">ON</span> employees(department_id, hire_date);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化的聚合查询</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    department_id,</span><br><span class="line">    <span class="keyword">YEAR</span>(hire_date) <span class="keyword">as</span> hire_year,</span><br><span class="line">    <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">as</span> employee_count,</span><br><span class="line">    <span class="built_in">AVG</span>(salary) <span class="keyword">as</span> avg_salary</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> department_id, <span class="keyword">YEAR</span>(hire_date)</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> department_id, hire_year;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- HAVING 子句优化</span></span><br><span class="line"><span class="comment">-- 将能在 WHERE 中过滤的条件移到 WHERE</span></span><br><span class="line"><span class="comment">-- 低效查询</span></span><br><span class="line"><span class="keyword">SELECT</span> department_id, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">as</span> cnt</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> department_id</span><br><span class="line"><span class="keyword">HAVING</span> department_id <span class="keyword">IN</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="keyword">AND</span> cnt <span class="operator">&gt;</span> <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 优化后</span></span><br><span class="line"><span class="keyword">SELECT</span> department_id, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">as</span> cnt</span><br><span class="line"><span class="keyword">FROM</span> employees</span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="keyword">IN</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> department_id</span><br><span class="line"><span class="keyword">HAVING</span> cnt <span class="operator">&gt;</span> <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="查询缓存和优化器"><a href="#查询缓存和优化器" class="headerlink" title="查询缓存和优化器"></a>查询缓存和优化器</h2><h3 id="1-查询缓存配置-MySQL-5-7"><a href="#1-查询缓存配置-MySQL-5-7" class="headerlink" title="1. 查询缓存配置 (MySQL 5.7)"></a>1. 查询缓存配置 (MySQL 5.7)</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看查询缓存状态</span></span><br><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;query_cache%&#x27;</span>;</span><br><span class="line"><span class="keyword">SHOW</span> STATUS <span class="keyword">LIKE</span> <span class="string">&#x27;Qcache%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 配置查询缓存 (my.cnf)</span></span><br><span class="line"><span class="comment">-- query_cache_type = 1</span></span><br><span class="line"><span class="comment">-- query_cache_size = 128M</span></span><br><span class="line"><span class="comment">-- query_cache_limit = 2M</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查询缓存使用技巧</span></span><br><span class="line"><span class="comment">-- 使用 SQL_CACHE 提示</span></span><br><span class="line"><span class="keyword">SELECT</span> SQL_CACHE <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 使用 SQL_NO_CACHE 跳过缓存</span></span><br><span class="line"><span class="keyword">SELECT</span> SQL_NO_CACHE <span class="operator">*</span> <span class="keyword">FROM</span> employees <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 注意：MySQL 8.0 已移除查询缓存，推荐使用应用层缓存</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-优化器提示-MySQL-8-0"><a href="#2-优化器提示-MySQL-8-0" class="headerlink" title="2. 优化器提示 (MySQL 8.0+)"></a>2. 优化器提示 (MySQL 8.0+)</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 强制使用特定索引</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="comment">/*+ USE_INDEX(employees idx_dept_salary) */</span> </span><br><span class="line">    <span class="operator">*</span> <span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> department_id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">AND</span> salary <span class="operator">&gt;</span> <span class="number">50000</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 强制使用特定 JOIN 算法</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="comment">/*+ HASH_JOIN(e, d) */</span></span><br><span class="line">    e.name, d.name</span><br><span class="line"><span class="keyword">FROM</span> employees e</span><br><span class="line"><span class="keyword">JOIN</span> departments d <span class="keyword">ON</span> e.department_id <span class="operator">=</span> d.id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 控制 JOIN 顺序</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="comment">/*+ STRAIGHT_JOIN */</span></span><br><span class="line">    e.name, d.name</span><br><span class="line"><span class="keyword">FROM</span> departments d</span><br><span class="line"><span class="keyword">JOIN</span> employees e <span class="keyword">ON</span> d.id <span class="operator">=</span> e.department_id</span><br><span class="line"><span class="keyword">WHERE</span> d.budget <span class="operator">&gt;</span> <span class="number">500000</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 并行查询提示</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="comment">/*+ SET_VAR(optimizer_switch = &#x27;block_nested_loop=off&#x27;) */</span></span><br><span class="line">    <span class="operator">*</span> <span class="keyword">FROM</span> employees e1</span><br><span class="line"><span class="keyword">JOIN</span> employees e2 <span class="keyword">ON</span> e1.department_id <span class="operator">=</span> e2.department_id</span><br><span class="line"><span class="keyword">WHERE</span> e1.id <span class="operator">!=</span> e2.id;</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能监控和诊断"><a href="#性能监控和诊断" class="headerlink" title="性能监控和诊断"></a>性能监控和诊断</h2><h3 id="1-慢查询日志分析"><a href="#1-慢查询日志分析" class="headerlink" title="1. 慢查询日志分析"></a>1. 慢查询日志分析</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启用慢查询日志 (my.cnf)</span></span><br><span class="line"><span class="comment"># slow_query_log = 1</span></span><br><span class="line"><span class="comment"># slow_query_log_file = /var/log/mysql/slow.log</span></span><br><span class="line"><span class="comment"># long_query_time = 1</span></span><br><span class="line"><span class="comment"># log_queries_not_using_indexes = 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 分析慢查询日志</span></span><br><span class="line">mysqldumpslow -s t -t 10 /var/log/mysql/slow.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 pt-query-digest 分析</span></span><br><span class="line">pt-query-digest /var/log/mysql/slow.log &gt; slow_query_report.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Performance-Schema-监控"><a href="#2-Performance-Schema-监控" class="headerlink" title="2. Performance Schema 监控"></a>2. Performance Schema 监控</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 启用 Performance Schema 监控</span></span><br><span class="line"><span class="keyword">UPDATE</span> performance_schema.setup_instruments </span><br><span class="line"><span class="keyword">SET</span> ENABLED <span class="operator">=</span> <span class="string">&#x27;YES&#x27;</span>, TIMED <span class="operator">=</span> <span class="string">&#x27;YES&#x27;</span> </span><br><span class="line"><span class="keyword">WHERE</span> NAME <span class="keyword">LIKE</span> <span class="string">&#x27;statement/%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">UPDATE</span> performance_schema.setup_consumers </span><br><span class="line"><span class="keyword">SET</span> ENABLED <span class="operator">=</span> <span class="string">&#x27;YES&#x27;</span> </span><br><span class="line"><span class="keyword">WHERE</span> NAME <span class="keyword">LIKE</span> <span class="string">&#x27;%statements%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看最耗时的查询</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    DIGEST_TEXT,</span><br><span class="line">    COUNT_STAR,</span><br><span class="line">    SUM_TIMER_WAIT<span class="operator">/</span><span class="number">1000000000</span> <span class="keyword">as</span> SUM_TIMER_WAIT_SEC,</span><br><span class="line">    AVG_TIMER_WAIT<span class="operator">/</span><span class="number">1000000000</span> <span class="keyword">as</span> AVG_TIMER_WAIT_SEC,</span><br><span class="line">    SUM_ROWS_EXAMINED,</span><br><span class="line">    SUM_ROWS_SENT</span><br><span class="line"><span class="keyword">FROM</span> performance_schema.events_statements_summary_by_digest</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> SUM_TIMER_WAIT <span class="keyword">DESC</span></span><br><span class="line">LIMIT <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查看表的访问统计</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    OBJECT_SCHEMA,</span><br><span class="line">    OBJECT_NAME,</span><br><span class="line">    COUNT_READ,</span><br><span class="line">    COUNT_WRITE,</span><br><span class="line">    COUNT_FETCH,</span><br><span class="line">    COUNT_INSERT,</span><br><span class="line">    COUNT_UPDATE,</span><br><span class="line">    COUNT_DELETE</span><br><span class="line"><span class="keyword">FROM</span> performance_schema.table_io_waits_summary_by_table</span><br><span class="line"><span class="keyword">WHERE</span> OBJECT_SCHEMA <span class="operator">=</span> <span class="string">&#x27;your_database&#x27;</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> COUNT_READ <span class="operator">+</span> COUNT_WRITE <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-实时查询监控脚本"><a href="#3-实时查询监控脚本" class="headerlink" title="3. 实时查询监控脚本"></a>3. 实时查询监控脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">QueryMonitor</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, db_config</span>):</span><br><span class="line">        <span class="variable language_">self</span>.db_config = db_config</span><br><span class="line">        <span class="variable language_">self</span>.connection = <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">connect</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.connection = pymysql.connect(**<span class="variable language_">self</span>.db_config)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_running_queries</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;获取当前运行的查询&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">with</span> <span class="variable language_">self</span>.connection.cursor(pymysql.cursors.DictCursor) <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.execute(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">                SELECT </span></span><br><span class="line"><span class="string">                    ID,</span></span><br><span class="line"><span class="string">                    USER,</span></span><br><span class="line"><span class="string">                    HOST,</span></span><br><span class="line"><span class="string">                    DB,</span></span><br><span class="line"><span class="string">                    COMMAND,</span></span><br><span class="line"><span class="string">                    TIME,</span></span><br><span class="line"><span class="string">                    STATE,</span></span><br><span class="line"><span class="string">                    INFO</span></span><br><span class="line"><span class="string">                FROM information_schema.PROCESSLIST </span></span><br><span class="line"><span class="string">                WHERE COMMAND != &#x27;Sleep&#x27; </span></span><br><span class="line"><span class="string">                    AND TIME &gt; 1</span></span><br><span class="line"><span class="string">                ORDER BY TIME DESC</span></span><br><span class="line"><span class="string">            &quot;&quot;&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> cursor.fetchall()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_slow_queries</span>(<span class="params">self, limit=<span class="number">10</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;获取最慢的查询&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">with</span> <span class="variable language_">self</span>.connection.cursor(pymysql.cursors.DictCursor) <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.execute(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">                SELECT </span></span><br><span class="line"><span class="string">                    DIGEST_TEXT,</span></span><br><span class="line"><span class="string">                    COUNT_STAR as execution_count,</span></span><br><span class="line"><span class="string">                    ROUND(SUM_TIMER_WAIT/1000000000, 2) as total_time_sec,</span></span><br><span class="line"><span class="string">                    ROUND(AVG_TIMER_WAIT/1000000000, 2) as avg_time_sec,</span></span><br><span class="line"><span class="string">                    ROUND(MAX_TIMER_WAIT/1000000000, 2) as max_time_sec,</span></span><br><span class="line"><span class="string">                    SUM_ROWS_EXAMINED,</span></span><br><span class="line"><span class="string">                    SUM_ROWS_SENT</span></span><br><span class="line"><span class="string">                FROM performance_schema.events_statements_summary_by_digest</span></span><br><span class="line"><span class="string">                WHERE DIGEST_TEXT IS NOT NULL</span></span><br><span class="line"><span class="string">                ORDER BY SUM_TIMER_WAIT DESC</span></span><br><span class="line"><span class="string">                LIMIT %s</span></span><br><span class="line"><span class="string">            &quot;&quot;&quot;</span>, (limit,))</span><br><span class="line">            <span class="keyword">return</span> cursor.fetchall()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">kill_long_running_query</span>(<span class="params">self, process_id</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;终止长时间运行的查询&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">with</span> <span class="variable language_">self</span>.connection.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.execute(<span class="string">f&quot;KILL <span class="subst">&#123;process_id&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;已终止查询进程: <span class="subst">&#123;process_id&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">monitor_loop</span>(<span class="params">self, interval=<span class="number">30</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;监控循环&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;\n=== 查询监控报告 <span class="subst">&#123;datetime.now()&#125;</span> ===&quot;</span>)</span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 检查运行中的查询</span></span><br><span class="line">                running_queries = <span class="variable language_">self</span>.get_running_queries()</span><br><span class="line">                <span class="keyword">if</span> running_queries:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;发现 <span class="subst">&#123;<span class="built_in">len</span>(running_queries)&#125;</span> 个运行中的查询:&quot;</span>)</span><br><span class="line">                    <span class="keyword">for</span> query <span class="keyword">in</span> running_queries:</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;  ID: <span class="subst">&#123;query[<span class="string">&#x27;ID&#x27;</span>]&#125;</span>, 用户: <span class="subst">&#123;query[<span class="string">&#x27;USER&#x27;</span>]&#125;</span>, &quot;</span></span><br><span class="line">                              <span class="string">f&quot;运行时间: <span class="subst">&#123;query[<span class="string">&#x27;TIME&#x27;</span>]&#125;</span>秒&quot;</span>)</span><br><span class="line">                        <span class="keyword">if</span> query[<span class="string">&#x27;TIME&#x27;</span>] &gt; <span class="number">300</span>:  <span class="comment"># 超过5分钟的查询</span></span><br><span class="line">                            <span class="built_in">print</span>(<span class="string">f&quot;    警告: 长时间运行的查询!&quot;</span>)</span><br><span class="line">                            <span class="comment"># 可以选择自动终止</span></span><br><span class="line">                            <span class="comment"># self.kill_long_running_query(query[&#x27;ID&#x27;])</span></span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 检查慢查询</span></span><br><span class="line">                slow_queries = <span class="variable language_">self</span>.get_slow_queries(<span class="number">5</span>)</span><br><span class="line">                <span class="keyword">if</span> slow_queries:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;\n最慢的 <span class="subst">&#123;<span class="built_in">len</span>(slow_queries)&#125;</span> 个查询:&quot;</span>)</span><br><span class="line">                    <span class="keyword">for</span> i, query <span class="keyword">in</span> <span class="built_in">enumerate</span>(slow_queries, <span class="number">1</span>):</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;  <span class="subst">&#123;i&#125;</span>. 平均耗时: <span class="subst">&#123;query[<span class="string">&#x27;avg_time_sec&#x27;</span>]&#125;</span>秒, &quot;</span></span><br><span class="line">                              <span class="string">f&quot;执行次数: <span class="subst">&#123;query[<span class="string">&#x27;execution_count&#x27;</span>]&#125;</span>&quot;</span>)</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;     查询: <span class="subst">&#123;query[<span class="string">&#x27;DIGEST_TEXT&#x27;</span>][:<span class="number">100</span>]&#125;</span>...&quot;</span>)</span><br><span class="line">                </span><br><span class="line">                time.sleep(interval)</span><br><span class="line">                </span><br><span class="line">            <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;\n监控已停止&quot;</span>)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;监控错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">                time.sleep(interval)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    db_config = &#123;</span><br><span class="line">        <span class="string">&#x27;host&#x27;</span>: <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;user&#x27;</span>: <span class="string">&#x27;monitor_user&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;password&#x27;</span>: <span class="string">&#x27;monitor_pass&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;database&#x27;</span>: <span class="string">&#x27;performance_schema&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;charset&#x27;</span>: <span class="string">&#x27;utf8mb4&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    monitor = QueryMonitor(db_config)</span><br><span class="line">    monitor.connect()</span><br><span class="line">    monitor.monitor_loop(<span class="number">30</span>)  <span class="comment"># 每30秒检查一次</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="最佳实践总结"><a href="#最佳实践总结" class="headerlink" title="最佳实践总结"></a>最佳实践总结</h2><h3 id="1-查询优化检查清单"><a href="#1-查询优化检查清单" class="headerlink" title="1. 查询优化检查清单"></a>1. 查询优化检查清单</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 1. 检查是否使用了索引</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> your_table <span class="keyword">WHERE</span> your_condition;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2. 检查索引选择性</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    <span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> column_name) <span class="operator">/</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">as</span> selectivity</span><br><span class="line"><span class="keyword">FROM</span> your_table;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 3. 检查查询是否可以使用覆盖索引</span></span><br><span class="line"><span class="comment">-- 确保 SELECT 的列都包含在索引中</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 4. 避免 SELECT *，只查询需要的列</span></span><br><span class="line"><span class="keyword">SELECT</span> specific_columns <span class="keyword">FROM</span> your_table <span class="keyword">WHERE</span> <span class="keyword">condition</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 5. 合理使用 LIMIT</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> your_table <span class="keyword">WHERE</span> <span class="keyword">condition</span> LIMIT <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 6. 优化 JOIN 条件</span></span><br><span class="line"><span class="comment">-- 确保 JOIN 条件上有索引</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 7. 避免在 WHERE 子句中使用函数</span></span><br><span class="line"><span class="comment">-- 使用范围查询替代函数调用</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-性能优化原则"><a href="#2-性能优化原则" class="headerlink" title="2. 性能优化原则"></a>2. 性能优化原则</h3><ol>
+<li><strong>索引优先</strong>: 确保查询条件有合适的索引支持</li>
+<li><strong>减少数据量</strong>: 只查询需要的列和行</li>
+<li><strong>避免复杂子查询</strong>: 尽量使用 JOIN 替代子查询</li>
+<li><strong>合理使用缓存</strong>: 应用层缓存热点数据</li>
+<li><strong>监控和分析</strong>: 定期分析慢查询和性能指标</li>
+<li><strong>测试验证</strong>: 在生产环境前充分测试优化效果</li>
+</ol>
+<h3 id="3-常见优化误区"><a href="#3-常见优化误区" class="headerlink" title="3. 常见优化误区"></a>3. 常见优化误区</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 误区1: 过度使用索引</span></span><br><span class="line"><span class="comment">-- 不要为每个列都创建索引，会影响写性能</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 误区2: 忽略数据类型</span></span><br><span class="line"><span class="comment">-- 使用合适的数据类型，避免不必要的存储开销</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 误区3: 不考虑数据分布</span></span><br><span class="line"><span class="comment">-- 对于数据分布不均匀的列，索引效果可能不佳</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 误区4: 盲目使用 LIMIT</span></span><br><span class="line"><span class="comment">-- 大偏移量的 LIMIT 仍然需要扫描前面的行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 误区5: 忽略查询缓存失效</span></span><br><span class="line"><span class="comment">-- 频繁更新的表不适合查询缓存</span></span><br></pre></td></tr></table></figure>
+
+<p>通过系统性地应用这些查询优化技巧，可以显著提升MySQL数据库的查询性能，为应用提供更好的响应速度和用户体验。记住，查询优化是一个持续的过程，需要根据数据增长和业务变化不断调整优化策略。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/">查询优化</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">性能分析</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/SQL%E8%B0%83%E4%BC%98/">SQL调优</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/EXPLAIN/">EXPLAIN</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92/">执行计划</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/vue/vue-component-library-design-system/"
+                                   title="Vue 组件库开发与设计系统构建实战指南"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Vue 组件库开发与设计系统构建实战指南</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/fastapi/fastapi-error-handling-logging/"
+                                   title="FastAPI错误处理与日志系统：构建健壮的生产级应用"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">FastAPI错误处理与日志系统：构建健壮的生产级应用</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90%E5%9F%BA%E7%A1%80"><span class="nav-text">查询分析基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-EXPLAIN-%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%AF%A6%E8%A7%A3"><span class="nav-text">1. EXPLAIN 执行计划详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-text">2. 查询性能分析工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-%E9%87%8D%E5%86%99%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">SQL 重写优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AD%90%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">1. 子查询优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-JOIN-%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">2. JOIN 优化技巧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">3. 分页查询优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">高级优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96-MySQL-8-0"><span class="nav-text">1. 窗口函数优化 (MySQL 8.0+)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9D%A1%E4%BB%B6%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">2. 条件优化技巧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">3. 聚合查询优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%E5%92%8C%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-text">查询缓存和优化器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%E9%85%8D%E7%BD%AE-MySQL-5-7"><span class="nav-text">1. 查询缓存配置 (MySQL 5.7)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BC%98%E5%8C%96%E5%99%A8%E6%8F%90%E7%A4%BA-MySQL-8-0"><span class="nav-text">2. 优化器提示 (MySQL 8.0+)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%92%8C%E8%AF%8A%E6%96%AD"><span class="nav-text">性能监控和诊断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%85%A2%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="nav-text">1. 慢查询日志分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Performance-Schema-%E7%9B%91%E6%8E%A7"><span class="nav-text">2. Performance Schema 监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%9E%E6%97%B6%E6%9F%A5%E8%AF%A2%E7%9B%91%E6%8E%A7%E8%84%9A%E6%9C%AC"><span class="nav-text">3. 实时查询监控脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93"><span class="nav-text">最佳实践总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-text">1. 查询优化检查清单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8E%9F%E5%88%99"><span class="nav-text">2. 性能优化原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B8%B8%E8%A7%81%E4%BC%98%E5%8C%96%E8%AF%AF%E5%8C%BA"><span class="nav-text">3. 常见优化误区</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90%E5%9F%BA%E7%A1%80"><span class="nav-text">查询分析基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-EXPLAIN-%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%AF%A6%E8%A7%A3"><span class="nav-text">1. EXPLAIN 执行计划详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-text">2. 查询性能分析工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-%E9%87%8D%E5%86%99%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">SQL 重写优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AD%90%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">1. 子查询优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-JOIN-%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">2. JOIN 优化技巧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">3. 分页查询优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">高级优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96-MySQL-8-0"><span class="nav-text">1. 窗口函数优化 (MySQL 8.0+)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9D%A1%E4%BB%B6%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">2. 条件优化技巧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">3. 聚合查询优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%E5%92%8C%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-text">查询缓存和优化器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%E9%85%8D%E7%BD%AE-MySQL-5-7"><span class="nav-text">1. 查询缓存配置 (MySQL 5.7)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BC%98%E5%8C%96%E5%99%A8%E6%8F%90%E7%A4%BA-MySQL-8-0"><span class="nav-text">2. 优化器提示 (MySQL 8.0+)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%92%8C%E8%AF%8A%E6%96%AD"><span class="nav-text">性能监控和诊断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%85%A2%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="nav-text">1. 慢查询日志分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Performance-Schema-%E7%9B%91%E6%8E%A7"><span class="nav-text">2. Performance Schema 监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%9E%E6%97%B6%E6%9F%A5%E8%AF%A2%E7%9B%91%E6%8E%A7%E8%84%9A%E6%9C%AC"><span class="nav-text">3. 实时查询监控脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93"><span class="nav-text">最佳实践总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-text">1. 查询优化检查清单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8E%9F%E5%88%99"><span class="nav-text">2. 性能优化原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B8%B8%E8%A7%81%E4%BC%98%E5%8C%96%E8%AF%AF%E5%8C%BA"><span class="nav-text">3. 常见优化误区</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

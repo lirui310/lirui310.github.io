@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            PHP 8 错误处理机制全面升级：从警告到异常的现代化转变 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        PHP 8 错误处理机制全面升级：从警告到异常的现代化转变
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-03-28 09:45:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/php/">php</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">最佳实践</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%B0%83%E8%AF%95/">调试</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/">错误处理</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%BC%82%E5%B8%B8/">异常</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/PHP8/">PHP8</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>PHP 8在错误处理方面进行了重大改进，将许多传统的警告和通知升级为异常，提供了更一致和可预测的错误处理机制。本文将深入探讨这些改进，并提供实际的应用示例。</p>
+<h2 id="错误级别的重大变化"><a href="#错误级别的重大变化" class="headerlink" title="错误级别的重大变化"></a>错误级别的重大变化</h2><h3 id="从警告到异常的转变"><a href="#从警告到异常的转变" class="headerlink" title="从警告到异常的转变"></a>从警告到异常的转变</h3><p>PHP 8将许多原本产生警告的情况改为抛出异常，使错误处理更加一致。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ErrorHandlingEvolution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">demonstrateStringOffsetChanges</span>(<span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;=== 字符串偏移错误处理变化 ===\n&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$string</span> = <span class="string">&quot;Hello World&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// PHP 8中，非法的字符串偏移会抛出异常</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;尝试访问非法偏移...\n&quot;</span>;</span><br><span class="line">            <span class="variable">$char</span> = <span class="variable">$string</span>[<span class="string">&quot;invalid&quot;</span>];</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;字符: <span class="subst">$char</span>\n&quot;</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">TypeError</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;捕获到类型错误: &quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 数组访问字符串也会抛出异常</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;尝试将字符串当作数组访问...\n&quot;</span>;</span><br><span class="line">            <span class="variable">$result</span> = <span class="variable">$string</span>[[]];</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">TypeError</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;数组偏移错误: &quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">demonstrateUndefinedVariableChanges</span>(<span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;\n=== 未定义变量处理变化 ===\n&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 设置错误处理器来捕获未定义变量</span></span><br><span class="line">        <span class="title function_ invoke__">set_error_handler</span>(function(<span class="variable">$severity</span>, <span class="variable">$message</span>, <span class="variable">$file</span>, <span class="variable">$line</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">ErrorException</span>(<span class="variable">$message</span>, <span class="number">0</span>, <span class="variable">$severity</span>, <span class="variable">$file</span>, <span class="variable">$line</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 在PHP 8中，访问未定义变量会产生警告（可转换为异常）</span></span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;尝试访问未定义变量...\n&quot;</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="variable">$undefinedVariable</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">ErrorException</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;未定义变量错误: &quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 安全的访问方式</span></span><br><span class="line">        <span class="variable">$safeVariable</span> = <span class="variable">$undefinedVariable</span> ?? <span class="string">&#x27;默认值&#x27;</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;安全访问结果: <span class="subst">$safeVariable</span>\n&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="title function_ invoke__">restore_error_handler</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">demonstrateArithmeticErrors</span>(<span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;\n=== 算术错误处理 ===\n&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 除零错误</span></span><br><span class="line">            <span class="variable">$result</span> = <span class="number">10</span> / <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;除零结果: <span class="subst">$result</span>\n&quot;</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">DivisionByZeroError</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;除零错误: &quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 模运算除零</span></span><br><span class="line">            <span class="variable">$result</span> = <span class="number">10</span> % <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">DivisionByZeroError</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;模运算除零错误: &quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 安全的除法操作</span></span><br><span class="line">        <span class="variable">$dividend</span> = <span class="number">10</span>;</span><br><span class="line">        <span class="variable">$divisor</span> = <span class="number">0</span>;</span><br><span class="line">        <span class="variable">$result</span> = <span class="variable">$divisor</span> !== <span class="number">0</span> ? <span class="variable">$dividend</span> / <span class="variable">$divisor</span> : <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;安全除法结果: &quot;</span> . (<span class="variable">$result</span> ?? <span class="string">&#x27;无法计算&#x27;</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行错误处理演示</span></span><br><span class="line"><span class="variable">$errorDemo</span> = <span class="keyword">new</span> <span class="title class_">ErrorHandlingEvolution</span>();</span><br><span class="line"><span class="variable">$errorDemo</span>-&gt;<span class="title function_ invoke__">demonstrateStringOffsetChanges</span>();</span><br><span class="line"><span class="variable">$errorDemo</span>-&gt;<span class="title function_ invoke__">demonstrateUndefinedVariableChanges</span>();</span><br><span class="line"><span class="variable">$errorDemo</span>-&gt;<span class="title function_ invoke__">demonstrateArithmeticErrors</span>();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="现代化的异常处理系统"><a href="#现代化的异常处理系统" class="headerlink" title="现代化的异常处理系统"></a>现代化的异常处理系统</h2><h3 id="自定义异常层次结构"><a href="#自定义异常层次结构" class="headerlink" title="自定义异常层次结构"></a>自定义异常层次结构</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 应用程序异常基类</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AppException</span> <span class="keyword">extends</span> <span class="title">Exception</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">array</span> <span class="variable">$context</span> = [];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">string</span> <span class="variable">$message</span> = <span class="string">&#x27;&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">int</span> <span class="variable">$code</span> = <span class="number">0</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        ?<span class="built_in">Throwable</span> <span class="variable">$previous</span> = <span class="literal">null</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">array</span> <span class="variable">$context</span> = []</span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="built_in">parent</span>::<span class="title function_ invoke__">__construct</span>(<span class="variable">$message</span>, <span class="variable">$code</span>, <span class="variable">$previous</span>);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;context = <span class="variable">$context</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getContext</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;context;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setContext</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$context</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;context = <span class="variable">$context</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getErrorType</span>(<span class="params"></span>): <span class="title">string</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">toArray</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;type&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getErrorType</span>(),</span><br><span class="line">            <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getMessage</span>(),</span><br><span class="line">            <span class="string">&#x27;code&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getCode</span>(),</span><br><span class="line">            <span class="string">&#x27;file&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getFile</span>(),</span><br><span class="line">            <span class="string">&#x27;line&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getLine</span>(),</span><br><span class="line">            <span class="string">&#x27;context&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;context,</span><br><span class="line">            <span class="string">&#x27;trace&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getTrace</span>()</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 业务逻辑异常</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BusinessLogicException</span> <span class="keyword">extends</span> <span class="title">AppException</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getErrorType</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;BUSINESS_LOGIC_ERROR&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 验证异常</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ValidationException</span> <span class="keyword">extends</span> <span class="title">AppException</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$errors</span> = [];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">array</span> <span class="variable">$errors</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">string</span> <span class="variable">$message</span> = <span class="string">&#x27;数据验证失败&#x27;</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">int</span> <span class="variable">$code</span> = <span class="number">422</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        ?<span class="built_in">Throwable</span> <span class="variable">$previous</span> = <span class="literal">null</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;errors = <span class="variable">$errors</span>;</span><br><span class="line">        <span class="built_in">parent</span>::<span class="title function_ invoke__">__construct</span>(<span class="variable">$message</span>, <span class="variable">$code</span>, <span class="variable">$previous</span>, [<span class="string">&#x27;errors&#x27;</span> =&gt; <span class="variable">$errors</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getErrors</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;errors;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getErrorType</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;VALIDATION_ERROR&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hasError</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$field</span></span>): <span class="title">bool</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">isset</span>(<span class="variable language_">$this</span>-&gt;errors[<span class="variable">$field</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getFieldErrors</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$field</span></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;errors[<span class="variable">$field</span>] ?? [];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 资源异常</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ResourceException</span> <span class="keyword">extends</span> <span class="title">AppException</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getErrorType</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;RESOURCE_ERROR&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据库异常</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DatabaseException</span> <span class="keyword">extends</span> <span class="title">ResourceException</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getErrorType</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;DATABASE_ERROR&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 网络异常</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NetworkException</span> <span class="keyword">extends</span> <span class="title">ResourceException</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getErrorType</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;NETWORK_ERROR&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用户服务示例</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$users</span> = [];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createUser</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$userData</span></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 验证用户数据</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">validateUserData</span>(<span class="variable">$userData</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 检查用户是否已存在</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">userExists</span>(<span class="variable">$userData</span>[<span class="string">&#x27;email&#x27;</span>])) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BusinessLogicException</span>(</span><br><span class="line">                <span class="string">&#x27;用户已存在&#x27;</span>,</span><br><span class="line">                <span class="number">409</span>,</span><br><span class="line">                <span class="literal">null</span>,</span><br><span class="line">                [<span class="string">&#x27;email&#x27;</span> =&gt; <span class="variable">$userData</span>[<span class="string">&#x27;email&#x27;</span>]]</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 模拟数据库操作</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">simulateDatabaseOperation</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 创建用户</span></span><br><span class="line">        <span class="variable">$user</span> = [</span><br><span class="line">            <span class="string">&#x27;id&#x27;</span> =&gt; <span class="title function_ invoke__">count</span>(<span class="variable">$this</span>-&gt;users) + <span class="number">1</span>,</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span> =&gt; <span class="variable">$userData</span>[<span class="string">&#x27;name&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;email&#x27;</span> =&gt; <span class="variable">$userData</span>[<span class="string">&#x27;email&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;created_at&#x27;</span> =&gt; <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d H:i:s&#x27;</span>)</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">$this</span>-&gt;users[] = <span class="variable">$user</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$user</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">validateUserData</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$userData</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable">$errors</span> = [];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$userData</span>[<span class="string">&#x27;name&#x27;</span>])) &#123;</span><br><span class="line">            <span class="variable">$errors</span>[<span class="string">&#x27;name&#x27;</span>][] = <span class="string">&#x27;姓名不能为空&#x27;</span>;</span><br><span class="line">        &#125; <span class="keyword">elseif</span> (<span class="title function_ invoke__">strlen</span>(<span class="variable">$userData</span>[<span class="string">&#x27;name&#x27;</span>]) &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="variable">$errors</span>[<span class="string">&#x27;name&#x27;</span>][] = <span class="string">&#x27;姓名长度不能少于2个字符&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$userData</span>[<span class="string">&#x27;email&#x27;</span>])) &#123;</span><br><span class="line">            <span class="variable">$errors</span>[<span class="string">&#x27;email&#x27;</span>][] = <span class="string">&#x27;邮箱不能为空&#x27;</span>;</span><br><span class="line">        &#125; <span class="keyword">elseif</span> (!<span class="title function_ invoke__">filter_var</span>(<span class="variable">$userData</span>[<span class="string">&#x27;email&#x27;</span>], FILTER_VALIDATE_EMAIL)) &#123;</span><br><span class="line">            <span class="variable">$errors</span>[<span class="string">&#x27;email&#x27;</span>][] = <span class="string">&#x27;邮箱格式无效&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$userData</span>[<span class="string">&#x27;age&#x27;</span>]) &amp;&amp; (<span class="variable">$userData</span>[<span class="string">&#x27;age&#x27;</span>] &lt; <span class="number">0</span> || <span class="variable">$userData</span>[<span class="string">&#x27;age&#x27;</span>] &gt; <span class="number">150</span>)) &#123;</span><br><span class="line">            <span class="variable">$errors</span>[<span class="string">&#x27;age&#x27;</span>][] = <span class="string">&#x27;年龄必须在0-150之间&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">empty</span>(<span class="variable">$errors</span>)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ValidationException</span>(<span class="variable">$errors</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">userExists</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$email</span></span>): <span class="title">bool</span> </span>&#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable language_">$this</span>-&gt;users <span class="keyword">as</span> <span class="variable">$user</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$user</span>[<span class="string">&#x27;email&#x27;</span>] === <span class="variable">$email</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">simulateDatabaseOperation</span>(<span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 模拟数据库连接失败</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">rand</span>(<span class="number">1</span>, <span class="number">10</span>) === <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">DatabaseException</span>(</span><br><span class="line">                <span class="string">&#x27;数据库连接失败&#x27;</span>,</span><br><span class="line">                <span class="number">500</span>,</span><br><span class="line">                <span class="literal">null</span>,</span><br><span class="line">                [<span class="string">&#x27;host&#x27;</span> =&gt; <span class="string">&#x27;localhost&#x27;</span>, <span class="string">&#x27;database&#x27;</span> =&gt; <span class="string">&#x27;users&#x27;</span>]</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUsers</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;users;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异常处理器</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExceptionHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$handlers</span> = [];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">register</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$exceptionClass</span>, <span class="keyword">callable</span> <span class="variable">$handler</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;handlers[<span class="variable">$exceptionClass</span>] = <span class="variable">$handler</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"><span class="built_in">Throwable</span> <span class="variable">$exception</span></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="variable">$exceptionClass</span> = <span class="title function_ invoke__">get_class</span>(<span class="variable">$exception</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 查找具体的处理器</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable language_">$this</span>-&gt;handlers[<span class="variable">$exceptionClass</span>])) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;handlers[<span class="variable">$exceptionClass</span>](<span class="variable">$exception</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 查找父类处理器</span></span><br><span class="line">        <span class="keyword">foreach</span> (<span class="variable language_">$this</span>-&gt;handlers <span class="keyword">as</span> <span class="variable">$class</span> =&gt; <span class="variable">$handler</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$exception</span> <span class="keyword">instanceof</span> <span class="variable">$class</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="variable">$handler</span>(<span class="variable">$exception</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 默认处理器</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">defaultHandler</span>(<span class="variable">$exception</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">defaultHandler</span>(<span class="params"><span class="built_in">Throwable</span> <span class="variable">$exception</span></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;error&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">            <span class="string">&#x27;type&#x27;</span> =&gt; <span class="string">&#x27;UNKNOWN_ERROR&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getMessage</span>(),</span><br><span class="line">            <span class="string">&#x27;code&#x27;</span> =&gt; <span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getCode</span>(),</span><br><span class="line">            <span class="string">&#x27;file&#x27;</span> =&gt; <span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getFile</span>(),</span><br><span class="line">            <span class="string">&#x27;line&#x27;</span> =&gt; <span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getLine</span>()</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;\n=== 现代化异常处理示例 ===\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$userService</span> = <span class="keyword">new</span> <span class="title class_">UserService</span>();</span><br><span class="line"><span class="variable">$exceptionHandler</span> = <span class="keyword">new</span> <span class="title class_">ExceptionHandler</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册异常处理器</span></span><br><span class="line"><span class="variable">$exceptionHandler</span>-&gt;<span class="title function_ invoke__">register</span>(<span class="title class_">ValidationException</span>::<span class="variable language_">class</span>, function(ValidationException <span class="variable">$e</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        <span class="string">&#x27;error&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;type&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getErrorType</span>(),</span><br><span class="line">        <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>(),</span><br><span class="line">        <span class="string">&#x27;errors&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getErrors</span>(),</span><br><span class="line">        <span class="string">&#x27;code&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getCode</span>()</span><br><span class="line">    ];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable">$exceptionHandler</span>-&gt;<span class="title function_ invoke__">register</span>(<span class="title class_">BusinessLogicException</span>::<span class="variable language_">class</span>, function(BusinessLogicException <span class="variable">$e</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        <span class="string">&#x27;error&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;type&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getErrorType</span>(),</span><br><span class="line">        <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>(),</span><br><span class="line">        <span class="string">&#x27;context&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getContext</span>(),</span><br><span class="line">        <span class="string">&#x27;code&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getCode</span>()</span><br><span class="line">    ];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable">$exceptionHandler</span>-&gt;<span class="title function_ invoke__">register</span>(<span class="title class_">DatabaseException</span>::<span class="variable language_">class</span>, function(DatabaseException <span class="variable">$e</span>) &#123;</span><br><span class="line">    <span class="comment">// 记录数据库错误日志</span></span><br><span class="line">    <span class="title function_ invoke__">error_log</span>(<span class="string">&quot;数据库错误: &quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>());</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        <span class="string">&#x27;error&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&#x27;type&#x27;</span> =&gt; <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getErrorType</span>(),</span><br><span class="line">        <span class="string">&#x27;message&#x27;</span> =&gt; <span class="string">&#x27;服务暂时不可用，请稍后重试&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;code&#x27;</span> =&gt; <span class="number">503</span></span><br><span class="line">    ];</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试用例</span></span><br><span class="line"><span class="variable">$testCases</span> = [</span><br><span class="line">    [<span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;email&#x27;</span> =&gt; <span class="string">&#x27;zhangsan@example.com&#x27;</span>],</span><br><span class="line">    [<span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;email&#x27;</span> =&gt; <span class="string">&#x27;invalid-email&#x27;</span>],  <span class="comment">// 验证错误</span></span><br><span class="line">    [<span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;李四&#x27;</span>, <span class="string">&#x27;email&#x27;</span> =&gt; <span class="string">&#x27;zhangsan@example.com&#x27;</span>],  <span class="comment">// 用户已存在</span></span><br><span class="line">    [<span class="string">&#x27;name&#x27;</span> =&gt; <span class="string">&#x27;王五&#x27;</span>, <span class="string">&#x27;email&#x27;</span> =&gt; <span class="string">&#x27;wangwu@example.com&#x27;</span>, <span class="string">&#x27;age&#x27;</span> =&gt; <span class="number">200</span>]  <span class="comment">// 年龄无效</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$testCases</span> <span class="keyword">as</span> <span class="variable">$index</span> =&gt; <span class="variable">$userData</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;\n测试用例 &quot;</span> . (<span class="variable">$index</span> + <span class="number">1</span>) . <span class="string">&quot;:\n&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;输入数据: &quot;</span> . <span class="title function_ invoke__">json_encode</span>(<span class="variable">$userData</span>, JSON_UNESCAPED_UNICODE) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="variable">$userService</span>-&gt;<span class="title function_ invoke__">createUser</span>(<span class="variable">$userData</span>);</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;创建成功: &quot;</span> . <span class="title function_ invoke__">json_encode</span>(<span class="variable">$user</span>, JSON_UNESCAPED_UNICODE) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (<span class="built_in">Throwable</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">        <span class="variable">$response</span> = <span class="variable">$exceptionHandler</span>-&gt;<span class="title function_ invoke__">handle</span>(<span class="variable">$e</span>);</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;处理结果: &quot;</span> . <span class="title function_ invoke__">json_encode</span>(<span class="variable">$response</span>, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="错误监控和日志系统"><a href="#错误监控和日志系统" class="headerlink" title="错误监控和日志系统"></a>错误监控和日志系统</h2><h3 id="综合错误监控"><a href="#综合错误监控" class="headerlink" title="综合错误监控"></a>综合错误监控</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ErrorMonitor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$errorStats</span> = [];</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$errorLog</span> = [];</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> <span class="variable">$maxLogSize</span> = <span class="number">1000</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 设置全局错误处理器</span></span><br><span class="line">        <span class="title function_ invoke__">set_error_handler</span>([<span class="variable">$this</span>, <span class="string">&#x27;handleError&#x27;</span>]);</span><br><span class="line">        <span class="title function_ invoke__">set_exception_handler</span>([<span class="variable">$this</span>, <span class="string">&#x27;handleException&#x27;</span>]);</span><br><span class="line">        <span class="title function_ invoke__">register_shutdown_function</span>([<span class="variable">$this</span>, <span class="string">&#x27;handleShutdown&#x27;</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handleError</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$severity</span>, <span class="keyword">string</span> <span class="variable">$message</span>, <span class="keyword">string</span> <span class="variable">$file</span>, <span class="keyword">int</span> <span class="variable">$line</span></span>): <span class="title">bool</span> </span>&#123;</span><br><span class="line">        <span class="variable">$errorType</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getErrorTypeName</span>(<span class="variable">$severity</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$errorInfo</span> = [</span><br><span class="line">            <span class="string">&#x27;type&#x27;</span> =&gt; <span class="string">&#x27;ERROR&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;severity&#x27;</span> =&gt; <span class="variable">$severity</span>,</span><br><span class="line">            <span class="string">&#x27;severity_name&#x27;</span> =&gt; <span class="variable">$errorType</span>,</span><br><span class="line">            <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable">$message</span>,</span><br><span class="line">            <span class="string">&#x27;file&#x27;</span> =&gt; <span class="variable">$file</span>,</span><br><span class="line">            <span class="string">&#x27;line&#x27;</span> =&gt; <span class="variable">$line</span>,</span><br><span class="line">            <span class="string">&#x27;timestamp&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>(),</span><br><span class="line">            <span class="string">&#x27;memory_usage&#x27;</span> =&gt; <span class="title function_ invoke__">memory_get_usage</span>(<span class="literal">true</span>),</span><br><span class="line">            <span class="string">&#x27;trace&#x27;</span> =&gt; <span class="title function_ invoke__">debug_backtrace</span>(DEBUG_BACKTRACE_IGNORE_ARGS)</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">logError</span>(<span class="variable">$errorInfo</span>);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">updateStats</span>(<span class="variable">$errorType</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 对于严重错误，转换为异常</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$severity</span> &amp; (E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">ErrorException</span>(<span class="variable">$message</span>, <span class="number">0</span>, <span class="variable">$severity</span>, <span class="variable">$file</span>, <span class="variable">$line</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// 阻止PHP默认错误处理</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handleException</span>(<span class="params"><span class="built_in">Throwable</span> <span class="variable">$exception</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable">$errorInfo</span> = [</span><br><span class="line">            <span class="string">&#x27;type&#x27;</span> =&gt; <span class="string">&#x27;EXCEPTION&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;class&#x27;</span> =&gt; <span class="title function_ invoke__">get_class</span>(<span class="variable">$exception</span>),</span><br><span class="line">            <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getMessage</span>(),</span><br><span class="line">            <span class="string">&#x27;code&#x27;</span> =&gt; <span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getCode</span>(),</span><br><span class="line">            <span class="string">&#x27;file&#x27;</span> =&gt; <span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getFile</span>(),</span><br><span class="line">            <span class="string">&#x27;line&#x27;</span> =&gt; <span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getLine</span>(),</span><br><span class="line">            <span class="string">&#x27;timestamp&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>(),</span><br><span class="line">            <span class="string">&#x27;memory_usage&#x27;</span> =&gt; <span class="title function_ invoke__">memory_get_usage</span>(<span class="literal">true</span>),</span><br><span class="line">            <span class="string">&#x27;trace&#x27;</span> =&gt; <span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getTrace</span>()</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">logError</span>(<span class="variable">$errorInfo</span>);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">updateStats</span>(<span class="string">&#x27;EXCEPTION&#x27;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 输出友好的错误信息</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">displayError</span>(<span class="variable">$errorInfo</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handleShutdown</span>(<span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable">$lastError</span> = <span class="title function_ invoke__">error_get_last</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$lastError</span> &amp;&amp; <span class="title function_ invoke__">in_array</span>(<span class="variable">$lastError</span>[<span class="string">&#x27;type&#x27;</span>], [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR])) &#123;</span><br><span class="line">            <span class="variable">$errorInfo</span> = [</span><br><span class="line">                <span class="string">&#x27;type&#x27;</span> =&gt; <span class="string">&#x27;FATAL_ERROR&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;severity&#x27;</span> =&gt; <span class="variable">$lastError</span>[<span class="string">&#x27;type&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;severity_name&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getErrorTypeName</span>(<span class="variable">$lastError</span>[<span class="string">&#x27;type&#x27;</span>]),</span><br><span class="line">                <span class="string">&#x27;message&#x27;</span> =&gt; <span class="variable">$lastError</span>[<span class="string">&#x27;message&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;file&#x27;</span> =&gt; <span class="variable">$lastError</span>[<span class="string">&#x27;file&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;line&#x27;</span> =&gt; <span class="variable">$lastError</span>[<span class="string">&#x27;line&#x27;</span>],</span><br><span class="line">                <span class="string">&#x27;timestamp&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>(),</span><br><span class="line">                <span class="string">&#x27;memory_usage&#x27;</span> =&gt; <span class="title function_ invoke__">memory_get_usage</span>(<span class="literal">true</span>)</span><br><span class="line">            ];</span><br><span class="line">            </span><br><span class="line">            <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">logError</span>(<span class="variable">$errorInfo</span>);</span><br><span class="line">            <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">updateStats</span>(<span class="string">&#x27;FATAL_ERROR&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">getErrorTypeName</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$severity</span></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">match</span>(<span class="variable">$severity</span>) &#123;</span><br><span class="line">            E_ERROR =&gt; <span class="string">&#x27;E_ERROR&#x27;</span>,</span><br><span class="line">            E_WARNING =&gt; <span class="string">&#x27;E_WARNING&#x27;</span>,</span><br><span class="line">            E_PARSE =&gt; <span class="string">&#x27;E_PARSE&#x27;</span>,</span><br><span class="line">            E_NOTICE =&gt; <span class="string">&#x27;E_NOTICE&#x27;</span>,</span><br><span class="line">            E_CORE_ERROR =&gt; <span class="string">&#x27;E_CORE_ERROR&#x27;</span>,</span><br><span class="line">            E_CORE_WARNING =&gt; <span class="string">&#x27;E_CORE_WARNING&#x27;</span>,</span><br><span class="line">            E_COMPILE_ERROR =&gt; <span class="string">&#x27;E_COMPILE_ERROR&#x27;</span>,</span><br><span class="line">            E_COMPILE_WARNING =&gt; <span class="string">&#x27;E_COMPILE_WARNING&#x27;</span>,</span><br><span class="line">            E_USER_ERROR =&gt; <span class="string">&#x27;E_USER_ERROR&#x27;</span>,</span><br><span class="line">            E_USER_WARNING =&gt; <span class="string">&#x27;E_USER_WARNING&#x27;</span>,</span><br><span class="line">            E_USER_NOTICE =&gt; <span class="string">&#x27;E_USER_NOTICE&#x27;</span>,</span><br><span class="line">            E_STRICT =&gt; <span class="string">&#x27;E_STRICT&#x27;</span>,</span><br><span class="line">            E_RECOVERABLE_ERROR =&gt; <span class="string">&#x27;E_RECOVERABLE_ERROR&#x27;</span>,</span><br><span class="line">            E_DEPRECATED =&gt; <span class="string">&#x27;E_DEPRECATED&#x27;</span>,</span><br><span class="line">            E_USER_DEPRECATED =&gt; <span class="string">&#x27;E_USER_DEPRECATED&#x27;</span>,</span><br><span class="line">            <span class="keyword">default</span> =&gt; <span class="string">&#x27;UNKNOWN&#x27;</span></span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">logError</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$errorInfo</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;errorLog[] = <span class="variable">$errorInfo</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 限制日志大小</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">count</span>(<span class="variable">$this</span>-&gt;errorLog) &gt; <span class="variable language_">$this</span>-&gt;maxLogSize) &#123;</span><br><span class="line">            <span class="title function_ invoke__">array_shift</span>(<span class="variable">$this</span>-&gt;errorLog);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 写入文件日志</span></span><br><span class="line">        <span class="variable">$logMessage</span> = <span class="title function_ invoke__">sprintf</span>(</span><br><span class="line">            <span class="string">&quot;[%s] %s: %s in %s:%d\n&quot;</span>,</span><br><span class="line">            <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d H:i:s&#x27;</span>, <span class="variable">$errorInfo</span>[<span class="string">&#x27;timestamp&#x27;</span>]),</span><br><span class="line">            <span class="variable">$errorInfo</span>[<span class="string">&#x27;severity_name&#x27;</span>] ?? <span class="variable">$errorInfo</span>[<span class="string">&#x27;class&#x27;</span>] ?? <span class="variable">$errorInfo</span>[<span class="string">&#x27;type&#x27;</span>],</span><br><span class="line">            <span class="variable">$errorInfo</span>[<span class="string">&#x27;message&#x27;</span>],</span><br><span class="line">            <span class="variable">$errorInfo</span>[<span class="string">&#x27;file&#x27;</span>],</span><br><span class="line">            <span class="variable">$errorInfo</span>[<span class="string">&#x27;line&#x27;</span>]</span><br><span class="line">        );</span><br><span class="line">        </span><br><span class="line">        <span class="title function_ invoke__">error_log</span>(<span class="variable">$logMessage</span>, <span class="number">3</span>, <span class="string">&#x27;error.log&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">updateStats</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$errorType</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">isset</span>(<span class="variable language_">$this</span>-&gt;errorStats[<span class="variable">$errorType</span>])) &#123;</span><br><span class="line">            <span class="variable language_">$this</span>-&gt;errorStats[<span class="variable">$errorType</span>] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;errorStats[<span class="variable">$errorType</span>]++;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">displayError</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$errorInfo</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">php_sapi_name</span>() === <span class="string">&#x27;cli&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;\n=== 未捕获的异常 ===\n&quot;</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;类型: <span class="subst">&#123;$errorInfo[&#x27;class&#x27;]&#125;</span>\n&quot;</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;消息: <span class="subst">&#123;$errorInfo[&#x27;message&#x27;]&#125;</span>\n&quot;</span>;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;文件: <span class="subst">&#123;$errorInfo[&#x27;file&#x27;]&#125;</span>:<span class="subst">&#123;$errorInfo[&#x27;line&#x27;]&#125;</span>\n&quot;</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// Web环境下的错误显示</span></span><br><span class="line">            <span class="title function_ invoke__">http_response_code</span>(<span class="number">500</span>);</span><br><span class="line">            <span class="keyword">echo</span> <span class="title function_ invoke__">json_encode</span>([</span><br><span class="line">                <span class="string">&#x27;error&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line">                <span class="string">&#x27;message&#x27;</span> =&gt; <span class="string">&#x27;服务器内部错误&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;timestamp&#x27;</span> =&gt; <span class="variable">$errorInfo</span>[<span class="string">&#x27;timestamp&#x27;</span>]</span><br><span class="line">            ]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getErrorStats</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;errorStats;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getRecentErrors</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$limit</span> = <span class="number">10</span></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_ invoke__">array_slice</span>(<span class="variable">$this</span>-&gt;errorLog, -<span class="variable">$limit</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">clearErrorLog</span>(<span class="params"></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;errorLog = [];</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;errorStats = [];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">generateReport</span>(<span class="params"></span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">        <span class="variable">$report</span> = <span class="string">&quot;=== 错误监控报告 ===\n&quot;</span>;</span><br><span class="line">        <span class="variable">$report</span> .= <span class="string">&quot;生成时间: &quot;</span> . <span class="title function_ invoke__">date</span>(<span class="string">&#x27;Y-m-d H:i:s&#x27;</span>) . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        <span class="variable">$report</span> .= <span class="string">&quot;总错误数: &quot;</span> . <span class="title function_ invoke__">array_sum</span>(<span class="variable">$this</span>-&gt;errorStats) . <span class="string">&quot;\n\n&quot;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">empty</span>(<span class="variable language_">$this</span>-&gt;errorStats)) &#123;</span><br><span class="line">            <span class="variable">$report</span> .= <span class="string">&quot;错误统计:\n&quot;</span>;</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="variable language_">$this</span>-&gt;errorStats <span class="keyword">as</span> <span class="variable">$type</span> =&gt; <span class="variable">$count</span>) &#123;</span><br><span class="line">                <span class="variable">$report</span> .= <span class="string">&quot;  <span class="subst">$type</span>: <span class="subst">$count</span>\n&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="variable">$report</span> .= <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$recentErrors</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getRecentErrors</span>(<span class="number">5</span>);</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">empty</span>(<span class="variable">$recentErrors</span>)) &#123;</span><br><span class="line">            <span class="variable">$report</span> .= <span class="string">&quot;最近错误:\n&quot;</span>;</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="variable">$recentErrors</span> <span class="keyword">as</span> <span class="variable">$error</span>) &#123;</span><br><span class="line">                <span class="variable">$report</span> .= <span class="title function_ invoke__">sprintf</span>(</span><br><span class="line">                    <span class="string">&quot;  [%s] %s: %s\n&quot;</span>,</span><br><span class="line">                    <span class="title function_ invoke__">date</span>(<span class="string">&#x27;H:i:s&#x27;</span>, <span class="variable">$error</span>[<span class="string">&#x27;timestamp&#x27;</span>]),</span><br><span class="line">                    <span class="variable">$error</span>[<span class="string">&#x27;severity_name&#x27;</span>] ?? <span class="variable">$error</span>[<span class="string">&#x27;class&#x27;</span>] ?? <span class="variable">$error</span>[<span class="string">&#x27;type&#x27;</span>],</span><br><span class="line">                    <span class="variable">$error</span>[<span class="string">&#x27;message&#x27;</span>]</span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$report</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 性能监控器</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PerformanceMonitor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$timers</span> = [];</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">array</span> <span class="variable">$memorySnapshots</span> = [];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">startTimer</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$name</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;timers[<span class="variable">$name</span>] = [</span><br><span class="line">            <span class="string">&#x27;start&#x27;</span> =&gt; <span class="title function_ invoke__">hrtime</span>(<span class="literal">true</span>),</span><br><span class="line">            <span class="string">&#x27;start_memory&#x27;</span> =&gt; <span class="title function_ invoke__">memory_get_usage</span>(<span class="literal">true</span>)</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">endTimer</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$name</span></span>): ?<span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">isset</span>(<span class="variable language_">$this</span>-&gt;timers[<span class="variable">$name</span>])) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$timer</span> = <span class="variable language_">$this</span>-&gt;timers[<span class="variable">$name</span>];</span><br><span class="line">        <span class="variable">$endTime</span> = <span class="title function_ invoke__">hrtime</span>(<span class="literal">true</span>);</span><br><span class="line">        <span class="variable">$endMemory</span> = <span class="title function_ invoke__">memory_get_usage</span>(<span class="literal">true</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$result</span> = [</span><br><span class="line">            <span class="string">&#x27;name&#x27;</span> =&gt; <span class="variable">$name</span>,</span><br><span class="line">            <span class="string">&#x27;duration_ns&#x27;</span> =&gt; <span class="variable">$endTime</span> - <span class="variable">$timer</span>[<span class="string">&#x27;start&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;duration_ms&#x27;</span> =&gt; (<span class="variable">$endTime</span> - <span class="variable">$timer</span>[<span class="string">&#x27;start&#x27;</span>]) / <span class="number">1e6</span>,</span><br><span class="line">            <span class="string">&#x27;memory_used&#x27;</span> =&gt; <span class="variable">$endMemory</span> - <span class="variable">$timer</span>[<span class="string">&#x27;start_memory&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;peak_memory&#x27;</span> =&gt; <span class="title function_ invoke__">memory_get_peak_usage</span>(<span class="literal">true</span>)</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">unset</span>(<span class="variable language_">$this</span>-&gt;timers[<span class="variable">$name</span>]);</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">snapshot</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$name</span></span>): <span class="title">void</span> </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;memorySnapshots[<span class="variable">$name</span>] = [</span><br><span class="line">            <span class="string">&#x27;timestamp&#x27;</span> =&gt; <span class="title function_ invoke__">time</span>(),</span><br><span class="line">            <span class="string">&#x27;memory_usage&#x27;</span> =&gt; <span class="title function_ invoke__">memory_get_usage</span>(<span class="literal">true</span>),</span><br><span class="line">            <span class="string">&#x27;peak_memory&#x27;</span> =&gt; <span class="title function_ invoke__">memory_get_peak_usage</span>(<span class="literal">true</span>)</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getSnapshots</span>(<span class="params"></span>): <span class="title">array</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;memorySnapshots;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;\n=== 错误监控系统示例 ===\n&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$errorMonitor</span> = <span class="keyword">new</span> <span class="title class_">ErrorMonitor</span>();</span><br><span class="line"><span class="variable">$performanceMonitor</span> = <span class="keyword">new</span> <span class="title class_">PerformanceMonitor</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模拟一些操作和错误</span></span><br><span class="line"><span class="variable">$performanceMonitor</span>-&gt;<span class="title function_ invoke__">startTimer</span>(<span class="string">&#x27;test_operation&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 模拟一些可能出错的操作</span></span><br><span class="line">    <span class="variable">$data</span> = [];</span><br><span class="line">    <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="number">1000</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">        <span class="variable">$data</span>[] = <span class="variable">$i</span> * <span class="number">2</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 模拟偶发错误</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$i</span> === <span class="number">500</span>) &#123;</span><br><span class="line">            <span class="title function_ invoke__">trigger_error</span>(<span class="string">&quot;这是一个测试警告&quot;</span>, E_USER_WARNING);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$i</span> === <span class="number">750</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">RuntimeException</span>(<span class="string">&quot;这是一个测试异常&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;捕获到异常: &quot;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getMessage</span>() . <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$performanceResult</span> = <span class="variable">$performanceMonitor</span>-&gt;<span class="title function_ invoke__">endTimer</span>(<span class="string">&#x27;test_operation&#x27;</span>);</span><br><span class="line"><span class="variable">$performanceMonitor</span>-&gt;<span class="title function_ invoke__">snapshot</span>(<span class="string">&#x27;after_operation&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 显示性能结果</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$performanceResult</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;\n性能监控结果:\n&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;操作耗时: &quot;</span> . <span class="title function_ invoke__">round</span>(<span class="variable">$performanceResult</span>[<span class="string">&#x27;duration_ms&#x27;</span>], <span class="number">2</span>) . <span class="string">&quot;ms\n&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;内存使用: &quot;</span> . <span class="title function_ invoke__">number_format</span>(<span class="variable">$performanceResult</span>[<span class="string">&#x27;memory_used&#x27;</span>]) . <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;峰值内存: &quot;</span> . <span class="title function_ invoke__">number_format</span>(<span class="variable">$performanceResult</span>[<span class="string">&#x27;peak_memory&#x27;</span>]) . <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成错误报告</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;\n&quot;</span> . <span class="variable">$errorMonitor</span>-&gt;<span class="title function_ invoke__">generateReport</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;\n=== PHP 8 错误处理总结 ===\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;主要改进:\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;1. 更多警告升级为异常，提供一致的错误处理\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;2. 改进的类型错误消息，更容易调试\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;3. 更好的堆栈跟踪信息\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;4. 敏感参数隐藏功能\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;5. 更强大的错误监控和日志系统\n&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>PHP 8的错误处理改进带来了以下重要变化：</p>
+<h3 id="主要改进"><a href="#主要改进" class="headerlink" title="主要改进"></a>主要改进</h3><ol>
+<li><strong>一致的异常处理</strong>: 将更多错误情况转换为异常</li>
+<li><strong>更好的调试信息</strong>: 改进的错误消息和堆栈跟踪</li>
+<li><strong>类型安全增强</strong>: 更严格的类型检查和错误报告</li>
+<li><strong>现代化的错误处理模式</strong>: 支持更复杂的异常层次结构</li>
+</ol>
+<h3 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h3><ul>
+<li>使用try-catch块处理可能的异常</li>
+<li>建立完整的异常层次结构</li>
+<li>实施综合的错误监控系统</li>
+<li>利用新的调试功能提高开发效率</li>
+<li>为不同类型的错误提供适当的处理策略</li>
+</ul>
+<p>这些改进使PHP 8的错误处理更加现代化和可靠，为构建健壮的应用程序提供了更好的基础。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">最佳实践</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%B0%83%E8%AF%95/">调试</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/">错误处理</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%BC%82%E5%B8%B8/">异常</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/PHP8/">PHP8</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/php/php-arrays-comprehensive-guide/"
+                                   title="PHP数组操作完全指南：从入门到精通"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP数组操作完全指南：从入门到精通</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/php/php-strings-manipulation-guide/"
+                                   title="PHP字符串处理完全指南：从基础到高级技巧"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP字符串处理完全指南：从基础到高级技巧</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%BA%A7%E5%88%AB%E7%9A%84%E9%87%8D%E5%A4%A7%E5%8F%98%E5%8C%96"><span class="nav-text">错误级别的重大变化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E8%AD%A6%E5%91%8A%E5%88%B0%E5%BC%82%E5%B8%B8%E7%9A%84%E8%BD%AC%E5%8F%98"><span class="nav-text">从警告到异常的转变</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E5%8C%96%E7%9A%84%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="nav-text">现代化的异常处理系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-text">自定义异常层次结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%9B%91%E6%8E%A7%E5%92%8C%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F"><span class="nav-text">错误监控和日志系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E9%94%99%E8%AF%AF%E7%9B%91%E6%8E%A7"><span class="nav-text">综合错误监控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%94%B9%E8%BF%9B"><span class="nav-text">主要改进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">最佳实践</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%BA%A7%E5%88%AB%E7%9A%84%E9%87%8D%E5%A4%A7%E5%8F%98%E5%8C%96"><span class="nav-text">错误级别的重大变化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E8%AD%A6%E5%91%8A%E5%88%B0%E5%BC%82%E5%B8%B8%E7%9A%84%E8%BD%AC%E5%8F%98"><span class="nav-text">从警告到异常的转变</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3%E5%8C%96%E7%9A%84%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="nav-text">现代化的异常处理系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-text">自定义异常层次结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%9B%91%E6%8E%A7%E5%92%8C%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F"><span class="nav-text">错误监控和日志系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E9%94%99%E8%AF%AF%E7%9B%91%E6%8E%A7"><span class="nav-text">综合错误监控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%94%B9%E8%BF%9B"><span class="nav-text">主要改进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">最佳实践</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

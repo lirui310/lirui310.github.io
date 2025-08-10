@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Python高效错误处理：从基础到最佳实践 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Python高效错误处理：从基础到最佳实践
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2022-10-03 08:45:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/python/">python</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/">代码质量</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%B0%83%E8%AF%95/">调试</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/">错误处理</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%BC%82%E5%B8%B8/">异常</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%97%A5%E5%BF%97/">日志</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Python高效错误处理：从基础到最佳实践"><a href="#Python高效错误处理：从基础到最佳实践" class="headerlink" title="Python高效错误处理：从基础到最佳实践"></a>Python高效错误处理：从基础到最佳实践</h1><p>错误处理是编写健壮Python代码的关键部分。良好的错误处理不仅可以防止程序崩溃，还能提供有用的调试信息，改善用户体验。在这篇文章中，我将从基础概念到高级技巧，全面介绍Python中的错误处理最佳实践。</p>
+<h2 id="异常处理基础"><a href="#异常处理基础" class="headerlink" title="异常处理基础"></a>异常处理基础</h2><h3 id="Python异常层次结构"><a href="#Python异常层次结构" class="headerlink" title="Python异常层次结构"></a>Python异常层次结构</h3><p>Python有一个丰富的内置异常层次结构，所有异常都继承自<code>BaseException</code>类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">BaseException</span><br><span class="line"> ├── SystemExit</span><br><span class="line"> ├── KeyboardInterrupt</span><br><span class="line"> ├── GeneratorExit</span><br><span class="line"> └── Exception</span><br><span class="line">      ├── StopIteration</span><br><span class="line">      ├── ArithmeticError</span><br><span class="line">      │    ├── FloatingPointError</span><br><span class="line">      │    ├── OverflowError</span><br><span class="line">      │    └── ZeroDivisionError</span><br><span class="line">      ├── AssertionError</span><br><span class="line">      ├── AttributeError</span><br><span class="line">      ├── BufferError</span><br><span class="line">      ├── EOFError</span><br><span class="line">      ├── ImportError</span><br><span class="line">      │    └── ModuleNotFoundError</span><br><span class="line">      ├── LookupError</span><br><span class="line">      │    ├── IndexError</span><br><span class="line">      │    └── KeyError</span><br><span class="line">      ├── MemoryError</span><br><span class="line">      ├── NameError</span><br><span class="line">      │    └── UnboundLocalError</span><br><span class="line">      ├── OSError</span><br><span class="line">      │    ├── BlockingIOError</span><br><span class="line">      │    ├── ChildProcessError</span><br><span class="line">      │    ├── ConnectionError</span><br><span class="line">      │    │    ├── BrokenPipeError</span><br><span class="line">      │    │    ├── ConnectionAbortedError</span><br><span class="line">      │    │    ├── ConnectionRefusedError</span><br><span class="line">      │    │    └── ConnectionResetError</span><br><span class="line">      │    ├── FileExistsError</span><br><span class="line">      │    ├── FileNotFoundError</span><br><span class="line">      │    ├── InterruptedError</span><br><span class="line">      │    ├── IsADirectoryError</span><br><span class="line">      │    ├── NotADirectoryError</span><br><span class="line">      │    ├── PermissionError</span><br><span class="line">      │    ├── ProcessLookupError</span><br><span class="line">      │    └── TimeoutError</span><br><span class="line">      ├── ReferenceError</span><br><span class="line">      ├── RuntimeError</span><br><span class="line">      │    ├── NotImplementedError</span><br><span class="line">      │    └── RecursionError</span><br><span class="line">      ├── SyntaxError</span><br><span class="line">      │    └── IndentationError</span><br><span class="line">      │         └── TabError</span><br><span class="line">      ├── SystemError</span><br><span class="line">      ├── TypeError</span><br><span class="line">      ├── ValueError</span><br><span class="line">      │    └── UnicodeError</span><br><span class="line">      │         ├── UnicodeDecodeError</span><br><span class="line">      │         ├── UnicodeEncodeError</span><br><span class="line">      │         └── UnicodeTranslateError</span><br><span class="line">      └── Warning</span><br><span class="line">           ├── DeprecationWarning</span><br><span class="line">           ├── PendingDeprecationWarning</span><br><span class="line">           ├── RuntimeWarning</span><br><span class="line">           ├── SyntaxWarning</span><br><span class="line">           ├── UserWarning</span><br><span class="line">           ├── FutureWarning</span><br><span class="line">           ├── ImportWarning</span><br><span class="line">           ├── UnicodeWarning</span><br><span class="line">           ├── BytesWarning</span><br><span class="line">           └── ResourceWarning</span><br></pre></td></tr></table></figure>
+
+<p>了解这个层次结构有助于我们选择合适的异常类型进行捕获和抛出。</p>
+<h3 id="基本的try-except语句"><a href="#基本的try-except语句" class="headerlink" title="基本的try-except语句"></a>基本的try-except语句</h3><p>Python使用<code>try-except</code>语句来捕获和处理异常：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 可能引发异常的代码</span></span><br><span class="line">    result = <span class="number">10</span> / <span class="number">0</span></span><br><span class="line"><span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">    <span class="comment"># 处理特定类型的异常</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;除数不能为零！&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="捕获多种异常"><a href="#捕获多种异常" class="headerlink" title="捕获多种异常"></a>捕获多种异常</h3><p>可以在一个<code>except</code>子句中捕获多种异常，或使用多个<code>except</code>子句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 可能引发异常的代码</span></span><br><span class="line">    value = <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&quot;请输入一个数字: &quot;</span>))</span><br><span class="line">    result = <span class="number">10</span> / value</span><br><span class="line"><span class="keyword">except</span> ValueError:</span><br><span class="line">    <span class="comment"># 处理ValueError异常</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;输入必须是一个数字！&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">    <span class="comment"># 处理ZeroDivisionError异常</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;除数不能为零！&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> (TypeError, OverflowError):</span><br><span class="line">    <span class="comment"># 同时处理多种异常</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;发生了类型错误或溢出错误！&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="else和finally子句"><a href="#else和finally子句" class="headerlink" title="else和finally子句"></a>else和finally子句</h3><p><code>try-except</code>语句可以包含<code>else</code>和<code>finally</code>子句：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    value = <span class="built_in">int</span>(<span class="built_in">input</span>(<span class="string">&quot;请输入一个数字: &quot;</span>))</span><br><span class="line">    result = <span class="number">10</span> / value</span><br><span class="line"><span class="keyword">except</span> ValueError:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;输入必须是一个数字！&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;除数不能为零！&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># 当try块中的代码没有引发异常时执行</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;结果是: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    <span class="comment"># 无论是否发生异常都会执行</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;计算完成，清理资源...&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级异常处理技巧"><a href="#高级异常处理技巧" class="headerlink" title="高级异常处理技巧"></a>高级异常处理技巧</h2><h3 id="获取异常信息"><a href="#获取异常信息" class="headerlink" title="获取异常信息"></a>获取异常信息</h3><p>可以使用<code>as</code>关键字获取异常对象，以便访问其属性和方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;不存在的文件.txt&quot;</span>, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">        content = file.read()</span><br><span class="line"><span class="keyword">except</span> FileNotFoundError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;错误类型: <span class="subst">&#123;<span class="built_in">type</span>(e).__name__&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;错误信息: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;错误参数: <span class="subst">&#123;e.args&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="异常链和上下文"><a href="#异常链和上下文" class="headerlink" title="异常链和上下文"></a>异常链和上下文</h3><p>Python 3支持异常链，可以在抛出新异常时保留原始异常的上下文：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="number">1</span> / <span class="number">0</span></span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 抛出新异常，同时保留原始异常</span></span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;计算失败&quot;</span>) <span class="keyword">from</span> e</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;当前异常: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;原始异常: <span class="subst">&#123;e.__cause__&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>也可以使用<code>raise</code>不带<code>from</code>子句来抑制异常链：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="number">1</span> / <span class="number">0</span></span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="comment"># 抛出新异常，不保留原始异常</span></span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;计算失败&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;当前异常: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;原始异常: <span class="subst">&#123;e.__cause__&#125;</span>&quot;</span>)  <span class="comment"># 输出None</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义异常类"><a href="#自定义异常类" class="headerlink" title="自定义异常类"></a>自定义异常类</h3><p>创建自定义异常类可以使错误处理更加明确和有意义：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CustomError</span>(<span class="title class_ inherited__">Exception</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;自定义异常的基类&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ValueTooSmallError</span>(<span class="title class_ inherited__">CustomError</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;当值小于最小允许值时抛出&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, value, min_value</span>):</span><br><span class="line">        <span class="variable language_">self</span>.value = value</span><br><span class="line">        <span class="variable language_">self</span>.min_value = min_value</span><br><span class="line">        <span class="variable language_">self</span>.message = <span class="string">f&quot;提供的值 <span class="subst">&#123;value&#125;</span> 小于最小允许值 <span class="subst">&#123;min_value&#125;</span>&quot;</span></span><br><span class="line">        <span class="built_in">super</span>().__init__(<span class="variable language_">self</span>.message)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ValueTooLargeError</span>(<span class="title class_ inherited__">CustomError</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;当值大于最大允许值时抛出&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, value, max_value</span>):</span><br><span class="line">        <span class="variable language_">self</span>.value = value</span><br><span class="line">        <span class="variable language_">self</span>.max_value = max_value</span><br><span class="line">        <span class="variable language_">self</span>.message = <span class="string">f&quot;提供的值 <span class="subst">&#123;value&#125;</span> 大于最大允许值 <span class="subst">&#123;max_value&#125;</span>&quot;</span></span><br><span class="line">        <span class="built_in">super</span>().__init__(<span class="variable language_">self</span>.message)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">validate_value</span>(<span class="params">value, min_value=<span class="number">0</span>, max_value=<span class="number">100</span></span>):</span><br><span class="line">    <span class="keyword">if</span> value &lt; min_value:</span><br><span class="line">        <span class="keyword">raise</span> ValueTooSmallError(value, min_value)</span><br><span class="line">    <span class="keyword">if</span> value &gt; max_value:</span><br><span class="line">        <span class="keyword">raise</span> ValueTooLargeError(value, max_value)</span><br><span class="line">    <span class="keyword">return</span> value</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用自定义异常</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    validate_value(-<span class="number">5</span>)</span><br><span class="line"><span class="keyword">except</span> ValueTooSmallError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(e)</span><br><span class="line"><span class="keyword">except</span> ValueTooLargeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(e)</span><br></pre></td></tr></table></figure>
+
+<h2 id="错误处理最佳实践"><a href="#错误处理最佳实践" class="headerlink" title="错误处理最佳实践"></a>错误处理最佳实践</h2><h3 id="1-只捕获预期的异常"><a href="#1-只捕获预期的异常" class="headerlink" title="1. 只捕获预期的异常"></a>1. 只捕获预期的异常</h3><p>不要使用空的<code>except:</code>子句捕获所有异常，这可能会掩盖真正的问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不好的做法</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 一些代码</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    <span class="comment"># 捕获所有异常</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 好的做法</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 一些代码</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">except</span> (ValueError, TypeError) <span class="keyword">as</span> e:</span><br><span class="line">    <span class="comment"># 只捕获预期的异常</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;处理特定错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>如果确实需要捕获所有异常，至少应该使用<code>Exception</code>而不是空的<code>except:</code>，并记录异常信息：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 一些代码</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="comment"># 捕获所有Exception子类</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;发生错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="comment"># 记录异常信息</span></span><br><span class="line">    <span class="keyword">import</span> traceback</span><br><span class="line">    traceback.print_exc()</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-尽早抛出，延迟捕获"><a href="#2-尽早抛出，延迟捕获" class="headerlink" title="2. 尽早抛出，延迟捕获"></a>2. 尽早抛出，延迟捕获</h3><p>在代码的最低层抛出异常，在更高层次捕获和处理它们：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_user_data</span>(<span class="params">user_id</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(user_id, <span class="built_in">int</span>):</span><br><span class="line">        <span class="keyword">raise</span> TypeError(<span class="string">&quot;user_id必须是整数&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> user_id &lt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;user_id必须是正整数&quot;</span>)</span><br><span class="line">    <span class="comment"># 获取用户数据...</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;id&quot;</span>: user_id, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;用户&quot;</span> + <span class="built_in">str</span>(user_id)&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_user</span>(<span class="params">user_id</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        user_data = get_user_data(user_id)</span><br><span class="line">        <span class="comment"># 处理用户数据...</span></span><br><span class="line">        <span class="keyword">return</span> user_data</span><br><span class="line">    <span class="keyword">except</span> (TypeError, ValueError) <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;处理用户 <span class="subst">&#123;user_id&#125;</span> 时出错: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-使用上下文管理器处理资源"><a href="#3-使用上下文管理器处理资源" class="headerlink" title="3. 使用上下文管理器处理资源"></a>3. 使用上下文管理器处理资源</h3><p>使用<code>with</code>语句和上下文管理器自动处理资源的获取和释放：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不好的做法</span></span><br><span class="line">file = <span class="built_in">open</span>(<span class="string">&quot;data.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    content = file.read()</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    file.close()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 好的做法</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;data.txt&quot;</span>, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    content = file.read()</span><br></pre></td></tr></table></figure>
+
+<p>自定义上下文管理器：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">DatabaseConnection</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, connection_string</span>):</span><br><span class="line">        <span class="variable language_">self</span>.connection_string = connection_string</span><br><span class="line">        <span class="variable language_">self</span>.connection = <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__enter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;连接数据库...&quot;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.connection = <span class="variable language_">self</span>._connect()</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.connection</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__exit__</span>(<span class="params">self, exc_type, exc_val, exc_tb</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;关闭数据库连接...&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.connection:</span><br><span class="line">            <span class="variable language_">self</span>.connection.close()</span><br><span class="line">        <span class="comment"># 如果返回True，则异常被抑制</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_connect</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 实际连接数据库的代码</span></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;connected&quot;</span>: <span class="literal">True</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用自定义上下文管理器</span></span><br><span class="line"><span class="keyword">with</span> DatabaseConnection(<span class="string">&quot;mysql://localhost/mydb&quot;</span>) <span class="keyword">as</span> conn:</span><br><span class="line">    <span class="comment"># 使用数据库连接</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;执行数据库操作...&quot;</span>)</span><br><span class="line">    <span class="comment"># 如果这里发生异常，__exit__方法仍然会被调用</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-使用异常而不是返回错误码"><a href="#4-使用异常而不是返回错误码" class="headerlink" title="4. 使用异常而不是返回错误码"></a>4. 使用异常而不是返回错误码</h3><p>Python鼓励使用异常而不是返回错误码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不好的做法</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">divide</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">if</span> b == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span>, <span class="string">&quot;除数不能为零&quot;</span></span><br><span class="line">    <span class="keyword">return</span> a / b, <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">result, error = divide(<span class="number">10</span>, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span> error:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;错误: <span class="subst">&#123;error&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 好的做法</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">divide</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">if</span> b == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ZeroDivisionError(<span class="string">&quot;除数不能为零&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> a / b</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = divide(<span class="number">10</span>, <span class="number">0</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> ZeroDivisionError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-使用断言进行内部检查"><a href="#5-使用断言进行内部检查" class="headerlink" title="5. 使用断言进行内部检查"></a>5. 使用断言进行内部检查</h3><p>断言用于验证代码的内部假设，而不是处理用户输入或外部条件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">calculate_average</span>(<span class="params">numbers</span>):</span><br><span class="line">    <span class="comment"># 断言用于验证内部假设</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(numbers) &gt; <span class="number">0</span>, <span class="string">&quot;列表不能为空&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">sum</span>(numbers) / <span class="built_in">len</span>(numbers)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意：断言可以通过-O选项禁用，所以不要用它来检查用户输入</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-结合使用日志和异常"><a href="#6-结合使用日志和异常" class="headerlink" title="6. 结合使用日志和异常"></a>6. 结合使用日志和异常</h3><p>使用日志记录异常信息，而不仅仅是打印它们：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置日志</span></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    level=logging.INFO,</span><br><span class="line">    <span class="built_in">format</span>=<span class="string">&#x27;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#x27;</span>,</span><br><span class="line">    filename=<span class="string">&#x27;app.log&#x27;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_data</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 处理数据</span></span><br><span class="line">        result = data[<span class="string">&#x27;key&#x27;</span>] / <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    <span class="keyword">except</span> KeyError:</span><br><span class="line">        <span class="comment"># 记录警告并继续</span></span><br><span class="line">        logging.warning(<span class="string">&quot;数据中缺少&#x27;key&#x27;字段&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">except</span> ZeroDivisionError:</span><br><span class="line">        <span class="comment"># 记录错误并重新抛出</span></span><br><span class="line">        logging.error(<span class="string">&quot;除零错误&quot;</span>, exc_info=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">raise</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="comment"># 记录未预期的异常</span></span><br><span class="line">        logging.exception(<span class="string">&quot;处理数据时发生未预期的错误&quot;</span>)</span><br><span class="line">        <span class="comment"># 或者</span></span><br><span class="line">        logging.error(<span class="string">&quot;处理数据时发生错误: %s&quot;</span>, <span class="built_in">str</span>(e), exc_info=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="实际应用案例"><a href="#实际应用案例" class="headerlink" title="实际应用案例"></a>实际应用案例</h2><h3 id="案例1：API错误处理"><a href="#案例1：API错误处理" class="headerlink" title="案例1：API错误处理"></a>案例1：API错误处理</h3><p>在Web API中处理错误：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, jsonify</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">APIError</span>(<span class="title class_ inherited__">Exception</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;API错误的基类&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, message, status_code=<span class="number">400</span>, payload=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(<span class="variable language_">self</span>)</span><br><span class="line">        <span class="variable language_">self</span>.message = message</span><br><span class="line">        <span class="variable language_">self</span>.status_code = status_code</span><br><span class="line">        <span class="variable language_">self</span>.payload = payload</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">to_dict</span>(<span class="params">self</span>):</span><br><span class="line">        rv = <span class="built_in">dict</span>(<span class="variable language_">self</span>.payload <span class="keyword">or</span> ())</span><br><span class="line">        rv[<span class="string">&#x27;message&#x27;</span>] = <span class="variable language_">self</span>.message</span><br><span class="line">        rv[<span class="string">&#x27;status&#x27;</span>] = <span class="string">&#x27;error&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> rv</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ResourceNotFoundError</span>(<span class="title class_ inherited__">APIError</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;资源未找到错误&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, message=<span class="string">&quot;请求的资源不存在&quot;</span>, payload=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(message, status_code=<span class="number">404</span>, payload=payload)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ValidationError</span>(<span class="title class_ inherited__">APIError</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;输入验证错误&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, message=<span class="string">&quot;输入数据验证失败&quot;</span>, payload=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(message, status_code=<span class="number">400</span>, payload=payload)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.errorhandler(<span class="params">APIError</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handle_api_error</span>(<span class="params">error</span>):</span><br><span class="line">    response = jsonify(error.to_dict())</span><br><span class="line">    response.status_code = error.status_code</span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/users/&lt;int:user_id&gt;&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_user</span>(<span class="params">user_id</span>):</span><br><span class="line">    <span class="comment"># 模拟用户数据库</span></span><br><span class="line">    users = &#123;<span class="number">1</span>: &#123;<span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>&#125;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> user_id <span class="keyword">not</span> <span class="keyword">in</span> users:</span><br><span class="line">        <span class="keyword">raise</span> ResourceNotFoundError(<span class="string">f&quot;用户ID <span class="subst">&#123;user_id&#125;</span> 不存在&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> jsonify(&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;success&quot;</span>, <span class="string">&quot;data&quot;</span>: users[user_id]&#125;)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/users&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_user</span>():</span><br><span class="line">    data = request.json</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> data:</span><br><span class="line">        <span class="keyword">raise</span> ValidationError(<span class="string">&quot;没有提供JSON数据&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;name&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> data:</span><br><span class="line">        <span class="keyword">raise</span> ValidationError(<span class="string">&quot;缺少必要字段: name&quot;</span>, payload=&#123;<span class="string">&quot;fields&quot;</span>: [<span class="string">&quot;name&quot;</span>]&#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 创建用户...</span></span><br><span class="line">    <span class="keyword">return</span> jsonify(&#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;success&quot;</span>, <span class="string">&quot;message&quot;</span>: <span class="string">&quot;用户创建成功&quot;</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="案例2：数据处理错误处理"><a href="#案例2：数据处理错误处理" class="headerlink" title="案例2：数据处理错误处理"></a>案例2：数据处理错误处理</h3><p>在数据处理管道中处理错误：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置日志</span></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    level=logging.INFO,</span><br><span class="line">    <span class="built_in">format</span>=<span class="string">&#x27;%(asctime)s - %(levelname)s - %(message)s&#x27;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataProcessingError</span>(<span class="title class_ inherited__">Exception</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;数据处理错误的基类&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataLoadError</span>(<span class="title class_ inherited__">DataProcessingError</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;数据加载错误&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataCleaningError</span>(<span class="title class_ inherited__">DataProcessingError</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;数据清洗错误&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataTransformError</span>(<span class="title class_ inherited__">DataProcessingError</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;数据转换错误&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_data</span>(<span class="params">file_path</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;加载数据&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        logging.info(<span class="string">f&quot;加载数据: <span class="subst">&#123;file_path&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> file_path.endswith(<span class="string">&#x27;.csv&#x27;</span>):</span><br><span class="line">            <span class="keyword">return</span> pd.read_csv(file_path)</span><br><span class="line">        <span class="keyword">elif</span> file_path.endswith(<span class="string">&#x27;.xlsx&#x27;</span>):</span><br><span class="line">            <span class="keyword">return</span> pd.read_excel(file_path)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">f&quot;不支持的文件格式: <span class="subst">&#123;file_path&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> FileNotFoundError:</span><br><span class="line">        <span class="keyword">raise</span> DataLoadError(<span class="string">f&quot;文件不存在: <span class="subst">&#123;file_path&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> pd.errors.EmptyDataError:</span><br><span class="line">        <span class="keyword">raise</span> DataLoadError(<span class="string">f&quot;文件为空: <span class="subst">&#123;file_path&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">raise</span> DataLoadError(<span class="string">f&quot;加载数据失败: <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clean_data</span>(<span class="params">df</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;清洗数据&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        logging.info(<span class="string">&quot;清洗数据&quot;</span>)</span><br><span class="line">        <span class="comment"># 检查必要的列</span></span><br><span class="line">        required_columns = [<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;value&#x27;</span>]</span><br><span class="line">        missing_columns = [col <span class="keyword">for</span> col <span class="keyword">in</span> required_columns <span class="keyword">if</span> col <span class="keyword">not</span> <span class="keyword">in</span> df.columns]</span><br><span class="line">        <span class="keyword">if</span> missing_columns:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">f&quot;缺少必要的列: <span class="subst">&#123;missing_columns&#125;</span>&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除空行</span></span><br><span class="line">        df_cleaned = df.dropna(subset=required_columns)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 检查是否有足够的数据</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(df_cleaned) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&quot;清洗后没有剩余数据&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> df_cleaned</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">raise</span> DataCleaningError(<span class="string">f&quot;清洗数据失败: <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transform_data</span>(<span class="params">df</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;转换数据&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        logging.info(<span class="string">&quot;转换数据&quot;</span>)</span><br><span class="line">        <span class="comment"># 转换数据类型</span></span><br><span class="line">        df[<span class="string">&#x27;id&#x27;</span>] = df[<span class="string">&#x27;id&#x27;</span>].astype(<span class="built_in">int</span>)</span><br><span class="line">        df[<span class="string">&#x27;value&#x27;</span>] = df[<span class="string">&#x27;value&#x27;</span>].astype(<span class="built_in">float</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算新列</span></span><br><span class="line">        df[<span class="string">&#x27;squared_value&#x27;</span>] = df[<span class="string">&#x27;value&#x27;</span>] ** <span class="number">2</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> df</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">raise</span> DataTransformError(<span class="string">f&quot;转换数据失败: <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_data_file</span>(<span class="params">file_path</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;处理数据文件的主函数&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 加载数据</span></span><br><span class="line">        df = load_data(file_path)</span><br><span class="line">        logging.info(<span class="string">f&quot;成功加载数据: <span class="subst">&#123;<span class="built_in">len</span>(df)&#125;</span> 行&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 清洗数据</span></span><br><span class="line">        df_cleaned = clean_data(df)</span><br><span class="line">        logging.info(<span class="string">f&quot;清洗后数据: <span class="subst">&#123;<span class="built_in">len</span>(df_cleaned)&#125;</span> 行&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 转换数据</span></span><br><span class="line">        df_transformed = transform_data(df_cleaned)</span><br><span class="line">        logging.info(<span class="string">&quot;数据转换完成&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 保存结果</span></span><br><span class="line">        output_path = file_path.replace(<span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;_processed.&#x27;</span>)</span><br><span class="line">        df_transformed.to_csv(output_path, index=<span class="literal">False</span>)</span><br><span class="line">        logging.info(<span class="string">f&quot;结果已保存到: <span class="subst">&#123;output_path&#125;</span>&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span>, output_path</span><br><span class="line">    <span class="keyword">except</span> DataLoadError <span class="keyword">as</span> e:</span><br><span class="line">        logging.error(<span class="string">f&quot;数据加载错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span>, <span class="built_in">str</span>(e)</span><br><span class="line">    <span class="keyword">except</span> DataCleaningError <span class="keyword">as</span> e:</span><br><span class="line">        logging.error(<span class="string">f&quot;数据清洗错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span>, <span class="built_in">str</span>(e)</span><br><span class="line">    <span class="keyword">except</span> DataTransformError <span class="keyword">as</span> e:</span><br><span class="line">        logging.error(<span class="string">f&quot;数据转换错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span>, <span class="built_in">str</span>(e)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        logging.exception(<span class="string">&quot;处理数据时发生未预期的错误&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span>, <span class="string">f&quot;未预期的错误: <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line">success, result = process_data_file(<span class="string">&quot;data.csv&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> success:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;处理成功，结果保存在: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;处理失败: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="案例3：重试机制"><a href="#案例3：重试机制" class="headerlink" title="案例3：重试机制"></a>案例3：重试机制</h3><p>实现带有重试机制的函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置日志</span></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    level=logging.INFO,</span><br><span class="line">    <span class="built_in">format</span>=<span class="string">&#x27;%(asctime)s - %(levelname)s - %(message)s&#x27;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RetryError</span>(<span class="title class_ inherited__">Exception</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;重试失败后抛出的异常&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, message, last_exception=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(message)</span><br><span class="line">        <span class="variable language_">self</span>.last_exception = last_exception</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">retry</span>(<span class="params">func, max_attempts=<span class="number">3</span>, delay=<span class="number">1</span>, backoff=<span class="number">2</span>, exceptions=(<span class="params">Exception,</span>)</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    执行函数，如果失败则重试</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    参数:</span></span><br><span class="line"><span class="string">        func: 要执行的函数</span></span><br><span class="line"><span class="string">        max_attempts: 最大尝试次数</span></span><br><span class="line"><span class="string">        delay: 初始延迟时间（秒）</span></span><br><span class="line"><span class="string">        backoff: 延迟时间的增长因子</span></span><br><span class="line"><span class="string">        exceptions: 要捕获的异常类型</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    返回:</span></span><br><span class="line"><span class="string">        函数的返回值</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    抛出:</span></span><br><span class="line"><span class="string">        RetryError: 如果所有尝试都失败</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    attempt = <span class="number">1</span></span><br><span class="line">    last_exception = <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> attempt &lt;= max_attempts:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            logging.info(<span class="string">f&quot;尝试 <span class="subst">&#123;attempt&#125;</span>/<span class="subst">&#123;max_attempts&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> func()</span><br><span class="line">        <span class="keyword">except</span> exceptions <span class="keyword">as</span> e:</span><br><span class="line">            last_exception = e</span><br><span class="line">            <span class="keyword">if</span> attempt == max_attempts:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            </span><br><span class="line">            wait_time = delay * (backoff ** (attempt - <span class="number">1</span>))</span><br><span class="line">            logging.warning(<span class="string">f&quot;尝试 <span class="subst">&#123;attempt&#125;</span> 失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">            logging.info(<span class="string">f&quot;等待 <span class="subst">&#123;wait_time&#125;</span> 秒后重试...&quot;</span>)</span><br><span class="line">            time.sleep(wait_time)</span><br><span class="line">            attempt += <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">raise</span> RetryError(</span><br><span class="line">        <span class="string">f&quot;在 <span class="subst">&#123;max_attempts&#125;</span> 次尝试后失败&quot;</span>,</span><br><span class="line">        last_exception=last_exception</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用示例</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unstable_network_request</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;模拟不稳定的网络请求&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 80%的概率失败</span></span><br><span class="line">    <span class="keyword">if</span> random.random() &lt; <span class="number">0.8</span>:</span><br><span class="line">        <span class="keyword">raise</span> ConnectionError(<span class="string">&quot;网络连接失败&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;请求成功&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = retry(</span><br><span class="line">        unstable_network_request,</span><br><span class="line">        max_attempts=<span class="number">5</span>,</span><br><span class="line">        delay=<span class="number">1</span>,</span><br><span class="line">        backoff=<span class="number">2</span>,</span><br><span class="line">        exceptions=(ConnectionError,)</span><br><span class="line">    )</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> RetryError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;所有重试都失败了: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> e.last_exception:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;最后一次异常: <span class="subst">&#123;e.last_exception&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级错误处理模式"><a href="#高级错误处理模式" class="headerlink" title="高级错误处理模式"></a>高级错误处理模式</h2><h3 id="1-上下文管理器模式"><a href="#1-上下文管理器模式" class="headerlink" title="1. 上下文管理器模式"></a>1. 上下文管理器模式</h3><p>使用上下文管理器进行错误处理和资源管理：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> contextlib</span><br><span class="line"></span><br><span class="line"><span class="meta">@contextlib.contextmanager</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">error_handling_context</span>(<span class="params">error_msg=<span class="string">&quot;操作失败&quot;</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;创建一个错误处理上下文&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">yield</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;error_msg&#125;</span>: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="comment"># 可以选择重新抛出或抑制异常</span></span><br><span class="line">        <span class="comment"># raise</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;清理资源...&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用上下文管理器</span></span><br><span class="line"><span class="keyword">with</span> error_handling_context(<span class="string">&quot;文件处理失败&quot;</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;不存在的文件.txt&quot;</span>, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        content = f.read()</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-装饰器模式"><a href="#2-装饰器模式" class="headerlink" title="2. 装饰器模式"></a>2. 装饰器模式</h3><p>使用装饰器添加错误处理逻辑：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">error_handler</span>(<span class="params">func=<span class="literal">None</span>, *, reraise=<span class="literal">False</span>, log_level=logging.ERROR</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    处理函数中的异常的装饰器</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    参数:</span></span><br><span class="line"><span class="string">        func: 被装饰的函数</span></span><br><span class="line"><span class="string">        reraise: 是否重新抛出异常</span></span><br><span class="line"><span class="string">        log_level: 日志级别</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                logging.log(log_level, <span class="string">f&quot;函数 <span class="subst">&#123;func.__name__&#125;</span> 执行失败: <span class="subst">&#123;e&#125;</span>&quot;</span>, exc_info=<span class="literal">True</span>)</span><br><span class="line">                <span class="keyword">if</span> reraise:</span><br><span class="line">                    <span class="keyword">raise</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> func <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> decorator</span><br><span class="line">    <span class="keyword">return</span> decorator(func)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用装饰器</span></span><br><span class="line"><span class="meta">@error_handler(<span class="params">reraise=<span class="literal">False</span>, log_level=logging.WARNING</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">risky_function</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / x</span><br><span class="line"></span><br><span class="line">result = risky_function(<span class="number">0</span>)  <span class="comment"># 不会抛出异常，返回None</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-异常过滤器模式"><a href="#3-异常过滤器模式" class="headerlink" title="3. 异常过滤器模式"></a>3. 异常过滤器模式</h3><p>创建一个异常过滤器，根据条件决定是否处理异常：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ExceptionFilter</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;异常过滤器，根据条件决定是否处理异常&quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.handlers = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">register</span>(<span class="params">self, exception_type, condition=<span class="literal">None</span>, handler=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        注册异常处理器</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        参数:</span></span><br><span class="line"><span class="string">            exception_type: 异常类型</span></span><br><span class="line"><span class="string">            condition: 一个函数，接受异常对象，返回布尔值</span></span><br><span class="line"><span class="string">            handler: 一个函数，接受异常对象，处理异常</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.handlers.append((exception_type, condition, handler))</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle</span>(<span class="params">self, exception</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        处理异常</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        参数:</span></span><br><span class="line"><span class="string">            exception: 异常对象</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        返回:</span></span><br><span class="line"><span class="string">            布尔值，表示异常是否被处理</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">for</span> exc_type, condition, handler <span class="keyword">in</span> <span class="variable language_">self</span>.handlers:</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(exception, exc_type):</span><br><span class="line">                <span class="keyword">if</span> condition <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> condition(exception):</span><br><span class="line">                    <span class="keyword">if</span> handler:</span><br><span class="line">                        handler(exception)</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用异常过滤器</span></span><br><span class="line"><span class="built_in">filter</span> = ExceptionFilter()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注册处理器</span></span><br><span class="line"><span class="built_in">filter</span>.register(</span><br><span class="line">    ValueError,</span><br><span class="line">    condition=<span class="keyword">lambda</span> e: <span class="string">&quot;invalid&quot;</span> <span class="keyword">in</span> <span class="built_in">str</span>(e).lower(),</span><br><span class="line">    handler=<span class="keyword">lambda</span> e: <span class="built_in">print</span>(<span class="string">f&quot;处理无效值错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">filter</span>.register(</span><br><span class="line">    ZeroDivisionError,</span><br><span class="line">    handler=<span class="keyword">lambda</span> e: <span class="built_in">print</span>(<span class="string">f&quot;处理除零错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用过滤器</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    value = <span class="built_in">int</span>(<span class="string">&quot;invalid&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">filter</span>.handle(e):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;未处理的异常: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-错误边界模式"><a href="#4-错误边界模式" class="headerlink" title="4. 错误边界模式"></a>4. 错误边界模式</h3><p>创建错误边界，限制错误的传播范围：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ErrorBoundary</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    错误边界，限制错误的传播范围</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, fallback=<span class="literal">None</span>, on_error=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        初始化错误边界</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        参数:</span></span><br><span class="line"><span class="string">            fallback: 发生错误时的回退值</span></span><br><span class="line"><span class="string">            on_error: 错误处理函数，接受异常对象</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.fallback = fallback</span><br><span class="line">        <span class="variable language_">self</span>.on_error = on_error</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">self, func, *args, **kwargs</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        执行函数，捕获异常</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        参数:</span></span><br><span class="line"><span class="string">            func: 要执行的函数</span></span><br><span class="line"><span class="string">            args, kwargs: 函数参数</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        返回:</span></span><br><span class="line"><span class="string">            函数返回值或回退值</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">if</span> <span class="variable language_">self</span>.on_error:</span><br><span class="line">                <span class="variable language_">self</span>.on_error(e)</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>.fallback</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用错误边界</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_item</span>(<span class="params">item</span>):</span><br><span class="line">    <span class="keyword">if</span> item == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;项目不能为零&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">10</span> / item</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建错误边界</span></span><br><span class="line">boundary = ErrorBoundary(</span><br><span class="line">    fallback=<span class="literal">None</span>,</span><br><span class="line">    on_error=<span class="keyword">lambda</span> e: <span class="built_in">print</span>(<span class="string">f&quot;处理项目时出错: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 处理项目列表</span></span><br><span class="line">items = [<span class="number">5</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="string">&quot;invalid&quot;</span>, <span class="number">8</span>]</span><br><span class="line">results = [boundary.execute(process_item, item) <span class="keyword">for</span> item <span class="keyword">in</span> items]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;结果: <span class="subst">&#123;results&#125;</span>&quot;</span>)  <span class="comment"># [2.0, None, 5.0, None, 1.25]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>良好的错误处理是编写健壮Python代码的关键。通过遵循本文介绍的最佳实践和模式，你可以创建更可靠、更易于维护的应用程序。记住以下几点：</p>
+<ol>
+<li><strong>明确异常类型</strong>：捕获特定的异常，而不是笼统地捕获所有异常</li>
+<li><strong>创建有意义的自定义异常</strong>：使错误信息更加明确</li>
+<li><strong>使用上下文管理器</strong>：自动处理资源的获取和释放</li>
+<li><strong>结合使用日志和异常</strong>：记录详细的错误信息</li>
+<li><strong>实现适当的重试机制</strong>：处理临时故障</li>
+<li><strong>建立错误边界</strong>：限制错误的传播范围</li>
+</ol>
+<p>通过这些技术，你可以构建出既能优雅地处理错误，又能提供良好用户体验的Python应用程序。</p>
+<p>你有什么关于Python错误处理的问题或经验分享吗？欢迎在评论中讨论！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/">代码质量</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%B0%83%E8%AF%95/">调试</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/">错误处理</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%BC%82%E5%B8%B8/">异常</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%97%A5%E5%BF%97/">日志</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2022/python/python-data-classes-guide/"
+                                   title="Python数据类完全指南：简化代码的强大工具"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Python数据类完全指南：简化代码的强大工具</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2022/python/python-generators-advanced-techniques/"
+                                   title="Python生成器高级技巧：超越基础用法的实用指南"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Python生成器高级技巧：超越基础用法的实用指南</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E9%AB%98%E6%95%88%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">Python高效错误处理：从基础到最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80"><span class="nav-text">异常处理基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E5%BC%82%E5%B8%B8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-text">Python异常层次结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9A%84try-except%E8%AF%AD%E5%8F%A5"><span class="nav-text">基本的try-except语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%95%E8%8E%B7%E5%A4%9A%E7%A7%8D%E5%BC%82%E5%B8%B8"><span class="nav-text">捕获多种异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#else%E5%92%8Cfinally%E5%AD%90%E5%8F%A5"><span class="nav-text">else和finally子句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%8A%80%E5%B7%A7"><span class="nav-text">高级异常处理技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%BC%82%E5%B8%B8%E4%BF%A1%E6%81%AF"><span class="nav-text">获取异常信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E9%93%BE%E5%92%8C%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-text">异常链和上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8%E7%B1%BB"><span class="nav-text">自定义异常类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">错误处理最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8F%AA%E6%8D%95%E8%8E%B7%E9%A2%84%E6%9C%9F%E7%9A%84%E5%BC%82%E5%B8%B8"><span class="nav-text">1. 只捕获预期的异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B0%BD%E6%97%A9%E6%8A%9B%E5%87%BA%EF%BC%8C%E5%BB%B6%E8%BF%9F%E6%8D%95%E8%8E%B7"><span class="nav-text">2. 尽早抛出，延迟捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%A4%84%E7%90%86%E8%B5%84%E6%BA%90"><span class="nav-text">3. 使用上下文管理器处理资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8%E5%BC%82%E5%B8%B8%E8%80%8C%E4%B8%8D%E6%98%AF%E8%BF%94%E5%9B%9E%E9%94%99%E8%AF%AF%E7%A0%81"><span class="nav-text">4. 使用异常而不是返回错误码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8%E6%96%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E5%86%85%E9%83%A8%E6%A3%80%E6%9F%A5"><span class="nav-text">5. 使用断言进行内部检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E7%BB%93%E5%90%88%E4%BD%BF%E7%94%A8%E6%97%A5%E5%BF%97%E5%92%8C%E5%BC%82%E5%B8%B8"><span class="nav-text">6. 结合使用日志和异常</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">实际应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B1%EF%BC%9AAPI%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-text">案例1：API错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B2%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-text">案例2：数据处理错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B3%EF%BC%9A%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6"><span class="nav-text">案例3：重试机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="nav-text">高级错误处理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-text">1. 上下文管理器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-text">2. 装饰器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BC%82%E5%B8%B8%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-text">3. 异常过滤器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%94%99%E8%AF%AF%E8%BE%B9%E7%95%8C%E6%A8%A1%E5%BC%8F"><span class="nav-text">4. 错误边界模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E9%AB%98%E6%95%88%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">Python高效错误处理：从基础到最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80"><span class="nav-text">异常处理基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E5%BC%82%E5%B8%B8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-text">Python异常层次结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9A%84try-except%E8%AF%AD%E5%8F%A5"><span class="nav-text">基本的try-except语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%95%E8%8E%B7%E5%A4%9A%E7%A7%8D%E5%BC%82%E5%B8%B8"><span class="nav-text">捕获多种异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#else%E5%92%8Cfinally%E5%AD%90%E5%8F%A5"><span class="nav-text">else和finally子句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%8A%80%E5%B7%A7"><span class="nav-text">高级异常处理技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%BC%82%E5%B8%B8%E4%BF%A1%E6%81%AF"><span class="nav-text">获取异常信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E9%93%BE%E5%92%8C%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-text">异常链和上下文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8%E7%B1%BB"><span class="nav-text">自定义异常类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">错误处理最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8F%AA%E6%8D%95%E8%8E%B7%E9%A2%84%E6%9C%9F%E7%9A%84%E5%BC%82%E5%B8%B8"><span class="nav-text">1. 只捕获预期的异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B0%BD%E6%97%A9%E6%8A%9B%E5%87%BA%EF%BC%8C%E5%BB%B6%E8%BF%9F%E6%8D%95%E8%8E%B7"><span class="nav-text">2. 尽早抛出，延迟捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%A4%84%E7%90%86%E8%B5%84%E6%BA%90"><span class="nav-text">3. 使用上下文管理器处理资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8%E5%BC%82%E5%B8%B8%E8%80%8C%E4%B8%8D%E6%98%AF%E8%BF%94%E5%9B%9E%E9%94%99%E8%AF%AF%E7%A0%81"><span class="nav-text">4. 使用异常而不是返回错误码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8%E6%96%AD%E8%A8%80%E8%BF%9B%E8%A1%8C%E5%86%85%E9%83%A8%E6%A3%80%E6%9F%A5"><span class="nav-text">5. 使用断言进行内部检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E7%BB%93%E5%90%88%E4%BD%BF%E7%94%A8%E6%97%A5%E5%BF%97%E5%92%8C%E5%BC%82%E5%B8%B8"><span class="nav-text">6. 结合使用日志和异常</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">实际应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B1%EF%BC%9AAPI%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-text">案例1：API错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B2%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-text">案例2：数据处理错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B3%EF%BC%9A%E9%87%8D%E8%AF%95%E6%9C%BA%E5%88%B6"><span class="nav-text">案例3：重试机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="nav-text">高级错误处理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-text">1. 上下文管理器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-text">2. 装饰器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BC%82%E5%B8%B8%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-text">3. 异常过滤器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%94%99%E8%AF%AF%E8%BE%B9%E7%95%8C%E6%A8%A1%E5%BC%8F"><span class="nav-text">4. 错误边界模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

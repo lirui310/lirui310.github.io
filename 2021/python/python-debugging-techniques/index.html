@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Python调试技巧：从print到高级调试工具的完全指南 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Python调试技巧：从print到高级调试工具的完全指南
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2021-09-28 14:10:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/python/">python</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%B0%83%E8%AF%95/">调试</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/pdb/">pdb</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/IDE/">IDE</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">性能分析</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/">错误处理</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Python调试技巧：从print到高级调试工具的完全指南"><a href="#Python调试技巧：从print到高级调试工具的完全指南" class="headerlink" title="Python调试技巧：从print到高级调试工具的完全指南"></a>Python调试技巧：从print到高级调试工具的完全指南</h1><p>调试是每个开发者日常工作中不可避免的一部分。无论你的代码写得多么精心，总会有那么一些bug悄悄潜入。在这篇文章中，我将分享一系列Python调试技巧，从简单的print语句到高级调试工具，帮助你更高效地找出并修复代码中的问题。</p>
+<h2 id="基础调试技巧"><a href="#基础调试技巧" class="headerlink" title="基础调试技巧"></a>基础调试技巧</h2><h3 id="1-使用print语句"><a href="#1-使用print语句" class="headerlink" title="1. 使用print语句"></a>1. 使用print语句</h3><p>尽管简单，但<code>print</code>语句仍然是最直接的调试方法之一：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">calculate_total</span>(<span class="params">items</span>):</span><br><span class="line">    total = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> items:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Processing item: <span class="subst">&#123;item&#125;</span>&quot;</span>)  <span class="comment"># 打印当前处理的项</span></span><br><span class="line">        total += item</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Current total: <span class="subst">&#123;total&#125;</span>&quot;</span>)  <span class="comment"># 打印当前总和</span></span><br><span class="line">    <span class="keyword">return</span> total</span><br><span class="line"></span><br><span class="line">result = calculate_total([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Final result: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>优点</strong>：简单直接，不需要额外工具。<br><strong>缺点</strong>：需要修改代码，可能产生大量输出，需要手动清理。</p>
+<h3 id="2-使用断言"><a href="#2-使用断言" class="headerlink" title="2. 使用断言"></a>2. 使用断言</h3><p>断言可以帮助你验证代码中的假设，当断言失败时会引发异常：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">divide</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">assert</span> b != <span class="number">0</span>, <span class="string">&quot;除数不能为零&quot;</span></span><br><span class="line">    <span class="keyword">return</span> a / b</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    result = divide(<span class="number">10</span>, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">except</span> AssertionError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;断言错误: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>优点</strong>：可以在开发阶段捕获逻辑错误，代码更健壮。<br><strong>缺点</strong>：在生产环境中可能被禁用（使用-O选项运行Python）。</p>
+<h3 id="3-使用日志"><a href="#3-使用日志" class="headerlink" title="3. 使用日志"></a>3. 使用日志</h3><p>相比<code>print</code>，日志提供了更多的灵活性和控制：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置日志</span></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    level=logging.DEBUG,</span><br><span class="line">    <span class="built_in">format</span>=<span class="string">&#x27;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#x27;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_data</span>(<span class="params">data</span>):</span><br><span class="line">    logging.debug(<span class="string">f&quot;开始处理数据: <span class="subst">&#123;data&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> data:</span><br><span class="line">        logging.warning(<span class="string">&quot;收到空数据&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        result = data[<span class="number">0</span>] / data[<span class="number">1</span>]</span><br><span class="line">        logging.info(<span class="string">f&quot;处理成功，结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        logging.error(<span class="string">f&quot;处理数据时出错: <span class="subst">&#123;e&#125;</span>&quot;</span>, exc_info=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">process_data([<span class="number">10</span>, <span class="number">2</span>])  <span class="comment"># 正常情况</span></span><br><span class="line">process_data([])       <span class="comment"># 空数据</span></span><br><span class="line">process_data([<span class="number">10</span>, <span class="number">0</span>])  <span class="comment"># 除零错误</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>优点</strong>：可以设置不同的日志级别，可以输出到文件，包含时间戳和上下文信息。<br><strong>缺点</strong>：需要一些初始设置。</p>
+<h2 id="使用Python内置调试器pdb"><a href="#使用Python内置调试器pdb" class="headerlink" title="使用Python内置调试器pdb"></a>使用Python内置调试器pdb</h2><p>Python的内置调试器<code>pdb</code>提供了交互式调试环境，允许你一步一步执行代码。</p>
+<h3 id="1-基本用法"><a href="#1-基本用法" class="headerlink" title="1. 基本用法"></a>1. 基本用法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">complex_function</span>(<span class="params">a, b</span>):</span><br><span class="line">    result = a * b</span><br><span class="line">    <span class="comment"># 在这里设置断点</span></span><br><span class="line">    <span class="keyword">import</span> pdb; pdb.set_trace()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(result):</span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">3</span> == <span class="number">0</span>:</span><br><span class="line">            result -= <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">complex_function(<span class="number">4</span>, <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<p>当执行到<code>pdb.set_trace()</code>时，程序会暂停，进入交互式调试模式。</p>
+<h3 id="2-常用pdb命令"><a href="#2-常用pdb命令" class="headerlink" title="2. 常用pdb命令"></a>2. 常用pdb命令</h3><ul>
+<li><code>n</code>（next）：执行当前行，并移动到下一行</li>
+<li><code>s</code>（step）：步入函数调用</li>
+<li><code>c</code>（continue）：继续执行直到下一个断点</li>
+<li><code>q</code>（quit）：退出调试器</li>
+<li><code>p expression</code>：打印表达式的值</li>
+<li><code>l</code>（list）：显示当前位置的代码</li>
+<li><code>w</code>（where）：打印当前位置的堆栈跟踪</li>
+<li><code>b line_number</code>：设置断点</li>
+<li><code>h</code>（help）：显示帮助信息</li>
+</ul>
+<h3 id="3-Python-3-7-中的breakpoint-函数"><a href="#3-Python-3-7-中的breakpoint-函数" class="headerlink" title="3. Python 3.7+中的breakpoint()函数"></a>3. Python 3.7+中的breakpoint()函数</h3><p>从Python 3.7开始，可以使用内置的<code>breakpoint()</code>函数代替<code>import pdb; pdb.set_trace()</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">complex_function</span>(<span class="params">a, b</span>):</span><br><span class="line">    result = a * b</span><br><span class="line">    <span class="built_in">breakpoint</span>()  <span class="comment"># 在这里设置断点</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(result):</span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">3</span> == <span class="number">0</span>:</span><br><span class="line">            result -= <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<p><strong>优点</strong>：可以通过环境变量<code>PYTHONBREAKPOINT</code>控制调试行为，更灵活。</p>
+<h2 id="IDE集成调试"><a href="#IDE集成调试" class="headerlink" title="IDE集成调试"></a>IDE集成调试</h2><p>现代IDE提供了强大的图形化调试工具，使调试过程更加直观。</p>
+<h3 id="1-PyCharm调试"><a href="#1-PyCharm调试" class="headerlink" title="1. PyCharm调试"></a>1. PyCharm调试</h3><p>PyCharm提供了完整的调试功能：</p>
+<ul>
+<li>设置断点：点击代码行号旁边</li>
+<li>启动调试：点击”Debug”按钮</li>
+<li>调试控制：步入、步过、继续等</li>
+<li>变量查看：在调试窗口中查看变量值</li>
+<li>条件断点：设置只在特定条件下触发的断点</li>
+</ul>
+<h3 id="2-VS-Code调试"><a href="#2-VS-Code调试" class="headerlink" title="2. VS Code调试"></a>2. VS Code调试</h3><p>VS Code通过Python扩展提供类似的调试功能：</p>
+<ul>
+<li>需要配置<code>launch.json</code>文件</li>
+<li>支持断点、变量查看、调用堆栈等</li>
+<li>支持远程调试</li>
+</ul>
+<h3 id="3-Jupyter-Notebook调试"><a href="#3-Jupyter-Notebook调试" class="headerlink" title="3. Jupyter Notebook调试"></a>3. Jupyter Notebook调试</h3><p>在Jupyter Notebook中，可以使用<code>%debug</code>魔术命令在异常发生后进入调试模式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">problematic_function</span>():</span><br><span class="line">    a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">    <span class="keyword">return</span> a[<span class="number">10</span>]  <span class="comment"># 索引错误</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    problematic_function()</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    %debug  <span class="comment"># 进入事后调试模式</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="高级调试技巧"><a href="#高级调试技巧" class="headerlink" title="高级调试技巧"></a>高级调试技巧</h2><h3 id="1-使用装饰器进行函数调试"><a href="#1-使用装饰器进行函数调试" class="headerlink" title="1. 使用装饰器进行函数调试"></a>1. 使用装饰器进行函数调试</h3><p>自定义装饰器可以帮助跟踪函数调用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">debug</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        args_repr = [<span class="built_in">repr</span>(a) <span class="keyword">for</span> a <span class="keyword">in</span> args]</span><br><span class="line">        kwargs_repr = [<span class="string">f&quot;<span class="subst">&#123;k&#125;</span>=<span class="subst">&#123;v!r&#125;</span>&quot;</span> <span class="keyword">for</span> k, v <span class="keyword">in</span> kwargs.items()]</span><br><span class="line">        signature = <span class="string">&quot;, &quot;</span>.join(args_repr + kwargs_repr)</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;调用 <span class="subst">&#123;func.__name__&#125;</span>(<span class="subst">&#123;signature&#125;</span>)&quot;</span>)</span><br><span class="line">        start_time = time.time()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            result = func(*args, **kwargs)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;func.__name__&#125;</span> 返回: <span class="subst">&#123;result!r&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;func.__name__&#125;</span> 抛出异常: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            end_time = time.time()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;func.__name__&#125;</span> 执行时间: <span class="subst">&#123;end_time - start_time:<span class="number">.6</span>f&#125;</span>秒&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@debug</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">factorial</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n &lt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;n必须是非负整数&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> n * factorial(n - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">factorial(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用上下文管理器计时"><a href="#2-使用上下文管理器计时" class="headerlink" title="2. 使用上下文管理器计时"></a>2. 使用上下文管理器计时</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> contextmanager</span><br><span class="line"></span><br><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">timer</span>(<span class="params">name</span>):</span><br><span class="line">    start_time = time.time()</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">yield</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        end_time = time.time()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;name&#125;</span> 执行时间: <span class="subst">&#123;end_time - start_time:<span class="number">.6</span>f&#125;</span>秒&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用上下文管理器</span></span><br><span class="line"><span class="keyword">with</span> timer(<span class="string">&quot;排序操作&quot;</span>):</span><br><span class="line">    sorted_list = <span class="built_in">sorted</span>([<span class="number">5</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">6</span>] * <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-使用tracemalloc跟踪内存分配"><a href="#3-使用tracemalloc跟踪内存分配" class="headerlink" title="3. 使用tracemalloc跟踪内存分配"></a>3. 使用tracemalloc跟踪内存分配</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tracemalloc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动跟踪</span></span><br><span class="line">tracemalloc.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一些对象</span></span><br><span class="line">my_list = [<span class="number">1</span>] * (<span class="number">10</span> ** <span class="number">6</span>)</span><br><span class="line">my_dict = &#123;i: i * <span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span> ** <span class="number">5</span>)&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前内存快照</span></span><br><span class="line">snapshot = tracemalloc.take_snapshot()</span><br><span class="line">top_stats = snapshot.statistics(<span class="string">&#x27;lineno&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印前10个内存块</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[ 内存使用情况 ]&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> stat <span class="keyword">in</span> top_stats[:<span class="number">10</span>]:</span><br><span class="line">    <span class="built_in">print</span>(stat)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-使用cProfile进行性能分析"><a href="#4-使用cProfile进行性能分析" class="headerlink" title="4. 使用cProfile进行性能分析"></a>4. 使用cProfile进行性能分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cProfile</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fibonacci</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    <span class="keyword">return</span> fibonacci(n-<span class="number">1</span>) + fibonacci(n-<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用cProfile分析函数性能</span></span><br><span class="line">cProfile.run(<span class="string">&#x27;fibonacci(30)&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-使用第三方调试工具"><a href="#5-使用第三方调试工具" class="headerlink" title="5. 使用第三方调试工具"></a>5. 使用第三方调试工具</h3><h4 id="a-ipdb-增强版pdb"><a href="#a-ipdb-增强版pdb" class="headerlink" title="a. ipdb - 增强版pdb"></a>a. ipdb - 增强版pdb</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install ipdb</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ipdb</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">complex_function</span>():</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    ipdb.set_trace()</span><br><span class="line">    <span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+
+<p>ipdb提供了语法高亮和tab补全等功能。</p>
+<h4 id="b-pudb-基于控制台的可视化调试器"><a href="#b-pudb-基于控制台的可视化调试器" class="headerlink" title="b. pudb - 基于控制台的可视化调试器"></a>b. pudb - 基于控制台的可视化调试器</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pudb</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pudb</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">complex_function</span>():</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    pudb.set_trace()</span><br><span class="line">    <span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+
+<p>pudb提供了类似IDE的界面，但在终端中运行。</p>
+<h4 id="c-remote-pdb-远程调试"><a href="#c-remote-pdb-远程调试" class="headerlink" title="c. remote-pdb - 远程调试"></a>c. remote-pdb - 远程调试</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install remote-pdb</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> remote_pdb <span class="keyword">import</span> set_trace</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">complex_function</span>():</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    set_trace(host=<span class="string">&#x27;0.0.0.0&#x27;</span>, port=<span class="number">4444</span>)  <span class="comment"># 监听所有接口的4444端口</span></span><br><span class="line">    <span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+
+<p>使用telnet连接到调试会话：<code>telnet localhost 4444</code></p>
+<h2 id="调试常见问题的技巧"><a href="#调试常见问题的技巧" class="headerlink" title="调试常见问题的技巧"></a>调试常见问题的技巧</h2><h3 id="1-调试导入错误"><a href="#1-调试导入错误" class="headerlink" title="1. 调试导入错误"></a>1. 调试导入错误</h3><p>当遇到导入错误时，可以检查模块搜索路径：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="built_in">print</span>(sys.path)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-调试异常"><a href="#2-调试异常" class="headerlink" title="2. 调试异常"></a>2. 调试异常</h3><p>使用<code>try-except</code>块捕获并分析异常：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 可能引发异常的代码</span></span><br><span class="line">    result = <span class="number">10</span> / <span class="number">0</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="keyword">import</span> traceback</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;异常类型: <span class="subst">&#123;<span class="built_in">type</span>(e).__name__&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;异常信息: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;详细堆栈跟踪:&quot;</span>)</span><br><span class="line">    traceback.print_exc()</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-调试多线程程序"><a href="#3-调试多线程程序" class="headerlink" title="3. 调试多线程程序"></a>3. 调试多线程程序</h3><p>多线程程序的调试可能很复杂，可以使用线程名称和日志来帮助跟踪：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    level=logging.DEBUG,</span><br><span class="line">    <span class="built_in">format</span>=<span class="string">&#x27;%(asctime)s - %(threadName)s - %(message)s&#x27;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">worker</span>(<span class="params">delay, count</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(count):</span><br><span class="line">        logging.debug(<span class="string">f&quot;执行任务 <span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">        time.sleep(delay)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并启动线程</span></span><br><span class="line">threads = [</span><br><span class="line">    threading.Thread(target=worker, name=<span class="string">f&quot;Worker-<span class="subst">&#123;i&#125;</span>&quot;</span>, args=(<span class="number">1</span>, <span class="number">3</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> thread <span class="keyword">in</span> threads:</span><br><span class="line">    thread.start()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> thread <span class="keyword">in</span> threads:</span><br><span class="line">    thread.join()</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-调试内存泄漏"><a href="#4-调试内存泄漏" class="headerlink" title="4. 调试内存泄漏"></a>4. 调试内存泄漏</h3><p>使用<code>objgraph</code>库查找内存泄漏：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install objgraph</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> objgraph</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在可能泄漏之前</span></span><br><span class="line">objgraph.show_most_common_types()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一些对象</span></span><br><span class="line">leaky_list = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">    leaky_list.append([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>] * <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在可能泄漏之后</span></span><br><span class="line">objgraph.show_most_common_types()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找特定类型的对象</span></span><br><span class="line">objgraph.show_growth()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化对象引用</span></span><br><span class="line">objgraph.show_backrefs(leaky_list, filename=<span class="string">&#x27;backrefs.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="调试最佳实践"><a href="#调试最佳实践" class="headerlink" title="调试最佳实践"></a>调试最佳实践</h2><h3 id="1-使用版本控制"><a href="#1-使用版本控制" class="headerlink" title="1. 使用版本控制"></a>1. 使用版本控制</h3><p>在调试前确保代码已提交到版本控制系统，这样可以安全地进行修改和实验。</p>
+<h3 id="2-隔离问题"><a href="#2-隔离问题" class="headerlink" title="2. 隔离问题"></a>2. 隔离问题</h3><p>尝试创建一个最小的、可重现问题的示例。这不仅有助于找出根本原因，还便于在需要时寻求帮助。</p>
+<h3 id="3-二分查找法"><a href="#3-二分查找法" class="headerlink" title="3. 二分查找法"></a>3. 二分查找法</h3><p>当不确定问题出在哪里时，可以使用二分查找法：注释掉一半的代码，看问题是否仍然存在，然后逐步缩小范围。</p>
+<h3 id="4-保持代码简洁"><a href="#4-保持代码简洁" class="headerlink" title="4. 保持代码简洁"></a>4. 保持代码简洁</h3><p>简洁的代码更容易调试。遵循KISS原则（Keep It Simple, Stupid）。</p>
+<h3 id="5-编写测试"><a href="#5-编写测试" class="headerlink" title="5. 编写测试"></a>5. 编写测试</h3><p>单元测试和集成测试可以帮助捕获bug，并防止回归。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestAddFunction</span>(unittest.TestCase):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_add_positive_numbers</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.assertEqual(add(<span class="number">1</span>, <span class="number">2</span>), <span class="number">3</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_add_negative_numbers</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.assertEqual(add(-<span class="number">1</span>, -<span class="number">2</span>), -<span class="number">3</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_add_mixed_numbers</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.assertEqual(add(-<span class="number">1</span>, <span class="number">2</span>), <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    unittest.main()</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-使用断言和契约"><a href="#6-使用断言和契约" class="headerlink" title="6. 使用断言和契约"></a>6. 使用断言和契约</h3><p>在关键点使用断言和契约可以帮助捕获错误：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">process_user_data</span>(<span class="params">user_data</span>):</span><br><span class="line">    <span class="comment"># 前置条件</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="string">&#x27;name&#x27;</span> <span class="keyword">in</span> user_data, <span class="string">&quot;用户数据必须包含名称&quot;</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="string">&#x27;age&#x27;</span> <span class="keyword">in</span> user_data, <span class="string">&quot;用户数据必须包含年龄&quot;</span></span><br><span class="line">    <span class="keyword">assert</span> user_data[<span class="string">&#x27;age&#x27;</span>] &gt;= <span class="number">0</span>, <span class="string">&quot;年龄必须是非负数&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 处理数据</span></span><br><span class="line">    result = do_something_with_data(user_data)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 后置条件</span></span><br><span class="line">    <span class="keyword">assert</span> result <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>, <span class="string">&quot;处理结果不能为空&quot;</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-使用代码检查工具"><a href="#7-使用代码检查工具" class="headerlink" title="7. 使用代码检查工具"></a>7. 使用代码检查工具</h3><p>静态代码分析工具可以在运行前发现潜在问题：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装pylint</span></span><br><span class="line">pip install pylint</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行pylint</span></span><br><span class="line">pylint your_module.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级调试场景"><a href="#高级调试场景" class="headerlink" title="高级调试场景"></a>高级调试场景</h2><h3 id="1-调试Django应用"><a href="#1-调试Django应用" class="headerlink" title="1. 调试Django应用"></a>1. 调试Django应用</h3><p>Django提供了调试工具栏和详细的错误页面：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># settings.py</span></span><br><span class="line">DEBUG = <span class="literal">True</span>  <span class="comment"># 开发环境中启用调试模式</span></span><br><span class="line"></span><br><span class="line">INSTALLED_APPS = [</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    <span class="string">&#x27;debug_toolbar&#x27;</span>,  <span class="comment"># 添加调试工具栏</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">MIDDLEWARE = [</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    <span class="string">&#x27;debug_toolbar.middleware.DebugToolbarMiddleware&#x27;</span>,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">INTERNAL_IPS = [</span><br><span class="line">    <span class="string">&#x27;127.0.0.1&#x27;</span>,  <span class="comment"># 允许调试工具栏显示</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-调试Flask应用"><a href="#2-调试Flask应用" class="headerlink" title="2. 调试Flask应用"></a>2. 调试Flask应用</h3><p>Flask内置了调试模式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line">app.debug = <span class="literal">True</span>  <span class="comment"># 启用调试模式</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Hello, World!&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(debug=<span class="literal">True</span>)  <span class="comment"># 也可以在这里启用调试模式</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-调试API请求"><a href="#3-调试API请求" class="headerlink" title="3. 调试API请求"></a>3. 调试API请求</h3><p>使用<code>requests</code>库的会话和调试钩子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个会话</span></span><br><span class="line">session = requests.Session()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义调试钩子</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">log_request</span>(<span class="params">response, *args, **kwargs</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;请求URL: <span class="subst">&#123;response.request.url&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;请求头: <span class="subst">&#123;response.request.headers&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;请求体: <span class="subst">&#123;response.request.body&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;响应状态: <span class="subst">&#123;response.status_code&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;响应头: <span class="subst">&#123;response.headers&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;响应体: <span class="subst">&#123;response.text[:<span class="number">100</span>]&#125;</span>...&quot;</span>)  <span class="comment"># 只打印前100个字符</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加钩子</span></span><br><span class="line">session.hooks[<span class="string">&#x27;response&#x27;</span>] = [log_request]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送请求</span></span><br><span class="line">response = session.get(<span class="string">&#x27;https://api.github.com/users/octocat&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-调试并发代码"><a href="#4-调试并发代码" class="headerlink" title="4. 调试并发代码"></a>4. 调试并发代码</h3><p>使用<code>concurrent.futures</code>模块的调试功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> concurrent.futures</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">logging.basicConfig(</span><br><span class="line">    level=logging.DEBUG,</span><br><span class="line">    <span class="built_in">format</span>=<span class="string">&#x27;%(asctime)s - %(threadName)s - %(message)s&#x27;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>(<span class="params">n</span>):</span><br><span class="line">    logging.debug(<span class="string">f&quot;开始任务 <span class="subst">&#123;n&#125;</span>&quot;</span>)</span><br><span class="line">    time.sleep(n)</span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">3</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">f&quot;任务 <span class="subst">&#123;n&#125;</span> 失败&quot;</span>)</span><br><span class="line">    logging.debug(<span class="string">f&quot;完成任务 <span class="subst">&#123;n&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> n * n</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用线程池执行器</span></span><br><span class="line"><span class="keyword">with</span> concurrent.futures.ThreadPoolExecutor(max_workers=<span class="number">3</span>) <span class="keyword">as</span> executor:</span><br><span class="line">    <span class="comment"># 提交任务</span></span><br><span class="line">    future_to_n = &#123;executor.submit(task, n): n <span class="keyword">for</span> n <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">6</span>)&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 处理结果</span></span><br><span class="line">    <span class="keyword">for</span> future <span class="keyword">in</span> concurrent.futures.as_completed(future_to_n):</span><br><span class="line">        n = future_to_n[future]</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            result = future.result()</span><br><span class="line">            logging.debug(<span class="string">f&quot;任务 <span class="subst">&#123;n&#125;</span> 结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            logging.error(<span class="string">f&quot;任务 <span class="subst">&#123;n&#125;</span> 生成异常: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>调试是软件开发中不可避免的一部分，掌握各种调试技巧可以大大提高开发效率。从简单的<code>print</code>语句到高级的调试工具，每种方法都有其适用场景。</p>
+<p>记住，最好的调试策略是预防bug的产生：编写清晰的代码、添加适当的注释、使用类型提示、编写测试用例，以及遵循良好的编程实践。</p>
+<p>然而，当bug确实出现时，希望本文介绍的这些技巧能帮助你更快地找到并解决问题。调试可能是一个挑战，但也是提升编程技能的绝佳机会。</p>
+<p>你有什么特别喜欢的Python调试技巧吗？欢迎在评论中分享！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%B0%83%E8%AF%95/">调试</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/pdb/">pdb</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/IDE/">IDE</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">性能分析</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/">错误处理</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2021/python/python-memory-management/"
+                                   title="Python内存管理：深入理解Python的内存机制"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Python内存管理：深入理解Python的内存机制</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2021/php/php8-nullsafe-operator-guide/"
+                                   title="PHP 8.0 空安全操作符实战：告别空指针异常的优雅解决方案"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8.0 空安全操作符实战：告别空指针异常的优雅解决方案</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7%EF%BC%9A%E4%BB%8Eprint%E5%88%B0%E9%AB%98%E7%BA%A7%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E7%9A%84%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97"><span class="nav-text">Python调试技巧：从print到高级调试工具的完全指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="nav-text">基础调试技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8print%E8%AF%AD%E5%8F%A5"><span class="nav-text">1. 使用print语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E6%96%AD%E8%A8%80"><span class="nav-text">2. 使用断言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8%E6%97%A5%E5%BF%97"><span class="nav-text">3. 使用日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Python%E5%86%85%E7%BD%AE%E8%B0%83%E8%AF%95%E5%99%A8pdb"><span class="nav-text">使用Python内置调试器pdb</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-text">1. 基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B8%B8%E7%94%A8pdb%E5%91%BD%E4%BB%A4"><span class="nav-text">2. 常用pdb命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Python-3-7-%E4%B8%AD%E7%9A%84breakpoint-%E5%87%BD%E6%95%B0"><span class="nav-text">3. Python 3.7+中的breakpoint()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IDE%E9%9B%86%E6%88%90%E8%B0%83%E8%AF%95"><span class="nav-text">IDE集成调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-PyCharm%E8%B0%83%E8%AF%95"><span class="nav-text">1. PyCharm调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-VS-Code%E8%B0%83%E8%AF%95"><span class="nav-text">2. VS Code调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Jupyter-Notebook%E8%B0%83%E8%AF%95"><span class="nav-text">3. Jupyter Notebook调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="nav-text">高级调试技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E8%A3%85%E9%A5%B0%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%87%BD%E6%95%B0%E8%B0%83%E8%AF%95"><span class="nav-text">1. 使用装饰器进行函数调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E8%AE%A1%E6%97%B6"><span class="nav-text">2. 使用上下文管理器计时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8tracemalloc%E8%B7%9F%E8%B8%AA%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-text">3. 使用tracemalloc跟踪内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8cProfile%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4. 使用cProfile进行性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-text">5. 使用第三方调试工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-ipdb-%E5%A2%9E%E5%BC%BA%E7%89%88pdb"><span class="nav-text">a. ipdb - 增强版pdb</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-pudb-%E5%9F%BA%E4%BA%8E%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%9A%84%E5%8F%AF%E8%A7%86%E5%8C%96%E8%B0%83%E8%AF%95%E5%99%A8"><span class="nav-text">b. pudb - 基于控制台的可视化调试器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-remote-pdb-%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95"><span class="nav-text">c. remote-pdb - 远程调试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E7%9A%84%E6%8A%80%E5%B7%A7"><span class="nav-text">调试常见问题的技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%B0%83%E8%AF%95%E5%AF%BC%E5%85%A5%E9%94%99%E8%AF%AF"><span class="nav-text">1. 调试导入错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%B0%83%E8%AF%95%E5%BC%82%E5%B8%B8"><span class="nav-text">2. 调试异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%B0%83%E8%AF%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F"><span class="nav-text">3. 调试多线程程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%B0%83%E8%AF%95%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F"><span class="nav-text">4. 调试内存泄漏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">调试最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-text">1. 使用版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%9A%94%E7%A6%BB%E9%97%AE%E9%A2%98"><span class="nav-text">2. 隔离问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%B3%95"><span class="nav-text">3. 二分查找法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BF%9D%E6%8C%81%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81"><span class="nav-text">4. 保持代码简洁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95"><span class="nav-text">5. 编写测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E4%BD%BF%E7%94%A8%E6%96%AD%E8%A8%80%E5%92%8C%E5%A5%91%E7%BA%A6"><span class="nav-text">6. 使用断言和契约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5%E5%B7%A5%E5%85%B7"><span class="nav-text">7. 使用代码检查工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E8%B0%83%E8%AF%95%E5%9C%BA%E6%99%AF"><span class="nav-text">高级调试场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%B0%83%E8%AF%95Django%E5%BA%94%E7%94%A8"><span class="nav-text">1. 调试Django应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%B0%83%E8%AF%95Flask%E5%BA%94%E7%94%A8"><span class="nav-text">2. 调试Flask应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%B0%83%E8%AF%95API%E8%AF%B7%E6%B1%82"><span class="nav-text">3. 调试API请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%B0%83%E8%AF%95%E5%B9%B6%E5%8F%91%E4%BB%A3%E7%A0%81"><span class="nav-text">4. 调试并发代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7%EF%BC%9A%E4%BB%8Eprint%E5%88%B0%E9%AB%98%E7%BA%A7%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E7%9A%84%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97"><span class="nav-text">Python调试技巧：从print到高级调试工具的完全指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="nav-text">基础调试技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8print%E8%AF%AD%E5%8F%A5"><span class="nav-text">1. 使用print语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E6%96%AD%E8%A8%80"><span class="nav-text">2. 使用断言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8%E6%97%A5%E5%BF%97"><span class="nav-text">3. 使用日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Python%E5%86%85%E7%BD%AE%E8%B0%83%E8%AF%95%E5%99%A8pdb"><span class="nav-text">使用Python内置调试器pdb</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-text">1. 基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B8%B8%E7%94%A8pdb%E5%91%BD%E4%BB%A4"><span class="nav-text">2. 常用pdb命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Python-3-7-%E4%B8%AD%E7%9A%84breakpoint-%E5%87%BD%E6%95%B0"><span class="nav-text">3. Python 3.7+中的breakpoint()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IDE%E9%9B%86%E6%88%90%E8%B0%83%E8%AF%95"><span class="nav-text">IDE集成调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-PyCharm%E8%B0%83%E8%AF%95"><span class="nav-text">1. PyCharm调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-VS-Code%E8%B0%83%E8%AF%95"><span class="nav-text">2. VS Code调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Jupyter-Notebook%E8%B0%83%E8%AF%95"><span class="nav-text">3. Jupyter Notebook调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="nav-text">高级调试技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E8%A3%85%E9%A5%B0%E5%99%A8%E8%BF%9B%E8%A1%8C%E5%87%BD%E6%95%B0%E8%B0%83%E8%AF%95"><span class="nav-text">1. 使用装饰器进行函数调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E8%AE%A1%E6%97%B6"><span class="nav-text">2. 使用上下文管理器计时</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8tracemalloc%E8%B7%9F%E8%B8%AA%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-text">3. 使用tracemalloc跟踪内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8cProfile%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4. 使用cProfile进行性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-text">5. 使用第三方调试工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-ipdb-%E5%A2%9E%E5%BC%BA%E7%89%88pdb"><span class="nav-text">a. ipdb - 增强版pdb</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-pudb-%E5%9F%BA%E4%BA%8E%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%9A%84%E5%8F%AF%E8%A7%86%E5%8C%96%E8%B0%83%E8%AF%95%E5%99%A8"><span class="nav-text">b. pudb - 基于控制台的可视化调试器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-remote-pdb-%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95"><span class="nav-text">c. remote-pdb - 远程调试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E7%9A%84%E6%8A%80%E5%B7%A7"><span class="nav-text">调试常见问题的技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%B0%83%E8%AF%95%E5%AF%BC%E5%85%A5%E9%94%99%E8%AF%AF"><span class="nav-text">1. 调试导入错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%B0%83%E8%AF%95%E5%BC%82%E5%B8%B8"><span class="nav-text">2. 调试异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%B0%83%E8%AF%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F"><span class="nav-text">3. 调试多线程程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%B0%83%E8%AF%95%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F"><span class="nav-text">4. 调试内存泄漏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">调试最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-text">1. 使用版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%9A%94%E7%A6%BB%E9%97%AE%E9%A2%98"><span class="nav-text">2. 隔离问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%B3%95"><span class="nav-text">3. 二分查找法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BF%9D%E6%8C%81%E4%BB%A3%E7%A0%81%E7%AE%80%E6%B4%81"><span class="nav-text">4. 保持代码简洁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95"><span class="nav-text">5. 编写测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E4%BD%BF%E7%94%A8%E6%96%AD%E8%A8%80%E5%92%8C%E5%A5%91%E7%BA%A6"><span class="nav-text">6. 使用断言和契约</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5%E5%B7%A5%E5%85%B7"><span class="nav-text">7. 使用代码检查工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E8%B0%83%E8%AF%95%E5%9C%BA%E6%99%AF"><span class="nav-text">高级调试场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%B0%83%E8%AF%95Django%E5%BA%94%E7%94%A8"><span class="nav-text">1. 调试Django应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%B0%83%E8%AF%95Flask%E5%BA%94%E7%94%A8"><span class="nav-text">2. 调试Flask应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%B0%83%E8%AF%95API%E8%AF%B7%E6%B1%82"><span class="nav-text">3. 调试API请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E8%B0%83%E8%AF%95%E5%B9%B6%E5%8F%91%E4%BB%A3%E7%A0%81"><span class="nav-text">4. 调试并发代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

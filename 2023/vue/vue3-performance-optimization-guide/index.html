@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Vue 3 性能优化实战指南：从理论到实践 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Vue 3 性能优化实战指南：从理论到实践
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-03-20 14:20:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/vue/">vue</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Vue3/">Vue3</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%99%9A%E6%8B%9F%E6%BB%9A%E5%8A%A8/">虚拟滚动</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%87%92%E5%8A%A0%E8%BD%BD/">懒加载</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E5%89%B2/">代码分割</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>Vue 3 在性能方面相比 Vue 2 有了显著提升，但在实际开发中，我们仍需要掌握各种性能优化技巧来构建高性能的应用。本文将从 Vue 3 的性能改进原理出发，深入探讨实际项目中的性能优化策略和最佳实践。</p>
+<span id="more"></span>
+
+<h2 id="Vue-3-性能提升的核心原理"><a href="#Vue-3-性能提升的核心原理" class="headerlink" title="Vue 3 性能提升的核心原理"></a>Vue 3 性能提升的核心原理</h2><h3 id="1-编译时优化"><a href="#1-编译时优化" class="headerlink" title="1. 编译时优化"></a>1. 编译时优化</h3><p><strong>静态标记（PatchFlag）</strong></p>
+<p>Vue 3 在编译阶段会为动态节点添加静态标记，运行时只需要更新标记的部分：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 编译前</span></span><br><span class="line">&lt;div&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123; message &#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">p</span>&gt;</span>静态文本<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译后（简化）</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createVNode</span>(<span class="string">&#x27;div&#x27;</span>, <span class="literal">null</span>, [</span><br><span class="line">    <span class="title function_">createVNode</span>(<span class="string">&#x27;span&#x27;</span>, <span class="literal">null</span>, message, <span class="number">1</span> <span class="comment">/* TEXT */</span>),</span><br><span class="line">    <span class="title function_">createVNode</span>(<span class="string">&#x27;p&#x27;</span>, <span class="literal">null</span>, <span class="string">&#x27;静态文本&#x27;</span>)</span><br><span class="line">  ])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>静态提升（hoistStatic）</strong></p>
+<p>静态元素会被提升到渲染函数外部，避免重复创建：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 优化前</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createVNode</span>(<span class="string">&#x27;div&#x27;</span>, <span class="literal">null</span>, [</span><br><span class="line">    <span class="title function_">createVNode</span>(<span class="string">&#x27;h1&#x27;</span>, <span class="literal">null</span>, <span class="string">&#x27;标题&#x27;</span>), <span class="comment">// 每次渲染都会创建</span></span><br><span class="line">    <span class="title function_">createVNode</span>(<span class="string">&#x27;p&#x27;</span>, <span class="literal">null</span>, message)</span><br><span class="line">  ])</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 优化后</span></span><br><span class="line"><span class="keyword">const</span> _hoisted_1 = <span class="title function_">createVNode</span>(<span class="string">&#x27;h1&#x27;</span>, <span class="literal">null</span>, <span class="string">&#x27;标题&#x27;</span>) <span class="comment">// 提升到外部</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createVNode</span>(<span class="string">&#x27;div&#x27;</span>, <span class="literal">null</span>, [</span><br><span class="line">    _hoisted_1, <span class="comment">// 复用静态节点</span></span><br><span class="line">    <span class="title function_">createVNode</span>(<span class="string">&#x27;p&#x27;</span>, <span class="literal">null</span>, message)</span><br><span class="line">  ])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-运行时优化"><a href="#2-运行时优化" class="headerlink" title="2. 运行时优化"></a>2. 运行时优化</h3><p><strong>Proxy 响应式系统</strong></p>
+<p>Vue 3 使用 Proxy 替代 Object.defineProperty，支持更多数据类型的响应式：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Vue 2 的限制</span></span><br><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  <span class="attr">items</span>: []</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这些操作在 Vue 2 中不是响应式的</span></span><br><span class="line">data.<span class="property">items</span>[<span class="number">0</span>] = newItem <span class="comment">// 索引赋值</span></span><br><span class="line">data.<span class="property">items</span>.<span class="property">length</span> = <span class="number">0</span>   <span class="comment">// 修改数组长度</span></span><br><span class="line">data.<span class="property">newProperty</span> = <span class="string">&#x27;value&#x27;</span> <span class="comment">// 添加新属性</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Vue 3 中都是响应式的</span></span><br><span class="line"><span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">items</span>: [],</span><br><span class="line">  <span class="attr">map</span>: <span class="keyword">new</span> <span class="title class_">Map</span>(),</span><br><span class="line">  <span class="attr">set</span>: <span class="keyword">new</span> <span class="title class_">Set</span>()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 所有操作都是响应式的</span></span><br><span class="line">state.<span class="property">items</span>[<span class="number">0</span>] = newItem</span><br><span class="line">state.<span class="property">items</span>.<span class="property">length</span> = <span class="number">0</span></span><br><span class="line">state.<span class="property">newProperty</span> = <span class="string">&#x27;value&#x27;</span></span><br><span class="line">state.<span class="property">map</span>.<span class="title function_">set</span>(<span class="string">&#x27;key&#x27;</span>, <span class="string">&#x27;value&#x27;</span>)</span><br><span class="line">state.<span class="property">set</span>.<span class="title function_">add</span>(<span class="string">&#x27;item&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="组件级性能优化"><a href="#组件级性能优化" class="headerlink" title="组件级性能优化"></a>组件级性能优化</h2><h3 id="1-合理使用-v-if-和-v-show"><a href="#1-合理使用-v-if-和-v-show" class="headerlink" title="1. 合理使用 v-if 和 v-show"></a>1. 合理使用 v-if 和 v-show</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;!-- 频繁切换使用 v-show --&gt;</span><br><span class="line">  &lt;div v-show=&quot;isVisible&quot; class=&quot;modal&quot;&gt;</span><br><span class="line">    模态框内容</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;!-- 条件渲染使用 v-if --&gt;</span><br><span class="line">  &lt;div v-if=&quot;userRole === &#x27;admin&#x27;&quot; class=&quot;admin-panel&quot;&gt;</span><br><span class="line">    管理员面板</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  </span><br><span class="line">  &lt;!-- 复杂组件的条件渲染 --&gt;</span><br><span class="line">  &lt;template v-if=&quot;shouldRenderChart&quot;&gt;</span><br><span class="line">    &lt;heavy-chart-component :data=&quot;chartData&quot; /&gt;</span><br><span class="line">  &lt;/template&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; computed &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const props = defineProps([&#x27;userRole&#x27;, &#x27;chartData&#x27;])</span><br><span class="line"></span><br><span class="line">// 使用计算属性缓存复杂的条件判断</span><br><span class="line">const shouldRenderChart = computed(() =&gt; &#123;</span><br><span class="line">  return props.chartData &amp;&amp; </span><br><span class="line">         props.chartData.length &gt; 0 &amp;&amp; </span><br><span class="line">         props.userRole === &#x27;admin&#x27;</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用-KeepAlive-缓存组件"><a href="#2-使用-KeepAlive-缓存组件" class="headerlink" title="2. 使用 KeepAlive 缓存组件"></a>2. 使用 KeepAlive 缓存组件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;!-- 缓存路由组件 --&gt;</span><br><span class="line">    &lt;router-view v-slot=&quot;&#123; Component &#125;&quot;&gt;</span><br><span class="line">      &lt;keep-alive :include=&quot;cachedViews&quot; :max=&quot;10&quot;&gt;</span><br><span class="line">        &lt;component :is=&quot;Component&quot; :key=&quot;$route.fullPath&quot; /&gt;</span><br><span class="line">      &lt;/keep-alive&gt;</span><br><span class="line">    &lt;/router-view&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 缓存标签页组件 --&gt;</span><br><span class="line">    &lt;div class=&quot;tabs&quot;&gt;</span><br><span class="line">      &lt;button </span><br><span class="line">        v-for=&quot;tab in tabs&quot; </span><br><span class="line">        :key=&quot;tab.id&quot;</span><br><span class="line">        @click=&quot;activeTab = tab.id&quot;</span><br><span class="line">        :class=&quot;&#123; active: activeTab === tab.id &#125;&quot;</span><br><span class="line">      &gt;</span><br><span class="line">        &#123;&#123; tab.name &#125;&#125;</span><br><span class="line">      &lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;keep-alive&gt;</span><br><span class="line">      &lt;component :is=&quot;currentTabComponent&quot; :data=&quot;tabData&quot; /&gt;</span><br><span class="line">    &lt;/keep-alive&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, computed &#125; from &#x27;vue&#x27;</span><br><span class="line">import TabA from &#x27;./TabA.vue&#x27;</span><br><span class="line">import TabB from &#x27;./TabB.vue&#x27;</span><br><span class="line">import TabC from &#x27;./TabC.vue&#x27;</span><br><span class="line"></span><br><span class="line">const activeTab = ref(&#x27;a&#x27;)</span><br><span class="line">const cachedViews = ref([&#x27;ProductList&#x27;, &#x27;UserProfile&#x27;])</span><br><span class="line"></span><br><span class="line">const tabs = [</span><br><span class="line">  &#123; id: &#x27;a&#x27;, name: &#x27;标签A&#x27;, component: TabA &#125;,</span><br><span class="line">  &#123; id: &#x27;b&#x27;, name: &#x27;标签B&#x27;, component: TabB &#125;,</span><br><span class="line">  &#123; id: &#x27;c&#x27;, name: &#x27;标签C&#x27;, component: TabC &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">const currentTabComponent = computed(() =&gt; &#123;</span><br><span class="line">  return tabs.find(tab =&gt; tab.id === activeTab.value)?.component</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-优化大列表渲染"><a href="#3-优化大列表渲染" class="headerlink" title="3. 优化大列表渲染"></a>3. 优化大列表渲染</h3><p><strong>虚拟滚动实现</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;virtual-list&quot; @scroll=&quot;handleScroll&quot; ref=&quot;containerRef&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;virtual-list-phantom&quot; :style=&quot;&#123; height: totalHeight + &#x27;px&#x27; &#125;&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;virtual-list-content&quot; :style=&quot;&#123; transform: `translateY($&#123;offsetY&#125;px)` &#125;&quot;&gt;</span><br><span class="line">      &lt;div </span><br><span class="line">        v-for=&quot;item in visibleItems&quot; </span><br><span class="line">        :key=&quot;item.id&quot;</span><br><span class="line">        class=&quot;virtual-list-item&quot;</span><br><span class="line">        :style=&quot;&#123; height: itemHeight + &#x27;px&#x27; &#125;&quot;</span><br><span class="line">      &gt;</span><br><span class="line">        &lt;slot :item=&quot;item&quot; :index=&quot;item.index&quot;&gt;</span><br><span class="line">          &#123;&#123; item.text &#125;&#125;</span><br><span class="line">        &lt;/slot&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, computed, onMounted, onUnmounted &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const props = defineProps(&#123;</span><br><span class="line">  items: &#123;</span><br><span class="line">    type: Array,</span><br><span class="line">    required: true</span><br><span class="line">  &#125;,</span><br><span class="line">  itemHeight: &#123;</span><br><span class="line">    type: Number,</span><br><span class="line">    default: 50</span><br><span class="line">  &#125;,</span><br><span class="line">  containerHeight: &#123;</span><br><span class="line">    type: Number,</span><br><span class="line">    default: 400</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const containerRef = ref(null)</span><br><span class="line">const scrollTop = ref(0)</span><br><span class="line"></span><br><span class="line">// 计算总高度</span><br><span class="line">const totalHeight = computed(() =&gt; props.items.length * props.itemHeight)</span><br><span class="line"></span><br><span class="line">// 计算可见区域的起始和结束索引</span><br><span class="line">const startIndex = computed(() =&gt; &#123;</span><br><span class="line">  return Math.floor(scrollTop.value / props.itemHeight)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const endIndex = computed(() =&gt; &#123;</span><br><span class="line">  const visibleCount = Math.ceil(props.containerHeight / props.itemHeight)</span><br><span class="line">  return Math.min(startIndex.value + visibleCount + 1, props.items.length)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// 计算可见项目</span><br><span class="line">const visibleItems = computed(() =&gt; &#123;</span><br><span class="line">  return props.items.slice(startIndex.value, endIndex.value).map((item, index) =&gt; (&#123;</span><br><span class="line">    ...item,</span><br><span class="line">    index: startIndex.value + index</span><br><span class="line">  &#125;))</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// 计算偏移量</span><br><span class="line">const offsetY = computed(() =&gt; startIndex.value * props.itemHeight)</span><br><span class="line"></span><br><span class="line">// 滚动事件处理</span><br><span class="line">function handleScroll(event) &#123;</span><br><span class="line">  scrollTop.value = event.target.scrollTop</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 防抖优化</span><br><span class="line">let ticking = false</span><br><span class="line">function optimizedHandleScroll(event) &#123;</span><br><span class="line">  if (!ticking) &#123;</span><br><span class="line">    requestAnimationFrame(() =&gt; &#123;</span><br><span class="line">      handleScroll(event)</span><br><span class="line">      ticking = false</span><br><span class="line">    &#125;)</span><br><span class="line">    ticking = true</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  if (containerRef.value) &#123;</span><br><span class="line">    containerRef.value.addEventListener(&#x27;scroll&#x27;, optimizedHandleScroll, &#123; passive: true &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">onUnmounted(() =&gt; &#123;</span><br><span class="line">  if (containerRef.value) &#123;</span><br><span class="line">    containerRef.value.removeEventListener(&#x27;scroll&#x27;, optimizedHandleScroll)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">.virtual-list &#123;</span><br><span class="line">  height: 400px;</span><br><span class="line">  overflow-y: auto;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.virtual-list-phantom &#123;</span><br><span class="line">  position: absolute;</span><br><span class="line">  left: 0;</span><br><span class="line">  top: 0;</span><br><span class="line">  right: 0;</span><br><span class="line">  z-index: -1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.virtual-list-content &#123;</span><br><span class="line">  left: 0;</span><br><span class="line">  right: 0;</span><br><span class="line">  top: 0;</span><br><span class="line">  position: absolute;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.virtual-list-item &#123;</span><br><span class="line">  padding: 10px;</span><br><span class="line">  border-bottom: 1px solid #eee;</span><br><span class="line">  box-sizing: border-box;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用虚拟滚动组件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;VirtualList</span><br><span class="line">      :items=&quot;largeDataset&quot;</span><br><span class="line">      :item-height=&quot;60&quot;</span><br><span class="line">      :container-height=&quot;500&quot;</span><br><span class="line">    &gt;</span><br><span class="line">      &lt;template #default=&quot;&#123; item &#125;&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;user-item&quot;&gt;</span><br><span class="line">          &lt;img  : src=&quot;item.avatar&quot;  :alt=&quot;item.name&quot; class=&quot;avatar&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;user-info&quot;&gt;</span><br><span class="line">            &lt;h3&gt;&#123;&#123; item.name &#125;&#125;&lt;/h3&gt;</span><br><span class="line">            &lt;p&gt;&#123;&#123; item.email &#125;&#125;&lt;/p&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/template&gt;</span><br><span class="line">    &lt;/VirtualList&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, onMounted &#125; from &#x27;vue&#x27;</span><br><span class="line">import VirtualList from &#x27;./VirtualList.vue&#x27;</span><br><span class="line"></span><br><span class="line">const largeDataset = ref([])</span><br><span class="line"></span><br><span class="line">// 模拟大量数据</span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  largeDataset.value = Array.from(&#123; length: 10000 &#125;, (_, index) =&gt; (&#123;</span><br><span class="line">    id: index,</span><br><span class="line">    name: `用户 $&#123;index&#125;`,</span><br><span class="line">    email: `user$&#123;index&#125;@example.com`,</span><br><span class="line">    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=$&#123;index&#125;`</span><br><span class="line">  &#125;))</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="异步组件和代码分割"><a href="#异步组件和代码分割" class="headerlink" title="异步组件和代码分割"></a>异步组件和代码分割</h2><h3 id="1-路由级代码分割"><a href="#1-路由级代码分割" class="headerlink" title="1. 路由级代码分割"></a>1. 路由级代码分割</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// router/index.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; createRouter, createWebHistory &#125; <span class="keyword">from</span> <span class="string">&#x27;vue-router&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Home&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;../views/Home.vue&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/products&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Products&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;../views/Products.vue&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;/admin&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Admin&#x27;</span>,</span><br><span class="line">    <span class="attr">component</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;../views/Admin.vue&#x27;</span>),</span><br><span class="line">    <span class="attr">meta</span>: &#123; <span class="attr">requiresAuth</span>: <span class="literal">true</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="title function_">createRouter</span>(&#123;</span><br><span class="line">  <span class="attr">history</span>: <span class="title function_">createWebHistory</span>(),</span><br><span class="line">  routes</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> router</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-组件级懒加载"><a href="#2-组件级懒加载" class="headerlink" title="2. 组件级懒加载"></a>2. 组件级懒加载</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;button @click=&quot;showChart = true&quot; v-if=&quot;!showChart&quot;&gt;</span><br><span class="line">      显示图表</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 懒加载重型组件 --&gt;</span><br><span class="line">    &lt;Suspense v-if=&quot;showChart&quot;&gt;</span><br><span class="line">      &lt;template #default&gt;</span><br><span class="line">        &lt;AsyncChart :data=&quot;chartData&quot; /&gt;</span><br><span class="line">      &lt;/template&gt;</span><br><span class="line">      &lt;template #fallback&gt;</span><br><span class="line">        &lt;div class=&quot;loading&quot;&gt;加载图表中...&lt;/div&gt;</span><br><span class="line">      &lt;/template&gt;</span><br><span class="line">    &lt;/Suspense&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 条件懒加载 --&gt;</span><br><span class="line">    &lt;Suspense v-if=&quot;userRole === &#x27;admin&#x27;&quot;&gt;</span><br><span class="line">      &lt;template #default&gt;</span><br><span class="line">        &lt;AdminPanel /&gt;</span><br><span class="line">      &lt;/template&gt;</span><br><span class="line">      &lt;template #fallback&gt;</span><br><span class="line">        &lt;div class=&quot;loading&quot;&gt;加载管理面板中...&lt;/div&gt;</span><br><span class="line">      &lt;/template&gt;</span><br><span class="line">    &lt;/Suspense&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, defineAsyncComponent &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const showChart = ref(false)</span><br><span class="line">const userRole = ref(&#x27;user&#x27;)</span><br><span class="line"></span><br><span class="line">// 异步组件定义</span><br><span class="line">const AsyncChart = defineAsyncComponent(&#123;</span><br><span class="line">  loader: () =&gt; import(&#x27;./HeavyChart.vue&#x27;),</span><br><span class="line">  loadingComponent: () =&gt; import(&#x27;./LoadingSpinner.vue&#x27;),</span><br><span class="line">  errorComponent: () =&gt; import(&#x27;./ErrorMessage.vue&#x27;),</span><br><span class="line">  delay: 200,</span><br><span class="line">  timeout: 3000</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const AdminPanel = defineAsyncComponent(() =&gt; import(&#x27;./AdminPanel.vue&#x27;))</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-图片懒加载"><a href="#3-图片懒加载" class="headerlink" title="3. 图片懒加载"></a>3. 图片懒加载</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;image-gallery&quot;&gt;</span><br><span class="line">    &lt;div </span><br><span class="line">      v-for=&quot;image in images&quot; </span><br><span class="line">      :key=&quot;image.id&quot;</span><br><span class="line">      class=&quot;image-container&quot;</span><br><span class="line">      ref=&quot;imageRefs&quot;</span><br><span class="line">    &gt;</span><br><span class="line">      &lt;img  </span><br><span class="line">        v-if=&quot;image.loaded&quot;</span><br><span class="line">        : src=&quot;image.src&quot; </span><br><span class="line">        :alt=&quot;image.alt&quot;</span><br><span class="line">        class=&quot;lazy-image&quot;</span><br><span class="line">        @load=&quot;onImageLoad(image)&quot;</span><br><span class="line">        @error=&quot;onImageError(image)&quot;</span><br><span class="line">      &gt;</span><br><span class="line">      &lt;div v-else class=&quot;image-placeholder&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;loading-spinner&quot;&gt;&lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, onMounted, onUnmounted &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const props = defineProps(&#123;</span><br><span class="line">  images: &#123;</span><br><span class="line">    type: Array,</span><br><span class="line">    required: true</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const imageRefs = ref([])</span><br><span class="line">const images = ref(props.images.map(img =&gt; (&#123; ...img, loaded: false &#125;)))</span><br><span class="line"></span><br><span class="line">let observer = null</span><br><span class="line"></span><br><span class="line">// 图片加载成功</span><br><span class="line">function onImageLoad(image) &#123;</span><br><span class="line">  console.log(`图片加载成功: $&#123;image.alt&#125;`)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 图片加载失败</span><br><span class="line">function onImageError(image) &#123;</span><br><span class="line">  console.error(`图片加载失败: $&#123;image.alt&#125;`)</span><br><span class="line">  image.src = &#x27;/placeholder-error.jpg&#x27; // 设置错误占位图</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 创建 Intersection Observer</span><br><span class="line">function createObserver() &#123;</span><br><span class="line">  observer = new IntersectionObserver(</span><br><span class="line">    (entries) =&gt; &#123;</span><br><span class="line">      entries.forEach(entry =&gt; &#123;</span><br><span class="line">        if (entry.isIntersecting) &#123;</span><br><span class="line">          const index = imageRefs.value.indexOf(entry.target)</span><br><span class="line">          if (index !== -1 &amp;&amp; !images.value[index].loaded) &#123;</span><br><span class="line">            images.value[index].loaded = true</span><br><span class="line">            observer.unobserve(entry.target)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      rootMargin: &#x27;50px 0px&#x27;, // 提前50px开始加载</span><br><span class="line">      threshold: 0.1</span><br><span class="line">    &#125;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  createObserver()</span><br><span class="line">  </span><br><span class="line">  // 观察所有图片容器</span><br><span class="line">  imageRefs.value.forEach(ref =&gt; &#123;</span><br><span class="line">    if (ref) observer.observe(ref)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">onUnmounted(() =&gt; &#123;</span><br><span class="line">  if (observer) &#123;</span><br><span class="line">    observer.disconnect()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;style scoped&gt;</span><br><span class="line">.image-gallery &#123;</span><br><span class="line">  display: grid;</span><br><span class="line">  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));</span><br><span class="line">  gap: 16px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.image-container &#123;</span><br><span class="line">  aspect-ratio: 1;</span><br><span class="line">  border-radius: 8px;</span><br><span class="line">  overflow: hidden;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.lazy-image &#123;</span><br><span class="line">  width: 100%;</span><br><span class="line">  height: 100%;</span><br><span class="line">  object-fit: cover;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.image-placeholder &#123;</span><br><span class="line">  width: 100%;</span><br><span class="line">  height: 100%;</span><br><span class="line">  background: #f0f0f0;</span><br><span class="line">  display: flex;</span><br><span class="line">  align-items: center;</span><br><span class="line">  justify-content: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.loading-spinner &#123;</span><br><span class="line">  width: 24px;</span><br><span class="line">  height: 24px;</span><br><span class="line">  border: 2px solid #e0e0e0;</span><br><span class="line">  border-top: 2px solid #007bff;</span><br><span class="line">  border-radius: 50%;</span><br><span class="line">  animation: spin 1s linear infinite;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@keyframes spin &#123;</span><br><span class="line">  0% &#123; transform: rotate(0deg); &#125;</span><br><span class="line">  100% &#123; transform: rotate(360deg); &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="响应式数据优化"><a href="#响应式数据优化" class="headerlink" title="响应式数据优化"></a>响应式数据优化</h2><h3 id="1-合理使用-ref-和-reactive"><a href="#1-合理使用-ref-和-reactive" class="headerlink" title="1. 合理使用 ref 和 reactive"></a>1. 合理使用 ref 和 reactive</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ✅ 推荐：基础类型使用 ref</span></span><br><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">const</span> message = <span class="title function_">ref</span>(<span class="string">&#x27;Hello&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> isLoading = <span class="title function_">ref</span>(<span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 推荐：对象使用 reactive</span></span><br><span class="line"><span class="keyword">const</span> user = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;John&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">30</span>,</span><br><span class="line">  <span class="attr">preferences</span>: &#123;</span><br><span class="line">    <span class="attr">theme</span>: <span class="string">&#x27;dark&#x27;</span>,</span><br><span class="line">    <span class="attr">language</span>: <span class="string">&#x27;zh-CN&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 避免：大对象全部响应式</span></span><br><span class="line"><span class="keyword">const</span> largeData = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">items</span>: <span class="keyword">new</span> <span class="title class_">Array</span>(<span class="number">10000</span>).<span class="title function_">fill</span>(<span class="number">0</span>).<span class="title function_">map</span>(<span class="function">(<span class="params">_, i</span>) =&gt;</span> (&#123; <span class="attr">id</span>: i, <span class="attr">value</span>: <span class="title class_">Math</span>.<span class="title function_">random</span>() &#125;))</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 推荐：只对需要的部分设置响应式</span></span><br><span class="line"><span class="keyword">const</span> largeData = &#123;</span><br><span class="line">  <span class="attr">items</span>: <span class="keyword">new</span> <span class="title class_">Array</span>(<span class="number">10000</span>).<span class="title function_">fill</span>(<span class="number">0</span>).<span class="title function_">map</span>(<span class="function">(<span class="params">_, i</span>) =&gt;</span> (&#123; <span class="attr">id</span>: i, <span class="attr">value</span>: <span class="title class_">Math</span>.<span class="title function_">random</span>() &#125;))</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> filteredItems = <span class="title function_">ref</span>([])</span><br><span class="line"><span class="keyword">const</span> currentPage = <span class="title function_">ref</span>(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用-shallowRef-和-shallowReactive"><a href="#2-使用-shallowRef-和-shallowReactive" class="headerlink" title="2. 使用 shallowRef 和 shallowReactive"></a>2. 使用 shallowRef 和 shallowReactive</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; shallowRef, shallowReactive, triggerRef &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 大型不可变数据使用 shallowRef</span></span><br><span class="line"><span class="keyword">const</span> largeList = <span class="title function_">shallowRef</span>([])</span><br><span class="line"></span><br><span class="line"><span class="comment">// 手动触发更新</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">updateList</span>(<span class="params">newList</span>) &#123;</span><br><span class="line">  largeList.<span class="property">value</span> = newList</span><br><span class="line">  <span class="title function_">triggerRef</span>(largeList) <span class="comment">// 手动触发响应式更新</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 只需要第一层响应式的对象</span></span><br><span class="line"><span class="keyword">const</span> config = <span class="title function_">shallowReactive</span>(&#123;</span><br><span class="line">  <span class="attr">api</span>: &#123;</span><br><span class="line">    <span class="attr">baseURL</span>: <span class="string">&#x27;https://api.example.com&#x27;</span>,</span><br><span class="line">    <span class="attr">timeout</span>: <span class="number">5000</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">ui</span>: &#123;</span><br><span class="line">    <span class="attr">theme</span>: <span class="string">&#x27;light&#x27;</span>,</span><br><span class="line">    <span class="attr">locale</span>: <span class="string">&#x27;zh-CN&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改第一层属性会触发更新</span></span><br><span class="line">config.<span class="property">api</span> = &#123; <span class="attr">baseURL</span>: <span class="string">&#x27;https://new-api.example.com&#x27;</span>, <span class="attr">timeout</span>: <span class="number">3000</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改嵌套属性不会触发更新（需要手动处理）</span></span><br><span class="line"><span class="comment">// config.api.baseURL = &#x27;new-url&#x27; // 不会触发更新</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-使用-markRaw-标记非响应式数据"><a href="#3-使用-markRaw-标记非响应式数据" class="headerlink" title="3. 使用 markRaw 标记非响应式数据"></a>3. 使用 markRaw 标记非响应式数据</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; markRaw, reactive &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第三方库实例不需要响应式</span></span><br><span class="line"><span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">chart</span>: <span class="title function_">markRaw</span>(<span class="keyword">new</span> <span class="title class_">Chart</span>()), <span class="comment">// Chart.js 实例</span></span><br><span class="line">  <span class="attr">map</span>: <span class="title function_">markRaw</span>(<span class="keyword">new</span> <span class="title class_">Map</span>()),     <span class="comment">// 大型 Map 对象</span></span><br><span class="line">  <span class="attr">editor</span>: <span class="title function_">markRaw</span>(<span class="keyword">new</span> <span class="title class_">Monaco</span>.<span class="title class_">Editor</span>()) <span class="comment">// Monaco 编辑器实例</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 大型配置对象</span></span><br><span class="line"><span class="keyword">const</span> appConfig = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">routes</span>: <span class="title function_">markRaw</span>([</span><br><span class="line">    <span class="comment">// 大量路由配置</span></span><br><span class="line">  ]),</span><br><span class="line">  <span class="attr">constants</span>: <span class="title function_">markRaw</span>(&#123;</span><br><span class="line">    <span class="comment">// 大量常量定义</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="计算属性和侦听器优化"><a href="#计算属性和侦听器优化" class="headerlink" title="计算属性和侦听器优化"></a>计算属性和侦听器优化</h2><h3 id="1-计算属性缓存优化"><a href="#1-计算属性缓存优化" class="headerlink" title="1. 计算属性缓存优化"></a>1. 计算属性缓存优化</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; computed, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> items = <span class="title function_">ref</span>([])</span><br><span class="line"><span class="keyword">const</span> searchQuery = <span class="title function_">ref</span>(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> sortBy = <span class="title function_">ref</span>(<span class="string">&#x27;name&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> filterCategory = <span class="title function_">ref</span>(<span class="string">&#x27;all&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 推荐：分步计算，充分利用缓存</span></span><br><span class="line"><span class="keyword">const</span> filteredItems = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (filterCategory.<span class="property">value</span> === <span class="string">&#x27;all&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> items.<span class="property">value</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> items.<span class="property">value</span>.<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="property">category</span> === filterCategory.<span class="property">value</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> searchedItems = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!searchQuery.<span class="property">value</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> filteredItems.<span class="property">value</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> query = searchQuery.<span class="property">value</span>.<span class="title function_">toLowerCase</span>()</span><br><span class="line">  <span class="keyword">return</span> filteredItems.<span class="property">value</span>.<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> </span><br><span class="line">    item.<span class="property">name</span>.<span class="title function_">toLowerCase</span>().<span class="title function_">includes</span>(query)</span><br><span class="line">  )</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sortedItems = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> [...searchedItems.<span class="property">value</span>].<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> aValue = a[sortBy.<span class="property">value</span>]</span><br><span class="line">    <span class="keyword">const</span> bValue = b[sortBy.<span class="property">value</span>]</span><br><span class="line">    <span class="keyword">return</span> aValue &gt; bValue ? <span class="number">1</span> : -<span class="number">1</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 避免：一次性计算所有逻辑</span></span><br><span class="line"><span class="keyword">const</span> processedItems = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> result = items.<span class="property">value</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 过滤</span></span><br><span class="line">  <span class="keyword">if</span> (filterCategory.<span class="property">value</span> !== <span class="string">&#x27;all&#x27;</span>) &#123;</span><br><span class="line">    result = result.<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="property">category</span> === filterCategory.<span class="property">value</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 搜索</span></span><br><span class="line">  <span class="keyword">if</span> (searchQuery.<span class="property">value</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> query = searchQuery.<span class="property">value</span>.<span class="title function_">toLowerCase</span>()</span><br><span class="line">    result = result.<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="property">name</span>.<span class="title function_">toLowerCase</span>().<span class="title function_">includes</span>(query))</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 排序</span></span><br><span class="line">  result = [...result].<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> aValue = a[sortBy.<span class="property">value</span>]</span><br><span class="line">    <span class="keyword">const</span> bValue = b[sortBy.<span class="property">value</span>]</span><br><span class="line">    <span class="keyword">return</span> aValue &gt; bValue ? <span class="number">1</span> : -<span class="number">1</span></span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-侦听器性能优化"><a href="#2-侦听器性能优化" class="headerlink" title="2. 侦听器性能优化"></a>2. 侦听器性能优化</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; watch, watchEffect, ref, nextTick &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> searchQuery = <span class="title function_">ref</span>(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> searchResults = <span class="title function_">ref</span>([])</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 使用防抖优化搜索</span></span><br><span class="line"><span class="keyword">let</span> searchTimer = <span class="literal">null</span></span><br><span class="line"><span class="title function_">watch</span>(searchQuery, <span class="function">(<span class="params">newQuery</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">clearTimeout</span>(searchTimer)</span><br><span class="line">  searchTimer = <span class="built_in">setTimeout</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (newQuery.<span class="title function_">trim</span>()) &#123;</span><br><span class="line">      searchResults.<span class="property">value</span> = <span class="keyword">await</span> <span class="title function_">searchAPI</span>(newQuery)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      searchResults.<span class="property">value</span> = []</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">300</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 深度侦听优化</span></span><br><span class="line"><span class="keyword">const</span> userForm = <span class="title function_">ref</span>(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">  <span class="attr">email</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">  <span class="attr">preferences</span>: &#123;</span><br><span class="line">    <span class="attr">theme</span>: <span class="string">&#x27;light&#x27;</span>,</span><br><span class="line">    <span class="attr">notifications</span>: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 只侦听特定属性</span></span><br><span class="line"><span class="title function_">watch</span>(<span class="function">() =&gt;</span> userForm.<span class="property">value</span>.<span class="property">name</span>, <span class="function">(<span class="params">newName</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 只在姓名变化时执行</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="title function_">watch</span>(<span class="function">() =&gt;</span> userForm.<span class="property">value</span>.<span class="property">preferences</span>.<span class="property">theme</span>, <span class="function">(<span class="params">newTheme</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 只在主题变化时执行</span></span><br><span class="line">  <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="title function_">setAttribute</span>(<span class="string">&#x27;data-theme&#x27;</span>, newTheme)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 使用 watchEffect 自动收集依赖</span></span><br><span class="line"><span class="title function_">watchEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 自动侦听 searchQuery 和 filterType 的变化</span></span><br><span class="line">  <span class="keyword">if</span> (searchQuery.<span class="property">value</span> &amp;&amp; filterType.<span class="property">value</span>) &#123;</span><br><span class="line">    <span class="title function_">performSearch</span>(searchQuery.<span class="property">value</span>, filterType.<span class="property">value</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 停止不必要的侦听器</span></span><br><span class="line"><span class="keyword">const</span> stopWatcher = <span class="title function_">watch</span>(someRef, callback)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在组件卸载或条件满足时停止</span></span><br><span class="line"><span class="keyword">if</span> (conditionMet) &#123;</span><br><span class="line">  <span class="title function_">stopWatcher</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建和打包优化"><a href="#构建和打包优化" class="headerlink" title="构建和打包优化"></a>构建和打包优化</h2><h3 id="1-Vite-配置优化"><a href="#1-Vite-配置优化" class="headerlink" title="1. Vite 配置优化"></a>1. Vite 配置优化</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; resolve &#125; <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [<span class="title function_">vue</span>()],</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 构建优化</span></span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="comment">// 代码分割</span></span><br><span class="line">    <span class="attr">rollupOptions</span>: &#123;</span><br><span class="line">      <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">manualChunks</span>: &#123;</span><br><span class="line">          <span class="comment">// 将 Vue 相关库打包到一个 chunk</span></span><br><span class="line">          <span class="attr">vue</span>: [<span class="string">&#x27;vue&#x27;</span>, <span class="string">&#x27;vue-router&#x27;</span>, <span class="string">&#x27;pinia&#x27;</span>],</span><br><span class="line">          <span class="comment">// 将 UI 库单独打包</span></span><br><span class="line">          <span class="attr">ui</span>: [<span class="string">&#x27;element-plus&#x27;</span>, <span class="string">&#x27;@element-plus/icons-vue&#x27;</span>],</span><br><span class="line">          <span class="comment">// 将工具库单独打包</span></span><br><span class="line">          <span class="attr">utils</span>: [<span class="string">&#x27;lodash-es&#x27;</span>, <span class="string">&#x27;dayjs&#x27;</span>, <span class="string">&#x27;axios&#x27;</span>]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 压缩配置</span></span><br><span class="line">    <span class="attr">minify</span>: <span class="string">&#x27;terser&#x27;</span>,</span><br><span class="line">    <span class="attr">terserOptions</span>: &#123;</span><br><span class="line">      <span class="attr">compress</span>: &#123;</span><br><span class="line">        <span class="attr">drop_console</span>: <span class="literal">true</span>, <span class="comment">// 生产环境移除 console</span></span><br><span class="line">        <span class="attr">drop_debugger</span>: <span class="literal">true</span> <span class="comment">// 生产环境移除 debugger</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 资源内联阈值</span></span><br><span class="line">    <span class="attr">assetsInlineLimit</span>: <span class="number">4096</span></span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 开发服务器优化</span></span><br><span class="line">  <span class="attr">server</span>: &#123;</span><br><span class="line">    <span class="attr">hmr</span>: &#123;</span><br><span class="line">      <span class="attr">overlay</span>: <span class="literal">false</span> <span class="comment">// 关闭错误遮罩层</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 依赖预构建</span></span><br><span class="line">  <span class="attr">optimizeDeps</span>: &#123;</span><br><span class="line">    <span class="attr">include</span>: [</span><br><span class="line">      <span class="string">&#x27;vue&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;vue-router&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;pinia&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;element-plus&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;lodash-es&#x27;</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-组件库按需引入"><a href="#2-组件库按需引入" class="headerlink" title="2. 组件库按需引入"></a>2. 组件库按需引入</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 unplugin-auto-import 和 unplugin-vue-components</span></span><br><span class="line"><span class="comment">// vite.config.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">AutoImport</span> <span class="keyword">from</span> <span class="string">&#x27;unplugin-auto-import/vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Components</span> <span class="keyword">from</span> <span class="string">&#x27;unplugin-vue-components/vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">ElementPlusResolver</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;unplugin-vue-components/resolvers&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title function_">vue</span>(),</span><br><span class="line">    <span class="title class_">AutoImport</span>(&#123;</span><br><span class="line">      <span class="attr">resolvers</span>: [<span class="title class_">ElementPlusResolver</span>()],</span><br><span class="line">      <span class="attr">imports</span>: [<span class="string">&#x27;vue&#x27;</span>, <span class="string">&#x27;vue-router&#x27;</span>, <span class="string">&#x27;pinia&#x27;</span>]</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="title class_">Components</span>(&#123;</span><br><span class="line">      <span class="attr">resolvers</span>: [<span class="title class_">ElementPlusResolver</span>()]</span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组件中直接使用，无需手动导入</span></span><br><span class="line"><span class="comment">// &lt;template&gt;</span></span><br><span class="line"><span class="comment">//   &lt;el-button @click=&quot;handleClick&quot;&gt;按钮&lt;/el-button&gt;</span></span><br><span class="line"><span class="comment">// &lt;/template&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="性能监控和分析"><a href="#性能监控和分析" class="headerlink" title="性能监控和分析"></a>性能监控和分析</h2><h3 id="1-性能监控组件"><a href="#1-性能监控组件" class="headerlink" title="1. 性能监控组件"></a>1. 性能监控组件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;div v-if=&quot;showPerformanceInfo&quot; class=&quot;performance-info&quot;&gt;</span><br><span class="line">      &lt;p&gt;组件渲染时间: &#123;&#123; renderTime &#125;&#125;ms&lt;/p&gt;</span><br><span class="line">      &lt;p&gt;更新次数: &#123;&#123; updateCount &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;slot /&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, onMounted, onUpdated, onBeforeUpdate &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const showPerformanceInfo = ref(process.env.NODE_ENV === &#x27;development&#x27;)</span><br><span class="line">const renderTime = ref(0)</span><br><span class="line">const updateCount = ref(0)</span><br><span class="line">let startTime = 0</span><br><span class="line"></span><br><span class="line">onBeforeUpdate(() =&gt; &#123;</span><br><span class="line">  startTime = performance.now()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">onUpdated(() =&gt; &#123;</span><br><span class="line">  renderTime.value = Math.round(performance.now() - startTime)</span><br><span class="line">  updateCount.value++</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  // 监控长任务</span><br><span class="line">  if (&#x27;PerformanceObserver&#x27; in window) &#123;</span><br><span class="line">    const observer = new PerformanceObserver((list) =&gt; &#123;</span><br><span class="line">      list.getEntries().forEach((entry) =&gt; &#123;</span><br><span class="line">        if (entry.duration &gt; 50) &#123;</span><br><span class="line">          console.warn(`长任务检测: $&#123;entry.duration&#125;ms`, entry)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    observer.observe(&#123; entryTypes: [&#x27;longtask&#x27;] &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-内存泄漏检测"><a href="#2-内存泄漏检测" class="headerlink" title="2. 内存泄漏检测"></a>2. 内存泄漏检测</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// composables/useMemoryMonitor.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; onUnmounted, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useMemoryMonitor</span>(<span class="params">componentName</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> memoryUsage = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line">  <span class="keyword">let</span> intervalId = <span class="literal">null</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">checkMemory</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (performance.<span class="property">memory</span>) &#123;</span><br><span class="line">      memoryUsage.<span class="property">value</span> = <span class="title class_">Math</span>.<span class="title function_">round</span>(performance.<span class="property">memory</span>.<span class="property">usedJSHeapSize</span> / <span class="number">1024</span> / <span class="number">1024</span>)</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">if</span> (memoryUsage.<span class="property">value</span> &gt; <span class="number">100</span>) &#123; <span class="comment">// 超过100MB警告</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">`<span class="subst">$&#123;componentName&#125;</span> 内存使用过高: <span class="subst">$&#123;memoryUsage.value&#125;</span>MB`</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 定期检查内存使用</span></span><br><span class="line">  intervalId = <span class="built_in">setInterval</span>(checkMemory, <span class="number">5000</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (intervalId) &#123;</span><br><span class="line">      <span class="built_in">clearInterval</span>(intervalId)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`<span class="subst">$&#123;componentName&#125;</span> 组件已卸载`</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> &#123; memoryUsage &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Vue 3 的性能优化是一个系统性工程，需要从编译时优化、运行时优化、组件设计、数据管理等多个维度进行考虑。关键要点包括：</p>
+<ol>
+<li><strong>充分利用 Vue 3 的编译时优化</strong>：静态标记、静态提升等特性</li>
+<li><strong>合理使用响应式 API</strong>：根据数据特性选择 ref、reactive、shallowRef 等</li>
+<li><strong>组件级优化</strong>：虚拟滚动、懒加载、KeepAlive 缓存</li>
+<li><strong>代码分割和异步加载</strong>：路由级和组件级的按需加载</li>
+<li><strong>构建优化</strong>：合理的打包策略和资源优化</li>
+<li><strong>性能监控</strong>：建立完善的性能监控体系</li>
+</ol>
+<p>在实际项目中，应该根据具体场景选择合适的优化策略，避免过度优化。记住，”过早的优化是万恶之源”，先确保功能正确，再针对性能瓶颈进行优化。通过合理的性能优化，可以显著提升 Vue 3 应用的用户体验和运行效率。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Vue3/">Vue3</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%99%9A%E6%8B%9F%E6%BB%9A%E5%8A%A8/">虚拟滚动</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%87%92%E5%8A%A0%E8%BD%BD/">懒加载</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E5%88%86%E5%89%B2/">代码分割</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/php/php-strings-manipulation-guide/"
+                                   title="PHP字符串处理完全指南：从基础到高级技巧"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP字符串处理完全指南：从基础到高级技巧</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/fastapi/fastapi-performance-optimization/"
+                                   title="FastAPI性能优化实战：从入门到精通"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">FastAPI性能优化实战：从入门到精通</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-3-%E6%80%A7%E8%83%BD%E6%8F%90%E5%8D%87%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="nav-text">Vue 3 性能提升的核心原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BC%96%E8%AF%91%E6%97%B6%E4%BC%98%E5%8C%96"><span class="nav-text">1. 编译时优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BC%98%E5%8C%96"><span class="nav-text">2. 运行时优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%BA%A7%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-text">组件级性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8-v-if-%E5%92%8C-v-show"><span class="nav-text">1. 合理使用 v-if 和 v-show</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-KeepAlive-%E7%BC%93%E5%AD%98%E7%BB%84%E4%BB%B6"><span class="nav-text">2. 使用 KeepAlive 缓存组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BC%98%E5%8C%96%E5%A4%A7%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93"><span class="nav-text">3. 优化大列表渲染</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%92%8C%E4%BB%A3%E7%A0%81%E5%88%86%E5%89%B2"><span class="nav-text">异步组件和代码分割</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%B7%AF%E7%94%B1%E7%BA%A7%E4%BB%A3%E7%A0%81%E5%88%86%E5%89%B2"><span class="nav-text">1. 路由级代码分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%BB%84%E4%BB%B6%E7%BA%A7%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="nav-text">2. 组件级懒加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="nav-text">3. 图片懒加载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%BC%98%E5%8C%96"><span class="nav-text">响应式数据优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8-ref-%E5%92%8C-reactive"><span class="nav-text">1. 合理使用 ref 和 reactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-shallowRef-%E5%92%8C-shallowReactive"><span class="nav-text">2. 使用 shallowRef 和 shallowReactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8-markRaw-%E6%A0%87%E8%AE%B0%E9%9D%9E%E5%93%8D%E5%BA%94%E5%BC%8F%E6%95%B0%E6%8D%AE"><span class="nav-text">3. 使用 markRaw 标记非响应式数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BE%A6%E5%90%AC%E5%99%A8%E4%BC%98%E5%8C%96"><span class="nav-text">计算属性和侦听器优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E7%BC%93%E5%AD%98%E4%BC%98%E5%8C%96"><span class="nav-text">1. 计算属性缓存优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BE%A6%E5%90%AC%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-text">2. 侦听器性能优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E5%92%8C%E6%89%93%E5%8C%85%E4%BC%98%E5%8C%96"><span class="nav-text">构建和打包优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Vite-%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96"><span class="nav-text">1. Vite 配置优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%BB%84%E4%BB%B6%E5%BA%93%E6%8C%89%E9%9C%80%E5%BC%95%E5%85%A5"><span class="nav-text">2. 组件库按需引入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%92%8C%E5%88%86%E6%9E%90"><span class="nav-text">性能监控和分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E7%BB%84%E4%BB%B6"><span class="nav-text">1. 性能监控组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E6%A3%80%E6%B5%8B"><span class="nav-text">2. 内存泄漏检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-3-%E6%80%A7%E8%83%BD%E6%8F%90%E5%8D%87%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="nav-text">Vue 3 性能提升的核心原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BC%96%E8%AF%91%E6%97%B6%E4%BC%98%E5%8C%96"><span class="nav-text">1. 编译时优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BC%98%E5%8C%96"><span class="nav-text">2. 运行时优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%BA%A7%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-text">组件级性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8-v-if-%E5%92%8C-v-show"><span class="nav-text">1. 合理使用 v-if 和 v-show</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-KeepAlive-%E7%BC%93%E5%AD%98%E7%BB%84%E4%BB%B6"><span class="nav-text">2. 使用 KeepAlive 缓存组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BC%98%E5%8C%96%E5%A4%A7%E5%88%97%E8%A1%A8%E6%B8%B2%E6%9F%93"><span class="nav-text">3. 优化大列表渲染</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E5%92%8C%E4%BB%A3%E7%A0%81%E5%88%86%E5%89%B2"><span class="nav-text">异步组件和代码分割</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%B7%AF%E7%94%B1%E7%BA%A7%E4%BB%A3%E7%A0%81%E5%88%86%E5%89%B2"><span class="nav-text">1. 路由级代码分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%BB%84%E4%BB%B6%E7%BA%A7%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="nav-text">2. 组件级懒加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="nav-text">3. 图片懒加载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E5%BC%8F%E6%95%B0%E6%8D%AE%E4%BC%98%E5%8C%96"><span class="nav-text">响应式数据优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8-ref-%E5%92%8C-reactive"><span class="nav-text">1. 合理使用 ref 和 reactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-shallowRef-%E5%92%8C-shallowReactive"><span class="nav-text">2. 使用 shallowRef 和 shallowReactive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8-markRaw-%E6%A0%87%E8%AE%B0%E9%9D%9E%E5%93%8D%E5%BA%94%E5%BC%8F%E6%95%B0%E6%8D%AE"><span class="nav-text">3. 使用 markRaw 标记非响应式数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%92%8C%E4%BE%A6%E5%90%AC%E5%99%A8%E4%BC%98%E5%8C%96"><span class="nav-text">计算属性和侦听器优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E7%BC%93%E5%AD%98%E4%BC%98%E5%8C%96"><span class="nav-text">1. 计算属性缓存优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BE%A6%E5%90%AC%E5%99%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-text">2. 侦听器性能优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E5%92%8C%E6%89%93%E5%8C%85%E4%BC%98%E5%8C%96"><span class="nav-text">构建和打包优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Vite-%E9%85%8D%E7%BD%AE%E4%BC%98%E5%8C%96"><span class="nav-text">1. Vite 配置优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%BB%84%E4%BB%B6%E5%BA%93%E6%8C%89%E9%9C%80%E5%BC%95%E5%85%A5"><span class="nav-text">2. 组件库按需引入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%92%8C%E5%88%86%E6%9E%90"><span class="nav-text">性能监控和分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E7%BB%84%E4%BB%B6"><span class="nav-text">1. 性能监控组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E6%A3%80%E6%B5%8B"><span class="nav-text">2. 内存泄漏检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

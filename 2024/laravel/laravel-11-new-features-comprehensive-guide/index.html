@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Laravel 11 新特性全面解析：简化应用结构与现代化开发体验 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Laravel 11 新特性全面解析：简化应用结构与现代化开发体验
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2024-03-15 10:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/laravel/">laravel</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Laravel-11/">Laravel 11</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/PHP-8-2/">PHP 8.2</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%BA%94%E7%94%A8%E6%9E%B6%E6%9E%84/">应用架构</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%96%B0%E7%89%B9%E6%80%A7/">新特性</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%A1%86%E6%9E%B6%E5%8D%87%E7%BA%A7/">框架升级</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Laravel 11 于2024年3月正式发布，这是一个具有重大改进的版本。<mcreference link="https://laravel-docs.catchadmin.com/docs/11/prologue/release" index="3">3</mcreference> 本文将深入解析Laravel 11的核心新特性，帮助开发者了解这个现代化框架的最新发展。</p>
+<h2 id="PHP-8-2-最低版本要求"><a href="#PHP-8-2-最低版本要求" class="headerlink" title="PHP 8.2 最低版本要求"></a>PHP 8.2 最低版本要求</h2><p>Laravel 11要求最低PHP版本为8.2，这延续了Laravel跟随PHP最新版本的策略。<mcreference link="https://blog.yuyansoftware.com.tw/2024/03/laravel-11-release-new-features/" index="2">2</mcreference> 虽然这可能会限制一些项目的升级，但也确保了框架能够利用PHP的最新特性。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// PHP 8.2 新特性示例：只读类</span></span><br><span class="line"><span class="keyword">readonly</span> <span class="class"><span class="keyword">class</span> <span class="title">UserConfiguration</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">string</span> <span class="variable">$name</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">string</span> <span class="variable">$email</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">array</span> <span class="variable">$preferences</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="简化的应用程序结构"><a href="#简化的应用程序结构" class="headerlink" title="简化的应用程序结构"></a>简化的应用程序结构</h2><h3 id="重新设计的-bootstrap-app-php"><a href="#重新设计的-bootstrap-app-php" class="headerlink" title="重新设计的 bootstrap&#x2F;app.php"></a>重新设计的 bootstrap&#x2F;app.php</h3><p>Laravel 11最显著的变化是引入了简化的应用程序结构。<mcreference link="https://laravel-docs.catchadmin.com/docs/11/prologue/release" index="3">3</mcreference> 新的<code>bootstrap/app.php</code>文件成为了代码优先的应用程序配置中心：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Application</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Configuration</span>\<span class="title">Exceptions</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Configuration</span>\<span class="title">Middleware</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="title class_">Application</span>::<span class="title function_ invoke__">configure</span>(<span class="attr">basePath</span>: <span class="title function_ invoke__">dirname</span>(<span class="keyword">__DIR__</span>))</span><br><span class="line">    -&gt;<span class="title function_ invoke__">withRouting</span>(</span><br><span class="line">        <span class="attr">web</span>: <span class="keyword">__DIR__</span>.<span class="string">&#x27;/../routes/web.php&#x27;</span>,</span><br><span class="line">        <span class="attr">commands</span>: <span class="keyword">__DIR__</span>.<span class="string">&#x27;/../routes/console.php&#x27;</span>,</span><br><span class="line">        <span class="attr">health</span>: <span class="string">&#x27;/up&#x27;</span>,</span><br><span class="line">    )</span><br><span class="line">    -&gt;<span class="title function_ invoke__">withMiddleware</span>(function (Middleware <span class="variable">$middleware</span>) &#123;</span><br><span class="line">        <span class="comment">// 自定义中间件配置</span></span><br><span class="line">        <span class="variable">$middleware</span>-&gt;<span class="title function_ invoke__">validateCsrfTokens</span>(</span><br><span class="line">            <span class="attr">except</span>: [<span class="string">&#x27;stripe/*&#x27;</span>, <span class="string">&#x27;webhook/*&#x27;</span>]</span><br><span class="line">        );</span><br><span class="line">        </span><br><span class="line">        <span class="variable">$middleware</span>-&gt;<span class="title function_ invoke__">web</span>(<span class="attr">append</span>: [</span><br><span class="line">            <span class="title class_">\App\Http\Middleware\EnsureUserIsSubscribed</span>::<span class="variable language_">class</span>,</span><br><span class="line">        ]);</span><br><span class="line">    &#125;)</span><br><span class="line">    -&gt;<span class="title function_ invoke__">withExceptions</span>(function (Exceptions <span class="variable">$exceptions</span>) &#123;</span><br><span class="line">        <span class="comment">// 异常处理配置</span></span><br><span class="line">        <span class="variable">$exceptions</span>-&gt;<span class="title function_ invoke__">render</span>(function (\<span class="built_in">Throwable</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="comment">// 自定义异常渲染逻辑</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;)-&gt;<span class="title function_ invoke__">create</span>();</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务提供者的简化"><a href="#服务提供者的简化" class="headerlink" title="服务提供者的简化"></a>服务提供者的简化</h3><p>Laravel 11将原本的5个默认服务提供者简化为1个<code>AppServiceProvider</code>。<mcreference link="https://laravel-docs.catchadmin.com/docs/11/prologue/release" index="3">3</mcreference> 这大大简化了应用程序的结构：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Providers</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">ServiceProvider</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Gate</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppServiceProvider</span> <span class="keyword">extends</span> <span class="title">ServiceProvider</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注册应用服务</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">register</span>(<span class="params"></span>): <span class="title">void</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 服务注册逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 启动应用服务</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span>(<span class="params"></span>): <span class="title">void</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 原本在AuthServiceProvider中的授权逻辑</span></span><br><span class="line">        <span class="title class_">Gate</span>::<span class="title function_ invoke__">define</span>(<span class="string">&#x27;update-post&#x27;</span>, function (<span class="variable">$user</span>, <span class="variable">$post</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="variable">$user</span>-&gt;id === <span class="variable">$post</span>-&gt;user_id;</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 事件监听器注册（现在默认启用事件发现）</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="中间件架构的改进"><a href="#中间件架构的改进" class="headerlink" title="中间件架构的改进"></a>中间件架构的改进</h3><p>Laravel 11将中间件移动到框架核心，移除了<code>app/Http/Middleware</code>目录和<code>app/Http/Kernel.php</code>文件。<mcreference link="https://blog.yuyansoftware.com.tw/2024/03/laravel-11-release-new-features/" index="2">2</mcreference> 中间件配置现在在<code>bootstrap/app.php</code>中进行：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">-&gt;<span class="title function_ invoke__">withMiddleware</span>(function (Middleware <span class="variable">$middleware</span>) &#123;</span><br><span class="line">    <span class="comment">// CSRF令牌验证配置</span></span><br><span class="line">    <span class="variable">$middleware</span>-&gt;<span class="title function_ invoke__">validateCsrfTokens</span>(</span><br><span class="line">        <span class="attr">except</span>: [<span class="string">&#x27;stripe/*&#x27;</span>, <span class="string">&#x27;api/webhooks/*&#x27;</span>]</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 添加自定义中间件到web组</span></span><br><span class="line">    <span class="variable">$middleware</span>-&gt;<span class="title function_ invoke__">web</span>(<span class="attr">append</span>: [</span><br><span class="line">        <span class="title class_">\App\Http\Middleware\TrackUserActivity</span>::<span class="variable language_">class</span>,</span><br><span class="line">    ]);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 添加自定义中间件到api组</span></span><br><span class="line">    <span class="variable">$middleware</span>-&gt;<span class="title function_ invoke__">api</span>(<span class="attr">prepend</span>: [</span><br><span class="line">        <span class="title class_">\App\Http\Middleware\ApiRateLimit</span>::<span class="variable language_">class</span>,</span><br><span class="line">    ]);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 全局中间件</span></span><br><span class="line">    <span class="variable">$middleware</span>-&gt;<span class="title function_ invoke__">append</span>(<span class="title class_">\App\Http\Middleware\SecurityHeaders</span>::<span class="variable language_">class</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Laravel-Reverb：WebSocket支持"><a href="#Laravel-Reverb：WebSocket支持" class="headerlink" title="Laravel Reverb：WebSocket支持"></a>Laravel Reverb：WebSocket支持</h2><p>Laravel 11引入了官方的WebSocket服务器Laravel Reverb，为应用程序提供实时功能支持。<mcreference link="https://doc.houdunren.com/laravel11/zh/releases.html" index="1">1</mcreference></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 安装Laravel Reverb</span></span><br><span class="line"><span class="comment">// composer require laravel/reverb</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置WebSocket事件</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Broadcasting</span>\<span class="title">Channel</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Broadcasting</span>\<span class="title">InteractsWithSockets</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Broadcasting</span>\<span class="title">PresenceChannel</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Broadcasting</span>\<span class="title">PrivateChannel</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Contracts</span>\<span class="title">Broadcasting</span>\<span class="title">ShouldBroadcast</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Events</span>\<span class="title">Dispatchable</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">SerializesModels</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MessageSent</span> <span class="keyword">implements</span> <span class="title">ShouldBroadcast</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">Dispatchable</span>, <span class="title">InteractsWithSockets</span>, <span class="title">SerializesModels</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">string</span> <span class="variable">$message</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">public</span> <span class="keyword">int</span> <span class="variable">$userId</span></span></span></span><br><span class="line"><span class="params"><span class="function">    </span>) </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">broadcastOn</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">PrivateChannel</span>(<span class="string">&#x27;chat.&#x27;</span> . <span class="variable language_">$this</span>-&gt;userId),</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="每秒速率限制"><a href="#每秒速率限制" class="headerlink" title="每秒速率限制"></a>每秒速率限制</h2><p>Laravel 11支持更精细的速率限制，可以按秒进行限制。<mcreference link="https://blog.yuyansoftware.com.tw/2024/03/laravel-11-release-new-features/" index="2">2</mcreference></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在AppServiceProvider中配置</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Cache</span>\<span class="title">RateLimiting</span>\<span class="title">Limit</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Http</span>\<span class="title">Request</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">RateLimiter</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span>(<span class="params"></span>): <span class="title">void</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="title class_">RateLimiter</span>::<span class="keyword">for</span>(<span class="string">&#x27;api&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">Request <span class="variable">$request</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Limit</span>::<span class="title function_ invoke__">perSecond</span>(<span class="number">10</span>)-&gt;<span class="title function_ invoke__">by</span>(<span class="variable">$request</span>-&gt;<span class="title function_ invoke__">user</span>()?-&gt;id ?: <span class="variable">$request</span>-&gt;<span class="title function_ invoke__">ip</span>());</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="title class_">RateLimiter</span>::<span class="keyword">for</span>(<span class="string">&#x27;uploads&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">Request <span class="variable">$request</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Limit</span>::<span class="title function_ invoke__">perSecond</span>(<span class="number">2</span>)-&gt;<span class="title function_ invoke__">by</span>(<span class="variable">$request</span>-&gt;<span class="title function_ invoke__">user</span>()-&gt;id);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="健康检查路由"><a href="#健康检查路由" class="headerlink" title="健康检查路由"></a>健康检查路由</h2><p>Laravel 11内置了健康检查路由<code>/up</code>，方便与Kubernetes等容器编排工具集成。<mcreference link="https://blog.yuyansoftware.com.tw/2024/03/laravel-11-release-new-features/" index="2">2</mcreference></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在bootstrap/app.php中配置</span></span><br><span class="line">-&gt;<span class="title function_ invoke__">withRouting</span>(</span><br><span class="line">    <span class="attr">web</span>: <span class="keyword">__DIR__</span>.<span class="string">&#x27;/../routes/web.php&#x27;</span>,</span><br><span class="line">    <span class="attr">health</span>: <span class="string">&#x27;/up&#x27;</span>, // 健康检查路由</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义健康检查逻辑</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Events</span>\<span class="title">DiagnosingHealth</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Event</span>;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Event</span>::<span class="title function_ invoke__">listen</span>(<span class="title class_">DiagnosingHealth</span>::<span class="variable language_">class</span>, function () &#123;</span><br><span class="line">    <span class="comment">// 检查数据库连接</span></span><br><span class="line">    \DB::<span class="title function_ invoke__">connection</span>()-&gt;<span class="title function_ invoke__">getPdo</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 检查缓存</span></span><br><span class="line">    <span class="title class_">\Cache</span>::<span class="title function_ invoke__">put</span>(<span class="string">&#x27;health-check&#x27;</span>, <span class="string">&#x27;ok&#x27;</span>, <span class="number">60</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 检查队列</span></span><br><span class="line">    <span class="comment">// 其他健康检查逻辑</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="加密密钥轮换"><a href="#加密密钥轮换" class="headerlink" title="加密密钥轮换"></a>加密密钥轮换</h2><p>Laravel 11支持优雅的加密密钥轮换，通过<code>APP_PREVIOUS_KEYS</code>环境变量支持多个历史密钥。<mcreference link="https://blog.yuyansoftware.com.tw/2024/03/laravel-11-release-new-features/" index="2">2</mcreference></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .env文件配置</span></span><br><span class="line">APP_KEY=<span class="built_in">base64</span>:new_encryption_key_here</span><br><span class="line">APP_PREVIOUS_KEYS=<span class="built_in">base64</span>:old_key_1,<span class="built_in">base64</span>:old_key_2</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Laravel会自动处理密钥轮换</span></span><br><span class="line"><span class="comment">// 加密时使用APP_KEY</span></span><br><span class="line"><span class="comment">// 解密时先尝试APP_KEY，失败则尝试APP_PREVIOUS_KEYS中的密钥</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$encrypted</span> = <span class="title function_ invoke__">encrypt</span>(<span class="string">&#x27;sensitive data&#x27;</span>);</span><br><span class="line"><span class="variable">$decrypted</span> = <span class="title function_ invoke__">decrypt</span>(<span class="variable">$encrypted</span>); <span class="comment">// 自动处理密钥轮换</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="队列测试改进"><a href="#队列测试改进" class="headerlink" title="队列测试改进"></a>队列测试改进</h2><p>Laravel 11改进了队列交互测试，提供更好的测试体验：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Testing</span>\<span class="title">RefreshDatabase</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Tests</span>\<span class="title">TestCase</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JobTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">RefreshDatabase</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">test_job_processing</span>(<span class="params"></span>): <span class="title">void</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 模拟队列</span></span><br><span class="line">        <span class="title class_">Queue</span>::<span class="title function_ invoke__">fake</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 触发任务</span></span><br><span class="line">        <span class="title class_">ProcessPayment</span>::<span class="title function_ invoke__">dispatch</span>(<span class="variable">$payment</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 断言任务被推送</span></span><br><span class="line">        <span class="title class_">Queue</span>::<span class="title function_ invoke__">assertPushed</span>(<span class="title class_">ProcessPayment</span>::<span class="variable language_">class</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 断言任务参数</span></span><br><span class="line">        <span class="title class_">Queue</span>::<span class="title function_ invoke__">assertPushed</span>(<span class="title class_">ProcessPayment</span>::<span class="variable language_">class</span>, function (<span class="variable">$job</span>) <span class="keyword">use</span> ($<span class="title">payment</span>) &#123;</span><br><span class="line">            <span class="title">return</span> $<span class="title">job</span>-&gt;<span class="title">payment</span>-&gt;<span class="title">id</span> === $<span class="title">payment</span>-&gt;<span class="title">id</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="新的Artisan命令"><a href="#新的Artisan命令" class="headerlink" title="新的Artisan命令"></a>新的Artisan命令</h2><p>Laravel 11引入了新的Artisan命令来简化开发流程：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装API路由</span></span><br><span class="line">php artisan install:api</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装广播功能</span></span><br><span class="line">php artisan install:broadcasting</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建类型转换器</span></span><br><span class="line">php artisan make:cast UserPreferences</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建枚举</span></span><br><span class="line">php artisan make:enum UserStatus</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据库改进"><a href="#数据库改进" class="headerlink" title="数据库改进"></a>数据库改进</h2><h3 id="默认SQLite数据库"><a href="#默认SQLite数据库" class="headerlink" title="默认SQLite数据库"></a>默认SQLite数据库</h3><p>Laravel 11默认使用SQLite作为数据库，这提供了更轻量级的开发体验：<mcreference link="https://blog.yuyansoftware.com.tw/2024/03/laravel-11-release-new-features/" index="2">2</mcreference></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config/database.php</span></span><br><span class="line"><span class="string">&#x27;default&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;DB_CONNECTION&#x27;</span>, <span class="string">&#x27;sqlite&#x27;</span>),</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;connections&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;sqlite&#x27;</span> =&gt; [</span><br><span class="line">        <span class="string">&#x27;driver&#x27;</span> =&gt; <span class="string">&#x27;sqlite&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;url&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;DATABASE_URL&#x27;</span>),</span><br><span class="line">        <span class="string">&#x27;database&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;DB_DATABASE&#x27;</span>, <span class="title function_ invoke__">database_path</span>(<span class="string">&#x27;database.sqlite&#x27;</span>)),</span><br><span class="line">        <span class="string">&#x27;prefix&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;foreign_key_constraints&#x27;</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">&#x27;DB_FOREIGN_KEYS&#x27;</span>, <span class="literal">true</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<h3 id="改进的模型转换"><a href="#改进的模型转换" class="headerlink" title="改进的模型转换"></a>改进的模型转换</h3><p>Laravel 11改进了属性转换功能：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Eloquent</span>\<span class="title">Model</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Eloquent</span>\<span class="title">Casts</span>\<span class="title">Attribute</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$fillable</span> = [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;email&#x27;</span>, <span class="string">&#x27;preferences&#x27;</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">casts</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> [</span><br><span class="line">            <span class="string">&#x27;email_verified_at&#x27;</span> =&gt; <span class="string">&#x27;datetime&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;preferences&#x27;</span> =&gt; <span class="string">&#x27;array&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;created_at&#x27;</span> =&gt; <span class="string">&#x27;datetime:Y-m-d H:i:s&#x27;</span>,</span><br><span class="line">        ];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 新的属性访问器语法</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">fullName</span>(<span class="params"></span>): <span class="title">Attribute</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Attribute</span>::<span class="title function_ invoke__">make</span>(</span><br><span class="line">            <span class="attr">get</span>: fn (<span class="keyword">mixed</span> <span class="variable">$value</span>, <span class="keyword">array</span> <span class="variable">$attributes</span>) =&gt; </span><br><span class="line">                <span class="variable">$attributes</span>[<span class="string">&#x27;first_name&#x27;</span>] . <span class="string">&#x27; &#x27;</span> . <span class="variable">$attributes</span>[<span class="string">&#x27;last_name&#x27;</span>],</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="升级建议"><a href="#升级建议" class="headerlink" title="升级建议"></a>升级建议</h2><h3 id="升级前的准备"><a href="#升级前的准备" class="headerlink" title="升级前的准备"></a>升级前的准备</h3><ol>
+<li><strong>PHP版本检查</strong>：确保服务器支持PHP 8.2+</li>
+<li><strong>依赖检查</strong>：检查第三方包的Laravel 11兼容性</li>
+<li><strong>测试覆盖</strong>：确保有充分的测试覆盖</li>
+</ol>
+<h3 id="升级步骤"><a href="#升级步骤" class="headerlink" title="升级步骤"></a>升级步骤</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 更新composer.json</span></span><br><span class="line">composer require laravel/framework:^11.0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 更新依赖</span></span><br><span class="line">composer update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 发布新的配置文件</span></span><br><span class="line">php artisan config:publish</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 运行迁移</span></span><br><span class="line">php artisan migrate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 清除缓存</span></span><br><span class="line">php artisan config:clear</span><br><span class="line">php artisan cache:clear</span><br><span class="line">php artisan view:clear</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Laravel 11带来了显著的架构简化和现代化改进。<mcreference link="https://doc.houdunren.com/laravel11/zh/releases.html" index="1">1</mcreference> 主要亮点包括：</p>
+<ul>
+<li><strong>简化的应用结构</strong>：减少了样板代码，提高了开发效率</li>
+<li><strong>现代化的PHP支持</strong>：充分利用PHP 8.2的新特性</li>
+<li><strong>实时功能支持</strong>：内置WebSocket服务器Laravel Reverb</li>
+<li><strong>改进的开发体验</strong>：更好的测试工具和调试功能</li>
+</ul>
+<p>虽然升级需要一定的工作量，但Laravel 11的改进将为长期开发带来显著的效率提升。建议开发团队在充分测试的基础上，逐步迁移到这个现代化的框架版本。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Laravel-11/">Laravel 11</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/PHP-8-2/">PHP 8.2</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%BA%94%E7%94%A8%E6%9E%B6%E6%9E%84/">应用架构</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%96%B0%E7%89%B9%E6%80%A7/">新特性</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%A1%86%E6%9E%B6%E5%8D%87%E7%BA%A7/">框架升级</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2024/thinkphp/thinkphp6-jwt-auth-middleware/"
+                                   title="ThinkPHP6 JWT认证中间件实战：无痛刷新Token机制"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">ThinkPHP6 JWT认证中间件实战：无痛刷新Token机制</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2024/thinkphp/thinkphp6-model-relations-advanced/"
+                                   title="ThinkPHP6/8 模型关联高级用法：一对一、一对多、多对多关联实战"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">ThinkPHP6/8 模型关联高级用法：一对一、一对多、多对多关联实战</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP-8-2-%E6%9C%80%E4%BD%8E%E7%89%88%E6%9C%AC%E8%A6%81%E6%B1%82"><span class="nav-text">PHP 8.2 最低版本要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8C%96%E7%9A%84%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84"><span class="nav-text">简化的应用程序结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E8%AE%BE%E8%AE%A1%E7%9A%84-bootstrap-app-php"><span class="nav-text">重新设计的 bootstrap&#x2F;app.php</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E7%9A%84%E7%AE%80%E5%8C%96"><span class="nav-text">服务提供者的简化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%9E%B6%E6%9E%84%E7%9A%84%E6%94%B9%E8%BF%9B"><span class="nav-text">中间件架构的改进</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Laravel-Reverb%EF%BC%9AWebSocket%E6%94%AF%E6%8C%81"><span class="nav-text">Laravel Reverb：WebSocket支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%8F%E7%A7%92%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="nav-text">每秒速率限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E8%B7%AF%E7%94%B1"><span class="nav-text">健康检查路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E5%AF%86%E9%92%A5%E8%BD%AE%E6%8D%A2"><span class="nav-text">加密密钥轮换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%9F%E5%88%97%E6%B5%8B%E8%AF%95%E6%94%B9%E8%BF%9B"><span class="nav-text">队列测试改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84Artisan%E5%91%BD%E4%BB%A4"><span class="nav-text">新的Artisan命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%94%B9%E8%BF%9B"><span class="nav-text">数据库改进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4SQLite%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">默认SQLite数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E7%9A%84%E6%A8%A1%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-text">改进的模型转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7%E5%BB%BA%E8%AE%AE"><span class="nav-text">升级建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87"><span class="nav-text">升级前的准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7%E6%AD%A5%E9%AA%A4"><span class="nav-text">升级步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP-8-2-%E6%9C%80%E4%BD%8E%E7%89%88%E6%9C%AC%E8%A6%81%E6%B1%82"><span class="nav-text">PHP 8.2 最低版本要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8C%96%E7%9A%84%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84"><span class="nav-text">简化的应用程序结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E8%AE%BE%E8%AE%A1%E7%9A%84-bootstrap-app-php"><span class="nav-text">重新设计的 bootstrap&#x2F;app.php</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%8F%90%E4%BE%9B%E8%80%85%E7%9A%84%E7%AE%80%E5%8C%96"><span class="nav-text">服务提供者的简化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%9E%B6%E6%9E%84%E7%9A%84%E6%94%B9%E8%BF%9B"><span class="nav-text">中间件架构的改进</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Laravel-Reverb%EF%BC%9AWebSocket%E6%94%AF%E6%8C%81"><span class="nav-text">Laravel Reverb：WebSocket支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%8F%E7%A7%92%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="nav-text">每秒速率限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E8%B7%AF%E7%94%B1"><span class="nav-text">健康检查路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E5%AF%86%E9%92%A5%E8%BD%AE%E6%8D%A2"><span class="nav-text">加密密钥轮换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%9F%E5%88%97%E6%B5%8B%E8%AF%95%E6%94%B9%E8%BF%9B"><span class="nav-text">队列测试改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84Artisan%E5%91%BD%E4%BB%A4"><span class="nav-text">新的Artisan命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%94%B9%E8%BF%9B"><span class="nav-text">数据库改进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4SQLite%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">默认SQLite数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E7%9A%84%E6%A8%A1%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-text">改进的模型转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7%E5%BB%BA%E8%AE%AE"><span class="nav-text">升级建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87"><span class="nav-text">升级前的准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%87%E7%BA%A7%E6%AD%A5%E9%AA%A4"><span class="nav-text">升级步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

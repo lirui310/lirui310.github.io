@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Python装饰器实战：15个实用案例详解 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Python装饰器实战：15个实用案例详解
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-02-18 16:45:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/python/">python</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/">装饰器</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%BB%A3%E7%A0%81%E5%A4%8D%E7%94%A8/">代码复用</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%85%83%E7%BC%96%E7%A8%8B/">元编程</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Python装饰器实战：15个实用案例详解"><a href="#Python装饰器实战：15个实用案例详解" class="headerlink" title="Python装饰器实战：15个实用案例详解"></a>Python装饰器实战：15个实用案例详解</h1><p>Python装饰器是我最喜欢的语言特性之一，它让我们能够优雅地修改或增强函数和类的行为，而无需修改其源代码。在这篇文章中，我将分享15个实用的装饰器案例，帮助你更好地理解和应用这一强大的功能。</p>
+<h2 id="装饰器基础"><a href="#装饰器基础" class="headerlink" title="装饰器基础"></a>装饰器基础</h2><p>在深入案例之前，让我们快速回顾一下装饰器的基本概念：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">my_decorator</span>(<span class="params">func</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;在函数调用前执行&quot;</span>)</span><br><span class="line">        result = func(*args, **kwargs)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;在函数调用后执行&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@my_decorator</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">say_hello</span>(<span class="params">name</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Hello, <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>现在，让我们看看一些实用的装饰器案例。</p>
+<h2 id="1-计时装饰器"><a href="#1-计时装饰器" class="headerlink" title="1. 计时装饰器"></a>1. 计时装饰器</h2><p>测量函数执行时间：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">timer</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        start_time = time.time()</span><br><span class="line">        result = func(*args, **kwargs)</span><br><span class="line">        end_time = time.time()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;func.__name__&#125;</span> 执行时间: <span class="subst">&#123;end_time - start_time:<span class="number">.6</span>f&#125;</span>秒&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@timer</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">slow_function</span>():</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;完成&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-重试装饰器"><a href="#2-重试装饰器" class="headerlink" title="2. 重试装饰器"></a>2. 重试装饰器</h2><p>自动重试可能失败的操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">retry</span>(<span class="params">max_attempts=<span class="number">3</span>, delay=<span class="number">1</span></span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            attempts = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> attempts &lt; max_attempts:</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">                <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                    attempts += <span class="number">1</span></span><br><span class="line">                    <span class="keyword">if</span> attempts == max_attempts:</span><br><span class="line">                        <span class="keyword">raise</span></span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;尝试 <span class="subst">&#123;attempts&#125;</span>/<span class="subst">&#123;max_attempts&#125;</span> 失败: <span class="subst">&#123;e&#125;</span>. 等待 <span class="subst">&#123;delay&#125;</span> 秒后重试...&quot;</span>)</span><br><span class="line">                    time.sleep(delay)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@retry(<span class="params">max_attempts=<span class="number">5</span>, delay=<span class="number">2</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">unstable_network_call</span>():</span><br><span class="line">    <span class="keyword">if</span> random.random() &lt; <span class="number">0.7</span>:  <span class="comment"># 70% 失败率</span></span><br><span class="line">        <span class="keyword">raise</span> ConnectionError(<span class="string">&quot;网络连接失败&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;成功获取数据&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-缓存装饰器"><a href="#3-缓存装饰器" class="headerlink" title="3. 缓存装饰器"></a>3. 缓存装饰器</h2><p>缓存函数结果以提高性能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">memoize</span>(<span class="params">func</span>):</span><br><span class="line">    cache = &#123;&#125;</span><br><span class="line">    </span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        <span class="comment"># 将kwargs转换为可哈希的形式</span></span><br><span class="line">        key_kwargs = <span class="built_in">tuple</span>(<span class="built_in">sorted</span>(kwargs.items()))</span><br><span class="line">        key = (args, key_kwargs)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> cache:</span><br><span class="line">            cache[key] = func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> cache[key]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@memoize</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fibonacci</span>(<span class="params">n</span>):</span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    <span class="keyword">return</span> fibonacci(n-<span class="number">1</span>) + fibonacci(n-<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-参数验证装饰器"><a href="#4-参数验证装饰器" class="headerlink" title="4. 参数验证装饰器"></a>4. 参数验证装饰器</h2><p>验证函数参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">validate_types</span>(<span class="params">**expected_types</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            <span class="comment"># 获取函数参数名</span></span><br><span class="line">            func_code = func.__code__</span><br><span class="line">            param_names = func_code.co_varnames[:func_code.co_argcount]</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 合并位置参数和关键字参数</span></span><br><span class="line">            all_args = <span class="built_in">dict</span>(<span class="built_in">zip</span>(param_names, args))</span><br><span class="line">            all_args.update(kwargs)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 验证类型</span></span><br><span class="line">            <span class="keyword">for</span> param, expected_type <span class="keyword">in</span> expected_types.items():</span><br><span class="line">                <span class="keyword">if</span> param <span class="keyword">in</span> all_args:</span><br><span class="line">                    actual_value = all_args[param]</span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(actual_value, expected_type):</span><br><span class="line">                        <span class="keyword">raise</span> TypeError(<span class="string">f&quot;参数 &#x27;<span class="subst">&#123;param&#125;</span>&#x27; 必须是 <span class="subst">&#123;expected_type.__name__&#125;</span> 类型, &quot;</span></span><br><span class="line">                                       <span class="string">f&quot;但收到的是 <span class="subst">&#123;<span class="built_in">type</span>(actual_value).__name__&#125;</span>&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@validate_types(<span class="params">name=<span class="built_in">str</span>, age=<span class="built_in">int</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">greet</span>(<span class="params">name, age</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;你好, <span class="subst">&#123;name&#125;</span>! 你已经 <span class="subst">&#123;age&#125;</span> 岁了。&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="5-日志装饰器"><a href="#5-日志装饰器" class="headerlink" title="5. 日志装饰器"></a>5. 日志装饰器</h2><p>记录函数调用和结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig(level=logging.INFO)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">log_function</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        args_repr = [<span class="built_in">repr</span>(a) <span class="keyword">for</span> a <span class="keyword">in</span> args]</span><br><span class="line">        kwargs_repr = [<span class="string">f&quot;<span class="subst">&#123;k&#125;</span>=<span class="subst">&#123;v!r&#125;</span>&quot;</span> <span class="keyword">for</span> k, v <span class="keyword">in</span> kwargs.items()]</span><br><span class="line">        signature = <span class="string">&quot;, &quot;</span>.join(args_repr + kwargs_repr)</span><br><span class="line">        </span><br><span class="line">        logging.info(<span class="string">f&quot;调用 <span class="subst">&#123;func.__name__&#125;</span>(<span class="subst">&#123;signature&#125;</span>)&quot;</span>)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            result = func(*args, **kwargs)</span><br><span class="line">            logging.info(<span class="string">f&quot;<span class="subst">&#123;func.__name__&#125;</span> 返回: <span class="subst">&#123;result!r&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            logging.exception(<span class="string">f&quot;<span class="subst">&#123;func.__name__&#125;</span> 抛出异常: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@log_function</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">divide</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">return</span> a / b</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-单例装饰器"><a href="#6-单例装饰器" class="headerlink" title="6. 单例装饰器"></a>6. 单例装饰器</h2><p>确保类只有一个实例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">singleton</span>(<span class="params">cls</span>):</span><br><span class="line">    instances = &#123;&#125;</span><br><span class="line">    </span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">cls</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_instance</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">        <span class="keyword">if</span> cls <span class="keyword">not</span> <span class="keyword">in</span> instances:</span><br><span class="line">            instances[cls] = cls(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> instances[cls]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> get_instance</span><br><span class="line"></span><br><span class="line"><span class="meta">@singleton</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DatabaseConnection</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, host, username, password</span>):</span><br><span class="line">        <span class="variable language_">self</span>.host = host</span><br><span class="line">        <span class="variable language_">self</span>.username = username</span><br><span class="line">        <span class="variable language_">self</span>.password = password</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;连接到数据库 <span class="subst">&#123;host&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-权限检查装饰器"><a href="#7-权限检查装饰器" class="headerlink" title="7. 权限检查装饰器"></a>7. 权限检查装饰器</h2><p>检查用户权限：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">require_permission</span>(<span class="params">permission</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">user, *args, **kwargs</span>):</span><br><span class="line">            <span class="keyword">if</span> permission <span class="keyword">not</span> <span class="keyword">in</span> user.permissions:</span><br><span class="line">                <span class="keyword">raise</span> PermissionError(<span class="string">f&quot;用户 <span class="subst">&#123;user.username&#125;</span> 没有 <span class="subst">&#123;permission&#125;</span> 权限&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> func(user, *args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, username, permissions=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.username = username</span><br><span class="line">        <span class="variable language_">self</span>.permissions = permissions <span class="keyword">or</span> []</span><br><span class="line"></span><br><span class="line"><span class="meta">@require_permission(<span class="params"><span class="string">&quot;admin&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete_user</span>(<span class="params">current_user, user_id</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;current_user.username&#125;</span> 删除了用户 <span class="subst">&#123;user_id&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-限速装饰器"><a href="#8-限速装饰器" class="headerlink" title="8. 限速装饰器"></a>8. 限速装饰器</h2><p>限制函数调用频率：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">rate_limit</span>(<span class="params">max_calls, period</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;限制函数在指定时间段内的最大调用次数&quot;&quot;&quot;</span></span><br><span class="line">    calls = deque(maxlen=max_calls)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            now = time.time()</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 移除过期的调用记录</span></span><br><span class="line">            <span class="keyword">while</span> calls <span class="keyword">and</span> calls[<span class="number">0</span>] &lt; now - period:</span><br><span class="line">                calls.popleft()</span><br><span class="line">                </span><br><span class="line">            <span class="comment"># 检查是否超过调用限制</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(calls) &gt;= max_calls:</span><br><span class="line">                wait_time = calls[<span class="number">0</span>] + period - now</span><br><span class="line">                <span class="keyword">raise</span> Exception(<span class="string">f&quot;调用频率过高，请在 <span class="subst">&#123;wait_time:<span class="number">.2</span>f&#125;</span> 秒后重试&quot;</span>)</span><br><span class="line">                </span><br><span class="line">            result = func(*args, **kwargs)</span><br><span class="line">            calls.append(now)</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@rate_limit(<span class="params">max_calls=<span class="number">3</span>, period=<span class="number">60</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">send_api_request</span>(<span class="params">endpoint</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;发送请求到 <span class="subst">&#123;endpoint&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="comment"># 实际API调用代码</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="9-超时装饰器"><a href="#9-超时装饰器" class="headerlink" title="9. 超时装饰器"></a>9. 超时装饰器</h2><p>限制函数执行时间：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> signal</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TimeoutError</span>(<span class="title class_ inherited__">Exception</span>):</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">timeout</span>(<span class="params">seconds</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            <span class="keyword">def</span> <span class="title function_">handler</span>(<span class="params">signum, frame</span>):</span><br><span class="line">                <span class="keyword">raise</span> TimeoutError(<span class="string">f&quot;函数执行超过 <span class="subst">&#123;seconds&#125;</span> 秒&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 设置信号处理器</span></span><br><span class="line">            original_handler = signal.signal(signal.SIGALRM, handler)</span><br><span class="line">            signal.alarm(seconds)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                result = func(*args, **kwargs)</span><br><span class="line">            <span class="keyword">finally</span>:</span><br><span class="line">                <span class="comment"># 恢复原始信号处理器</span></span><br><span class="line">                signal.alarm(<span class="number">0</span>)</span><br><span class="line">                signal.signal(signal.SIGALRM, original_handler)</span><br><span class="line">                </span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@timeout(<span class="params"><span class="number">5</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">long_running_task</span>():</span><br><span class="line">    <span class="keyword">import</span> time</span><br><span class="line">    time.sleep(<span class="number">10</span>)  <span class="comment"># 这将触发超时</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="10-异步重试装饰器"><a href="#10-异步重试装饰器" class="headerlink" title="10. 异步重试装饰器"></a>10. 异步重试装饰器</h2><p>异步函数的重试机制：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">async_retry</span>(<span class="params">max_attempts=<span class="number">3</span>, delay=<span class="number">1</span></span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            attempts = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> attempts &lt; max_attempts:</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">await</span> func(*args, **kwargs)</span><br><span class="line">                <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                    attempts += <span class="number">1</span></span><br><span class="line">                    <span class="keyword">if</span> attempts == max_attempts:</span><br><span class="line">                        <span class="keyword">raise</span></span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;尝试 <span class="subst">&#123;attempts&#125;</span>/<span class="subst">&#123;max_attempts&#125;</span> 失败: <span class="subst">&#123;e&#125;</span>. 等待 <span class="subst">&#123;delay&#125;</span> 秒后重试...&quot;</span>)</span><br><span class="line">                    <span class="keyword">await</span> asyncio.sleep(delay)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@async_retry(<span class="params">max_attempts=<span class="number">3</span>, delay=<span class="number">2</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">fetch_data</span>(<span class="params">url</span>):</span><br><span class="line">    <span class="comment"># 模拟网络请求</span></span><br><span class="line">    <span class="keyword">if</span> random.random() &lt; <span class="number">0.7</span>:  <span class="comment"># 70% 失败率</span></span><br><span class="line">        <span class="keyword">raise</span> ConnectionError(<span class="string">&quot;网络连接失败&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;来自 <span class="subst">&#123;url&#125;</span> 的数据&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="11-参数转换装饰器"><a href="#11-参数转换装饰器" class="headerlink" title="11. 参数转换装饰器"></a>11. 参数转换装饰器</h2><p>自动转换函数参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">convert_args</span>(<span class="params">**converters</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            <span class="comment"># 获取函数参数名</span></span><br><span class="line">            func_code = func.__code__</span><br><span class="line">            param_names = func_code.co_varnames[:func_code.co_argcount]</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 转换位置参数</span></span><br><span class="line">            converted_args = <span class="built_in">list</span>(args)</span><br><span class="line">            <span class="keyword">for</span> i, param_name <span class="keyword">in</span> <span class="built_in">enumerate</span>(param_names[:<span class="built_in">len</span>(args)]):</span><br><span class="line">                <span class="keyword">if</span> param_name <span class="keyword">in</span> converters:</span><br><span class="line">                    converted_args[i] = converters[param_name](args[i])</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 转换关键字参数</span></span><br><span class="line">            converted_kwargs = &#123;&#125;</span><br><span class="line">            <span class="keyword">for</span> key, value <span class="keyword">in</span> kwargs.items():</span><br><span class="line">                <span class="keyword">if</span> key <span class="keyword">in</span> converters:</span><br><span class="line">                    converted_kwargs[key] = converters[key](value)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    converted_kwargs[key] = value</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> func(*converted_args, **converted_kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@convert_args(<span class="params">age=<span class="built_in">int</span>, height=<span class="built_in">float</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">register_user</span>(<span class="params">name, age, height</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;注册用户: <span class="subst">&#123;name&#125;</span>, 年龄: <span class="subst">&#123;age&#125;</span> (<span class="subst">&#123;<span class="built_in">type</span>(age)&#125;</span>), 身高: <span class="subst">&#123;height&#125;</span> (<span class="subst">&#123;<span class="built_in">type</span>(height)&#125;</span>)&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 即使传入字符串，也会自动转换</span></span><br><span class="line">register_user(<span class="string">&quot;Alice&quot;</span>, <span class="string">&quot;30&quot;</span>, <span class="string">&quot;165.5&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="12-属性缓存装饰器"><a href="#12-属性缓存装饰器" class="headerlink" title="12. 属性缓存装饰器"></a>12. 属性缓存装饰器</h2><p>缓存类属性计算结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cached_property</span>(<span class="params">func</span>):</span><br><span class="line">    attr_name = <span class="string">f&quot;_<span class="subst">&#123;func.__name__&#125;</span>&quot;</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line"><span class="meta">    @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">hasattr</span>(<span class="variable language_">self</span>, attr_name):</span><br><span class="line">            <span class="built_in">setattr</span>(<span class="variable language_">self</span>, attr_name, func(<span class="variable language_">self</span>))</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">getattr</span>(<span class="variable language_">self</span>, attr_name)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Circle</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, radius</span>):</span><br><span class="line">        <span class="variable language_">self</span>.radius = radius</span><br><span class="line">    </span><br><span class="line"><span class="meta">    @cached_property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">area</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;计算面积...&quot;</span>)</span><br><span class="line">        <span class="keyword">import</span> math</span><br><span class="line">        <span class="keyword">return</span> math.pi * <span class="variable language_">self</span>.radius ** <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="13-弃用警告装饰器"><a href="#13-弃用警告装饰器" class="headerlink" title="13. 弃用警告装饰器"></a>13. 弃用警告装饰器</h2><p>标记弃用的函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">deprecated</span>(<span class="params">reason</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            warnings.warn(</span><br><span class="line">                <span class="string">f&quot;<span class="subst">&#123;func.__name__&#125;</span> 已弃用: <span class="subst">&#123;reason&#125;</span>&quot;</span>,</span><br><span class="line">                category=DeprecationWarning,</span><br><span class="line">                stacklevel=<span class="number">2</span></span><br><span class="line">            )</span><br><span class="line">            <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@deprecated(<span class="params"><span class="string">&quot;请使用 new_function() 代替&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">old_function</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;旧功能&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="14-事件触发装饰器"><a href="#14-事件触发装饰器" class="headerlink" title="14. 事件触发装饰器"></a>14. 事件触发装饰器</h2><p>在函数执行前后触发事件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EventSystem</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.listeners = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">subscribe</span>(<span class="params">self, event, callback</span>):</span><br><span class="line">        <span class="keyword">if</span> event <span class="keyword">not</span> <span class="keyword">in</span> <span class="variable language_">self</span>.listeners:</span><br><span class="line">            <span class="variable language_">self</span>.listeners[event] = []</span><br><span class="line">        <span class="variable language_">self</span>.listeners[event].append(callback)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">emit</span>(<span class="params">self, event, *args, **kwargs</span>):</span><br><span class="line">        <span class="keyword">if</span> event <span class="keyword">in</span> <span class="variable language_">self</span>.listeners:</span><br><span class="line">            <span class="keyword">for</span> callback <span class="keyword">in</span> <span class="variable language_">self</span>.listeners[event]:</span><br><span class="line">                callback(*args, **kwargs)</span><br><span class="line"></span><br><span class="line">event_system = EventSystem()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">emit_events</span>(<span class="params">before_event=<span class="literal">None</span>, after_event=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            <span class="keyword">if</span> before_event:</span><br><span class="line">                event_system.emit(before_event, *args, **kwargs)</span><br><span class="line">            </span><br><span class="line">            result = func(*args, **kwargs)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> after_event:</span><br><span class="line">                event_system.emit(after_event, result, *args, **kwargs)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@emit_events(<span class="params">before_event=<span class="string">&quot;user_login_attempt&quot;</span>, after_event=<span class="string">&quot;user_login_complete&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">login_user</span>(<span class="params">username, password</span>):</span><br><span class="line">    <span class="comment"># 验证逻辑</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;username&quot;</span>: username, <span class="string">&quot;success&quot;</span>: <span class="literal">True</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="15-参数注入装饰器"><a href="#15-参数注入装饰器" class="headerlink" title="15. 参数注入装饰器"></a>15. 参数注入装饰器</h2><p>自动注入依赖：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"><span class="keyword">import</span> inspect</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DependencyContainer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.dependencies = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">register</span>(<span class="params">self, name, instance</span>):</span><br><span class="line">        <span class="variable language_">self</span>.dependencies[name] = instance</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get</span>(<span class="params">self, name</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.dependencies.get(name)</span><br><span class="line"></span><br><span class="line">container = DependencyContainer()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">inject</span>(<span class="params">**dependencies</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func</span>):</span><br><span class="line"><span class="meta">        @functools.wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            <span class="comment"># 获取函数签名</span></span><br><span class="line">            sig = inspect.signature(func)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 注入依赖</span></span><br><span class="line">            <span class="keyword">for</span> param_name, dependency_name <span class="keyword">in</span> dependencies.items():</span><br><span class="line">                <span class="keyword">if</span> param_name <span class="keyword">in</span> sig.parameters <span class="keyword">and</span> param_name <span class="keyword">not</span> <span class="keyword">in</span> kwargs:</span><br><span class="line">                    kwargs[param_name] = container.get(dependency_name)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注册依赖</span></span><br><span class="line">container.register(<span class="string">&quot;db&quot;</span>, &#123;<span class="string">&quot;connection&quot;</span>: <span class="string">&quot;sqlite:///:memory:&quot;</span>&#125;)</span><br><span class="line">container.register(<span class="string">&quot;logger&quot;</span>, &#123;<span class="string">&quot;log&quot;</span>: <span class="keyword">lambda</span> msg: <span class="built_in">print</span>(<span class="string">f&quot;LOG: <span class="subst">&#123;msg&#125;</span>&quot;</span>)&#125;)</span><br><span class="line"></span><br><span class="line"><span class="meta">@inject(<span class="params">db=<span class="string">&quot;db&quot;</span>, logger=<span class="string">&quot;logger&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">save_user</span>(<span class="params">user, db, logger</span>):</span><br><span class="line">    logger[<span class="string">&quot;log&quot;</span>](<span class="string">f&quot;保存用户到数据库: <span class="subst">&#123;user&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="comment"># 使用db进行实际操作</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>装饰器是Python中非常强大的特性，可以帮助我们编写更简洁、更可维护的代码。通过这15个实用案例，你应该能够更好地理解装饰器的工作原理和应用场景。</p>
+<p>记住，好的装饰器应该遵循单一职责原则，专注于解决一个特定的问题。此外，使用<code>functools.wraps</code>来保留原始函数的元数据也是一个好习惯。</p>
+<p>你有什么创新的装饰器用例吗？欢迎在评论区分享！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/">装饰器</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E5%A4%8D%E7%94%A8/">代码复用</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%85%83%E7%BC%96%E7%A8%8B/">元编程</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/php/php8-migration-upgrade-guide/"
+                                   title="PHP 8 迁移升级完全指南：从PHP 7.x平滑过渡到PHP 8"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8 迁移升级完全指南：从PHP 7.x平滑过渡到PHP 8</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/python/python-web-scraping-techniques/"
+                                   title="Python网络爬虫技术：从入门到精通"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Python网络爬虫技术：从入门到精通</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E8%A3%85%E9%A5%B0%E5%99%A8%E5%AE%9E%E6%88%98%EF%BC%9A15%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%88%E4%BE%8B%E8%AF%A6%E8%A7%A3"><span class="nav-text">Python装饰器实战：15个实用案例详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E5%9F%BA%E7%A1%80"><span class="nav-text">装饰器基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%A1%E6%97%B6%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">1. 计时装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%87%8D%E8%AF%95%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">2. 重试装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BC%93%E5%AD%98%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">3. 缓存装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8F%82%E6%95%B0%E9%AA%8C%E8%AF%81%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">4. 参数验证装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%97%A5%E5%BF%97%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">5. 日志装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%8D%95%E4%BE%8B%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">6. 单例装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%9D%83%E9%99%90%E6%A3%80%E6%9F%A5%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">7. 权限检查装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E9%99%90%E9%80%9F%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">8. 限速装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E8%B6%85%E6%97%B6%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">9. 超时装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E5%BC%82%E6%AD%A5%E9%87%8D%E8%AF%95%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">10. 异步重试装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E5%8F%82%E6%95%B0%E8%BD%AC%E6%8D%A2%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">11. 参数转换装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-%E5%B1%9E%E6%80%A7%E7%BC%93%E5%AD%98%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">12. 属性缓存装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-%E5%BC%83%E7%94%A8%E8%AD%A6%E5%91%8A%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">13. 弃用警告装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">14. 事件触发装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-%E5%8F%82%E6%95%B0%E6%B3%A8%E5%85%A5%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">15. 参数注入装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E8%A3%85%E9%A5%B0%E5%99%A8%E5%AE%9E%E6%88%98%EF%BC%9A15%E4%B8%AA%E5%AE%9E%E7%94%A8%E6%A1%88%E4%BE%8B%E8%AF%A6%E8%A7%A3"><span class="nav-text">Python装饰器实战：15个实用案例详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E5%9F%BA%E7%A1%80"><span class="nav-text">装饰器基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%AE%A1%E6%97%B6%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">1. 计时装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E9%87%8D%E8%AF%95%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">2. 重试装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BC%93%E5%AD%98%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">3. 缓存装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8F%82%E6%95%B0%E9%AA%8C%E8%AF%81%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">4. 参数验证装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%97%A5%E5%BF%97%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">5. 日志装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%8D%95%E4%BE%8B%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">6. 单例装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%9D%83%E9%99%90%E6%A3%80%E6%9F%A5%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">7. 权限检查装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E9%99%90%E9%80%9F%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">8. 限速装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E8%B6%85%E6%97%B6%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">9. 超时装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E5%BC%82%E6%AD%A5%E9%87%8D%E8%AF%95%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">10. 异步重试装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E5%8F%82%E6%95%B0%E8%BD%AC%E6%8D%A2%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">11. 参数转换装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-%E5%B1%9E%E6%80%A7%E7%BC%93%E5%AD%98%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">12. 属性缓存装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-%E5%BC%83%E7%94%A8%E8%AD%A6%E5%91%8A%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">13. 弃用警告装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">14. 事件触发装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#15-%E5%8F%82%E6%95%B0%E6%B3%A8%E5%85%A5%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-text">15. 参数注入装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

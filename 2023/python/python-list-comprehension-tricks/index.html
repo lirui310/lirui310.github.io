@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Python列表推导式的10个高级技巧 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Python列表推导式的10个高级技巧
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-05-15 14:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/python/">python</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F/">列表推导式</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">数据处理</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Pythonic/">Pythonic</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Python列表推导式的10个高级技巧"><a href="#Python列表推导式的10个高级技巧" class="headerlink" title="Python列表推导式的10个高级技巧"></a>Python列表推导式的10个高级技巧</h1><p>作为Python开发者，列表推导式是我日常编码中最常用的特性之一。它不仅让代码更简洁，还能提高执行效率。今天我想分享一些列表推导式的高级技巧，帮助你写出更优雅、更高效的Python代码。</p>
+<h2 id="1-嵌套列表推导式"><a href="#1-嵌套列表推导式" class="headerlink" title="1. 嵌套列表推导式"></a>1. 嵌套列表推导式</h2><p>嵌套列表推导式可以用来处理多维数据结构：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">matrix = [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>], [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]]</span><br><span class="line">flattened = [num <span class="keyword">for</span> row <span class="keyword">in</span> matrix <span class="keyword">for</span> num <span class="keyword">in</span> row]</span><br><span class="line"><span class="comment"># 结果: [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-条件过滤"><a href="#2-条件过滤" class="headerlink" title="2. 条件过滤"></a>2. 条件过滤</h2><p>在列表推导式中使用条件语句过滤元素：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>]</span><br><span class="line">even_numbers = [x <span class="keyword">for</span> x <span class="keyword">in</span> numbers <span class="keyword">if</span> x % <span class="number">2</span> == <span class="number">0</span>]</span><br><span class="line"><span class="comment"># 结果: [2, 4, 6, 8, 10]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-条件表达式（三元运算符）"><a href="#3-条件表达式（三元运算符）" class="headerlink" title="3. 条件表达式（三元运算符）"></a>3. 条件表达式（三元运算符）</h2><p>在列表推导式中使用条件表达式进行转换：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">result = [<span class="string">&quot;偶数&quot;</span> <span class="keyword">if</span> x % <span class="number">2</span> == <span class="number">0</span> <span class="keyword">else</span> <span class="string">&quot;奇数&quot;</span> <span class="keyword">for</span> x <span class="keyword">in</span> numbers]</span><br><span class="line"><span class="comment"># 结果: [&#x27;奇数&#x27;, &#x27;偶数&#x27;, &#x27;奇数&#x27;, &#x27;偶数&#x27;, &#x27;奇数&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-集合和字典推导式"><a href="#4-集合和字典推导式" class="headerlink" title="4. 集合和字典推导式"></a>4. 集合和字典推导式</h2><p>类似的语法也适用于创建集合和字典：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 集合推导式</span></span><br><span class="line">unique_squares = &#123;x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>)&#125;</span><br><span class="line"><span class="comment"># 结果: &#123;0, 1, 4, 9, 16, 25, 36, 49, 64, 81&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 字典推导式</span></span><br><span class="line">square_dict = &#123;x: x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>)&#125;</span><br><span class="line"><span class="comment"># 结果: &#123;0: 0, 1: 1, 2: 4, 3: 9, 4: 16&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="5-使用zip合并多个列表"><a href="#5-使用zip合并多个列表" class="headerlink" title="5. 使用zip合并多个列表"></a>5. 使用zip合并多个列表</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">names = [<span class="string">&#x27;Alice&#x27;</span>, <span class="string">&#x27;Bob&#x27;</span>, <span class="string">&#x27;Charlie&#x27;</span>]</span><br><span class="line">ages = [<span class="number">25</span>, <span class="number">30</span>, <span class="number">35</span>]</span><br><span class="line">people = [(name, age) <span class="keyword">for</span> name, age <span class="keyword">in</span> <span class="built_in">zip</span>(names, ages)]</span><br><span class="line"><span class="comment"># 结果: [(&#x27;Alice&#x27;, 25), (&#x27;Bob&#x27;, 30), (&#x27;Charlie&#x27;, 35)]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="6-生成器表达式节省内存"><a href="#6-生成器表达式节省内存" class="headerlink" title="6. 生成器表达式节省内存"></a>6. 生成器表达式节省内存</h2><p>对于大型数据集，使用生成器表达式可以节省内存：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 列表推导式会一次性生成所有元素</span></span><br><span class="line">sum_squares_list = <span class="built_in">sum</span>([x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000000</span>)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成器表达式会按需生成元素，节省内存</span></span><br><span class="line">sum_squares_gen = <span class="built_in">sum</span>(x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000000</span>))</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-处理嵌套结构"><a href="#7-处理嵌套结构" class="headerlink" title="7. 处理嵌套结构"></a>7. 处理嵌套结构</h2><p>处理JSON等嵌套数据结构：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data = [</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;Alice&#x27;</span>, <span class="string">&#x27;skills&#x27;</span>: [<span class="string">&#x27;Python&#x27;</span>, <span class="string">&#x27;SQL&#x27;</span>]&#125;,</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;Bob&#x27;</span>, <span class="string">&#x27;skills&#x27;</span>: [<span class="string">&#x27;Java&#x27;</span>, <span class="string">&#x27;C++&#x27;</span>, <span class="string">&#x27;Python&#x27;</span>]&#125;,</span><br><span class="line">    &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;Charlie&#x27;</span>, <span class="string">&#x27;skills&#x27;</span>: [<span class="string">&#x27;JavaScript&#x27;</span>, <span class="string">&#x27;HTML&#x27;</span>]&#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">python_users = [person[<span class="string">&#x27;name&#x27;</span>] <span class="keyword">for</span> person <span class="keyword">in</span> data <span class="keyword">if</span> <span class="string">&#x27;Python&#x27;</span> <span class="keyword">in</span> person[<span class="string">&#x27;skills&#x27;</span>]]</span><br><span class="line"><span class="comment"># 结果: [&#x27;Alice&#x27;, &#x27;Bob&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="8-使用enumerate获取索引"><a href="#8-使用enumerate获取索引" class="headerlink" title="8. 使用enumerate获取索引"></a>8. 使用enumerate获取索引</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fruits = [<span class="string">&#x27;apple&#x27;</span>, <span class="string">&#x27;banana&#x27;</span>, <span class="string">&#x27;cherry&#x27;</span>]</span><br><span class="line">indexed_fruits = [<span class="string">f&quot;<span class="subst">&#123;i&#125;</span>: <span class="subst">&#123;fruit&#125;</span>&quot;</span> <span class="keyword">for</span> i, fruit <span class="keyword">in</span> <span class="built_in">enumerate</span>(fruits, <span class="number">1</span>)]</span><br><span class="line"><span class="comment"># 结果: [&#x27;1: apple&#x27;, &#x27;2: banana&#x27;, &#x27;3: cherry&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="9-列表推导式中的函数调用"><a href="#9-列表推导式中的函数调用" class="headerlink" title="9. 列表推导式中的函数调用"></a>9. 列表推导式中的函数调用</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">texts = [<span class="string">&quot;hello world&quot;</span>, <span class="string">&quot;python is great&quot;</span>, <span class="string">&quot;coding in python&quot;</span>]</span><br><span class="line">word_counts = [<span class="built_in">len</span>(re.findall(<span class="string">r&#x27;\w+&#x27;</span>, text)) <span class="keyword">for</span> text <span class="keyword">in</span> texts]</span><br><span class="line"><span class="comment"># 结果: [2, 3, 3]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="10-多重条件过滤"><a href="#10-多重条件过滤" class="headerlink" title="10. 多重条件过滤"></a>10. 多重条件过滤</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">numbers = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">1</span>, <span class="number">101</span>))</span><br><span class="line">filtered = [x <span class="keyword">for</span> x <span class="keyword">in</span> numbers <span class="keyword">if</span> x % <span class="number">3</span> == <span class="number">0</span> <span class="keyword">and</span> x % <span class="number">5</span> == <span class="number">0</span>]</span><br><span class="line"><span class="comment"># 结果: [15, 30, 45, 60, 75, 90]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="性能考虑"><a href="#性能考虑" class="headerlink" title="性能考虑"></a>性能考虑</h2><p>列表推导式通常比等效的for循环快，但并不总是最佳选择。对于非常复杂的操作，传统的for循环可能更易读和维护。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 性能测试</span></span><br><span class="line"><span class="keyword">import</span> timeit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用列表推导式</span></span><br><span class="line">list_comp_time = timeit.timeit(<span class="string">&#x27;[x**2 for x in range(1000)]&#x27;</span>, number=<span class="number">10000</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用for循环</span></span><br><span class="line">loop_time = timeit.timeit(</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    result = []</span></span><br><span class="line"><span class="string">    for x in range(1000):</span></span><br><span class="line"><span class="string">        result.append(x**2)</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span>, </span><br><span class="line">    number=<span class="number">10000</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;列表推导式: <span class="subst">&#123;list_comp_time:<span class="number">.6</span>f&#125;</span>秒&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;For循环: <span class="subst">&#123;loop_time:<span class="number">.6</span>f&#125;</span>秒&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>列表推导式是Python中非常强大的特性，掌握这些技巧可以让你的代码更加简洁、高效。但也要记住，代码的可读性同样重要，不要为了使用列表推导式而牺牲代码的清晰度。</p>
+<p>希望这些技巧对你有所帮助！你有什么常用的列表推导式技巧吗？欢迎在评论区分享。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F/">列表推导式</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">数据处理</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Pythonic/">Pythonic</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/php/php82-new-features-overview/"
+                                   title="PHP 8.2 新特性全面解析：现代PHP开发的新里程碑"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8.2 新特性全面解析：现代PHP开发的新里程碑</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/php/php-sessions-cookies-guide/"
+                                   title="PHP会话管理详解：Session与Cookie的实战应用"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP会话管理详解：Session与Cookie的实战应用</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F%E7%9A%8410%E4%B8%AA%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7"><span class="nav-text">Python列表推导式的10个高级技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B5%8C%E5%A5%97%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F"><span class="nav-text">1. 嵌套列表推导式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9D%A1%E4%BB%B6%E8%BF%87%E6%BB%A4"><span class="nav-text">2. 条件过滤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%9D%A1%E4%BB%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E4%B8%89%E5%85%83%E8%BF%90%E7%AE%97%E7%AC%A6%EF%BC%89"><span class="nav-text">3. 条件表达式（三元运算符）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%9B%86%E5%90%88%E5%92%8C%E5%AD%97%E5%85%B8%E6%8E%A8%E5%AF%BC%E5%BC%8F"><span class="nav-text">4. 集合和字典推导式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8zip%E5%90%88%E5%B9%B6%E5%A4%9A%E4%B8%AA%E5%88%97%E8%A1%A8"><span class="nav-text">5. 使用zip合并多个列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E7%94%9F%E6%88%90%E5%99%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%8A%82%E7%9C%81%E5%86%85%E5%AD%98"><span class="nav-text">6. 生成器表达式节省内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E5%A4%84%E7%90%86%E5%B5%8C%E5%A5%97%E7%BB%93%E6%9E%84"><span class="nav-text">7. 处理嵌套结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E4%BD%BF%E7%94%A8enumerate%E8%8E%B7%E5%8F%96%E7%B4%A2%E5%BC%95"><span class="nav-text">8. 使用enumerate获取索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="nav-text">9. 列表推导式中的函数调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E5%A4%9A%E9%87%8D%E6%9D%A1%E4%BB%B6%E8%BF%87%E6%BB%A4"><span class="nav-text">10. 多重条件过滤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91"><span class="nav-text">性能考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F%E7%9A%8410%E4%B8%AA%E9%AB%98%E7%BA%A7%E6%8A%80%E5%B7%A7"><span class="nav-text">Python列表推导式的10个高级技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B5%8C%E5%A5%97%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F"><span class="nav-text">1. 嵌套列表推导式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%9D%A1%E4%BB%B6%E8%BF%87%E6%BB%A4"><span class="nav-text">2. 条件过滤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%9D%A1%E4%BB%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E4%B8%89%E5%85%83%E8%BF%90%E7%AE%97%E7%AC%A6%EF%BC%89"><span class="nav-text">3. 条件表达式（三元运算符）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%9B%86%E5%90%88%E5%92%8C%E5%AD%97%E5%85%B8%E6%8E%A8%E5%AF%BC%E5%BC%8F"><span class="nav-text">4. 集合和字典推导式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8zip%E5%90%88%E5%B9%B6%E5%A4%9A%E4%B8%AA%E5%88%97%E8%A1%A8"><span class="nav-text">5. 使用zip合并多个列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E7%94%9F%E6%88%90%E5%99%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%8A%82%E7%9C%81%E5%86%85%E5%AD%98"><span class="nav-text">6. 生成器表达式节省内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E5%A4%84%E7%90%86%E5%B5%8C%E5%A5%97%E7%BB%93%E6%9E%84"><span class="nav-text">7. 处理嵌套结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E4%BD%BF%E7%94%A8enumerate%E8%8E%B7%E5%8F%96%E7%B4%A2%E5%BC%95"><span class="nav-text">8. 使用enumerate获取索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="nav-text">9. 列表推导式中的函数调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E5%A4%9A%E9%87%8D%E6%9D%A1%E4%BB%B6%E8%BF%87%E6%BB%A4"><span class="nav-text">10. 多重条件过滤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91"><span class="nav-text">性能考虑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

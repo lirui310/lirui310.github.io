@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Python正则表达式精通指南：从基础到高级应用 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Python正则表达式精通指南：从基础到高级应用
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-05-20 14:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/python/">python</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">正则表达式</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/">文本处理</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D/">模式匹配</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/re%E6%A8%A1%E5%9D%97/">re模块</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Python正则表达式精通指南：从基础到高级应用"><a href="#Python正则表达式精通指南：从基础到高级应用" class="headerlink" title="Python正则表达式精通指南：从基础到高级应用"></a>Python正则表达式精通指南：从基础到高级应用</h1><p>正则表达式是处理文本的强大工具，掌握它可以让你的文本处理工作事半功倍。Python通过<code>re</code>模块提供了全面的正则表达式支持。在这篇文章中，我将带你从基础到高级，全面掌握Python中的正则表达式。</p>
+<h2 id="正则表达式基础"><a href="#正则表达式基础" class="headerlink" title="正则表达式基础"></a>正则表达式基础</h2><h3 id="什么是正则表达式？"><a href="#什么是正则表达式？" class="headerlink" title="什么是正则表达式？"></a>什么是正则表达式？</h3><p>正则表达式（Regular Expression，简称regex）是一种用于描述字符串模式的特殊语法。它可以用来搜索、替换和验证文本。</p>
+<h3 id="Python中的re模块"><a href="#Python中的re模块" class="headerlink" title="Python中的re模块"></a>Python中的re模块</h3><p>Python的<code>re</code>模块提供了使用正则表达式的接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 搜索模式</span></span><br><span class="line">result = re.search(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;string to search&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配开头</span></span><br><span class="line">result = re.<span class="keyword">match</span>(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;string to match&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找所有匹配</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;string to find all matches&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换</span></span><br><span class="line">new_string = re.sub(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;replacement&#x27;</span>, <span class="string">&#x27;string to modify&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分割</span></span><br><span class="line">parts = re.split(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;string to split&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="基本模式匹配"><a href="#基本模式匹配" class="headerlink" title="基本模式匹配"></a>基本模式匹配</h3><p>最简单的正则表达式就是直接匹配字符：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 搜索单词&quot;Python&quot;</span></span><br><span class="line">result = re.search(<span class="string">r&#x27;Python&#x27;</span>, <span class="string">&#x27;I love Python programming&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)  <span class="comment"># &lt;re.Match object; span=(7, 13), match=&#x27;Python&#x27;&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取匹配的字符串</span></span><br><span class="line"><span class="built_in">print</span>(result.group())  <span class="comment"># Python</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取匹配的位置</span></span><br><span class="line"><span class="built_in">print</span>(result.start(), result.end())  <span class="comment"># 7 13</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="元字符和特殊序列"><a href="#元字符和特殊序列" class="headerlink" title="元字符和特殊序列"></a>元字符和特殊序列</h2><p>正则表达式的强大之处在于它的元字符和特殊序列。</p>
+<h3 id="常用元字符"><a href="#常用元字符" class="headerlink" title="常用元字符"></a>常用元字符</h3><table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.</code></td>
+<td>匹配除换行符外的任何字符</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>匹配字符串的开始</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>匹配字符串的结束</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>匹配前面的模式零次或多次</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>匹配前面的模式一次或多次</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>匹配前面的模式零次或一次</td>
+</tr>
+<tr>
+<td><code>&#123;n&#125;</code></td>
+<td>精确匹配前面的模式n次</td>
+</tr>
+<tr>
+<td><code>&#123;n,&#125;</code></td>
+<td>匹配前面的模式至少n次</td>
+</tr>
+<tr>
+<td><code>&#123;n,m&#125;</code></td>
+<td>匹配前面的模式n到m次</td>
+</tr>
+<tr>
+<td><code>\</code></td>
+<td>转义字符</td>
+</tr>
+<tr>
+<td><code>[]</code></td>
+<td>字符集，匹配括号内的任一字符</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>或运算符，匹配<code>|</code>前或后的模式</td>
+</tr>
+<tr>
+<td><code>()</code></td>
+<td>分组</td>
+</tr>
+</tbody></table>
+<h3 id="特殊序列"><a href="#特殊序列" class="headerlink" title="特殊序列"></a>特殊序列</h3><table>
+<thead>
+<tr>
+<th>特殊序列</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>\d</code></td>
+<td>匹配任何十进制数字，相当于<code>[0-9]</code></td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td>匹配任何非数字字符，相当于<code>[^0-9]</code></td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td>匹配任何空白字符，相当于<code>[ \t\n\r\f\v]</code></td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td>匹配任何非空白字符，相当于<code>[^ \t\n\r\f\v]</code></td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>匹配任何字母数字字符，相当于<code>[a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td>匹配任何非字母数字字符，相当于<code>[^a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>匹配单词边界</td>
+</tr>
+<tr>
+<td><code>\B</code></td>
+<td>匹配非单词边界</td>
+</tr>
+</tbody></table>
+<h3 id="实例演示"><a href="#实例演示" class="headerlink" title="实例演示"></a>实例演示</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Python 3.9 was released on 2020-10-05, Python 3.10 on 2021-10-04.&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配所有数字</span></span><br><span class="line">digits = re.findall(<span class="string">r&#x27;\d&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(digits)  <span class="comment"># [&#x27;3&#x27;, &#x27;9&#x27;, &#x27;2&#x27;, &#x27;0&#x27;, &#x27;2&#x27;, &#x27;0&#x27;, &#x27;1&#x27;, &#x27;0&#x27;, &#x27;0&#x27;, &#x27;5&#x27;, &#x27;3&#x27;, &#x27;1&#x27;, &#x27;0&#x27;, &#x27;2&#x27;, &#x27;0&#x27;, &#x27;2&#x27;, &#x27;1&#x27;, &#x27;1&#x27;, &#x27;0&#x27;, &#x27;0&#x27;, &#x27;4&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配所有数字序列</span></span><br><span class="line">numbers = re.findall(<span class="string">r&#x27;\d+&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(numbers)  <span class="comment"># [&#x27;3&#x27;, &#x27;9&#x27;, &#x27;2020&#x27;, &#x27;10&#x27;, &#x27;05&#x27;, &#x27;3&#x27;, &#x27;10&#x27;, &#x27;2021&#x27;, &#x27;10&#x27;, &#x27;04&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配日期格式</span></span><br><span class="line">dates = re.findall(<span class="string">r&#x27;\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125;&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(dates)  <span class="comment"># [&#x27;2020-10-05&#x27;, &#x27;2021-10-04&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配Python版本</span></span><br><span class="line">versions = re.findall(<span class="string">r&#x27;Python \d\.\d+&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(versions)  <span class="comment"># [&#x27;Python 3.9&#x27;, &#x27;Python 3.10&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="字符集和范围"><a href="#字符集和范围" class="headerlink" title="字符集和范围"></a>字符集和范围</h2><p>字符集允许你指定一组可能的字符。</p>
+<h3 id="基本字符集"><a href="#基本字符集" class="headerlink" title="基本字符集"></a>基本字符集</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;The quick brown fox jumps over the lazy dog.&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配元音字母</span></span><br><span class="line">vowels = re.findall(<span class="string">r&#x27;[aeiou]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(vowels)  <span class="comment"># [&#x27;e&#x27;, &#x27;u&#x27;, &#x27;i&#x27;, &#x27;o&#x27;, &#x27;o&#x27;, &#x27;u&#x27;, &#x27;o&#x27;, &#x27;e&#x27;, &#x27;e&#x27;, &#x27;a&#x27;, &#x27;o&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配辅音字母</span></span><br><span class="line">consonants = re.findall(<span class="string">r&#x27;[bcdfghjklmnpqrstvwxyz]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(consonants))  <span class="comment"># 21</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="范围"><a href="#范围" class="headerlink" title="范围"></a>范围</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配所有小写字母</span></span><br><span class="line">lowercase = re.findall(<span class="string">r&#x27;[a-z]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(lowercase))  <span class="comment"># 35</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配所有大写字母</span></span><br><span class="line">uppercase = re.findall(<span class="string">r&#x27;[A-Z]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(uppercase)  <span class="comment"># [&#x27;T&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配所有字母和数字</span></span><br><span class="line">alphanumeric = re.findall(<span class="string">r&#x27;[a-zA-Z0-9]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(alphanumeric))  <span class="comment"># 36</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="否定字符集"><a href="#否定字符集" class="headerlink" title="否定字符集"></a>否定字符集</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配非空白字符</span></span><br><span class="line">non_whitespace = re.findall(<span class="string">r&#x27;[^\s]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(non_whitespace))  <span class="comment"># 36</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配非字母字符</span></span><br><span class="line">non_alpha = re.findall(<span class="string">r&#x27;[^a-zA-Z]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(non_alpha)  <span class="comment"># [&#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27;.&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="分组和捕获"><a href="#分组和捕获" class="headerlink" title="分组和捕获"></a>分组和捕获</h2><p>分组允许你将正则表达式的一部分视为一个单元，可以用于捕获匹配的子字符串。</p>
+<h3 id="基本分组"><a href="#基本分组" class="headerlink" title="基本分组"></a>基本分组</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Python 3.9 was released on 2020-10-05&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 捕获版本号</span></span><br><span class="line"><span class="keyword">match</span> = re.search(<span class="string">r&#x27;Python (\d\.\d+)&#x27;</span>, text)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">match</span>:</span><br><span class="line">    version = <span class="keyword">match</span>.group(<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(version)  <span class="comment"># 3.9</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="命名分组"><a href="#命名分组" class="headerlink" title="命名分组"></a>命名分组</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用命名分组</span></span><br><span class="line"><span class="keyword">match</span> = re.search(<span class="string">r&#x27;Python (?P&lt;version&gt;\d\.\d+) was released on (?P&lt;date&gt;\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125;)&#x27;</span>, text)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">match</span>:</span><br><span class="line">    version = <span class="keyword">match</span>.group(<span class="string">&#x27;version&#x27;</span>)</span><br><span class="line">    date = <span class="keyword">match</span>.group(<span class="string">&#x27;date&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Version: <span class="subst">&#123;version&#125;</span>, Release date: <span class="subst">&#123;date&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="comment"># Version: 3.9, Release date: 2020-10-05</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="非捕获分组"><a href="#非捕获分组" class="headerlink" title="非捕获分组"></a>非捕获分组</h3><p>有时你需要分组但不需要捕获匹配的内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 非捕获分组</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;Python (?:\d\.\d+)&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;Python 3.9&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="反向引用"><a href="#反向引用" class="headerlink" title="反向引用"></a>反向引用</h3><p>你可以在模式中引用之前捕获的分组：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查找重复的单词</span></span><br><span class="line">text = <span class="string">&quot;The the quick brown fox&quot;</span></span><br><span class="line"><span class="keyword">match</span> = re.search(<span class="string">r&#x27;\b(\w+)\s+\1\b&#x27;</span>, text, re.IGNORECASE)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">match</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;重复的单词: <span class="subst">&#123;<span class="keyword">match</span>.group(<span class="number">1</span>)&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="comment"># 重复的单词: The</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="贪婪与非贪婪匹配"><a href="#贪婪与非贪婪匹配" class="headerlink" title="贪婪与非贪婪匹配"></a>贪婪与非贪婪匹配</h2><p>默认情况下，量词是贪婪的，它们会尽可能多地匹配字符。</p>
+<h3 id="贪婪匹配"><a href="#贪婪匹配" class="headerlink" title="贪婪匹配"></a>贪婪匹配</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;&lt;div&gt;Content 1&lt;/div&gt;&lt;div&gt;Content 2&lt;/div&gt;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 贪婪匹配</span></span><br><span class="line">greedy = re.search(<span class="string">r&#x27;&lt;div&gt;.*&lt;/div&gt;&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(greedy.group())  <span class="comment"># &lt;div&gt;Content 1&lt;/div&gt;&lt;div&gt;Content 2&lt;/div&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="非贪婪匹配"><a href="#非贪婪匹配" class="headerlink" title="非贪婪匹配"></a>非贪婪匹配</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 非贪婪匹配</span></span><br><span class="line">non_greedy = re.search(<span class="string">r&#x27;&lt;div&gt;.*?&lt;/div&gt;&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(non_greedy.group())  <span class="comment"># &lt;div&gt;Content 1&lt;/div&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="前瞻和后顾"><a href="#前瞻和后顾" class="headerlink" title="前瞻和后顾"></a>前瞻和后顾</h2><p>前瞻和后顾允许你基于前面或后面的内容来匹配文本，但不包括这些内容在匹配结果中。</p>
+<h3 id="正向前瞻"><a href="#正向前瞻" class="headerlink" title="正向前瞻"></a>正向前瞻</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Python is great, javascript is also great&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配后面跟着&quot;is great&quot;的单词</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;\w+(?= is great)&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;Python&#x27;, &#x27;javascript&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="负向前瞻"><a href="#负向前瞻" class="headerlink" title="负向前瞻"></a>负向前瞻</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配后面不跟着&quot;is great&quot;的单词</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;\w+(?! is great)&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;is&#x27;, &#x27;great&#x27;, &#x27;javascript&#x27;, &#x27;is&#x27;, &#x27;also&#x27;, &#x27;great&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="正向后顾和负向后顾"><a href="#正向后顾和负向后顾" class="headerlink" title="正向后顾和负向后顾"></a>正向后顾和负向后顾</h3><p>注意：Python的<code>re</code>模块不支持后顾断言，但从Python 3.6开始，可以使用有限形式的后顾。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配前面是&quot;Python&quot;的单词（Python 3.6+）</span></span><br><span class="line">text = <span class="string">&quot;Python is great, Python was created by Guido&quot;</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;(?&lt;=Python )\w+&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;is&#x27;, &#x27;was&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配前面不是&quot;Python&quot;的单词（Python 3.6+）</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;(?&lt;!Python )\w+&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;Python&#x27;, &#x27;great&#x27;, &#x27;Python&#x27;, &#x27;created&#x27;, &#x27;by&#x27;, &#x27;Guido&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="标志和选项"><a href="#标志和选项" class="headerlink" title="标志和选项"></a>标志和选项</h2><p>正则表达式可以使用各种标志来修改其行为。</p>
+<h3 id="常用标志"><a href="#常用标志" class="headerlink" title="常用标志"></a>常用标志</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;&quot;&quot;Python is case-sensitive.</span></span><br><span class="line"><span class="string">PYTHON is uppercase.</span></span><br><span class="line"><span class="string">python is lowercase.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略大小写</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;python&#x27;</span>, text, re.IGNORECASE)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;Python&#x27;, &#x27;PYTHON&#x27;, &#x27;python&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 多行模式</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;^python&#x27;</span>, text, re.MULTILINE)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;python&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 点号匹配所有字符，包括换行符</span></span><br><span class="line">text = <span class="string">&quot;Python spans\nmultiple lines&quot;</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;spans.multiple&#x27;</span>, text, re.DOTALL)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;spans\nmultiple&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 详细模式，允许注释和空白</span></span><br><span class="line">pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Python      # 匹配&quot;Python&quot;</span></span><br><span class="line"><span class="string">    \s+         # 一个或多个空白字符</span></span><br><span class="line"><span class="string">    \d\.\d+     # 版本号，如3.9</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span>, re.VERBOSE)</span><br><span class="line"><span class="keyword">match</span> = pattern.search(<span class="string">&quot;Python 3.9 is great&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="keyword">match</span>.group())  <span class="comment"># Python 3.9</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="编译正则表达式"><a href="#编译正则表达式" class="headerlink" title="编译正则表达式"></a>编译正则表达式</h2><p>如果你需要多次使用同一个正则表达式，可以预编译它以提高性能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译正则表达式</span></span><br><span class="line">email_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]&#123;2,&#125;\b&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用编译后的模式</span></span><br><span class="line">text = <span class="string">&quot;Contact us at info@example.com or support@company.org&quot;</span></span><br><span class="line">emails = email_pattern.findall(text)</span><br><span class="line"><span class="built_in">print</span>(emails)  <span class="comment"># [&#x27;info@example.com&#x27;, &#x27;support@company.org&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否匹配</span></span><br><span class="line">is_valid = <span class="built_in">bool</span>(email_pattern.<span class="keyword">match</span>(<span class="string">&quot;user@domain.com&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(is_valid)  <span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="实际应用案例"><a href="#实际应用案例" class="headerlink" title="实际应用案例"></a>实际应用案例</h2><h3 id="案例1：提取URL"><a href="#案例1：提取URL" class="headerlink" title="案例1：提取URL"></a>案例1：提取URL</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Visit our website at https://www.example.com.</span></span><br><span class="line"><span class="string">For support, go to http://help.example.com/support.</span></span><br><span class="line"><span class="string">Our API documentation is available at https://api.example.com/v2/docs.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取URL</span></span><br><span class="line">url_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;https?://[^\s]+&#x27;</span>)</span><br><span class="line">urls = url_pattern.findall(text)</span><br><span class="line"><span class="built_in">print</span>(urls)</span><br><span class="line"><span class="comment"># [&#x27;https://www.example.com.&#x27;, &#x27;http://help.example.com/support.&#x27;, &#x27;https://api.example.com/v2/docs.&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理URL（移除尾部的标点符号）</span></span><br><span class="line">clean_urls = [re.sub(<span class="string">r&#x27;[.,]$&#x27;</span>, <span class="string">&#x27;&#x27;</span>, url) <span class="keyword">for</span> url <span class="keyword">in</span> urls]</span><br><span class="line"><span class="built_in">print</span>(clean_urls)</span><br><span class="line"><span class="comment"># [&#x27;https://www.example.com&#x27;, &#x27;http://help.example.com/support&#x27;, &#x27;https://api.example.com/v2/docs&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="案例2：解析日志文件"><a href="#案例2：解析日志文件" class="headerlink" title="案例2：解析日志文件"></a>案例2：解析日志文件</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">log_lines = [</span><br><span class="line">    <span class="string">&quot;2023-05-15 10:23:45 INFO User login successful: user123&quot;</span>,</span><br><span class="line">    <span class="string">&quot;2023-05-15 10:24:12 ERROR Database connection failed&quot;</span>,</span><br><span class="line">    <span class="string">&quot;2023-05-15 10:25:30 WARNING Disk space low: 15% remaining&quot;</span>,</span><br><span class="line">    <span class="string">&quot;2023-05-15 10:26:45 INFO User logout: user123&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析日志</span></span><br><span class="line">log_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;(\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125; \d&#123;2&#125;:\d&#123;2&#125;:\d&#123;2&#125;) (\w+) (.+)&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> log_lines:</span><br><span class="line">    <span class="keyword">match</span> = log_pattern.<span class="keyword">match</span>(line)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">match</span>:</span><br><span class="line">        timestamp, level, message = <span class="keyword">match</span>.groups()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Time: <span class="subst">&#123;timestamp&#125;</span>, Level: <span class="subst">&#123;level&#125;</span>, Message: <span class="subst">&#123;message&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取所有错误消息</span></span><br><span class="line">error_messages = [</span><br><span class="line">    log_pattern.<span class="keyword">match</span>(line).group(<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> log_lines</span><br><span class="line">    <span class="keyword">if</span> log_pattern.<span class="keyword">match</span>(line) <span class="keyword">and</span> log_pattern.<span class="keyword">match</span>(line).group(<span class="number">2</span>) == <span class="string">&quot;ERROR&quot;</span></span><br><span class="line">]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Error messages:&quot;</span>, error_messages)</span><br><span class="line"><span class="comment"># Error messages: [&#x27;Database connection failed&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="案例3：验证和清理用户输入"><a href="#案例3：验证和清理用户输入" class="headerlink" title="案例3：验证和清理用户输入"></a>案例3：验证和清理用户输入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">validate_username</span>(<span class="params">username</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;验证用户名：只允许字母、数字和下划线，长度4-20个字符&quot;&quot;&quot;</span></span><br><span class="line">    pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;^[a-zA-Z0-9_]&#123;4,20&#125;$&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bool</span>(pattern.<span class="keyword">match</span>(username))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">validate_email</span>(<span class="params">email</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;验证电子邮件地址&quot;&quot;&quot;</span></span><br><span class="line">    pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]&#123;2,&#125;\b&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bool</span>(pattern.<span class="keyword">match</span>(email))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sanitize_html</span>(<span class="params">text</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;移除HTML标签&quot;&quot;&quot;</span></span><br><span class="line">    pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;[^&gt;]+&gt;&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> pattern.sub(<span class="string">&#x27;&#x27;</span>, text)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试验证函数</span></span><br><span class="line">usernames = [<span class="string">&quot;user123&quot;</span>, <span class="string">&quot;user@123&quot;</span>, <span class="string">&quot;ab&quot;</span>, <span class="string">&quot;validusername_123&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> username <span class="keyword">in</span> usernames:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;username&#125;</span>: <span class="subst">&#123;<span class="string">&#x27;Valid&#x27;</span> <span class="keyword">if</span> validate_username(username) <span class="keyword">else</span> <span class="string">&#x27;Invalid&#x27;</span>&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># user123: Valid</span></span><br><span class="line"><span class="comment"># user@123: Invalid</span></span><br><span class="line"><span class="comment"># ab: Invalid</span></span><br><span class="line"><span class="comment"># validusername_123: Valid</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试HTML清理</span></span><br><span class="line">html = <span class="string">&quot;&lt;p&gt;This is &lt;strong&gt;important&lt;/strong&gt; text.&lt;/p&gt;&quot;</span></span><br><span class="line">clean_text = sanitize_html(html)</span><br><span class="line"><span class="built_in">print</span>(clean_text)  <span class="comment"># This is important text.</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="案例4：提取文本中的结构化数据"><a href="#案例4：提取文本中的结构化数据" class="headerlink" title="案例4：提取文本中的结构化数据"></a>案例4：提取文本中的结构化数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取产品信息</span></span><br><span class="line">product_text = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Product: iPhone 13</span></span><br><span class="line"><span class="string">Price: $799.00</span></span><br><span class="line"><span class="string">SKU: APPL-IPH-13-128</span></span><br><span class="line"><span class="string">Available: Yes</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Product: Samsung Galaxy S21</span></span><br><span class="line"><span class="string">Price: $699.99</span></span><br><span class="line"><span class="string">SKU: SMSNG-GS21-256</span></span><br><span class="line"><span class="string">Available: No</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用命名分组提取产品信息</span></span><br><span class="line">product_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Product:\s+(?P&lt;name&gt;[\w\s]+)\n</span></span><br><span class="line"><span class="string">    Price:\s+\$(?P&lt;price&gt;[\d.]+)\n</span></span><br><span class="line"><span class="string">    SKU:\s+(?P&lt;sku&gt;[\w-]+)\n</span></span><br><span class="line"><span class="string">    Available:\s+(?P&lt;available&gt;Yes|No)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>, re.VERBOSE)</span><br><span class="line"></span><br><span class="line">products = []</span><br><span class="line"><span class="keyword">for</span> <span class="keyword">match</span> <span class="keyword">in</span> product_pattern.finditer(product_text):</span><br><span class="line">    product = <span class="keyword">match</span>.groupdict()</span><br><span class="line">    product[<span class="string">&#x27;price&#x27;</span>] = <span class="built_in">float</span>(product[<span class="string">&#x27;price&#x27;</span>])</span><br><span class="line">    product[<span class="string">&#x27;available&#x27;</span>] = product[<span class="string">&#x27;available&#x27;</span>] == <span class="string">&#x27;Yes&#x27;</span></span><br><span class="line">    products.append(product)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> product <span class="keyword">in</span> products:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Name: <span class="subst">&#123;product[<span class="string">&#x27;name&#x27;</span>].strip()&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Price: $<span class="subst">&#123;product[<span class="string">&#x27;price&#x27;</span>]&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;SKU: <span class="subst">&#123;product[<span class="string">&#x27;sku&#x27;</span>]&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Available: <span class="subst">&#123;<span class="string">&#x27;Yes&#x27;</span> <span class="keyword">if</span> product[<span class="string">&#x27;available&#x27;</span>] <span class="keyword">else</span> <span class="string">&#x27;No&#x27;</span>&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>()</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能考虑"><a href="#性能考虑" class="headerlink" title="性能考虑"></a>性能考虑</h2><p>正则表达式功能强大，但使用不当可能导致性能问题。</p>
+<h3 id="避免灾难性回溯"><a href="#避免灾难性回溯" class="headerlink" title="避免灾难性回溯"></a>避免灾难性回溯</h3><p>某些正则表达式模式可能导致灾难性回溯，特别是在处理长文本时：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可能导致灾难性回溯的模式</span></span><br><span class="line">bad_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;(a+)+b&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个不会匹配的长字符串</span></span><br><span class="line">text = <span class="string">&#x27;a&#x27;</span> * <span class="number">30</span></span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 设置超时</span></span><br><span class="line">    result = bad_pattern.<span class="keyword">match</span>(text)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;匹配结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;发生异常: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;执行时间: <span class="subst">&#123;time.time() - start_time:<span class="number">.6</span>f&#125;</span>秒&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="优化技巧"><a href="#优化技巧" class="headerlink" title="优化技巧"></a>优化技巧</h3><ol>
+<li><strong>使用非捕获分组</strong>：当不需要引用分组内容时，使用<code>(?:...)</code>代替<code>(...)</code>。</li>
+<li><strong>避免过度使用贪婪量词</strong>：特别是在处理大文本时。</li>
+<li><strong>尽可能具体</strong>：使用更具体的模式可以减少回溯。</li>
+<li><strong>预编译正则表达式</strong>：重复使用同一模式时，预编译可以提高性能。</li>
+<li><strong>考虑替代方案</strong>：对于简单的字符串操作，内置的字符串方法可能更高效。</li>
+</ol>
+<h2 id="调试正则表达式"><a href="#调试正则表达式" class="headerlink" title="调试正则表达式"></a>调试正则表达式</h2><p>调试复杂的正则表达式可能很困难。以下是一些有用的技巧：</p>
+<h3 id="使用re-DEBUG标志"><a href="#使用re-DEBUG标志" class="headerlink" title="使用re.DEBUG标志"></a>使用re.DEBUG标志</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]&#123;2,&#125;\b&#x27;</span>, re.DEBUG)</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用在线工具"><a href="#使用在线工具" class="headerlink" title="使用在线工具"></a>使用在线工具</h3><p>有许多在线工具可以帮助可视化和测试正则表达式，如regex101.com。</p>
+<h3 id="分步构建"><a href="#分步构建" class="headerlink" title="分步构建"></a>分步构建</h3><p>对于复杂的正则表达式，从简单部分开始，逐步构建和测试：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤1：匹配用户名部分</span></span><br><span class="line">username_pattern = <span class="string">r&#x27;[A-Za-z0-9._%+-]+&#x27;</span></span><br><span class="line">test_string = <span class="string">&quot;user.name_123&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.<span class="keyword">match</span>(username_pattern, test_string).group())  <span class="comment"># user.name_123</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤2：添加@符号</span></span><br><span class="line">username_domain_pattern = username_pattern + <span class="string">r&#x27;@&#x27;</span></span><br><span class="line">test_string = <span class="string">&quot;user.name_123@&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.<span class="keyword">match</span>(username_domain_pattern, test_string).group())  <span class="comment"># user.name_123@</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤3：添加域名部分</span></span><br><span class="line">email_pattern = username_domain_pattern + <span class="string">r&#x27;[A-Za-z0-9.-]+&#x27;</span></span><br><span class="line">test_string = <span class="string">&quot;user.name_123@example&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.<span class="keyword">match</span>(email_pattern, test_string).group())  <span class="comment"># user.name_123@example</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤4：添加顶级域名</span></span><br><span class="line">full_email_pattern = email_pattern + <span class="string">r&#x27;\.[A-Z|a-z]&#123;2,&#125;&#x27;</span></span><br><span class="line">test_string = <span class="string">&quot;user.name_123@example.com&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.<span class="keyword">match</span>(full_email_pattern, test_string).group())  <span class="comment"># user.name_123@example.com</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>正则表达式是处理文本的强大工具，掌握它可以大大提高你的文本处理效率。Python的<code>re</code>模块提供了全面的正则表达式支持，从基本的模式匹配到复杂的文本提取和验证。</p>
+<p>虽然正则表达式有时看起来晦涩难懂，但通过实践和理解基本概念，你可以逐渐掌握这一强大工具。记住，编写清晰、高效的正则表达式是一种平衡艺术，需要在表达能力、可读性和性能之间找到平衡点。</p>
+<h2 id="你有什么正则表达式的问题或使用技巧想分享吗？欢迎在评论中讨论！title-Python正则表达式精通指南：从基础到高级应用date-2023-05-20-14-30-00categories-pythontags-正则表达式-文本处理-模式匹配-re模块-字符串"><a href="#你有什么正则表达式的问题或使用技巧想分享吗？欢迎在评论中讨论！title-Python正则表达式精通指南：从基础到高级应用date-2023-05-20-14-30-00categories-pythontags-正则表达式-文本处理-模式匹配-re模块-字符串" class="headerlink" title="你有什么正则表达式的问题或使用技巧想分享吗？欢迎在评论中讨论！title: Python正则表达式精通指南：从基础到高级应用date: 2023-05-20 14:30:00categories: pythontags: [正则表达式, 文本处理, 模式匹配, re模块, 字符串]"></a>你有什么正则表达式的问题或使用技巧想分享吗？欢迎在评论中讨论！title: Python正则表达式精通指南：从基础到高级应用<br>date: 2023-05-20 14:30:00<br>categories: python<br>tags: [正则表达式, 文本处理, 模式匹配, re模块, 字符串]</h2><h1 id="Python正则表达式精通指南：从基础到高级应用-1"><a href="#Python正则表达式精通指南：从基础到高级应用-1" class="headerlink" title="Python正则表达式精通指南：从基础到高级应用"></a>Python正则表达式精通指南：从基础到高级应用</h1><p>正则表达式是处理文本的强大工具，掌握它可以让你的文本处理工作事半功倍。Python通过<code>re</code>模块提供了全面的正则表达式支持。在这篇文章中，我将带你从基础到高级，全面掌握Python中的正则表达式。</p>
+<h2 id="正则表达式基础-1"><a href="#正则表达式基础-1" class="headerlink" title="正则表达式基础"></a>正则表达式基础</h2><h3 id="什么是正则表达式？-1"><a href="#什么是正则表达式？-1" class="headerlink" title="什么是正则表达式？"></a>什么是正则表达式？</h3><p>正则表达式（Regular Expression，简称regex）是一种用于描述字符串模式的特殊语法。它可以用来搜索、替换和验证文本。</p>
+<h3 id="Python中的re模块-1"><a href="#Python中的re模块-1" class="headerlink" title="Python中的re模块"></a>Python中的re模块</h3><p>Python的<code>re</code>模块提供了使用正则表达式的接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 搜索模式</span></span><br><span class="line">result = re.search(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;string to search&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配开头</span></span><br><span class="line">result = re.<span class="keyword">match</span>(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;string to match&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找所有匹配</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;string to find all matches&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换</span></span><br><span class="line">new_string = re.sub(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;replacement&#x27;</span>, <span class="string">&#x27;string to modify&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分割</span></span><br><span class="line">parts = re.split(<span class="string">r&#x27;pattern&#x27;</span>, <span class="string">&#x27;string to split&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="基本模式匹配-1"><a href="#基本模式匹配-1" class="headerlink" title="基本模式匹配"></a>基本模式匹配</h3><p>最简单的正则表达式就是直接匹配字符：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 搜索单词&quot;Python&quot;</span></span><br><span class="line">result = re.search(<span class="string">r&#x27;Python&#x27;</span>, <span class="string">&#x27;I love Python programming&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(result)  <span class="comment"># &lt;re.Match object; span=(7, 13), match=&#x27;Python&#x27;&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取匹配的字符串</span></span><br><span class="line"><span class="built_in">print</span>(result.group())  <span class="comment"># Python</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取匹配的位置</span></span><br><span class="line"><span class="built_in">print</span>(result.start(), result.end())  <span class="comment"># 7 13</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="元字符和特殊序列-1"><a href="#元字符和特殊序列-1" class="headerlink" title="元字符和特殊序列"></a>元字符和特殊序列</h2><p>正则表达式的强大之处在于它的元字符和特殊序列。</p>
+<h3 id="常用元字符-1"><a href="#常用元字符-1" class="headerlink" title="常用元字符"></a>常用元字符</h3><table>
+<thead>
+<tr>
+<th>元字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.</code></td>
+<td>匹配除换行符外的任何字符</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>匹配字符串的开始</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>匹配字符串的结束</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>匹配前面的模式零次或多次</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>匹配前面的模式一次或多次</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>匹配前面的模式零次或一次</td>
+</tr>
+<tr>
+<td><code>&#123;n&#125;</code></td>
+<td>精确匹配前面的模式n次</td>
+</tr>
+<tr>
+<td><code>&#123;n,&#125;</code></td>
+<td>匹配前面的模式至少n次</td>
+</tr>
+<tr>
+<td><code>&#123;n,m&#125;</code></td>
+<td>匹配前面的模式n到m次</td>
+</tr>
+<tr>
+<td><code>\</code></td>
+<td>转义字符</td>
+</tr>
+<tr>
+<td><code>[]</code></td>
+<td>字符集，匹配括号内的任一字符</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>或运算符，匹配<code>|</code>前或后的模式</td>
+</tr>
+<tr>
+<td><code>()</code></td>
+<td>分组</td>
+</tr>
+</tbody></table>
+<h3 id="特殊序列-1"><a href="#特殊序列-1" class="headerlink" title="特殊序列"></a>特殊序列</h3><table>
+<thead>
+<tr>
+<th>特殊序列</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>\d</code></td>
+<td>匹配任何十进制数字，相当于<code>[0-9]</code></td>
+</tr>
+<tr>
+<td><code>\D</code></td>
+<td>匹配任何非数字字符，相当于<code>[^0-9]</code></td>
+</tr>
+<tr>
+<td><code>\s</code></td>
+<td>匹配任何空白字符，相当于<code>[ \t\n\r\f\v]</code></td>
+</tr>
+<tr>
+<td><code>\S</code></td>
+<td>匹配任何非空白字符，相当于<code>[^ \t\n\r\f\v]</code></td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>匹配任何字母数字字符，相当于<code>[a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td>匹配任何非字母数字字符，相当于<code>[^a-zA-Z0-9_]</code></td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>匹配单词边界</td>
+</tr>
+<tr>
+<td><code>\B</code></td>
+<td>匹配非单词边界</td>
+</tr>
+</tbody></table>
+<h3 id="实例演示-1"><a href="#实例演示-1" class="headerlink" title="实例演示"></a>实例演示</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Python 3.9 was released on 2020-10-05, Python 3.10 on 2021-10-04.&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配所有数字</span></span><br><span class="line">digits = re.findall(<span class="string">r&#x27;\d&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(digits)  <span class="comment"># [&#x27;3&#x27;, &#x27;9&#x27;, &#x27;2&#x27;, &#x27;0&#x27;, &#x27;2&#x27;, &#x27;0&#x27;, &#x27;1&#x27;, &#x27;0&#x27;, &#x27;0&#x27;, &#x27;5&#x27;, &#x27;3&#x27;, &#x27;1&#x27;, &#x27;0&#x27;, &#x27;2&#x27;, &#x27;0&#x27;, &#x27;2&#x27;, &#x27;1&#x27;, &#x27;1&#x27;, &#x27;0&#x27;, &#x27;0&#x27;, &#x27;4&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配所有数字序列</span></span><br><span class="line">numbers = re.findall(<span class="string">r&#x27;\d+&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(numbers)  <span class="comment"># [&#x27;3&#x27;, &#x27;9&#x27;, &#x27;2020&#x27;, &#x27;10&#x27;, &#x27;05&#x27;, &#x27;3&#x27;, &#x27;10&#x27;, &#x27;2021&#x27;, &#x27;10&#x27;, &#x27;04&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配日期格式</span></span><br><span class="line">dates = re.findall(<span class="string">r&#x27;\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125;&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(dates)  <span class="comment"># [&#x27;2020-10-05&#x27;, &#x27;2021-10-04&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配Python版本</span></span><br><span class="line">versions = re.findall(<span class="string">r&#x27;Python \d\.\d+&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(versions)  <span class="comment"># [&#x27;Python 3.9&#x27;, &#x27;Python 3.10&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="字符集和范围-1"><a href="#字符集和范围-1" class="headerlink" title="字符集和范围"></a>字符集和范围</h2><p>字符集允许你指定一组可能的字符。</p>
+<h3 id="基本字符集-1"><a href="#基本字符集-1" class="headerlink" title="基本字符集"></a>基本字符集</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;The quick brown fox jumps over the lazy dog.&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配元音字母</span></span><br><span class="line">vowels = re.findall(<span class="string">r&#x27;[aeiou]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(vowels)  <span class="comment"># [&#x27;e&#x27;, &#x27;u&#x27;, &#x27;i&#x27;, &#x27;o&#x27;, &#x27;o&#x27;, &#x27;u&#x27;, &#x27;o&#x27;, &#x27;e&#x27;, &#x27;e&#x27;, &#x27;a&#x27;, &#x27;o&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配辅音字母</span></span><br><span class="line">consonants = re.findall(<span class="string">r&#x27;[bcdfghjklmnpqrstvwxyz]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(consonants))  <span class="comment"># 21</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="范围-1"><a href="#范围-1" class="headerlink" title="范围"></a>范围</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配所有小写字母</span></span><br><span class="line">lowercase = re.findall(<span class="string">r&#x27;[a-z]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(lowercase))  <span class="comment"># 35</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配所有大写字母</span></span><br><span class="line">uppercase = re.findall(<span class="string">r&#x27;[A-Z]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(uppercase)  <span class="comment"># [&#x27;T&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配所有字母和数字</span></span><br><span class="line">alphanumeric = re.findall(<span class="string">r&#x27;[a-zA-Z0-9]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(alphanumeric))  <span class="comment"># 36</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="否定字符集-1"><a href="#否定字符集-1" class="headerlink" title="否定字符集"></a>否定字符集</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配非空白字符</span></span><br><span class="line">non_whitespace = re.findall(<span class="string">r&#x27;[^\s]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(non_whitespace))  <span class="comment"># 36</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配非字母字符</span></span><br><span class="line">non_alpha = re.findall(<span class="string">r&#x27;[^a-zA-Z]&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(non_alpha)  <span class="comment"># [&#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27;.&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="分组和捕获-1"><a href="#分组和捕获-1" class="headerlink" title="分组和捕获"></a>分组和捕获</h2><p>分组允许你将正则表达式的一部分视为一个单元，可以用于捕获匹配的子字符串。</p>
+<h3 id="基本分组-1"><a href="#基本分组-1" class="headerlink" title="基本分组"></a>基本分组</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Python 3.9 was released on 2020-10-05&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 捕获版本号</span></span><br><span class="line"><span class="keyword">match</span> = re.search(<span class="string">r&#x27;Python (\d\.\d+)&#x27;</span>, text)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">match</span>:</span><br><span class="line">    version = <span class="keyword">match</span>.group(<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">print</span>(version)  <span class="comment"># 3.9</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="命名分组-1"><a href="#命名分组-1" class="headerlink" title="命名分组"></a>命名分组</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用命名分组</span></span><br><span class="line"><span class="keyword">match</span> = re.search(<span class="string">r&#x27;Python (?P&lt;version&gt;\d\.\d+) was released on (?P&lt;date&gt;\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125;)&#x27;</span>, text)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">match</span>:</span><br><span class="line">    version = <span class="keyword">match</span>.group(<span class="string">&#x27;version&#x27;</span>)</span><br><span class="line">    date = <span class="keyword">match</span>.group(<span class="string">&#x27;date&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Version: <span class="subst">&#123;version&#125;</span>, Release date: <span class="subst">&#123;date&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="comment"># Version: 3.9, Release date: 2020-10-05</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="非捕获分组-1"><a href="#非捕获分组-1" class="headerlink" title="非捕获分组"></a>非捕获分组</h3><p>有时你需要分组但不需要捕获匹配的内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 非捕获分组</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;Python (?:\d\.\d+)&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;Python 3.9&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="反向引用-1"><a href="#反向引用-1" class="headerlink" title="反向引用"></a>反向引用</h3><p>你可以在模式中引用之前捕获的分组：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查找重复的单词</span></span><br><span class="line">text = <span class="string">&quot;The the quick brown fox&quot;</span></span><br><span class="line"><span class="keyword">match</span> = re.search(<span class="string">r&#x27;\b(\w+)\s+\1\b&#x27;</span>, text, re.IGNORECASE)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">match</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;重复的单词: <span class="subst">&#123;<span class="keyword">match</span>.group(<span class="number">1</span>)&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="comment"># 重复的单词: The</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="贪婪与非贪婪匹配-1"><a href="#贪婪与非贪婪匹配-1" class="headerlink" title="贪婪与非贪婪匹配"></a>贪婪与非贪婪匹配</h2><p>默认情况下，量词是贪婪的，它们会尽可能多地匹配字符。</p>
+<h3 id="贪婪匹配-1"><a href="#贪婪匹配-1" class="headerlink" title="贪婪匹配"></a>贪婪匹配</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;&lt;div&gt;Content 1&lt;/div&gt;&lt;div&gt;Content 2&lt;/div&gt;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 贪婪匹配</span></span><br><span class="line">greedy = re.search(<span class="string">r&#x27;&lt;div&gt;.*&lt;/div&gt;&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(greedy.group())  <span class="comment"># &lt;div&gt;Content 1&lt;/div&gt;&lt;div&gt;Content 2&lt;/div&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="非贪婪匹配-1"><a href="#非贪婪匹配-1" class="headerlink" title="非贪婪匹配"></a>非贪婪匹配</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 非贪婪匹配</span></span><br><span class="line">non_greedy = re.search(<span class="string">r&#x27;&lt;div&gt;.*?&lt;/div&gt;&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(non_greedy.group())  <span class="comment"># &lt;div&gt;Content 1&lt;/div&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="前瞻和后顾-1"><a href="#前瞻和后顾-1" class="headerlink" title="前瞻和后顾"></a>前瞻和后顾</h2><p>前瞻和后顾允许你基于前面或后面的内容来匹配文本，但不包括这些内容在匹配结果中。</p>
+<h3 id="正向前瞻-1"><a href="#正向前瞻-1" class="headerlink" title="正向前瞻"></a>正向前瞻</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;Python is great, javascript is also great&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配后面跟着&quot;is great&quot;的单词</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;\w+(?= is great)&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;Python&#x27;, &#x27;javascript&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="负向前瞻-1"><a href="#负向前瞻-1" class="headerlink" title="负向前瞻"></a>负向前瞻</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配后面不跟着&quot;is great&quot;的单词</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;\w+(?! is great)&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;is&#x27;, &#x27;great&#x27;, &#x27;javascript&#x27;, &#x27;is&#x27;, &#x27;also&#x27;, &#x27;great&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="正向后顾和负向后顾-1"><a href="#正向后顾和负向后顾-1" class="headerlink" title="正向后顾和负向后顾"></a>正向后顾和负向后顾</h3><p>注意：Python的<code>re</code>模块不支持后顾断言，但从Python 3.6开始，可以使用有限形式的后顾。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 匹配前面是&quot;Python&quot;的单词（Python 3.6+）</span></span><br><span class="line">text = <span class="string">&quot;Python is great, Python was created by Guido&quot;</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;(?&lt;=Python )\w+&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;is&#x27;, &#x27;was&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配前面不是&quot;Python&quot;的单词（Python 3.6+）</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;(?&lt;!Python )\w+&#x27;</span>, text)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;Python&#x27;, &#x27;great&#x27;, &#x27;Python&#x27;, &#x27;created&#x27;, &#x27;by&#x27;, &#x27;Guido&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="标志和选项-1"><a href="#标志和选项-1" class="headerlink" title="标志和选项"></a>标志和选项</h2><p>正则表达式可以使用各种标志来修改其行为。</p>
+<h3 id="常用标志-1"><a href="#常用标志-1" class="headerlink" title="常用标志"></a>常用标志</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;&quot;&quot;Python is case-sensitive.</span></span><br><span class="line"><span class="string">PYTHON is uppercase.</span></span><br><span class="line"><span class="string">python is lowercase.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略大小写</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;python&#x27;</span>, text, re.IGNORECASE)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;Python&#x27;, &#x27;PYTHON&#x27;, &#x27;python&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 多行模式</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;^python&#x27;</span>, text, re.MULTILINE)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;python&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 点号匹配所有字符，包括换行符</span></span><br><span class="line">text = <span class="string">&quot;Python spans\nmultiple lines&quot;</span></span><br><span class="line">results = re.findall(<span class="string">r&#x27;spans.multiple&#x27;</span>, text, re.DOTALL)</span><br><span class="line"><span class="built_in">print</span>(results)  <span class="comment"># [&#x27;spans\nmultiple&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 详细模式，允许注释和空白</span></span><br><span class="line">pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Python      # 匹配&quot;Python&quot;</span></span><br><span class="line"><span class="string">    \s+         # 一个或多个空白字符</span></span><br><span class="line"><span class="string">    \d\.\d+     # 版本号，如3.9</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span>, re.VERBOSE)</span><br><span class="line"><span class="keyword">match</span> = pattern.search(<span class="string">&quot;Python 3.9 is great&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="keyword">match</span>.group())  <span class="comment"># Python 3.9</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="编译正则表达式-1"><a href="#编译正则表达式-1" class="headerlink" title="编译正则表达式"></a>编译正则表达式</h2><p>如果你需要多次使用同一个正则表达式，可以预编译它以提高性能。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译正则表达式</span></span><br><span class="line">email_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]&#123;2,&#125;\b&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用编译后的模式</span></span><br><span class="line">text = <span class="string">&quot;Contact us at info@example.com or support@company.org&quot;</span></span><br><span class="line">emails = email_pattern.findall(text)</span><br><span class="line"><span class="built_in">print</span>(emails)  <span class="comment"># [&#x27;info@example.com&#x27;, &#x27;support@company.org&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否匹配</span></span><br><span class="line">is_valid = <span class="built_in">bool</span>(email_pattern.<span class="keyword">match</span>(<span class="string">&quot;user@domain.com&quot;</span>))</span><br><span class="line"><span class="built_in">print</span>(is_valid)  <span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="实际应用案例-1"><a href="#实际应用案例-1" class="headerlink" title="实际应用案例"></a>实际应用案例</h2><h3 id="案例1：提取URL-1"><a href="#案例1：提取URL-1" class="headerlink" title="案例1：提取URL"></a>案例1：提取URL</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">text = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Visit our website at https://www.example.com.</span></span><br><span class="line"><span class="string">For support, go to http://help.example.com/support.</span></span><br><span class="line"><span class="string">Our API documentation is available at https://api.example.com/v2/docs.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取URL</span></span><br><span class="line">url_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;https?://[^\s]+&#x27;</span>)</span><br><span class="line">urls = url_pattern.findall(text)</span><br><span class="line"><span class="built_in">print</span>(urls)</span><br><span class="line"><span class="comment"># [&#x27;https://www.example.com.&#x27;, &#x27;http://help.example.com/support.&#x27;, &#x27;https://api.example.com/v2/docs.&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理URL（移除尾部的标点符号）</span></span><br><span class="line">clean_urls = [re.sub(<span class="string">r&#x27;[.,]$&#x27;</span>, <span class="string">&#x27;&#x27;</span>, url) <span class="keyword">for</span> url <span class="keyword">in</span> urls]</span><br><span class="line"><span class="built_in">print</span>(clean_urls)</span><br><span class="line"><span class="comment"># [&#x27;https://www.example.com&#x27;, &#x27;http://help.example.com/support&#x27;, &#x27;https://api.example.com/v2/docs&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="案例2：解析日志文件-1"><a href="#案例2：解析日志文件-1" class="headerlink" title="案例2：解析日志文件"></a>案例2：解析日志文件</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">log_lines = [</span><br><span class="line">    <span class="string">&quot;2023-05-15 10:23:45 INFO User login successful: user123&quot;</span>,</span><br><span class="line">    <span class="string">&quot;2023-05-15 10:24:12 ERROR Database connection failed&quot;</span>,</span><br><span class="line">    <span class="string">&quot;2023-05-15 10:25:30 WARNING Disk space low: 15% remaining&quot;</span>,</span><br><span class="line">    <span class="string">&quot;2023-05-15 10:26:45 INFO User logout: user123&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析日志</span></span><br><span class="line">log_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;(\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125; \d&#123;2&#125;:\d&#123;2&#125;:\d&#123;2&#125;) (\w+) (.+)&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> log_lines:</span><br><span class="line">    <span class="keyword">match</span> = log_pattern.<span class="keyword">match</span>(line)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">match</span>:</span><br><span class="line">        timestamp, level, message = <span class="keyword">match</span>.groups()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Time: <span class="subst">&#123;timestamp&#125;</span>, Level: <span class="subst">&#123;level&#125;</span>, Message: <span class="subst">&#123;message&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取所有错误消息</span></span><br><span class="line">error_messages = [</span><br><span class="line">    log_pattern.<span class="keyword">match</span>(line).group(<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> log_lines</span><br><span class="line">    <span class="keyword">if</span> log_pattern.<span class="keyword">match</span>(line) <span class="keyword">and</span> log_pattern.<span class="keyword">match</span>(line).group(<span class="number">2</span>) == <span class="string">&quot;ERROR&quot;</span></span><br><span class="line">]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Error messages:&quot;</span>, error_messages)</span><br><span class="line"><span class="comment"># Error messages: [&#x27;Database connection failed&#x27;]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="案例3：验证和清理用户输入-1"><a href="#案例3：验证和清理用户输入-1" class="headerlink" title="案例3：验证和清理用户输入"></a>案例3：验证和清理用户输入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">validate_username</span>(<span class="params">username</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;验证用户名：只允许字母、数字和下划线，长度4-20个字符&quot;&quot;&quot;</span></span><br><span class="line">    pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;^[a-zA-Z0-9_]&#123;4,20&#125;$&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bool</span>(pattern.<span class="keyword">match</span>(username))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">validate_email</span>(<span class="params">email</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;验证电子邮件地址&quot;&quot;&quot;</span></span><br><span class="line">    pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]&#123;2,&#125;\b&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bool</span>(pattern.<span class="keyword">match</span>(email))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sanitize_html</span>(<span class="params">text</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;移除HTML标签&quot;&quot;&quot;</span></span><br><span class="line">    pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&lt;[^&gt;]+&gt;&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> pattern.sub(<span class="string">&#x27;&#x27;</span>, text)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试验证函数</span></span><br><span class="line">usernames = [<span class="string">&quot;user123&quot;</span>, <span class="string">&quot;user@123&quot;</span>, <span class="string">&quot;ab&quot;</span>, <span class="string">&quot;validusername_123&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> username <span class="keyword">in</span> usernames:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;username&#125;</span>: <span class="subst">&#123;<span class="string">&#x27;Valid&#x27;</span> <span class="keyword">if</span> validate_username(username) <span class="keyword">else</span> <span class="string">&#x27;Invalid&#x27;</span>&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># user123: Valid</span></span><br><span class="line"><span class="comment"># user@123: Invalid</span></span><br><span class="line"><span class="comment"># ab: Invalid</span></span><br><span class="line"><span class="comment"># validusername_123: Valid</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试HTML清理</span></span><br><span class="line">html = <span class="string">&quot;&lt;p&gt;This is &lt;strong&gt;important&lt;/strong&gt; text.&lt;/p&gt;&quot;</span></span><br><span class="line">clean_text = sanitize_html(html)</span><br><span class="line"><span class="built_in">print</span>(clean_text)  <span class="comment"># This is important text.</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="案例4：提取文本中的结构化数据-1"><a href="#案例4：提取文本中的结构化数据-1" class="headerlink" title="案例4：提取文本中的结构化数据"></a>案例4：提取文本中的结构化数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取产品信息</span></span><br><span class="line">product_text = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Product: iPhone 13</span></span><br><span class="line"><span class="string">Price: $799.00</span></span><br><span class="line"><span class="string">SKU: APPL-IPH-13-128</span></span><br><span class="line"><span class="string">Available: Yes</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Product: Samsung Galaxy S21</span></span><br><span class="line"><span class="string">Price: $699.99</span></span><br><span class="line"><span class="string">SKU: SMSNG-GS21-256</span></span><br><span class="line"><span class="string">Available: No</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用命名分组提取产品信息</span></span><br><span class="line">product_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Product:\s+(?P&lt;name&gt;[\w\s]+)\n</span></span><br><span class="line"><span class="string">    Price:\s+\$(?P&lt;price&gt;[\d.]+)\n</span></span><br><span class="line"><span class="string">    SKU:\s+(?P&lt;sku&gt;[\w-]+)\n</span></span><br><span class="line"><span class="string">    Available:\s+(?P&lt;available&gt;Yes|No)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>, re.VERBOSE)</span><br><span class="line"></span><br><span class="line">products = []</span><br><span class="line"><span class="keyword">for</span> <span class="keyword">match</span> <span class="keyword">in</span> product_pattern.finditer(product_text):</span><br><span class="line">    product = <span class="keyword">match</span>.groupdict()</span><br><span class="line">    product[<span class="string">&#x27;price&#x27;</span>] = <span class="built_in">float</span>(product[<span class="string">&#x27;price&#x27;</span>])</span><br><span class="line">    product[<span class="string">&#x27;available&#x27;</span>] = product[<span class="string">&#x27;available&#x27;</span>] == <span class="string">&#x27;Yes&#x27;</span></span><br><span class="line">    products.append(product)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> product <span class="keyword">in</span> products:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Name: <span class="subst">&#123;product[<span class="string">&#x27;name&#x27;</span>].strip()&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Price: $<span class="subst">&#123;product[<span class="string">&#x27;price&#x27;</span>]&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;SKU: <span class="subst">&#123;product[<span class="string">&#x27;sku&#x27;</span>]&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Available: <span class="subst">&#123;<span class="string">&#x27;Yes&#x27;</span> <span class="keyword">if</span> product[<span class="string">&#x27;available&#x27;</span>] <span class="keyword">else</span> <span class="string">&#x27;No&#x27;</span>&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>()</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能考虑-1"><a href="#性能考虑-1" class="headerlink" title="性能考虑"></a>性能考虑</h2><p>正则表达式功能强大，但使用不当可能导致性能问题。</p>
+<h3 id="避免灾难性回溯-1"><a href="#避免灾难性回溯-1" class="headerlink" title="避免灾难性回溯"></a>避免灾难性回溯</h3><p>某些正则表达式模式可能导致灾难性回溯，特别是在处理长文本时：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可能导致灾难性回溯的模式</span></span><br><span class="line">bad_pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;(a+)+b&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个不会匹配的长字符串</span></span><br><span class="line">text = <span class="string">&#x27;a&#x27;</span> * <span class="number">30</span></span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># 设置超时</span></span><br><span class="line">    result = bad_pattern.<span class="keyword">match</span>(text)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;匹配结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;发生异常: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;执行时间: <span class="subst">&#123;time.time() - start_time:<span class="number">.6</span>f&#125;</span>秒&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="优化技巧-1"><a href="#优化技巧-1" class="headerlink" title="优化技巧"></a>优化技巧</h3><ol>
+<li><strong>使用非捕获分组</strong>：当不需要引用分组内容时，使用<code>(?:...)</code>代替<code>(...)</code>。</li>
+<li><strong>避免过度使用贪婪量词</strong>：特别是在处理大文本时。</li>
+<li><strong>尽可能具体</strong>：使用更具体的模式可以减少回溯。</li>
+<li><strong>预编译正则表达式</strong>：重复使用同一模式时，预编译可以提高性能。</li>
+<li><strong>考虑替代方案</strong>：对于简单的字符串操作，内置的字符串方法可能更高效。</li>
+</ol>
+<h2 id="调试正则表达式-1"><a href="#调试正则表达式-1" class="headerlink" title="调试正则表达式"></a>调试正则表达式</h2><p>调试复杂的正则表达式可能很困难。以下是一些有用的技巧：</p>
+<h3 id="使用re-DEBUG标志-1"><a href="#使用re-DEBUG标志-1" class="headerlink" title="使用re.DEBUG标志"></a>使用re.DEBUG标志</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">pattern = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]&#123;2,&#125;\b&#x27;</span>, re.DEBUG)</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用在线工具-1"><a href="#使用在线工具-1" class="headerlink" title="使用在线工具"></a>使用在线工具</h3><p>有许多在线工具可以帮助可视化和测试正则表达式，如regex101.com。</p>
+<h3 id="分步构建-1"><a href="#分步构建-1" class="headerlink" title="分步构建"></a>分步构建</h3><p>对于复杂的正则表达式，从简单部分开始，逐步构建和测试：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤1：匹配用户名部分</span></span><br><span class="line">username_pattern = <span class="string">r&#x27;[A-Za-z0-9._%+-]+&#x27;</span></span><br><span class="line">test_string = <span class="string">&quot;user.name_123&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.<span class="keyword">match</span>(username_pattern, test_string).group())  <span class="comment"># user.name_123</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤2：添加@符号</span></span><br><span class="line">username_domain_pattern = username_pattern + <span class="string">r&#x27;@&#x27;</span></span><br><span class="line">test_string = <span class="string">&quot;user.name_123@&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.<span class="keyword">match</span>(username_domain_pattern, test_string).group())  <span class="comment"># user.name_123@</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤3：添加域名部分</span></span><br><span class="line">email_pattern = username_domain_pattern + <span class="string">r&#x27;[A-Za-z0-9.-]+&#x27;</span></span><br><span class="line">test_string = <span class="string">&quot;user.name_123@example&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.<span class="keyword">match</span>(email_pattern, test_string).group())  <span class="comment"># user.name_123@example</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤4：添加顶级域名</span></span><br><span class="line">full_email_pattern = email_pattern + <span class="string">r&#x27;\.[A-Z|a-z]&#123;2,&#125;&#x27;</span></span><br><span class="line">test_string = <span class="string">&quot;user.name_123@example.com&quot;</span></span><br><span class="line"><span class="built_in">print</span>(re.<span class="keyword">match</span>(full_email_pattern, test_string).group())  <span class="comment"># user.name_123@example.com</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="结论-1"><a href="#结论-1" class="headerlink" title="结论"></a>结论</h2><p>正则表达式是处理文本的强大工具，掌握它可以大大提高你的文本处理效率。Python的<code>re</code>模块提供了全面的正则表达式支持，从基本的模式匹配到复杂的文本提取和验证。</p>
+<p>虽然正则表达式有时看起来晦涩难懂，但通过实践和理解基本概念，你可以逐渐掌握这一强大工具。记住，编写清晰、高效的正则表达式是一种平衡艺术，需要在表达能力、可读性和性能之间找到平衡点。</p>
+<p>你有什么正则表达式的问题或使用技巧想分享吗？欢迎在评论中讨论！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">正则表达式</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86/">文本处理</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D/">模式匹配</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/re%E6%A8%A1%E5%9D%97/">re模块</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/python/python-type-hints-best-practices/"
+                                   title="Python类型提示最佳实践：提高代码质量的完全指南"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Python类型提示最佳实践：提高代码质量的完全指南</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/php/php82-new-features-overview/"
+                                   title="PHP 8.2 新特性全面解析：现代PHP开发的新里程碑"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP 8.2 新特性全面解析：现代PHP开发的新里程碑</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%B2%BE%E9%80%9A%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8"><span class="nav-text">Python正则表达式精通指南：从基础到高级应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9F%BA%E7%A1%80"><span class="nav-text">正则表达式基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%9F"><span class="nav-text">什么是正则表达式？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E4%B8%AD%E7%9A%84re%E6%A8%A1%E5%9D%97"><span class="nav-text">Python中的re模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="nav-text">基本模式匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6%E5%92%8C%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97"><span class="nav-text">元字符和特殊序列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%85%83%E5%AD%97%E7%AC%A6"><span class="nav-text">常用元字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97"><span class="nav-text">特殊序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E6%BC%94%E7%A4%BA"><span class="nav-text">实例演示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86%E5%92%8C%E8%8C%83%E5%9B%B4"><span class="nav-text">字符集和范围</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-text">基本字符集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8C%83%E5%9B%B4"><span class="nav-text">范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%A6%E5%AE%9A%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-text">否定字符集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E5%92%8C%E6%8D%95%E8%8E%B7"><span class="nav-text">分组和捕获</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%88%86%E7%BB%84"><span class="nav-text">基本分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E5%88%86%E7%BB%84"><span class="nav-text">命名分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%8D%95%E8%8E%B7%E5%88%86%E7%BB%84"><span class="nav-text">非捕获分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E5%BC%95%E7%94%A8"><span class="nav-text">反向引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%AA%E5%A9%AA%E4%B8%8E%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="nav-text">贪婪与非贪婪匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="nav-text">贪婪匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="nav-text">非贪婪匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%9E%BB%E5%92%8C%E5%90%8E%E9%A1%BE"><span class="nav-text">前瞻和后顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E5%89%8D%E7%9E%BB"><span class="nav-text">正向前瞻</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E5%90%91%E5%89%8D%E7%9E%BB"><span class="nav-text">负向前瞻</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E5%90%8E%E9%A1%BE%E5%92%8C%E8%B4%9F%E5%90%91%E5%90%8E%E9%A1%BE"><span class="nav-text">正向后顾和负向后顾</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%BF%97%E5%92%8C%E9%80%89%E9%A1%B9"><span class="nav-text">标志和选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A0%87%E5%BF%97"><span class="nav-text">常用标志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">编译正则表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">实际应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B1%EF%BC%9A%E6%8F%90%E5%8F%96URL"><span class="nav-text">案例1：提取URL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B2%EF%BC%9A%E8%A7%A3%E6%9E%90%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6"><span class="nav-text">案例2：解析日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B3%EF%BC%9A%E9%AA%8C%E8%AF%81%E5%92%8C%E6%B8%85%E7%90%86%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5"><span class="nav-text">案例3：验证和清理用户输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B4%EF%BC%9A%E6%8F%90%E5%8F%96%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE"><span class="nav-text">案例4：提取文本中的结构化数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91"><span class="nav-text">性能考虑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E7%81%BE%E9%9A%BE%E6%80%A7%E5%9B%9E%E6%BA%AF"><span class="nav-text">避免灾难性回溯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">优化技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">调试正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8re-DEBUG%E6%A0%87%E5%BF%97"><span class="nav-text">使用re.DEBUG标志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%A8%E7%BA%BF%E5%B7%A5%E5%85%B7"><span class="nav-text">使用在线工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%AD%A5%E6%9E%84%E5%BB%BA"><span class="nav-text">分步构建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%A0%E6%9C%89%E4%BB%80%E4%B9%88%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98%E6%88%96%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%E6%83%B3%E5%88%86%E4%BA%AB%E5%90%97%EF%BC%9F%E6%AC%A2%E8%BF%8E%E5%9C%A8%E8%AF%84%E8%AE%BA%E4%B8%AD%E8%AE%A8%E8%AE%BA%EF%BC%81title-Python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%B2%BE%E9%80%9A%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8date-2023-05-20-14-30-00categories-pythontags-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86-%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D-re%E6%A8%A1%E5%9D%97-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-text">你有什么正则表达式的问题或使用技巧想分享吗？欢迎在评论中讨论！title: Python正则表达式精通指南：从基础到高级应用date: 2023-05-20 14:30:00categories: pythontags: [正则表达式, 文本处理, 模式匹配, re模块, 字符串]</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%B2%BE%E9%80%9A%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8-1"><span class="nav-text">Python正则表达式精通指南：从基础到高级应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9F%BA%E7%A1%80-1"><span class="nav-text">正则表达式基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%9F-1"><span class="nav-text">什么是正则表达式？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E4%B8%AD%E7%9A%84re%E6%A8%A1%E5%9D%97-1"><span class="nav-text">Python中的re模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D-1"><span class="nav-text">基本模式匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6%E5%92%8C%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97-1"><span class="nav-text">元字符和特殊序列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%85%83%E5%AD%97%E7%AC%A6-1"><span class="nav-text">常用元字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97-1"><span class="nav-text">特殊序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E6%BC%94%E7%A4%BA-1"><span class="nav-text">实例演示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86%E5%92%8C%E8%8C%83%E5%9B%B4-1"><span class="nav-text">字符集和范围</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%AD%97%E7%AC%A6%E9%9B%86-1"><span class="nav-text">基本字符集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8C%83%E5%9B%B4-1"><span class="nav-text">范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%A6%E5%AE%9A%E5%AD%97%E7%AC%A6%E9%9B%86-1"><span class="nav-text">否定字符集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E5%92%8C%E6%8D%95%E8%8E%B7-1"><span class="nav-text">分组和捕获</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%88%86%E7%BB%84-1"><span class="nav-text">基本分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E5%88%86%E7%BB%84-1"><span class="nav-text">命名分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%8D%95%E8%8E%B7%E5%88%86%E7%BB%84-1"><span class="nav-text">非捕获分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E5%BC%95%E7%94%A8-1"><span class="nav-text">反向引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%AA%E5%A9%AA%E4%B8%8E%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D-1"><span class="nav-text">贪婪与非贪婪匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D-1"><span class="nav-text">贪婪匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D-1"><span class="nav-text">非贪婪匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%9E%BB%E5%92%8C%E5%90%8E%E9%A1%BE-1"><span class="nav-text">前瞻和后顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E5%89%8D%E7%9E%BB-1"><span class="nav-text">正向前瞻</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E5%90%91%E5%89%8D%E7%9E%BB-1"><span class="nav-text">负向前瞻</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E5%90%8E%E9%A1%BE%E5%92%8C%E8%B4%9F%E5%90%91%E5%90%8E%E9%A1%BE-1"><span class="nav-text">正向后顾和负向后顾</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%BF%97%E5%92%8C%E9%80%89%E9%A1%B9-1"><span class="nav-text">标志和选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A0%87%E5%BF%97-1"><span class="nav-text">常用标志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-1"><span class="nav-text">编译正则表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B-1"><span class="nav-text">实际应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B1%EF%BC%9A%E6%8F%90%E5%8F%96URL-1"><span class="nav-text">案例1：提取URL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B2%EF%BC%9A%E8%A7%A3%E6%9E%90%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6-1"><span class="nav-text">案例2：解析日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B3%EF%BC%9A%E9%AA%8C%E8%AF%81%E5%92%8C%E6%B8%85%E7%90%86%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5-1"><span class="nav-text">案例3：验证和清理用户输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B4%EF%BC%9A%E6%8F%90%E5%8F%96%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE-1"><span class="nav-text">案例4：提取文本中的结构化数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91-1"><span class="nav-text">性能考虑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E7%81%BE%E9%9A%BE%E6%80%A7%E5%9B%9E%E6%BA%AF-1"><span class="nav-text">避免灾难性回溯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7-1"><span class="nav-text">优化技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-1"><span class="nav-text">调试正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8re-DEBUG%E6%A0%87%E5%BF%97-1"><span class="nav-text">使用re.DEBUG标志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%A8%E7%BA%BF%E5%B7%A5%E5%85%B7-1"><span class="nav-text">使用在线工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%AD%A5%E6%9E%84%E5%BB%BA-1"><span class="nav-text">分步构建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA-1"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%B2%BE%E9%80%9A%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8"><span class="nav-text">Python正则表达式精通指南：从基础到高级应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9F%BA%E7%A1%80"><span class="nav-text">正则表达式基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%9F"><span class="nav-text">什么是正则表达式？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E4%B8%AD%E7%9A%84re%E6%A8%A1%E5%9D%97"><span class="nav-text">Python中的re模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="nav-text">基本模式匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6%E5%92%8C%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97"><span class="nav-text">元字符和特殊序列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%85%83%E5%AD%97%E7%AC%A6"><span class="nav-text">常用元字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97"><span class="nav-text">特殊序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E6%BC%94%E7%A4%BA"><span class="nav-text">实例演示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86%E5%92%8C%E8%8C%83%E5%9B%B4"><span class="nav-text">字符集和范围</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-text">基本字符集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8C%83%E5%9B%B4"><span class="nav-text">范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%A6%E5%AE%9A%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-text">否定字符集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E5%92%8C%E6%8D%95%E8%8E%B7"><span class="nav-text">分组和捕获</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%88%86%E7%BB%84"><span class="nav-text">基本分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E5%88%86%E7%BB%84"><span class="nav-text">命名分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%8D%95%E8%8E%B7%E5%88%86%E7%BB%84"><span class="nav-text">非捕获分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E5%BC%95%E7%94%A8"><span class="nav-text">反向引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%AA%E5%A9%AA%E4%B8%8E%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="nav-text">贪婪与非贪婪匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="nav-text">贪婪匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D"><span class="nav-text">非贪婪匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%9E%BB%E5%92%8C%E5%90%8E%E9%A1%BE"><span class="nav-text">前瞻和后顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E5%89%8D%E7%9E%BB"><span class="nav-text">正向前瞻</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E5%90%91%E5%89%8D%E7%9E%BB"><span class="nav-text">负向前瞻</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E5%90%8E%E9%A1%BE%E5%92%8C%E8%B4%9F%E5%90%91%E5%90%8E%E9%A1%BE"><span class="nav-text">正向后顾和负向后顾</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%BF%97%E5%92%8C%E9%80%89%E9%A1%B9"><span class="nav-text">标志和选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A0%87%E5%BF%97"><span class="nav-text">常用标志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">编译正则表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">实际应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B1%EF%BC%9A%E6%8F%90%E5%8F%96URL"><span class="nav-text">案例1：提取URL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B2%EF%BC%9A%E8%A7%A3%E6%9E%90%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6"><span class="nav-text">案例2：解析日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B3%EF%BC%9A%E9%AA%8C%E8%AF%81%E5%92%8C%E6%B8%85%E7%90%86%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5"><span class="nav-text">案例3：验证和清理用户输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B4%EF%BC%9A%E6%8F%90%E5%8F%96%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE"><span class="nav-text">案例4：提取文本中的结构化数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91"><span class="nav-text">性能考虑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E7%81%BE%E9%9A%BE%E6%80%A7%E5%9B%9E%E6%BA%AF"><span class="nav-text">避免灾难性回溯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">优化技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">调试正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8re-DEBUG%E6%A0%87%E5%BF%97"><span class="nav-text">使用re.DEBUG标志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%A8%E7%BA%BF%E5%B7%A5%E5%85%B7"><span class="nav-text">使用在线工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%AD%A5%E6%9E%84%E5%BB%BA"><span class="nav-text">分步构建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%A0%E6%9C%89%E4%BB%80%E4%B9%88%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98%E6%88%96%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7%E6%83%B3%E5%88%86%E4%BA%AB%E5%90%97%EF%BC%9F%E6%AC%A2%E8%BF%8E%E5%9C%A8%E8%AF%84%E8%AE%BA%E4%B8%AD%E8%AE%A8%E8%AE%BA%EF%BC%81title-Python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%B2%BE%E9%80%9A%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8date-2023-05-20-14-30-00categories-pythontags-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86-%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D-re%E6%A8%A1%E5%9D%97-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-text">你有什么正则表达式的问题或使用技巧想分享吗？欢迎在评论中讨论！title: Python正则表达式精通指南：从基础到高级应用date: 2023-05-20 14:30:00categories: pythontags: [正则表达式, 文本处理, 模式匹配, re模块, 字符串]</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%B2%BE%E9%80%9A%E6%8C%87%E5%8D%97%EF%BC%9A%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8-1"><span class="nav-text">Python正则表达式精通指南：从基础到高级应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9F%BA%E7%A1%80-1"><span class="nav-text">正则表达式基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%9F-1"><span class="nav-text">什么是正则表达式？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E4%B8%AD%E7%9A%84re%E6%A8%A1%E5%9D%97-1"><span class="nav-text">Python中的re模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D-1"><span class="nav-text">基本模式匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%83%E5%AD%97%E7%AC%A6%E5%92%8C%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97-1"><span class="nav-text">元字符和特殊序列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%85%83%E5%AD%97%E7%AC%A6-1"><span class="nav-text">常用元字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%BA%8F%E5%88%97-1"><span class="nav-text">特殊序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E6%BC%94%E7%A4%BA-1"><span class="nav-text">实例演示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86%E5%92%8C%E8%8C%83%E5%9B%B4-1"><span class="nav-text">字符集和范围</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%AD%97%E7%AC%A6%E9%9B%86-1"><span class="nav-text">基本字符集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8C%83%E5%9B%B4-1"><span class="nav-text">范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%A6%E5%AE%9A%E5%AD%97%E7%AC%A6%E9%9B%86-1"><span class="nav-text">否定字符集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E5%92%8C%E6%8D%95%E8%8E%B7-1"><span class="nav-text">分组和捕获</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%88%86%E7%BB%84-1"><span class="nav-text">基本分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E5%88%86%E7%BB%84-1"><span class="nav-text">命名分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%8D%95%E8%8E%B7%E5%88%86%E7%BB%84-1"><span class="nav-text">非捕获分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E5%BC%95%E7%94%A8-1"><span class="nav-text">反向引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%AA%E5%A9%AA%E4%B8%8E%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D-1"><span class="nav-text">贪婪与非贪婪匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D-1"><span class="nav-text">贪婪匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E8%B4%AA%E5%A9%AA%E5%8C%B9%E9%85%8D-1"><span class="nav-text">非贪婪匹配</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%9E%BB%E5%92%8C%E5%90%8E%E9%A1%BE-1"><span class="nav-text">前瞻和后顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E5%89%8D%E7%9E%BB-1"><span class="nav-text">正向前瞻</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E5%90%91%E5%89%8D%E7%9E%BB-1"><span class="nav-text">负向前瞻</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E5%90%8E%E9%A1%BE%E5%92%8C%E8%B4%9F%E5%90%91%E5%90%8E%E9%A1%BE-1"><span class="nav-text">正向后顾和负向后顾</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E5%BF%97%E5%92%8C%E9%80%89%E9%A1%B9-1"><span class="nav-text">标志和选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%A0%87%E5%BF%97-1"><span class="nav-text">常用标志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-1"><span class="nav-text">编译正则表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B-1"><span class="nav-text">实际应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B1%EF%BC%9A%E6%8F%90%E5%8F%96URL-1"><span class="nav-text">案例1：提取URL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B2%EF%BC%9A%E8%A7%A3%E6%9E%90%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6-1"><span class="nav-text">案例2：解析日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B3%EF%BC%9A%E9%AA%8C%E8%AF%81%E5%92%8C%E6%B8%85%E7%90%86%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5-1"><span class="nav-text">案例3：验证和清理用户输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B4%EF%BC%9A%E6%8F%90%E5%8F%96%E6%96%87%E6%9C%AC%E4%B8%AD%E7%9A%84%E7%BB%93%E6%9E%84%E5%8C%96%E6%95%B0%E6%8D%AE-1"><span class="nav-text">案例4：提取文本中的结构化数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%80%83%E8%99%91-1"><span class="nav-text">性能考虑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E7%81%BE%E9%9A%BE%E6%80%A7%E5%9B%9E%E6%BA%AF-1"><span class="nav-text">避免灾难性回溯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7-1"><span class="nav-text">优化技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-1"><span class="nav-text">调试正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8re-DEBUG%E6%A0%87%E5%BF%97-1"><span class="nav-text">使用re.DEBUG标志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%A8%E7%BA%BF%E5%B7%A5%E5%85%B7-1"><span class="nav-text">使用在线工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%AD%A5%E6%9E%84%E5%BB%BA-1"><span class="nav-text">分步构建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA-1"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

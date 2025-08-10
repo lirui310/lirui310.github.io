@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Vue 组件通信与自定义指令实战技巧 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Vue 组件通信与自定义指令实战技巧
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-08-10 16:45:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/vue/">vue</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Vue3/">Vue3</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1/">组件通信</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4/">自定义指令</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/provide-inject/">provide/inject</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF/">事件总线</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>在 Vue 开发中，组件通信和自定义指令是构建复杂应用的重要技能。本文将深入探讨 Vue 3 中各种组件通信方式的使用场景和最佳实践，以及如何创建实用的自定义指令来提升开发效率和用户体验。</p>
+<span id="more"></span>
+
+<h2 id="Vue-3-组件通信全景图"><a href="#Vue-3-组件通信全景图" class="headerlink" title="Vue 3 组件通信全景图"></a>Vue 3 组件通信全景图</h2><h3 id="1-Props-和-Emits（父子通信）"><a href="#1-Props-和-Emits（父子通信）" class="headerlink" title="1. Props 和 Emits（父子通信）"></a>1. Props 和 Emits（父子通信）</h3><p><strong>基础用法</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 父组件 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;UserCard </span><br><span class="line">      :user=&quot;currentUser&quot;</span><br><span class="line">      :editable=&quot;isAdmin&quot;</span><br><span class="line">      @update-user=&quot;handleUserUpdate&quot;</span><br><span class="line">      @delete-user=&quot;handleUserDelete&quot;</span><br><span class="line">    /&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &#x27;vue&#x27;</span><br><span class="line">import UserCard from &#x27;./UserCard.vue&#x27;</span><br><span class="line"></span><br><span class="line">const currentUser = ref(&#123;</span><br><span class="line">  id: 1,</span><br><span class="line">  name: &#x27;John Doe&#x27;,</span><br><span class="line">  email: &#x27;john@example.com&#x27;,</span><br><span class="line">  role: &#x27;user&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const isAdmin = ref(true)</span><br><span class="line"></span><br><span class="line">function handleUserUpdate(updatedUser) &#123;</span><br><span class="line">  currentUser.value = &#123; ...currentUser.value, ...updatedUser &#125;</span><br><span class="line">  console.log(&#x27;用户信息已更新:&#x27;, updatedUser)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function handleUserDelete(userId) &#123;</span><br><span class="line">  console.log(&#x27;删除用户:&#x27;, userId)</span><br><span class="line">  // 执行删除逻辑</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件 UserCard.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;user-card&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;user-info&quot;&gt;</span><br><span class="line">      &lt;h3&gt;&#123;&#123; user.name &#125;&#125;&lt;/h3&gt;</span><br><span class="line">      &lt;p&gt;&#123;&#123; user.email &#125;&#125;&lt;/p&gt;</span><br><span class="line">      &lt;span class=&quot;role-badge&quot; :class=&quot;user.role&quot;&gt;&#123;&#123; user.role &#125;&#125;&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;div v-if=&quot;editable&quot; class=&quot;actions&quot;&gt;</span><br><span class="line">      &lt;button @click=&quot;editUser&quot;&gt;编辑&lt;/button&gt;</span><br><span class="line">      &lt;button @click=&quot;deleteUser&quot; class=&quot;danger&quot;&gt;删除&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 编辑模态框 --&gt;</span><br><span class="line">    &lt;div v-if=&quot;showEditModal&quot; class=&quot;modal&quot;&gt;</span><br><span class="line">      &lt;div class=&quot;modal-content&quot;&gt;</span><br><span class="line">        &lt;h4&gt;编辑用户&lt;/h4&gt;</span><br><span class="line">        &lt;form @submit.prevent=&quot;saveUser&quot;&gt;</span><br><span class="line">          &lt;input v-model=&quot;editForm.name&quot; placeholder=&quot;姓名&quot; required&gt;</span><br><span class="line">          &lt;input v-model=&quot;editForm.email&quot; type=&quot;email&quot; placeholder=&quot;邮箱&quot; required&gt;</span><br><span class="line">          &lt;select v-model=&quot;editForm.role&quot;&gt;</span><br><span class="line">            &lt;option value=&quot;user&quot;&gt;普通用户&lt;/option&gt;</span><br><span class="line">            &lt;option value=&quot;admin&quot;&gt;管理员&lt;/option&gt;</span><br><span class="line">          &lt;/select&gt;</span><br><span class="line">          &lt;div class=&quot;modal-actions&quot;&gt;</span><br><span class="line">            &lt;button type=&quot;submit&quot;&gt;保存&lt;/button&gt;</span><br><span class="line">            &lt;button type=&quot;button&quot; @click=&quot;cancelEdit&quot;&gt;取消&lt;/button&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, reactive &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">// Props 定义</span><br><span class="line">const props = defineProps(&#123;</span><br><span class="line">  user: &#123;</span><br><span class="line">    type: Object,</span><br><span class="line">    required: true,</span><br><span class="line">    validator: (user) =&gt; &#123;</span><br><span class="line">      return user &amp;&amp; typeof user.id !== &#x27;undefined&#x27; &amp;&amp; user.name &amp;&amp; user.email</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  editable: &#123;</span><br><span class="line">    type: Boolean,</span><br><span class="line">    default: false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// Emits 定义</span><br><span class="line">const emit = defineEmits(&#123;</span><br><span class="line">  &#x27;update-user&#x27;: (user) =&gt; &#123;</span><br><span class="line">    // 验证事件参数</span><br><span class="line">    return user &amp;&amp; typeof user === &#x27;object&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#x27;delete-user&#x27;: (userId) =&gt; &#123;</span><br><span class="line">    return typeof userId === &#x27;number&#x27; || typeof userId === &#x27;string&#x27;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const showEditModal = ref(false)</span><br><span class="line">const editForm = reactive(&#123;</span><br><span class="line">  name: &#x27;&#x27;,</span><br><span class="line">  email: &#x27;&#x27;,</span><br><span class="line">  role: &#x27;user&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">function editUser() &#123;</span><br><span class="line">  // 初始化编辑表单</span><br><span class="line">  Object.assign(editForm, props.user)</span><br><span class="line">  showEditModal.value = true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function saveUser() &#123;</span><br><span class="line">  // 发送更新事件</span><br><span class="line">  emit(&#x27;update-user&#x27;, &#123; ...editForm &#125;)</span><br><span class="line">  showEditModal.value = false</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function cancelEdit() &#123;</span><br><span class="line">  showEditModal.value = false</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function deleteUser() &#123;</span><br><span class="line">  if (confirm(&#x27;确定要删除这个用户吗？&#x27;)) &#123;</span><br><span class="line">    emit(&#x27;delete-user&#x27;, props.user.id)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-v-model-双向绑定"><a href="#2-v-model-双向绑定" class="headerlink" title="2. v-model 双向绑定"></a>2. v-model 双向绑定</h3><p><strong>自定义组件的 v-model</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 自定义输入组件 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;custom-input&quot;&gt;</span><br><span class="line">    &lt;label v-if=&quot;label&quot;&gt;&#123;&#123; label &#125;&#125;&lt;/label&gt;</span><br><span class="line">    &lt;input </span><br><span class="line">      :value=&quot;modelValue&quot;</span><br><span class="line">      @input=&quot;updateValue&quot;</span><br><span class="line">      :type=&quot;type&quot;</span><br><span class="line">      :placeholder=&quot;placeholder&quot;</span><br><span class="line">      :disabled=&quot;disabled&quot;</span><br><span class="line">      :class=&quot;&#123; error: hasError &#125;&quot;</span><br><span class="line">    &gt;</span><br><span class="line">    &lt;span v-if=&quot;hasError&quot; class=&quot;error-message&quot;&gt;&#123;&#123; errorMessage &#125;&#125;&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; computed &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const props = defineProps(&#123;</span><br><span class="line">  modelValue: [String, Number],</span><br><span class="line">  label: String,</span><br><span class="line">  type: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">    default: &#x27;text&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  placeholder: String,</span><br><span class="line">  disabled: Boolean,</span><br><span class="line">  validator: Function,</span><br><span class="line">  errorMessage: String</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const emit = defineEmits([&#x27;update:modelValue&#x27;])</span><br><span class="line"></span><br><span class="line">const hasError = computed(() =&gt; &#123;</span><br><span class="line">  if (props.validator &amp;&amp; props.modelValue) &#123;</span><br><span class="line">    return !props.validator(props.modelValue)</span><br><span class="line">  &#125;</span><br><span class="line">  return false</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">function updateValue(event) &#123;</span><br><span class="line">  let value = event.target.value</span><br><span class="line">  </span><br><span class="line">  // 类型转换</span><br><span class="line">  if (props.type === &#x27;number&#x27;) &#123;</span><br><span class="line">    value = value === &#x27;&#x27; ? null : Number(value)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  emit(&#x27;update:modelValue&#x27;, value)</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>多个 v-model 绑定</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 用户表单组件 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;form class=&quot;user-form&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">      &lt;label&gt;姓名&lt;/label&gt;</span><br><span class="line">      &lt;input </span><br><span class="line">        :value=&quot;firstName&quot;</span><br><span class="line">        @input=&quot;emit(&#x27;update:firstName&#x27;, $event.target.value)&quot;</span><br><span class="line">      &gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">      &lt;label&gt;姓氏&lt;/label&gt;</span><br><span class="line">      &lt;input </span><br><span class="line">        :value=&quot;lastName&quot;</span><br><span class="line">        @input=&quot;emit(&#x27;update:lastName&#x27;, $event.target.value)&quot;</span><br><span class="line">      &gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">      &lt;label&gt;邮箱&lt;/label&gt;</span><br><span class="line">      &lt;input </span><br><span class="line">        :value=&quot;email&quot;</span><br><span class="line">        @input=&quot;emit(&#x27;update:email&#x27;, $event.target.value)&quot;</span><br><span class="line">        type=&quot;email&quot;</span><br><span class="line">      &gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">defineProps([&#x27;firstName&#x27;, &#x27;lastName&#x27;, &#x27;email&#x27;])</span><br><span class="line">const emit = defineEmits([&#x27;update:firstName&#x27;, &#x27;update:lastName&#x27;, &#x27;update:email&#x27;])</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 使用多个 v-model --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;UserForm </span><br><span class="line">      v-model:first-name=&quot;user.firstName&quot;</span><br><span class="line">      v-model:last-name=&quot;user.lastName&quot;</span><br><span class="line">      v-model:email=&quot;user.email&quot;</span><br><span class="line">    /&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;p&gt;完整姓名: &#123;&#123; fullName &#125;&#125;&lt;/p&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; reactive, computed &#125; from &#x27;vue&#x27;</span><br><span class="line">import UserForm from &#x27;./UserForm.vue&#x27;</span><br><span class="line"></span><br><span class="line">const user = reactive(&#123;</span><br><span class="line">  firstName: &#x27;&#x27;,</span><br><span class="line">  lastName: &#x27;&#x27;,</span><br><span class="line">  email: &#x27;&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const fullName = computed(() =&gt; `$&#123;user.firstName&#125; $&#123;user.lastName&#125;`.trim())</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Provide-Inject（跨层级通信）"><a href="#3-Provide-Inject（跨层级通信）" class="headerlink" title="3. Provide&#x2F;Inject（跨层级通信）"></a>3. Provide&#x2F;Inject（跨层级通信）</h3><p><strong>基础用法</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 根组件或祖先组件 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;app&quot;&gt;</span><br><span class="line">    &lt;ThemeToggle /&gt;</span><br><span class="line">    &lt;UserProfile /&gt;</span><br><span class="line">    &lt;ProductList /&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; provide, ref, readonly &#125; from &#x27;vue&#x27;</span><br><span class="line">import ThemeToggle from &#x27;./ThemeToggle.vue&#x27;</span><br><span class="line">import UserProfile from &#x27;./UserProfile.vue&#x27;</span><br><span class="line">import ProductList from &#x27;./ProductList.vue&#x27;</span><br><span class="line"></span><br><span class="line">// 主题状态</span><br><span class="line">const theme = ref(&#x27;light&#x27;)</span><br><span class="line">const toggleTheme = () =&gt; &#123;</span><br><span class="line">  theme.value = theme.value === &#x27;light&#x27; ? &#x27;dark&#x27; : &#x27;light&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 用户状态</span><br><span class="line">const currentUser = ref(&#123;</span><br><span class="line">  id: 1,</span><br><span class="line">  name: &#x27;John Doe&#x27;,</span><br><span class="line">  avatar: &#x27;/avatars/john.jpg&#x27;,</span><br><span class="line">  permissions: [&#x27;read&#x27;, &#x27;write&#x27;]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// 全局配置</span><br><span class="line">const appConfig = ref(&#123;</span><br><span class="line">  apiBaseUrl: &#x27;https://api.example.com&#x27;,</span><br><span class="line">  version: &#x27;1.0.0&#x27;,</span><br><span class="line">  features: &#123;</span><br><span class="line">    darkMode: true,</span><br><span class="line">    notifications: true</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// 提供数据和方法</span><br><span class="line">provide(&#x27;theme&#x27;, &#123;</span><br><span class="line">  current: readonly(theme),</span><br><span class="line">  toggle: toggleTheme</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">provide(&#x27;user&#x27;, readonly(currentUser))</span><br><span class="line">provide(&#x27;config&#x27;, readonly(appConfig))</span><br><span class="line"></span><br><span class="line">// 提供工具函数</span><br><span class="line">provide(&#x27;utils&#x27;, &#123;</span><br><span class="line">  formatDate: (date) =&gt; new Intl.DateTimeFormat(&#x27;zh-CN&#x27;).format(date),</span><br><span class="line">  formatCurrency: (amount) =&gt; new Intl.NumberFormat(&#x27;zh-CN&#x27;, &#123;</span><br><span class="line">    style: &#x27;currency&#x27;,</span><br><span class="line">    currency: &#x27;CNY&#x27;</span><br><span class="line">  &#125;).format(amount)</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 深层子组件 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;product-card&quot; :class=&quot;themeClass&quot;&gt;</span><br><span class="line">    &lt;h3&gt;&#123;&#123; product.name &#125;&#125;&lt;/h3&gt;</span><br><span class="line">    &lt;p class=&quot;price&quot;&gt;&#123;&#123; formatCurrency(product.price) &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;p class=&quot;date&quot;&gt;发布时间: &#123;&#123; formatDate(product.createdAt) &#125;&#125;&lt;/p&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;button </span><br><span class="line">      v-if=&quot;canEdit&quot; </span><br><span class="line">      @click=&quot;editProduct&quot;</span><br><span class="line">      class=&quot;edit-btn&quot;</span><br><span class="line">    &gt;</span><br><span class="line">      编辑</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; inject, computed &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const props = defineProps([&#x27;product&#x27;])</span><br><span class="line"></span><br><span class="line">// 注入依赖</span><br><span class="line">const &#123; current: theme &#125; = inject(&#x27;theme&#x27;)</span><br><span class="line">const user = inject(&#x27;user&#x27;)</span><br><span class="line">const &#123; formatDate, formatCurrency &#125; = inject(&#x27;utils&#x27;)</span><br><span class="line"></span><br><span class="line">// 计算属性</span><br><span class="line">const themeClass = computed(() =&gt; `theme-$&#123;theme.value&#125;`)</span><br><span class="line">const canEdit = computed(() =&gt; user.value.permissions.includes(&#x27;write&#x27;))</span><br><span class="line"></span><br><span class="line">function editProduct() &#123;</span><br><span class="line">  console.log(&#x27;编辑产品:&#x27;, props.product.id)</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>响应式 Provide&#x2F;Inject</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// composables/useGlobalState.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; ref, provide, inject, readonly &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">GLOBAL_STATE_KEY</span> = <span class="title class_">Symbol</span>(<span class="string">&#x27;globalState&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建全局状态</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">createGlobalState</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> state = <span class="title function_">ref</span>(&#123;</span><br><span class="line">    <span class="attr">user</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">notifications</span>: [],</span><br><span class="line">    <span class="attr">settings</span>: &#123;</span><br><span class="line">      <span class="attr">theme</span>: <span class="string">&#x27;light&#x27;</span>,</span><br><span class="line">      <span class="attr">language</span>: <span class="string">&#x27;zh-CN&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> actions = &#123;</span><br><span class="line">    <span class="title function_">setUser</span>(<span class="params">user</span>) &#123;</span><br><span class="line">      state.<span class="property">value</span>.<span class="property">user</span> = user</span><br><span class="line">    &#125;,</span><br><span class="line">    </span><br><span class="line">    <span class="title function_">addNotification</span>(<span class="params">notification</span>) &#123;</span><br><span class="line">      state.<span class="property">value</span>.<span class="property">notifications</span>.<span class="title function_">push</span>(&#123;</span><br><span class="line">        <span class="attr">id</span>: <span class="title class_">Date</span>.<span class="title function_">now</span>(),</span><br><span class="line">        <span class="attr">timestamp</span>: <span class="keyword">new</span> <span class="title class_">Date</span>(),</span><br><span class="line">        ...notification</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">    </span><br><span class="line">    <span class="title function_">removeNotification</span>(<span class="params">id</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> index = state.<span class="property">value</span>.<span class="property">notifications</span>.<span class="title function_">findIndex</span>(<span class="function"><span class="params">n</span> =&gt;</span> n.<span class="property">id</span> === id)</span><br><span class="line">      <span class="keyword">if</span> (index &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">        state.<span class="property">value</span>.<span class="property">notifications</span>.<span class="title function_">splice</span>(index, <span class="number">1</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    </span><br><span class="line">    <span class="title function_">updateSettings</span>(<span class="params">newSettings</span>) &#123;</span><br><span class="line">      state.<span class="property">value</span>.<span class="property">settings</span> = &#123; ...state.<span class="property">value</span>.<span class="property">settings</span>, ...newSettings &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">provide</span>(<span class="variable constant_">GLOBAL_STATE_KEY</span>, &#123;</span><br><span class="line">    <span class="attr">state</span>: <span class="title function_">readonly</span>(state),</span><br><span class="line">    ...actions</span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> &#123; state, ...actions &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用全局状态</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useGlobalState</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> globalState = <span class="title function_">inject</span>(<span class="variable constant_">GLOBAL_STATE_KEY</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (!globalState) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;useGlobalState must be used within a provider&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> globalState</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-事件总线（Event-Bus）"><a href="#4-事件总线（Event-Bus）" class="headerlink" title="4. 事件总线（Event Bus）"></a>4. 事件总线（Event Bus）</h3><p><strong>创建类型安全的事件总线</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// utils/eventBus.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">EventBus</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">events</span> = <span class="keyword">new</span> <span class="title class_">Map</span>()</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 订阅事件</span></span><br><span class="line">  <span class="title function_">on</span>(<span class="params">event, callback</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">events</span>.<span class="title function_">has</span>(event)) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">events</span>.<span class="title function_">set</span>(event, [])</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">events</span>.<span class="title function_">get</span>(event).<span class="title function_">push</span>(callback)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 返回取消订阅函数</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function">() =&gt;</span> <span class="variable language_">this</span>.<span class="title function_">off</span>(event, callback)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 取消订阅</span></span><br><span class="line">  <span class="title function_">off</span>(<span class="params">event, callback</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">events</span>.<span class="title function_">has</span>(event)) &#123;</span><br><span class="line">      <span class="keyword">const</span> callbacks = <span class="variable language_">this</span>.<span class="property">events</span>.<span class="title function_">get</span>(event)</span><br><span class="line">      <span class="keyword">const</span> index = callbacks.<span class="title function_">indexOf</span>(callback)</span><br><span class="line">      <span class="keyword">if</span> (index &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">        callbacks.<span class="title function_">splice</span>(index, <span class="number">1</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 发送事件</span></span><br><span class="line">  <span class="title function_">emit</span>(<span class="params">event, ...args</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">events</span>.<span class="title function_">has</span>(event)) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">events</span>.<span class="title function_">get</span>(event).<span class="title function_">forEach</span>(<span class="function"><span class="params">callback</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="title function_">callback</span>(...args)</span><br><span class="line">        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">`事件处理器错误 [<span class="subst">$&#123;event&#125;</span>]:`</span>, error)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 一次性订阅</span></span><br><span class="line">  <span class="title function_">once</span>(<span class="params">event, callback</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> unsubscribe = <span class="variable language_">this</span>.<span class="title function_">on</span>(event, <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">callback</span>(...args)</span><br><span class="line">      <span class="title function_">unsubscribe</span>()</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> unsubscribe</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 清除所有事件</span></span><br><span class="line">  <span class="title function_">clear</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">events</span>.<span class="title function_">clear</span>()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建全局事件总线</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> eventBus = <span class="keyword">new</span> <span class="title class_">EventBus</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 事件类型定义（TypeScript）</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">EventTypes</span> = &#123;</span><br><span class="line">  <span class="attr">USER_LOGIN</span>: <span class="string">&#x27;user:login&#x27;</span>,</span><br><span class="line">  <span class="attr">USER_LOGOUT</span>: <span class="string">&#x27;user:logout&#x27;</span>,</span><br><span class="line">  <span class="attr">NOTIFICATION_SHOW</span>: <span class="string">&#x27;notification:show&#x27;</span>,</span><br><span class="line">  <span class="attr">NOTIFICATION_HIDE</span>: <span class="string">&#x27;notification:hide&#x27;</span>,</span><br><span class="line">  <span class="attr">THEME_CHANGE</span>: <span class="string">&#x27;theme:change&#x27;</span>,</span><br><span class="line">  <span class="attr">CART_ADD_ITEM</span>: <span class="string">&#x27;cart:addItem&#x27;</span>,</span><br><span class="line">  <span class="attr">CART_REMOVE_ITEM</span>: <span class="string">&#x27;cart:removeItem&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>在组件中使用事件总线</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 购物车组件 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;cart&quot;&gt;</span><br><span class="line">    &lt;h3&gt;购物车 (&#123;&#123; items.length &#125;&#125;)&lt;/h3&gt;</span><br><span class="line">    &lt;div v-for=&quot;item in items&quot; :key=&quot;item.id&quot; class=&quot;cart-item&quot;&gt;</span><br><span class="line">      &lt;span&gt;&#123;&#123; item.name &#125;&#125;&lt;/span&gt;</span><br><span class="line">      &lt;span&gt;&#123;&#123; item.price &#125;&#125;&lt;/span&gt;</span><br><span class="line">      &lt;button @click=&quot;removeItem(item.id)&quot;&gt;移除&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, onMounted, onUnmounted &#125; from &#x27;vue&#x27;</span><br><span class="line">import &#123; eventBus, EventTypes &#125; from &#x27;@/utils/eventBus&#x27;</span><br><span class="line"></span><br><span class="line">const items = ref([])</span><br><span class="line">let unsubscribers = []</span><br><span class="line"></span><br><span class="line">function addItem(item) &#123;</span><br><span class="line">  items.value.push(item)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function removeItem(itemId) &#123;</span><br><span class="line">  const index = items.value.findIndex(item =&gt; item.id === itemId)</span><br><span class="line">  if (index &gt; -1) &#123;</span><br><span class="line">    const removedItem = items.value.splice(index, 1)[0]</span><br><span class="line">    eventBus.emit(EventTypes.CART_REMOVE_ITEM, removedItem)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  // 订阅添加商品事件</span><br><span class="line">  unsubscribers.push(</span><br><span class="line">    eventBus.on(EventTypes.CART_ADD_ITEM, addItem)</span><br><span class="line">  )</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">onUnmounted(() =&gt; &#123;</span><br><span class="line">  // 清理事件订阅</span><br><span class="line">  unsubscribers.forEach(unsubscribe =&gt; unsubscribe())</span><br><span class="line">&#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 产品列表组件 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;product-list&quot;&gt;</span><br><span class="line">    &lt;div v-for=&quot;product in products&quot; :key=&quot;product.id&quot; class=&quot;product&quot;&gt;</span><br><span class="line">      &lt;h4&gt;&#123;&#123; product.name &#125;&#125;&lt;/h4&gt;</span><br><span class="line">      &lt;p&gt;&#123;&#123; product.price &#125;&#125;&lt;/p&gt;</span><br><span class="line">      &lt;button @click=&quot;addToCart(product)&quot;&gt;加入购物车&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; eventBus, EventTypes &#125; from &#x27;@/utils/eventBus&#x27;</span><br><span class="line"></span><br><span class="line">const props = defineProps([&#x27;products&#x27;])</span><br><span class="line"></span><br><span class="line">function addToCart(product) &#123;</span><br><span class="line">  // 发送添加到购物车事件</span><br><span class="line">  eventBus.emit(EventTypes.CART_ADD_ITEM, &#123;</span><br><span class="line">    id: product.id,</span><br><span class="line">    name: product.name,</span><br><span class="line">    price: product.price,</span><br><span class="line">    quantity: 1</span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  // 显示通知</span><br><span class="line">  eventBus.emit(EventTypes.NOTIFICATION_SHOW, &#123;</span><br><span class="line">    type: &#x27;success&#x27;,</span><br><span class="line">    message: `$&#123;product.name&#125; 已加入购物车`</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义指令实战"><a href="#自定义指令实战" class="headerlink" title="自定义指令实战"></a>自定义指令实战</h2><h3 id="1-基础自定义指令"><a href="#1-基础自定义指令" class="headerlink" title="1. 基础自定义指令"></a>1. 基础自定义指令</h3><p><strong>v-focus 自动聚焦指令</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// directives/focus.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> vFocus = &#123;</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="comment">// 延迟聚焦，确保 DOM 完全渲染</span></span><br><span class="line">    <span class="keyword">if</span> (binding.<span class="property">value</span> !== <span class="literal">false</span>) &#123;</span><br><span class="line">      <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        el.<span class="title function_">focus</span>()</span><br><span class="line">      &#125;, <span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">updated</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="comment">// 当绑定值变化时重新聚焦</span></span><br><span class="line">    <span class="keyword">if</span> (binding.<span class="property">value</span> &amp;&amp; !binding.<span class="property">oldValue</span>) &#123;</span><br><span class="line">      el.<span class="title function_">focus</span>()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>v-click-outside 点击外部指令</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// directives/clickOutside.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> vClickOutside = &#123;</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    el.<span class="property">_clickOutsideHandler</span> = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 检查点击是否在元素外部</span></span><br><span class="line">      <span class="keyword">if</span> (!(el === event.<span class="property">target</span> || el.<span class="title function_">contains</span>(event.<span class="property">target</span>))) &#123;</span><br><span class="line">        <span class="comment">// 调用绑定的函数</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> binding.<span class="property">value</span> === <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">          binding.<span class="title function_">value</span>(event)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 延迟添加事件监听器，避免立即触发</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, el.<span class="property">_clickOutsideHandler</span>)</span><br><span class="line">    &#125;, <span class="number">0</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">unmounted</span>(<span class="params">el</span>) &#123;</span><br><span class="line">    <span class="comment">// 清理事件监听器</span></span><br><span class="line">    <span class="keyword">if</span> (el.<span class="property">_clickOutsideHandler</span>) &#123;</span><br><span class="line">      <span class="variable language_">document</span>.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;click&#x27;</span>, el.<span class="property">_clickOutsideHandler</span>)</span><br><span class="line">      <span class="keyword">delete</span> el.<span class="property">_clickOutsideHandler</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-高级自定义指令"><a href="#2-高级自定义指令" class="headerlink" title="2. 高级自定义指令"></a>2. 高级自定义指令</h3><p><strong>v-lazy 图片懒加载指令</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// directives/lazy.js</span></span><br><span class="line"><span class="keyword">const</span> defaultOptions = &#123;</span><br><span class="line">  <span class="attr">threshold</span>: <span class="number">0.1</span>,</span><br><span class="line">  <span class="attr">rootMargin</span>: <span class="string">&#x27;50px 0px&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> vLazy = &#123;</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> options = &#123; ...defaultOptions, ...binding.<span class="property">arg</span> &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建 Intersection Observer</span></span><br><span class="line">    <span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="title class_">IntersectionObserver</span>(<span class="function">(<span class="params">entries</span>) =&gt;</span> &#123;</span><br><span class="line">      entries.<span class="title function_">forEach</span>(<span class="function"><span class="params">entry</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (entry.<span class="property">isIntersecting</span>) &#123;</span><br><span class="line">          <span class="keyword">const</span> img = entry.<span class="property">target</span></span><br><span class="line">          <span class="keyword">const</span> src = binding.<span class="property">value</span></span><br><span class="line">          </span><br><span class="line">          <span class="comment">// 创建新的图片对象预加载</span></span><br><span class="line">          <span class="keyword">const</span> imageLoader = <span class="keyword">new</span> <span class="title class_">Image</span>()</span><br><span class="line">          </span><br><span class="line">          imageLoader.<span class="property">onload</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">// 加载成功后设置 src</span></span><br><span class="line">            img.<span class="property">src</span> = src</span><br><span class="line">            img.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;lazy-loaded&#x27;</span>)</span><br><span class="line">            img.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;lazy-loading&#x27;</span>)</span><br><span class="line">          &#125;</span><br><span class="line">          </span><br><span class="line">          imageLoader.<span class="property">onerror</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">// 加载失败时设置默认图片</span></span><br><span class="line">            img.<span class="property">src</span> = <span class="string">&#x27;/images/placeholder-error.jpg&#x27;</span></span><br><span class="line">            img.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;lazy-error&#x27;</span>)</span><br><span class="line">            img.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;lazy-loading&#x27;</span>)</span><br><span class="line">          &#125;</span><br><span class="line">          </span><br><span class="line">          <span class="comment">// 添加加载中样式</span></span><br><span class="line">          img.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;lazy-loading&#x27;</span>)</span><br><span class="line">          </span><br><span class="line">          <span class="comment">// 开始加载图片</span></span><br><span class="line">          imageLoader.<span class="property">src</span> = src</span><br><span class="line">          </span><br><span class="line">          <span class="comment">// 停止观察该元素</span></span><br><span class="line">          observer.<span class="title function_">unobserve</span>(img)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;, options)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 设置初始状态</span></span><br><span class="line">    el.<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&#x27;lazy-image&#x27;</span>)</span><br><span class="line">    el.<span class="property">src</span> = el.<span class="property">dataset</span>.<span class="property">placeholder</span> || <span class="string">&#x27;/images/placeholder.jpg&#x27;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 开始观察</span></span><br><span class="line">    observer.<span class="title function_">observe</span>(el)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 保存 observer 引用以便清理</span></span><br><span class="line">    el.<span class="property">_lazyObserver</span> = observer</span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">updated</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="comment">// 如果 src 改变，重新开始懒加载</span></span><br><span class="line">    <span class="keyword">if</span> (binding.<span class="property">value</span> !== binding.<span class="property">oldValue</span>) &#123;</span><br><span class="line">      el.<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&#x27;lazy-loaded&#x27;</span>, <span class="string">&#x27;lazy-error&#x27;</span>)</span><br><span class="line">      el.<span class="property">_lazyObserver</span>.<span class="title function_">observe</span>(el)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">unmounted</span>(<span class="params">el</span>) &#123;</span><br><span class="line">    <span class="comment">// 清理 observer</span></span><br><span class="line">    <span class="keyword">if</span> (el.<span class="property">_lazyObserver</span>) &#123;</span><br><span class="line">      el.<span class="property">_lazyObserver</span>.<span class="title function_">disconnect</span>()</span><br><span class="line">      <span class="keyword">delete</span> el.<span class="property">_lazyObserver</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>v-permission 权限控制指令</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// directives/permission.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; useUserStore &#125; <span class="keyword">from</span> <span class="string">&#x27;@/stores/user&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> vPermission = &#123;</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="title function_">checkPermission</span>(el, binding)</span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">updated</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="title function_">checkPermission</span>(el, binding)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">checkPermission</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> userStore = <span class="title function_">useUserStore</span>()</span><br><span class="line">  <span class="keyword">const</span> &#123; <span class="attr">value</span>: requiredPermissions, <span class="attr">arg</span>: mode = <span class="string">&#x27;some&#x27;</span> &#125; = binding</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (!requiredPermissions) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">&#x27;v-permission 指令需要权限参数&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> permissions = <span class="title class_">Array</span>.<span class="title function_">isArray</span>(requiredPermissions) </span><br><span class="line">    ? requiredPermissions </span><br><span class="line">    : [requiredPermissions]</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> userPermissions = userStore.<span class="property">permissions</span> || []</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">let</span> hasPermission = <span class="literal">false</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (mode === <span class="string">&#x27;every&#x27;</span>) &#123;</span><br><span class="line">    <span class="comment">// 需要拥有所有权限</span></span><br><span class="line">    hasPermission = permissions.<span class="title function_">every</span>(<span class="function"><span class="params">permission</span> =&gt;</span> </span><br><span class="line">      userPermissions.<span class="title function_">includes</span>(permission)</span><br><span class="line">    )</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 需要拥有任一权限（默认）</span></span><br><span class="line">    hasPermission = permissions.<span class="title function_">some</span>(<span class="function"><span class="params">permission</span> =&gt;</span> </span><br><span class="line">      userPermissions.<span class="title function_">includes</span>(permission)</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (!hasPermission) &#123;</span><br><span class="line">    <span class="comment">// 移除元素或隐藏</span></span><br><span class="line">    <span class="keyword">if</span> (binding.<span class="property">modifiers</span>.<span class="property">remove</span>) &#123;</span><br><span class="line">      el.<span class="title function_">remove</span>()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      el.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&#x27;none&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    el.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&#x27;&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>v-loading 加载状态指令</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// directives/loading.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">LoadingComponent</span> <span class="keyword">from</span> <span class="string">&#x27;@/components/Loading.vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> vLoading = &#123;</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="title function_">createLoadingInstance</span>(el, binding)</span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">updated</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (binding.<span class="property">value</span> !== binding.<span class="property">oldValue</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (binding.<span class="property">value</span>) &#123;</span><br><span class="line">        <span class="title function_">showLoading</span>(el, binding)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">hideLoading</span>(el)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">unmounted</span>(<span class="params">el</span>) &#123;</span><br><span class="line">    <span class="title function_">hideLoading</span>(el)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createLoadingInstance</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> loadingText = binding.<span class="property">arg</span> || <span class="string">&#x27;加载中...&#x27;</span></span><br><span class="line">  <span class="keyword">const</span> size = binding.<span class="property">modifiers</span>.<span class="property">small</span> ? <span class="string">&#x27;small&#x27;</span> : </span><br><span class="line">               binding.<span class="property">modifiers</span>.<span class="property">large</span> ? <span class="string">&#x27;large&#x27;</span> : <span class="string">&#x27;medium&#x27;</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 创建 loading 组件实例</span></span><br><span class="line">  <span class="keyword">const</span> loadingApp = <span class="title function_">createApp</span>(<span class="title class_">LoadingComponent</span>, &#123;</span><br><span class="line">    <span class="attr">text</span>: loadingText,</span><br><span class="line">    <span class="attr">size</span>: size</span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> loadingEl = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line">  loadingEl.<span class="property">className</span> = <span class="string">&#x27;v-loading-container&#x27;</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 挂载组件</span></span><br><span class="line">  loadingApp.<span class="title function_">mount</span>(loadingEl)</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 保存引用</span></span><br><span class="line">  el.<span class="property">_loadingInstance</span> = &#123;</span><br><span class="line">    <span class="attr">app</span>: loadingApp,</span><br><span class="line">    <span class="attr">element</span>: loadingEl</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 如果初始值为 true，显示 loading</span></span><br><span class="line">  <span class="keyword">if</span> (binding.<span class="property">value</span>) &#123;</span><br><span class="line">    <span class="title function_">showLoading</span>(el, binding)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">showLoading</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; element &#125; = el.<span class="property">_loadingInstance</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 设置容器样式</span></span><br><span class="line">  <span class="keyword">const</span> originalPosition = <span class="title function_">getComputedStyle</span>(el).<span class="property">position</span></span><br><span class="line">  <span class="keyword">if</span> (originalPosition === <span class="string">&#x27;static&#x27;</span>) &#123;</span><br><span class="line">    el.<span class="property">style</span>.<span class="property">position</span> = <span class="string">&#x27;relative&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 添加 loading 遮罩</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">position</span> = <span class="string">&#x27;absolute&#x27;</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">top</span> = <span class="string">&#x27;0&#x27;</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">left</span> = <span class="string">&#x27;0&#x27;</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">width</span> = <span class="string">&#x27;100%&#x27;</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">height</span> = <span class="string">&#x27;100%&#x27;</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">backgroundColor</span> = <span class="string">&#x27;rgba(255, 255, 255, 0.8)&#x27;</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&#x27;flex&#x27;</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">alignItems</span> = <span class="string">&#x27;center&#x27;</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">justifyContent</span> = <span class="string">&#x27;center&#x27;</span></span><br><span class="line">  element.<span class="property">style</span>.<span class="property">zIndex</span> = <span class="string">&#x27;1000&#x27;</span></span><br><span class="line">  </span><br><span class="line">  el.<span class="title function_">appendChild</span>(element)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">hideLoading</span>(<span class="params">el</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (el.<span class="property">_loadingInstance</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; element &#125; = el.<span class="property">_loadingInstance</span></span><br><span class="line">    <span class="keyword">if</span> (element.<span class="property">parentNode</span>) &#123;</span><br><span class="line">      element.<span class="property">parentNode</span>.<span class="title function_">removeChild</span>(element)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-指令的注册和使用"><a href="#3-指令的注册和使用" class="headerlink" title="3. 指令的注册和使用"></a>3. 指令的注册和使用</h3><p><strong>全局注册指令</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&#x27;./App.vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 导入自定义指令</span></span><br><span class="line"><span class="keyword">import</span> &#123; vFocus &#125; <span class="keyword">from</span> <span class="string">&#x27;./directives/focus&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; vClickOutside &#125; <span class="keyword">from</span> <span class="string">&#x27;./directives/clickOutside&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; vLazy &#125; <span class="keyword">from</span> <span class="string">&#x27;./directives/lazy&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; vPermission &#125; <span class="keyword">from</span> <span class="string">&#x27;./directives/permission&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; vLoading &#125; <span class="keyword">from</span> <span class="string">&#x27;./directives/loading&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(<span class="title class_">App</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册全局指令</span></span><br><span class="line">app.<span class="title function_">directive</span>(<span class="string">&#x27;focus&#x27;</span>, vFocus)</span><br><span class="line">app.<span class="title function_">directive</span>(<span class="string">&#x27;click-outside&#x27;</span>, vClickOutside)</span><br><span class="line">app.<span class="title function_">directive</span>(<span class="string">&#x27;lazy&#x27;</span>, vLazy)</span><br><span class="line">app.<span class="title function_">directive</span>(<span class="string">&#x27;permission&#x27;</span>, vPermission)</span><br><span class="line">app.<span class="title function_">directive</span>(<span class="string">&#x27;loading&#x27;</span>, vLoading)</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>在组件中使用指令</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;demo-page&quot;&gt;</span><br><span class="line">    &lt;!-- 自动聚焦 --&gt;</span><br><span class="line">    &lt;input v-focus placeholder=&quot;自动聚焦的输入框&quot;&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 点击外部关闭 --&gt;</span><br><span class="line">    &lt;div class=&quot;dropdown&quot; v-click-outside=&quot;closeDropdown&quot;&gt;</span><br><span class="line">      &lt;button @click=&quot;showDropdown = !showDropdown&quot;&gt;下拉菜单&lt;/button&gt;</span><br><span class="line">      &lt;ul v-if=&quot;showDropdown&quot; class=&quot;dropdown-menu&quot;&gt;</span><br><span class="line">        &lt;li&gt;选项 1&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;选项 2&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;选项 3&lt;/li&gt;</span><br><span class="line">      &lt;/ul&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 图片懒加载 --&gt;</span><br><span class="line">    &lt;div class=&quot;image-gallery&quot;&gt;</span><br><span class="line">      &lt;img </span><br><span class="line">        v-for=&quot;image in images&quot; </span><br><span class="line">        :key=&quot;image.id&quot;</span><br><span class="line">        v-lazy=&quot;image.src&quot;</span><br><span class="line">        :data-placeholder=&quot;image.placeholder&quot;</span><br><span class="line">        :alt=&quot;image.alt&quot;</span><br><span class="line">        class=&quot;gallery-image&quot;</span><br><span class="line">      &gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 权限控制 --&gt;</span><br><span class="line">    &lt;button v-permission=&quot;[&#x27;admin&#x27;, &#x27;editor&#x27;]&quot; @click=&quot;deleteItem&quot;&gt;</span><br><span class="line">      删除（需要管理员或编辑权限）</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;button v-permission:every=&quot;[&#x27;admin&#x27;, &#x27;super&#x27;]&quot; @click=&quot;systemConfig&quot;&gt;</span><br><span class="line">      系统配置（需要管理员和超级权限）</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;!-- 加载状态 --&gt;</span><br><span class="line">    &lt;div v-loading=&quot;isLoading&quot; class=&quot;content-area&quot;&gt;</span><br><span class="line">      &lt;p&gt;这里是内容区域&lt;/p&gt;</span><br><span class="line">      &lt;button @click=&quot;loadData&quot;&gt;加载数据&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref &#125; from &#x27;vue&#x27;</span><br><span class="line"></span><br><span class="line">const showDropdown = ref(false)</span><br><span class="line">const isLoading = ref(false)</span><br><span class="line"></span><br><span class="line">const images = ref([</span><br><span class="line">  &#123;</span><br><span class="line">    id: 1,</span><br><span class="line">    src: &#x27;https://example.com/image1.jpg&#x27;,</span><br><span class="line">    placeholder: &#x27;/images/placeholder.jpg&#x27;,</span><br><span class="line">    alt: &#x27;图片1&#x27;</span><br><span class="line">  &#125;,</span><br><span class="line">  // 更多图片...</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">function closeDropdown() &#123;</span><br><span class="line">  showDropdown.value = false</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function deleteItem() &#123;</span><br><span class="line">  console.log(&#x27;删除操作&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function systemConfig() &#123;</span><br><span class="line">  console.log(&#x27;系统配置&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async function loadData() &#123;</span><br><span class="line">  isLoading.value = true</span><br><span class="line">  try &#123;</span><br><span class="line">    // 模拟 API 调用</span><br><span class="line">    await new Promise(resolve =&gt; setTimeout(resolve, 2000))</span><br><span class="line">    console.log(&#x27;数据加载完成&#x27;)</span><br><span class="line">  &#125; finally &#123;</span><br><span class="line">    isLoading.value = false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="组合式函数封装通信逻辑"><a href="#组合式函数封装通信逻辑" class="headerlink" title="组合式函数封装通信逻辑"></a>组合式函数封装通信逻辑</h2><p><strong>useEventBus 组合式函数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// composables/useEventBus.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; onUnmounted &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; eventBus &#125; <span class="keyword">from</span> <span class="string">&#x27;@/utils/eventBus&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useEventBus</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> unsubscribers = []</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">on</span> = (<span class="params">event, callback</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> unsubscribe = eventBus.<span class="title function_">on</span>(event, callback)</span><br><span class="line">    unsubscribers.<span class="title function_">push</span>(unsubscribe)</span><br><span class="line">    <span class="keyword">return</span> unsubscribe</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">emit</span> = (<span class="params">event, ...args</span>) =&gt; &#123;</span><br><span class="line">    eventBus.<span class="title function_">emit</span>(event, ...args)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">once</span> = (<span class="params">event, callback</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> unsubscribe = eventBus.<span class="title function_">once</span>(event, callback)</span><br><span class="line">    unsubscribers.<span class="title function_">push</span>(unsubscribe)</span><br><span class="line">    <span class="keyword">return</span> unsubscribe</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 组件卸载时自动清理</span></span><br><span class="line">  <span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    unsubscribers.<span class="title function_">forEach</span>(<span class="function"><span class="params">unsubscribe</span> =&gt;</span> <span class="title function_">unsubscribe</span>())</span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    on,</span><br><span class="line">    emit,</span><br><span class="line">    once</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>useParentChild 组合式函数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// composables/useParentChild.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; getCurrentInstance, provide, inject &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">PARENT_CHILD_KEY</span> = <span class="title class_">Symbol</span>(<span class="string">&#x27;parentChild&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useParent</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> children = <span class="keyword">new</span> <span class="title class_">Set</span>()</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">addChild</span> = (<span class="params">child</span>) =&gt; &#123;</span><br><span class="line">    children.<span class="title function_">add</span>(child)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">removeChild</span> = (<span class="params">child</span>) =&gt; &#123;</span><br><span class="line">    children.<span class="title function_">delete</span>(child)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">broadcastToChildren</span> = (<span class="params">method, ...args</span>) =&gt; &#123;</span><br><span class="line">    children.<span class="title function_">forEach</span>(<span class="function"><span class="params">child</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (child[method]) &#123;</span><br><span class="line">        child[method](...args)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">provide</span>(<span class="variable constant_">PARENT_CHILD_KEY</span>, &#123;</span><br><span class="line">    addChild,</span><br><span class="line">    removeChild</span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    children,</span><br><span class="line">    broadcastToChildren</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useChild</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> instance = <span class="title function_">getCurrentInstance</span>()</span><br><span class="line">  <span class="keyword">const</span> parent = <span class="title function_">inject</span>(<span class="variable constant_">PARENT_CHILD_KEY</span>, <span class="literal">null</span>)</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (parent) &#123;</span><br><span class="line">    parent.<span class="title function_">addChild</span>(instance.<span class="property">proxy</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      parent.<span class="title function_">removeChild</span>(instance.<span class="property">proxy</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">parent</span>: parent ? parent : <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Vue 3 提供了丰富的组件通信方式和强大的自定义指令系统，让我们能够构建复杂而灵活的应用。关键要点包括：</p>
+<p><strong>组件通信最佳实践：</strong></p>
+<ol>
+<li><strong>Props&#x2F;Emits</strong>：适用于父子组件直接通信</li>
+<li><strong>v-model</strong>：适用于双向数据绑定场景</li>
+<li><strong>Provide&#x2F;Inject</strong>：适用于跨层级的依赖注入</li>
+<li><strong>Event Bus</strong>：适用于兄弟组件或远距离组件通信</li>
+<li><strong>状态管理</strong>：适用于复杂的全局状态管理</li>
+</ol>
+<p><strong>自定义指令最佳实践：</strong></p>
+<ol>
+<li><strong>关注 DOM 操作</strong>：指令主要用于 DOM 相关的操作</li>
+<li><strong>生命周期管理</strong>：正确处理指令的挂载、更新和卸载</li>
+<li><strong>性能优化</strong>：避免在指令中进行重复的计算和 DOM 操作</li>
+<li><strong>错误处理</strong>：添加适当的错误处理和边界情况处理</li>
+<li><strong>可复用性</strong>：设计通用的指令，通过参数和修饰符提供灵活性</li>
+</ol>
+<p>通过合理选择通信方式和创建实用的自定义指令，可以大大提升 Vue 应用的开发效率和用户体验。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Vue3/">Vue3</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1/">组件通信</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4/">自定义指令</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/provide-inject/">provide/inject</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF/">事件总线</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/laravel/laravel-routing-system-comprehensive-guide/"
+                                   title="Laravel 路由系统完全指南：从基础到高级应用"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Laravel 路由系统完全指南：从基础到高级应用</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/php/php-datetime-handling-guide/"
+                                   title="PHP日期时间处理完全指南：从基础到高级应用"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">PHP日期时间处理完全指南：从基础到高级应用</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-3-%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E5%85%A8%E6%99%AF%E5%9B%BE"><span class="nav-text">Vue 3 组件通信全景图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Props-%E5%92%8C-Emits%EF%BC%88%E7%88%B6%E5%AD%90%E9%80%9A%E4%BF%A1%EF%BC%89"><span class="nav-text">1. Props 和 Emits（父子通信）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-v-model-%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A"><span class="nav-text">2. v-model 双向绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Provide-Inject%EF%BC%88%E8%B7%A8%E5%B1%82%E7%BA%A7%E9%80%9A%E4%BF%A1%EF%BC%89"><span class="nav-text">3. Provide&#x2F;Inject（跨层级通信）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%EF%BC%88Event-Bus%EF%BC%89"><span class="nav-text">4. 事件总线（Event Bus）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E5%AE%9E%E6%88%98"><span class="nav-text">自定义指令实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E7%A1%80%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="nav-text">1. 基础自定义指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%AB%98%E7%BA%A7%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="nav-text">2. 高级自定义指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%8C%87%E4%BB%A4%E7%9A%84%E6%B3%A8%E5%86%8C%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-text">3. 指令的注册和使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F%E5%87%BD%E6%95%B0%E5%B0%81%E8%A3%85%E9%80%9A%E4%BF%A1%E9%80%BB%E8%BE%91"><span class="nav-text">组合式函数封装通信逻辑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-3-%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E5%85%A8%E6%99%AF%E5%9B%BE"><span class="nav-text">Vue 3 组件通信全景图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Props-%E5%92%8C-Emits%EF%BC%88%E7%88%B6%E5%AD%90%E9%80%9A%E4%BF%A1%EF%BC%89"><span class="nav-text">1. Props 和 Emits（父子通信）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-v-model-%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A"><span class="nav-text">2. v-model 双向绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Provide-Inject%EF%BC%88%E8%B7%A8%E5%B1%82%E7%BA%A7%E9%80%9A%E4%BF%A1%EF%BC%89"><span class="nav-text">3. Provide&#x2F;Inject（跨层级通信）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%EF%BC%88Event-Bus%EF%BC%89"><span class="nav-text">4. 事件总线（Event Bus）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E5%AE%9E%E6%88%98"><span class="nav-text">自定义指令实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E7%A1%80%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="nav-text">1. 基础自定义指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%AB%98%E7%BA%A7%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4"><span class="nav-text">2. 高级自定义指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%8C%87%E4%BB%A4%E7%9A%84%E6%B3%A8%E5%86%8C%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-text">3. 指令的注册和使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E5%BC%8F%E5%87%BD%E6%95%B0%E5%B0%81%E8%A3%85%E9%80%9A%E4%BF%A1%E9%80%BB%E8%BE%91"><span class="nav-text">组合式函数封装通信逻辑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

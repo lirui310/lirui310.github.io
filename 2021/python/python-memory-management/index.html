@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            Python内存管理：深入理解Python的内存机制 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Python内存管理：深入理解Python的内存机制
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2021-11-30 13:50:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/python/">python</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/">内存优化</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">内存管理</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">垃圾回收</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/">引用计数</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%80%A7%E8%83%BD/">性能</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Python内存管理：深入理解Python的内存机制"><a href="#Python内存管理：深入理解Python的内存机制" class="headerlink" title="Python内存管理：深入理解Python的内存机制"></a>Python内存管理：深入理解Python的内存机制</h1><p>Python作为一种高级编程语言，为开发者处理了大部分内存管理工作，使我们可以专注于解决问题而不是内存分配和释放。然而，了解Python的内存管理机制对于编写高效、无内存泄漏的代码至关重要。在这篇文章中，我将深入探讨Python的内存管理机制，包括对象的生命周期、垃圾回收、内存池等概念。</p>
+<h2 id="Python内存管理的基础"><a href="#Python内存管理的基础" class="headerlink" title="Python内存管理的基础"></a>Python内存管理的基础</h2><h3 id="Python中的一切都是对象"><a href="#Python中的一切都是对象" class="headerlink" title="Python中的一切都是对象"></a>Python中的一切都是对象</h3><p>在Python中，一切都是对象，包括数字、字符串、函数、类等。每个对象都有三个基本属性：</p>
+<ol>
+<li><strong>标识（Identity）</strong>：对象在内存中的地址，可以通过<code>id()</code>函数获取</li>
+<li><strong>类型（Type）</strong>：对象的类型，决定了对象可以进行的操作和占用的内存，可以通过<code>type()</code>函数获取</li>
+<li><strong>值（Value）</strong>：对象的数据内容</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">42</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;标识: <span class="subst">&#123;<span class="built_in">id</span>(x)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;类型: <span class="subst">&#123;<span class="built_in">type</span>(x)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;值: <span class="subst">&#123;x&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="可变对象与不可变对象"><a href="#可变对象与不可变对象" class="headerlink" title="可变对象与不可变对象"></a>可变对象与不可变对象</h3><p>Python中的对象分为可变对象和不可变对象：</p>
+<ul>
+<li><strong>不可变对象</strong>：一旦创建，其值就不能改变，如数字、字符串、元组</li>
+<li><strong>可变对象</strong>：创建后可以修改其值，如列表、字典、集合</li>
+</ul>
+<p>这种区别对内存管理有重要影响：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不可变对象</span></span><br><span class="line">a = <span class="string">&quot;hello&quot;</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(a))  <span class="comment"># 打印内存地址</span></span><br><span class="line">a = a + <span class="string">&quot; world&quot;</span>  <span class="comment"># 创建新对象，而不是修改原对象</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(a))  <span class="comment"># 打印新对象的内存地址，与之前不同</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 可变对象</span></span><br><span class="line">b = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(b))  <span class="comment"># 打印内存地址</span></span><br><span class="line">b.append(<span class="number">4</span>)  <span class="comment"># 修改原对象</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">id</span>(b))  <span class="comment"># 打印内存地址，与之前相同</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="引用计数机制"><a href="#引用计数机制" class="headerlink" title="引用计数机制"></a>引用计数机制</h2><p>Python的内存管理主要基于引用计数机制。每个对象都有一个引用计数，表示指向该对象的引用数量。</p>
+<h3 id="引用计数的工作原理"><a href="#引用计数的工作原理" class="headerlink" title="引用计数的工作原理"></a>引用计数的工作原理</h3><ul>
+<li>当对象被创建或被引用时，引用计数加1</li>
+<li>当对象的引用被删除或超出作用域时，引用计数减1</li>
+<li>当引用计数为0时，对象被销毁，内存被回收</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建对象，引用计数为1</span></span><br><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="built_in">print</span>(sys.getrefcount(a) - <span class="number">1</span>)  <span class="comment"># getrefcount本身会创建一个临时引用，所以减1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建另一个引用，引用计数为2</span></span><br><span class="line">b = a</span><br><span class="line"><span class="built_in">print</span>(sys.getrefcount(a) - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除一个引用，引用计数为1</span></span><br><span class="line"><span class="keyword">del</span> b</span><br><span class="line"><span class="built_in">print</span>(sys.getrefcount(a) - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 函数结束后，a超出作用域，引用计数为0，对象被回收</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="循环引用问题"><a href="#循环引用问题" class="headerlink" title="循环引用问题"></a>循环引用问题</h3><p>引用计数机制的一个主要缺点是无法处理循环引用。当两个或多个对象相互引用时，即使它们不再被程序使用，它们的引用计数也不会变为0，导致内存泄漏：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">create_cycle</span>():</span><br><span class="line">    <span class="comment"># 创建两个相互引用的列表</span></span><br><span class="line">    a = []</span><br><span class="line">    b = []</span><br><span class="line">    a.append(b)  <span class="comment"># a引用b</span></span><br><span class="line">    b.append(a)  <span class="comment"># b引用a</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 函数结束后，a和b的引用计数都为1（相互引用）</span></span><br><span class="line">    <span class="comment"># 尽管它们不再被程序使用，但不会被回收</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用函数</span></span><br><span class="line">create_cycle()</span><br></pre></td></tr></table></figure>
+
+<p>为了解决这个问题，Python引入了循环垃圾收集器。</p>
+<h2 id="垃圾回收机制"><a href="#垃圾回收机制" class="headerlink" title="垃圾回收机制"></a>垃圾回收机制</h2><p>Python的垃圾回收机制包括三个部分：</p>
+<ol>
+<li><strong>引用计数</strong>：主要的垃圾回收机制</li>
+<li><strong>循环垃圾收集器</strong>：处理循环引用</li>
+<li><strong>内存池</strong>：优化小对象的内存分配和释放</li>
+</ol>
+<h3 id="循环垃圾收集器"><a href="#循环垃圾收集器" class="headerlink" title="循环垃圾收集器"></a>循环垃圾收集器</h3><p>Python的循环垃圾收集器使用”标记-清除”算法来检测和回收循环引用的对象：</p>
+<ol>
+<li>收集所有容器对象（可能产生循环引用的对象）</li>
+<li>检测这些对象之间的循环引用</li>
+<li>回收没有外部引用的循环引用对象</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看垃圾回收阈值</span></span><br><span class="line"><span class="built_in">print</span>(gc.get_threshold())  <span class="comment"># 默认为(700, 10, 10)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 手动触发垃圾回收</span></span><br><span class="line">gc.collect()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 禁用自动垃圾回收</span></span><br><span class="line">gc.disable()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用自动垃圾回收</span></span><br><span class="line">gc.enable()</span><br></pre></td></tr></table></figure>
+
+<h3 id="分代垃圾回收"><a href="#分代垃圾回收" class="headerlink" title="分代垃圾回收"></a>分代垃圾回收</h3><p>Python的垃圾回收器使用分代回收策略，将对象分为三代：</p>
+<ul>
+<li>第0代：新创建的对象</li>
+<li>第1代：经过一次垃圾回收后仍然存活的对象</li>
+<li>第2代：经过两次垃圾回收后仍然存活的对象</li>
+</ul>
+<p>每一代都有自己的阈值，当达到阈值时触发垃圾回收。这种策略基于”新对象容易死，老对象往往长寿”的经验法则，提高了垃圾回收的效率。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看当前各代对象数量</span></span><br><span class="line"><span class="built_in">print</span>(gc.get_count())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 手动触发特定代的垃圾回收</span></span><br><span class="line">gc.collect(<span class="number">0</span>)  <span class="comment"># 只回收第0代</span></span><br><span class="line">gc.collect(<span class="number">1</span>)  <span class="comment"># 只回收第1代</span></span><br><span class="line">gc.collect(<span class="number">2</span>)  <span class="comment"># 只回收第2代</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="内存池机制"><a href="#内存池机制" class="headerlink" title="内存池机制"></a>内存池机制</h2><p>为了提高小对象的分配和释放效率，Python实现了内存池机制。</p>
+<h3 id="小整数对象池"><a href="#小整数对象池" class="headerlink" title="小整数对象池"></a>小整数对象池</h3><p>Python预先分配了[-5, 256]范围内的整数对象，这些对象是单例的，多次创建相同的小整数实际上会返回同一个对象：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">42</span></span><br><span class="line">b = <span class="number">42</span></span><br><span class="line"><span class="built_in">print</span>(a <span class="keyword">is</span> b)  <span class="comment"># True，a和b引用同一个对象</span></span><br><span class="line"></span><br><span class="line">c = <span class="number">1000</span></span><br><span class="line">d = <span class="number">1000</span></span><br><span class="line"><span class="built_in">print</span>(c <span class="keyword">is</span> d)  <span class="comment"># False，超出小整数池范围，是不同对象</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串驻留"><a href="#字符串驻留" class="headerlink" title="字符串驻留"></a>字符串驻留</h3><p>Python也对字符串进行了优化，相同的字符串字面量会被驻留（interned）为同一个对象：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="string">&quot;hello&quot;</span></span><br><span class="line">b = <span class="string">&quot;hello&quot;</span></span><br><span class="line"><span class="built_in">print</span>(a <span class="keyword">is</span> b)  <span class="comment"># True，a和b引用同一个对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 但动态创建的字符串不一定会被驻留</span></span><br><span class="line">c = <span class="string">&quot;&quot;</span>.join([<span class="string">&quot;h&quot;</span>, <span class="string">&quot;e&quot;</span>, <span class="string">&quot;l&quot;</span>, <span class="string">&quot;l&quot;</span>, <span class="string">&quot;o&quot;</span>])</span><br><span class="line"><span class="built_in">print</span>(a <span class="keyword">is</span> c)  <span class="comment"># 可能是False，取决于Python实现</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="PyMalloc分配器"><a href="#PyMalloc分配器" class="headerlink" title="PyMalloc分配器"></a>PyMalloc分配器</h3><p>Python使用自己的内存分配器（PyMalloc）来管理小对象（小于512字节）的内存分配。PyMalloc维护了不同大小的内存池，减少了系统调用的开销，提高了内存分配的效率。</p>
+<h2 id="内存泄漏的常见原因"><a href="#内存泄漏的常见原因" class="headerlink" title="内存泄漏的常见原因"></a>内存泄漏的常见原因</h2><p>尽管Python有自动垃圾回收机制，但仍然可能发生内存泄漏：</p>
+<h3 id="1-循环引用中包含-del-方法"><a href="#1-循环引用中包含-del-方法" class="headerlink" title="1. 循环引用中包含__del__方法"></a>1. 循环引用中包含__del__方法</h3><p>如果循环引用中的对象定义了<code>__del__</code>方法，垃圾回收器无法安全地决定销毁顺序，会将这些对象放入<code>gc.garbage</code>列表而不是回收它们：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.b = <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__del__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;A被销毁&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.a = <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__del__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;B被销毁&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建循环引用</span></span><br><span class="line">a = A()</span><br><span class="line">b = B()</span><br><span class="line">a.b = b</span><br><span class="line">b.a = a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除外部引用</span></span><br><span class="line"><span class="keyword">del</span> a</span><br><span class="line"><span class="keyword">del</span> b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 手动触发垃圾回收</span></span><br><span class="line"><span class="keyword">import</span> gc</span><br><span class="line">gc.collect()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看未回收的对象</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(gc.garbage))</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-全局变量和单例"><a href="#2-全局变量和单例" class="headerlink" title="2. 全局变量和单例"></a>2. 全局变量和单例</h3><p>全局变量和单例在程序运行期间一直存在，如果它们持有大量数据，会占用内存直到程序结束：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 全局缓存</span></span><br><span class="line">_cache = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_data</span>(<span class="params">key</span>):</span><br><span class="line">    <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> _cache:</span><br><span class="line">        <span class="comment"># 获取数据（可能很大）</span></span><br><span class="line">        _cache[key] = load_data(key)</span><br><span class="line">    <span class="keyword">return</span> _cache[key]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果不清理缓存，它会一直增长</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-闭包和函数属性"><a href="#3-闭包和函数属性" class="headerlink" title="3. 闭包和函数属性"></a>3. 闭包和函数属性</h3><p>闭包会保留外部函数的变量，如果这些变量引用了大对象，可能导致内存泄漏：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">create_multipliers</span>():</span><br><span class="line">    <span class="comment"># 一个大列表</span></span><br><span class="line">    big_list = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100000</span>)]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">multiply</span>(<span class="params">n</span>):</span><br><span class="line">        <span class="comment"># 闭包引用了big_list，即使不使用它</span></span><br><span class="line">        <span class="keyword">return</span> n * <span class="number">2</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> multiply</span><br><span class="line"></span><br><span class="line"><span class="comment"># 即使我们只需要multiply函数，big_list也会被保留在内存中</span></span><br><span class="line">multiplier = create_multipliers()</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-未关闭的文件和网络连接"><a href="#4-未关闭的文件和网络连接" class="headerlink" title="4. 未关闭的文件和网络连接"></a>4. 未关闭的文件和网络连接</h3><p>未正确关闭的文件、网络连接等资源可能导致内存泄漏：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">read_file</span>(<span class="params">filename</span>):</span><br><span class="line">    f = <span class="built_in">open</span>(filename, <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">    content = f.read()</span><br><span class="line">    <span class="comment"># 忘记关闭文件</span></span><br><span class="line">    <span class="keyword">return</span> content</span><br><span class="line"></span><br><span class="line"><span class="comment"># 正确的做法是使用with语句</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_file_correctly</span>(<span class="params">filename</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filename, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        content = f.read()</span><br><span class="line">    <span class="keyword">return</span> content</span><br></pre></td></tr></table></figure>
+
+<h2 id="内存优化技巧"><a href="#内存优化技巧" class="headerlink" title="内存优化技巧"></a>内存优化技巧</h2><p>了解Python的内存管理机制后，我们可以使用一些技巧来优化内存使用：</p>
+<h3 id="1-使用生成器和迭代器"><a href="#1-使用生成器和迭代器" class="headerlink" title="1. 使用生成器和迭代器"></a>1. 使用生成器和迭代器</h3><p>对于大数据集，使用生成器和迭代器可以避免一次性加载所有数据到内存：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不好的做法：一次性加载所有数据</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_large_file</span>(<span class="params">filename</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filename, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        lines = f.readlines()  <span class="comment"># 加载所有行到内存</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">        process_line(line)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 好的做法：使用生成器逐行处理</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_large_file_efficiently</span>(<span class="params">filename</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(filename, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> f:  <span class="comment"># 文件对象是一个迭代器，逐行读取</span></span><br><span class="line">            process_line(line)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用-slots"><a href="#2-使用-slots" class="headerlink" title="2. 使用__slots__"></a>2. 使用__slots__</h3><p>对于创建大量实例的类，使用<code>__slots__</code>可以显著减少内存使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 普通类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name, age</span>):</span><br><span class="line">        <span class="variable language_">self</span>.name = name</span><br><span class="line">        <span class="variable language_">self</span>.age = age</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用__slots__的类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PersonWithSlots</span>:</span><br><span class="line">    __slots__ = [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;age&#x27;</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name, age</span>):</span><br><span class="line">        <span class="variable language_">self</span>.name = name</span><br><span class="line">        <span class="variable language_">self</span>.age = age</span><br><span class="line"></span><br><span class="line"><span class="comment"># 比较内存使用</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">p1 = Person(<span class="string">&quot;Alice&quot;</span>, <span class="number">30</span>)</span><br><span class="line">p2 = PersonWithSlots(<span class="string">&quot;Alice&quot;</span>, <span class="number">30</span>)</span><br><span class="line"><span class="built_in">print</span>(sys.getsizeof(p1.__dict__))  <span class="comment"># 普通类实例的字典</span></span><br><span class="line"><span class="built_in">print</span>(sys.getsizeof(p2))  <span class="comment"># __slots__类实例没有__dict__</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-使用弱引用"><a href="#3-使用弱引用" class="headerlink" title="3. 使用弱引用"></a>3. 使用弱引用</h3><p>当需要缓存对象但不想阻止它们被垃圾回收时，可以使用弱引用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> weakref</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cache</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 使用WeakValueDictionary而不是普通字典</span></span><br><span class="line">        <span class="variable language_">self</span>._cache = weakref.WeakValueDictionary()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get</span>(<span class="params">self, key</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>._cache.get(key)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">set</span>(<span class="params">self, key, value</span>):</span><br><span class="line">        <span class="variable language_">self</span>._cache[key] = value</span><br><span class="line"></span><br><span class="line"><span class="comment"># 当对象不再被其他地方引用时，它会自动从缓存中移除</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-及时释放不再需要的引用"><a href="#4-及时释放不再需要的引用" class="headerlink" title="4. 及时释放不再需要的引用"></a>4. 及时释放不再需要的引用</h3><p>显式删除不再需要的大对象引用，可以帮助垃圾回收器更快地回收内存：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">process_data</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="comment"># 处理数据</span></span><br><span class="line">    result = do_something_with(data)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 显式删除不再需要的大对象</span></span><br><span class="line">    <span class="keyword">del</span> data</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 继续处理</span></span><br><span class="line">    <span class="keyword">return</span> post_process(result)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-使用NumPy和Pandas等专业库"><a href="#5-使用NumPy和Pandas等专业库" class="headerlink" title="5. 使用NumPy和Pandas等专业库"></a>5. 使用NumPy和Pandas等专业库</h3><p>对于数值计算和数据处理，使用NumPy和Pandas等专业库可以显著减少内存使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 普通Python列表</span></span><br><span class="line">python_list = [[i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>)] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># NumPy数组</span></span><br><span class="line">numpy_array = np.arange(<span class="number">1000000</span>).reshape(<span class="number">1000</span>, <span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Python列表内存: <span class="subst">&#123;sys.getsizeof(python_list) + <span class="built_in">sum</span>(sys.getsizeof(row) <span class="keyword">for</span> row <span class="keyword">in</span> python_list)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;NumPy数组内存: <span class="subst">&#123;sys.getsizeof(numpy_array) + numpy_array.nbytes&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="内存分析工具"><a href="#内存分析工具" class="headerlink" title="内存分析工具"></a>内存分析工具</h2><p>当遇到内存问题时，以下工具可以帮助分析和解决：</p>
+<h3 id="1-memory-profiler"><a href="#1-memory-profiler" class="headerlink" title="1. memory_profiler"></a>1. memory_profiler</h3><p><code>memory_profiler</code>可以逐行分析Python代码的内存使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装：pip install memory_profiler</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用装饰器分析函数</span></span><br><span class="line"><span class="keyword">from</span> memory_profiler <span class="keyword">import</span> profile</span><br><span class="line"></span><br><span class="line"><span class="meta">@profile</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">my_function</span>():</span><br><span class="line">    a = [<span class="number">1</span>] * (<span class="number">10</span> ** <span class="number">6</span>)</span><br><span class="line">    b = [<span class="number">2</span>] * (<span class="number">2</span> * <span class="number">10</span> ** <span class="number">7</span>)</span><br><span class="line">    <span class="keyword">del</span> b</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    my_function()</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-objgraph"><a href="#2-objgraph" class="headerlink" title="2. objgraph"></a>2. objgraph</h3><p><code>objgraph</code>可以帮助可视化对象引用关系，特别适合分析循环引用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装：pip install objgraph</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> objgraph</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一些对象</span></span><br><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line">a.append(b)</span><br><span class="line">b.append(a)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找循环引用</span></span><br><span class="line">objgraph.show_backrefs([a], filename=<span class="string">&#x27;cycle.png&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看最常见的对象类型</span></span><br><span class="line">objgraph.show_most_common_types()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看特定类型对象的增长</span></span><br><span class="line">objgraph.show_growth()</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-tracemalloc"><a href="#3-tracemalloc" class="headerlink" title="3. tracemalloc"></a>3. tracemalloc</h3><p>Python 3.4引入的<code>tracemalloc</code>模块可以跟踪Python对象的内存分配：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tracemalloc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动跟踪</span></span><br><span class="line">tracemalloc.start()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行代码</span></span><br><span class="line">a = [<span class="number">1</span>] * (<span class="number">10</span> ** <span class="number">6</span>)</span><br><span class="line">b = [<span class="number">2</span>] * (<span class="number">2</span> * <span class="number">10</span> ** <span class="number">7</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取当前快照</span></span><br><span class="line">snapshot = tracemalloc.take_snapshot()</span><br><span class="line">top_stats = snapshot.statistics(<span class="string">&#x27;lineno&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印前10个内存块</span></span><br><span class="line"><span class="keyword">for</span> stat <span class="keyword">in</span> top_stats[:<span class="number">10</span>]:</span><br><span class="line">    <span class="built_in">print</span>(stat)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-pympler"><a href="#4-pympler" class="headerlink" title="4. pympler"></a>4. pympler</h3><p><code>pympler</code>提供了更多内存分析功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装：pip install pympler</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pympler <span class="keyword">import</span> asizeof, tracker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 精确计算对象大小</span></span><br><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>, <span class="number">4</span>, [<span class="number">5</span>, <span class="number">6</span>]]]</span><br><span class="line"><span class="built_in">print</span>(asizeof.asizeof(a))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 跟踪内存变化</span></span><br><span class="line">tr = tracker.SummaryTracker()</span><br><span class="line">a = [<span class="number">1</span>] * <span class="number">1000</span></span><br><span class="line">b = &#123;i: i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>)&#125;</span><br><span class="line">tr.print_diff()</span><br></pre></td></tr></table></figure>
+
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>Python的内存管理机制是一个复杂而精妙的系统，它通过引用计数、垃圾回收和内存池等机制，为开发者提供了高效、自动的内存管理。了解这些机制不仅有助于编写更高效的代码，还能帮助我们诊断和解决内存相关的问题。</p>
+<p>虽然Python的自动内存管理让我们不必像C&#x2F;C++那样手动分配和释放内存，但这并不意味着我们可以完全忽视内存管理。通过合理使用数据结构、避免循环引用、及时释放大对象等技巧，我们可以让Python程序更加高效地使用内存。</p>
+<p>你有什么关于Python内存管理的问题或经验分享吗？欢迎在评论中讨论！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96/">内存优化</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">内存管理</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">垃圾回收</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/">引用计数</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%80%A7%E8%83%BD/">性能</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2021/thinkphp/thinkphp6-file-upload-security/"
+                                   title="ThinkPHP6/8 文件上传与安全防护实战"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">ThinkPHP6/8 文件上传与安全防护实战</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2021/python/python-debugging-techniques/"
+                                   title="Python调试技巧：从print到高级调试工具的完全指南"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Python调试技巧：从print到高级调试工具的完全指南</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%EF%BC%9A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Python%E7%9A%84%E5%86%85%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-text">Python内存管理：深入理解Python的内存机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E5%9F%BA%E7%A1%80"><span class="nav-text">Python内存管理的基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E4%B8%AD%E7%9A%84%E4%B8%80%E5%88%87%E9%83%BD%E6%98%AF%E5%AF%B9%E8%B1%A1"><span class="nav-text">Python中的一切都是对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1%E4%B8%8E%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1"><span class="nav-text">可变对象与不可变对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">引用计数机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">引用计数的工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98"><span class="nav-text">循环引用问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-text">垃圾回收机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-text">循环垃圾收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E4%BB%A3%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="nav-text">分代垃圾回收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B1%A0%E6%9C%BA%E5%88%B6"><span class="nav-text">内存池机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E6%95%B4%E6%95%B0%E5%AF%B9%E8%B1%A1%E6%B1%A0"><span class="nav-text">小整数对象池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%A9%BB%E7%95%99"><span class="nav-text">字符串驻留</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PyMalloc%E5%88%86%E9%85%8D%E5%99%A8"><span class="nav-text">PyMalloc分配器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E5%B8%B8%E8%A7%81%E5%8E%9F%E5%9B%A0"><span class="nav-text">内存泄漏的常见原因</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E4%B8%AD%E5%8C%85%E5%90%AB-del-%E6%96%B9%E6%B3%95"><span class="nav-text">1. 循环引用中包含__del__方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E5%92%8C%E5%8D%95%E4%BE%8B"><span class="nav-text">2. 全局变量和单例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%97%AD%E5%8C%85%E5%92%8C%E5%87%BD%E6%95%B0%E5%B1%9E%E6%80%A7"><span class="nav-text">3. 闭包和函数属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%9C%AA%E5%85%B3%E9%97%AD%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5"><span class="nav-text">4. 未关闭的文件和网络连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">内存优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="nav-text">1. 使用生成器和迭代器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-slots"><span class="nav-text">2. 使用__slots__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8"><span class="nav-text">3. 使用弱引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%8F%8A%E6%97%B6%E9%87%8A%E6%94%BE%E4%B8%8D%E5%86%8D%E9%9C%80%E8%A6%81%E7%9A%84%E5%BC%95%E7%94%A8"><span class="nav-text">4. 及时释放不再需要的引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8NumPy%E5%92%8CPandas%E7%AD%89%E4%B8%93%E4%B8%9A%E5%BA%93"><span class="nav-text">5. 使用NumPy和Pandas等专业库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-text">内存分析工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-memory-profiler"><span class="nav-text">1. memory_profiler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-objgraph"><span class="nav-text">2. objgraph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-tracemalloc"><span class="nav-text">3. tracemalloc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-pympler"><span class="nav-text">4. pympler</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%EF%BC%9A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Python%E7%9A%84%E5%86%85%E5%AD%98%E6%9C%BA%E5%88%B6"><span class="nav-text">Python内存管理：深入理解Python的内存机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E5%9F%BA%E7%A1%80"><span class="nav-text">Python内存管理的基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E4%B8%AD%E7%9A%84%E4%B8%80%E5%88%87%E9%83%BD%E6%98%AF%E5%AF%B9%E8%B1%A1"><span class="nav-text">Python中的一切都是对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1%E4%B8%8E%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1"><span class="nav-text">可变对象与不可变对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%9C%BA%E5%88%B6"><span class="nav-text">引用计数机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">引用计数的工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98"><span class="nav-text">循环引用问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-text">垃圾回收机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-text">循环垃圾收集器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E4%BB%A3%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="nav-text">分代垃圾回收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B1%A0%E6%9C%BA%E5%88%B6"><span class="nav-text">内存池机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E6%95%B4%E6%95%B0%E5%AF%B9%E8%B1%A1%E6%B1%A0"><span class="nav-text">小整数对象池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%A9%BB%E7%95%99"><span class="nav-text">字符串驻留</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PyMalloc%E5%88%86%E9%85%8D%E5%99%A8"><span class="nav-text">PyMalloc分配器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E5%B8%B8%E8%A7%81%E5%8E%9F%E5%9B%A0"><span class="nav-text">内存泄漏的常见原因</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E4%B8%AD%E5%8C%85%E5%90%AB-del-%E6%96%B9%E6%B3%95"><span class="nav-text">1. 循环引用中包含__del__方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E5%92%8C%E5%8D%95%E4%BE%8B"><span class="nav-text">2. 全局变量和单例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%97%AD%E5%8C%85%E5%92%8C%E5%87%BD%E6%95%B0%E5%B1%9E%E6%80%A7"><span class="nav-text">3. 闭包和函数属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%9C%AA%E5%85%B3%E9%97%AD%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5"><span class="nav-text">4. 未关闭的文件和网络连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">内存优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="nav-text">1. 使用生成器和迭代器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-slots"><span class="nav-text">2. 使用__slots__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8"><span class="nav-text">3. 使用弱引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%8F%8A%E6%97%B6%E9%87%8A%E6%94%BE%E4%B8%8D%E5%86%8D%E9%9C%80%E8%A6%81%E7%9A%84%E5%BC%95%E7%94%A8"><span class="nav-text">4. 及时释放不再需要的引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E4%BD%BF%E7%94%A8NumPy%E5%92%8CPandas%E7%AD%89%E4%B8%93%E4%B8%9A%E5%BA%93"><span class="nav-text">5. 使用NumPy和Pandas等专业库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-text">内存分析工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-memory-profiler"><span class="nav-text">1. memory_profiler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-objgraph"><span class="nav-text">2. objgraph</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-tracemalloc"><span class="nav-text">3. tracemalloc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-pympler"><span class="nav-text">4. pympler</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>

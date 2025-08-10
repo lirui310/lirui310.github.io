@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Orion K">
+    
+    <title>
+        
+            FastAPI异步数据库操作优化：从SQLAlchemy到性能调优 |
+        
+        Orion K Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Orion K Blog","author":"Orion K","avatar":"/images/avatar.svg","logo":"/images/logo.svg","favicon":"/images/logo.svg"},"menu":{"home":"/                        || fa-solid fa-home","archives":"/archives            || fa-solid fa-box-archive","tags":"/tags                    || fa-solid fa-tags","categories":"/categories        || fa-solid fa-layer-group"},"first_screen":{"enable":false,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":"欢迎来到 Orion K 的博客，这是一个分享互联网技术的博客。联系：wxmm686800@gmail.com","category":true,"tag":true,"post_datetime":"created"},"post":{"author_badge":{"enable":true,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":false,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2025,"word_count":false,"site_deploy":{"enable":true,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":false,"css":[null],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Orion K Blog
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-home"></i>
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-tags"></i>
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                    <i class="menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-home"></i>
+                                </span>
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-box-archive"></i>
+                                </span>
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-tags"></i>
+                                </span>
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                                <span class="menu-icon-wrap border-box flex-center">
+                                    <i class="drawer-menu-text-color menu-icon fa-solid fa-layer-group"></i>
+                                </span>
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        FastAPI异步数据库操作优化：从SQLAlchemy到性能调优
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Orion K</span>
+                                
+                                    <span class="author-badge">Lv6</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2023-08-15 14:30:00</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/fastapi/">fastapi</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/">数据库优化</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/SQLAlchemy/">SQLAlchemy</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/">性能调优</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ORM/">ORM</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="FastAPI异步数据库操作优化：从SQLAlchemy到性能调优"><a href="#FastAPI异步数据库操作优化：从SQLAlchemy到性能调优" class="headerlink" title="FastAPI异步数据库操作优化：从SQLAlchemy到性能调优"></a>FastAPI异步数据库操作优化：从SQLAlchemy到性能调优</h1><p>在开发高性能的FastAPI应用时，数据库操作往往是性能瓶颈的关键所在。作为一个在生产环境中维护多个FastAPI项目的开发者，我想分享一些在异步数据库操作方面的实战经验和优化技巧。</p>
+<h2 id="异步数据库连接的正确姿势"><a href="#异步数据库连接的正确姿势" class="headerlink" title="异步数据库连接的正确姿势"></a>异步数据库连接的正确姿势</h2><h3 id="1-选择合适的异步数据库驱动"><a href="#1-选择合适的异步数据库驱动" class="headerlink" title="1. 选择合适的异步数据库驱动"></a>1. 选择合适的异步数据库驱动</h3><p>首先，我们需要选择支持异步操作的数据库驱动。以PostgreSQL为例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># requirements.txt</span></span><br><span class="line">fastapi==<span class="number">0.104</span><span class="number">.1</span></span><br><span class="line">sqlalchemy==<span class="number">2.0</span><span class="number">.23</span></span><br><span class="line">asyncpg==<span class="number">0.29</span><span class="number">.0</span>  <span class="comment"># PostgreSQL异步驱动</span></span><br><span class="line">databases==<span class="number">0.8</span><span class="number">.0</span></span><br><span class="line">alembic==<span class="number">1.12</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-配置异步SQLAlchemy引擎"><a href="#2-配置异步SQLAlchemy引擎" class="headerlink" title="2. 配置异步SQLAlchemy引擎"></a>2. 配置异步SQLAlchemy引擎</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># database.py</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> create_async_engine, AsyncSession</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> async_sessionmaker</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> declarative_base</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">DATABASE_URL = os.getenv(</span><br><span class="line">    <span class="string">&quot;DATABASE_URL&quot;</span>, </span><br><span class="line">    <span class="string">&quot;postgresql+asyncpg://user:password@localhost/dbname&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建异步引擎</span></span><br><span class="line">engine = create_async_engine(</span><br><span class="line">    DATABASE_URL,</span><br><span class="line">    echo=<span class="literal">True</span>,  <span class="comment"># 开发环境下启用SQL日志</span></span><br><span class="line">    pool_size=<span class="number">20</span>,  <span class="comment"># 连接池大小</span></span><br><span class="line">    max_overflow=<span class="number">0</span>,  <span class="comment"># 超出连接池大小的连接数</span></span><br><span class="line">    pool_pre_ping=<span class="literal">True</span>,  <span class="comment"># 连接前检查连接是否有效</span></span><br><span class="line">    pool_recycle=<span class="number">3600</span>,  <span class="comment"># 连接回收时间（秒）</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建异步会话工厂</span></span><br><span class="line">AsyncSessionLocal = async_sessionmaker(</span><br><span class="line">    engine, </span><br><span class="line">    class_=AsyncSession, </span><br><span class="line">    expire_on_commit=<span class="literal">False</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">Base = declarative_base()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 依赖注入：获取数据库会话</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_db</span>():</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> AsyncSessionLocal() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">yield</span> session</span><br><span class="line">        <span class="keyword">except</span> Exception:</span><br><span class="line">            <span class="keyword">await</span> session.rollback()</span><br><span class="line">            <span class="keyword">raise</span></span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            <span class="keyword">await</span> session.close()</span><br></pre></td></tr></table></figure>
+
+<h2 id="模型定义和关系处理"><a href="#模型定义和关系处理" class="headerlink" title="模型定义和关系处理"></a>模型定义和关系处理</h2><h3 id="1-定义异步友好的模型"><a href="#1-定义异步友好的模型" class="headerlink" title="1. 定义异步友好的模型"></a>1. 定义异步友好的模型</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># models.py</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Column, Integer, String, DateTime, ForeignKey, Text, Boolean</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> relationship</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.sql <span class="keyword">import</span> func</span><br><span class="line"><span class="keyword">from</span> database <span class="keyword">import</span> Base</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&quot;users&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">id</span> = Column(Integer, primary_key=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    username = Column(String(<span class="number">50</span>), unique=<span class="literal">True</span>, index=<span class="literal">True</span>, nullable=<span class="literal">False</span>)</span><br><span class="line">    email = Column(String(<span class="number">100</span>), unique=<span class="literal">True</span>, index=<span class="literal">True</span>, nullable=<span class="literal">False</span>)</span><br><span class="line">    hashed_password = Column(String(<span class="number">255</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    is_active = Column(Boolean, default=<span class="literal">True</span>)</span><br><span class="line">    created_at = Column(DateTime(timezone=<span class="literal">True</span>), server_default=func.now())</span><br><span class="line">    updated_at = Column(DateTime(timezone=<span class="literal">True</span>), onupdate=func.now())</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 关系定义</span></span><br><span class="line">    posts = relationship(<span class="string">&quot;Post&quot;</span>, back_populates=<span class="string">&quot;author&quot;</span>, lazy=<span class="string">&quot;selectin&quot;</span>)</span><br><span class="line">    profile = relationship(<span class="string">&quot;UserProfile&quot;</span>, back_populates=<span class="string">&quot;user&quot;</span>, uselist=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Post</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&quot;posts&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">id</span> = Column(Integer, primary_key=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    title = Column(String(<span class="number">200</span>), nullable=<span class="literal">False</span>, index=<span class="literal">True</span>)</span><br><span class="line">    content = Column(Text, nullable=<span class="literal">False</span>)</span><br><span class="line">    author_id = Column(Integer, ForeignKey(<span class="string">&quot;users.id&quot;</span>), nullable=<span class="literal">False</span>)</span><br><span class="line">    is_published = Column(Boolean, default=<span class="literal">False</span>)</span><br><span class="line">    created_at = Column(DateTime(timezone=<span class="literal">True</span>), server_default=func.now())</span><br><span class="line">    updated_at = Column(DateTime(timezone=<span class="literal">True</span>), onupdate=func.now())</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 关系定义</span></span><br><span class="line">    author = relationship(<span class="string">&quot;User&quot;</span>, back_populates=<span class="string">&quot;posts&quot;</span>)</span><br><span class="line">    tags = relationship(<span class="string">&quot;Tag&quot;</span>, secondary=<span class="string">&quot;post_tags&quot;</span>, back_populates=<span class="string">&quot;posts&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UserProfile</span>(<span class="title class_ inherited__">Base</span>):</span><br><span class="line">    __tablename__ = <span class="string">&quot;user_profiles&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">id</span> = Column(Integer, primary_key=<span class="literal">True</span>, index=<span class="literal">True</span>)</span><br><span class="line">    user_id = Column(Integer, ForeignKey(<span class="string">&quot;users.id&quot;</span>), unique=<span class="literal">True</span>, nullable=<span class="literal">False</span>)</span><br><span class="line">    bio = Column(Text)</span><br><span class="line">    avatar_url = Column(String(<span class="number">255</span>))</span><br><span class="line">    </span><br><span class="line">    user = relationship(<span class="string">&quot;User&quot;</span>, back_populates=<span class="string">&quot;profile&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-处理N-1查询问题"><a href="#2-处理N-1查询问题" class="headerlink" title="2. 处理N+1查询问题"></a>2. 处理N+1查询问题</h3><p>N+1查询是ORM中常见的性能问题，在异步环境下更需要注意：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># crud.py</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncSession</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> selectinload, joinedload</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> select</span><br><span class="line"><span class="keyword">from</span> models <span class="keyword">import</span> User, Post</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Optional</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UserCRUD</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, db: AsyncSession</span>):</span><br><span class="line">        <span class="variable language_">self</span>.db = db</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_user_with_posts</span>(<span class="params">self, user_id: <span class="built_in">int</span></span>) -&gt; <span class="type">Optional</span>[User]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;获取用户及其所有文章（避免N+1查询）&quot;&quot;&quot;</span></span><br><span class="line">        stmt = select(User).options(</span><br><span class="line">            selectinload(User.posts),  <span class="comment"># 预加载文章</span></span><br><span class="line">            selectinload(User.profile)  <span class="comment"># 预加载用户资料</span></span><br><span class="line">        ).where(User.<span class="built_in">id</span> == user_id)</span><br><span class="line">        </span><br><span class="line">        result = <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(stmt)</span><br><span class="line">        <span class="keyword">return</span> result.scalar_one_or_none()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_users_with_post_count</span>(<span class="params">self</span>) -&gt; <span class="type">List</span>[User]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;获取用户列表及文章数量&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> func</span><br><span class="line">        </span><br><span class="line">        stmt = select(</span><br><span class="line">            User,</span><br><span class="line">            func.count(Post.<span class="built_in">id</span>).label(<span class="string">&quot;post_count&quot;</span>)</span><br><span class="line">        ).outerjoin(Post).group_by(User.<span class="built_in">id</span>)</span><br><span class="line">        </span><br><span class="line">        result = <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(stmt)</span><br><span class="line">        <span class="keyword">return</span> result.<span class="built_in">all</span>()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_active_users_with_recent_posts</span>(<span class="params">self</span>) -&gt; <span class="type">List</span>[User]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;获取活跃用户及其最近的文章&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta</span><br><span class="line">        </span><br><span class="line">        recent_date = datetime.utcnow() - timedelta(days=<span class="number">30</span>)</span><br><span class="line">        </span><br><span class="line">        stmt = select(User).options(</span><br><span class="line">            selectinload(User.posts.and_(Post.created_at &gt;= recent_date))</span><br><span class="line">        ).where(User.is_active == <span class="literal">True</span>)</span><br><span class="line">        </span><br><span class="line">        result = <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(stmt)</span><br><span class="line">        <span class="keyword">return</span> result.scalars().<span class="built_in">all</span>()</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级查询优化技巧"><a href="#高级查询优化技巧" class="headerlink" title="高级查询优化技巧"></a>高级查询优化技巧</h2><h3 id="1-批量操作优化"><a href="#1-批量操作优化" class="headerlink" title="1. 批量操作优化"></a>1. 批量操作优化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bulk_operations.py</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncSession</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> select, update, delete</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.dialects.postgresql <span class="keyword">import</span> insert</span><br><span class="line"><span class="keyword">from</span> models <span class="keyword">import</span> User, Post</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Dict</span>, <span class="type">Any</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BulkOperations</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, db: AsyncSession</span>):</span><br><span class="line">        <span class="variable language_">self</span>.db = db</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">bulk_create_users</span>(<span class="params">self, users_data: <span class="type">List</span>[<span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]]</span>) -&gt; <span class="type">List</span>[User]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;批量创建用户&quot;&quot;&quot;</span></span><br><span class="line">        users = [User(**user_data) <span class="keyword">for</span> user_data <span class="keyword">in</span> users_data]</span><br><span class="line">        <span class="variable language_">self</span>.db.add_all(users)</span><br><span class="line">        <span class="keyword">await</span> <span class="variable language_">self</span>.db.commit()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 刷新以获取生成的ID</span></span><br><span class="line">        <span class="keyword">for</span> user <span class="keyword">in</span> users:</span><br><span class="line">            <span class="keyword">await</span> <span class="variable language_">self</span>.db.refresh(user)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> users</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">bulk_update_users</span>(<span class="params">self, updates: <span class="type">List</span>[<span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;批量更新用户&quot;&quot;&quot;</span></span><br><span class="line">        stmt = update(User)</span><br><span class="line">        result = <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(stmt, updates)</span><br><span class="line">        <span class="keyword">await</span> <span class="variable language_">self</span>.db.commit()</span><br><span class="line">        <span class="keyword">return</span> result.rowcount</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">upsert_users</span>(<span class="params">self, users_data: <span class="type">List</span>[<span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;PostgreSQL特有的UPSERT操作&quot;&quot;&quot;</span></span><br><span class="line">        stmt = insert(User).values(users_data)</span><br><span class="line">        stmt = stmt.on_conflict_do_update(</span><br><span class="line">            index_elements=[<span class="string">&#x27;email&#x27;</span>],</span><br><span class="line">            set_=<span class="built_in">dict</span>(</span><br><span class="line">                username=stmt.excluded.username,</span><br><span class="line">                updated_at=func.now()</span><br><span class="line">            )</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(stmt)</span><br><span class="line">        <span class="keyword">await</span> <span class="variable language_">self</span>.db.commit()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">bulk_delete_inactive_users</span>(<span class="params">self, days: <span class="built_in">int</span> = <span class="number">365</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;批量删除非活跃用户&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta</span><br><span class="line">        </span><br><span class="line">        cutoff_date = datetime.utcnow() - timedelta(days=days)</span><br><span class="line">        </span><br><span class="line">        stmt = delete(User).where(</span><br><span class="line">            User.is_active == <span class="literal">False</span>,</span><br><span class="line">            User.updated_at &lt; cutoff_date</span><br><span class="line">        )</span><br><span class="line">        </span><br><span class="line">        result = <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(stmt)</span><br><span class="line">        <span class="keyword">await</span> <span class="variable language_">self</span>.db.commit()</span><br><span class="line">        <span class="keyword">return</span> result.rowcount</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-分页查询优化"><a href="#2-分页查询优化" class="headerlink" title="2. 分页查询优化"></a>2. 分页查询优化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pagination.py</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncSession</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> select, func, desc</span><br><span class="line"><span class="keyword">from</span> models <span class="keyword">import</span> Post, User</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span>, <span class="type">Optional</span>, <span class="type">Tuple</span></span><br><span class="line"><span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PaginationParams</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    page: <span class="built_in">int</span> = <span class="number">1</span></span><br><span class="line">    size: <span class="built_in">int</span> = <span class="number">20</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">offset</span>(<span class="params">self</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">return</span> (<span class="variable language_">self</span>.page - <span class="number">1</span>) * <span class="variable language_">self</span>.size</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PaginatedResponse</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    items: <span class="type">List</span>[<span class="type">Any</span>]</span><br><span class="line">    total: <span class="built_in">int</span></span><br><span class="line">    page: <span class="built_in">int</span></span><br><span class="line">    size: <span class="built_in">int</span></span><br><span class="line">    pages: <span class="built_in">int</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PostCRUD</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, db: AsyncSession</span>):</span><br><span class="line">        <span class="variable language_">self</span>.db = db</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_posts_paginated</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self, </span></span><br><span class="line"><span class="params">        pagination: PaginationParams,</span></span><br><span class="line"><span class="params">        search: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        author_id: <span class="type">Optional</span>[<span class="built_in">int</span>] = <span class="literal">None</span></span></span><br><span class="line"><span class="params">    </span>) -&gt; PaginatedResponse:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;分页获取文章列表&quot;&quot;&quot;</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 构建基础查询</span></span><br><span class="line">        base_query = select(Post).options(</span><br><span class="line">            selectinload(Post.author),</span><br><span class="line">            selectinload(Post.tags)</span><br><span class="line">        )</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 添加过滤条件</span></span><br><span class="line">        <span class="keyword">if</span> search:</span><br><span class="line">            base_query = base_query.where(</span><br><span class="line">                Post.title.ilike(<span class="string">f&quot;%<span class="subst">&#123;search&#125;</span>%&quot;</span>) |</span><br><span class="line">                Post.content.ilike(<span class="string">f&quot;%<span class="subst">&#123;search&#125;</span>%&quot;</span>)</span><br><span class="line">            )</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> author_id:</span><br><span class="line">            base_query = base_query.where(Post.author_id == author_id)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 只查询已发布的文章</span></span><br><span class="line">        base_query = base_query.where(Post.is_published == <span class="literal">True</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 获取总数</span></span><br><span class="line">        count_query = select(func.count()).select_from(</span><br><span class="line">            base_query.subquery()</span><br><span class="line">        )</span><br><span class="line">        total_result = <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(count_query)</span><br><span class="line">        total = total_result.scalar()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 获取分页数据</span></span><br><span class="line">        paginated_query = base_query.order_by(</span><br><span class="line">            desc(Post.created_at)</span><br><span class="line">        ).offset(pagination.offset).limit(pagination.size)</span><br><span class="line">        </span><br><span class="line">        result = <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(paginated_query)</span><br><span class="line">        posts = result.scalars().<span class="built_in">all</span>()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> PaginatedResponse(</span><br><span class="line">            items=posts,</span><br><span class="line">            total=total,</span><br><span class="line">            page=pagination.page,</span><br><span class="line">            size=pagination.size,</span><br><span class="line">            pages=(total + pagination.size - <span class="number">1</span>) // pagination.size</span><br><span class="line">        )</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_posts_cursor_paginated</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        cursor: <span class="type">Optional</span>[<span class="built_in">int</span>] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        size: <span class="built_in">int</span> = <span class="number">20</span></span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="type">Tuple</span>[<span class="type">List</span>[Post], <span class="type">Optional</span>[<span class="built_in">int</span>]]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;游标分页（适合大数据集）&quot;&quot;&quot;</span></span><br><span class="line">        query = select(Post).options(</span><br><span class="line">            selectinload(Post.author)</span><br><span class="line">        ).where(Post.is_published == <span class="literal">True</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> cursor:</span><br><span class="line">            query = query.where(Post.<span class="built_in">id</span> &lt; cursor)</span><br><span class="line">        </span><br><span class="line">        query = query.order_by(desc(Post.<span class="built_in">id</span>)).limit(size + <span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        result = <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(query)</span><br><span class="line">        posts = result.scalars().<span class="built_in">all</span>()</span><br><span class="line">        </span><br><span class="line">        next_cursor = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(posts) &gt; size:</span><br><span class="line">            posts = posts[:-<span class="number">1</span>]  <span class="comment"># 移除多查询的一条记录</span></span><br><span class="line">            next_cursor = posts[-<span class="number">1</span>].<span class="built_in">id</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> posts, next_cursor</span><br></pre></td></tr></table></figure>
+
+<h2 id="连接池和事务管理"><a href="#连接池和事务管理" class="headerlink" title="连接池和事务管理"></a>连接池和事务管理</h2><h3 id="1-连接池监控和调优"><a href="#1-连接池监控和调优" class="headerlink" title="1. 连接池监控和调优"></a>1. 连接池监控和调优</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># monitoring.py</span></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncEngine</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.pool <span class="keyword">import</span> QueuePool</span><br><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> asynccontextmanager</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DatabaseMonitor</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, engine: AsyncEngine</span>):</span><br><span class="line">        <span class="variable language_">self</span>.engine = engine</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_pool_status</span>(<span class="params">self</span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;获取连接池状态&quot;&quot;&quot;</span></span><br><span class="line">        pool = <span class="variable language_">self</span>.engine.pool</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="string">&quot;size&quot;</span>: pool.size(),</span><br><span class="line">            <span class="string">&quot;checked_in&quot;</span>: pool.checkedin(),</span><br><span class="line">            <span class="string">&quot;checked_out&quot;</span>: pool.checkedout(),</span><br><span class="line">            <span class="string">&quot;overflow&quot;</span>: pool.overflow(),</span><br><span class="line">            <span class="string">&quot;invalid&quot;</span>: pool.invalid()</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">monitor_pool</span>(<span class="params">self, interval: <span class="built_in">int</span> = <span class="number">60</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;定期监控连接池状态&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                status = <span class="keyword">await</span> <span class="variable language_">self</span>.get_pool_status()</span><br><span class="line">                logger.info(<span class="string">f&quot;数据库连接池状态: <span class="subst">&#123;status&#125;</span>&quot;</span>)</span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 检查连接池是否接近满载</span></span><br><span class="line">                <span class="keyword">if</span> status[<span class="string">&quot;checked_out&quot;</span>] / (status[<span class="string">&quot;size&quot;</span>] + status[<span class="string">&quot;overflow&quot;</span>]) &gt; <span class="number">0.8</span>:</span><br><span class="line">                    logger.warning(<span class="string">&quot;数据库连接池使用率过高！&quot;</span>)</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">await</span> asyncio.sleep(interval)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                logger.error(<span class="string">f&quot;监控连接池时出错: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">                <span class="keyword">await</span> asyncio.sleep(interval)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在FastAPI应用启动时启动监控</span></span><br><span class="line"><span class="meta">@asynccontextmanager</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">lifespan</span>(<span class="params">app</span>):</span><br><span class="line">    <span class="comment"># 启动时</span></span><br><span class="line">    monitor = DatabaseMonitor(engine)</span><br><span class="line">    monitor_task = asyncio.create_task(monitor.monitor_pool())</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">yield</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 关闭时</span></span><br><span class="line">    monitor_task.cancel()</span><br><span class="line">    <span class="keyword">await</span> engine.dispose()</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-事务管理最佳实践"><a href="#2-事务管理最佳实践" class="headerlink" title="2. 事务管理最佳实践"></a>2. 事务管理最佳实践</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># transaction_manager.py</span></span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncSession</span><br><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> asynccontextmanager</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> AsyncGenerator</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@asynccontextmanager</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">transaction_manager</span>(<span class="params"></span></span><br><span class="line"><span class="params">    db: AsyncSession,</span></span><br><span class="line"><span class="params">    rollback_on_exception: <span class="built_in">bool</span> = <span class="literal">True</span></span></span><br><span class="line"><span class="params"></span>) -&gt; AsyncGenerator[AsyncSession, <span class="literal">None</span>]:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;事务管理器&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">yield</span> db</span><br><span class="line">        <span class="keyword">await</span> db.commit()</span><br><span class="line">        logger.debug(<span class="string">&quot;事务提交成功&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">if</span> rollback_on_exception:</span><br><span class="line">            <span class="keyword">await</span> db.rollback()</span><br><span class="line">            logger.error(<span class="string">f&quot;事务回滚: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">raise</span></span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="keyword">await</span> db.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TransactionalService</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, db: AsyncSession</span>):</span><br><span class="line">        <span class="variable language_">self</span>.db = db</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">create_user_with_profile</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self, </span></span><br><span class="line"><span class="params">        user_data: <span class="built_in">dict</span>, </span></span><br><span class="line"><span class="params">        profile_data: <span class="built_in">dict</span></span></span><br><span class="line"><span class="params">    </span>) -&gt; User:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;创建用户和用户资料（事务操作）&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> transaction_manager(<span class="variable language_">self</span>.db) <span class="keyword">as</span> session:</span><br><span class="line">            <span class="comment"># 创建用户</span></span><br><span class="line">            user = User(**user_data)</span><br><span class="line">            session.add(user)</span><br><span class="line">            <span class="keyword">await</span> session.flush()  <span class="comment"># 获取用户ID但不提交</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 创建用户资料</span></span><br><span class="line">            profile_data[<span class="string">&quot;user_id&quot;</span>] = user.<span class="built_in">id</span></span><br><span class="line">            profile = UserProfile(**profile_data)</span><br><span class="line">            session.add(profile)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 如果这里出现异常，整个事务会回滚</span></span><br><span class="line">            <span class="keyword">return</span> user</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">transfer_posts</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self, </span></span><br><span class="line"><span class="params">        from_user_id: <span class="built_in">int</span>, </span></span><br><span class="line"><span class="params">        to_user_id: <span class="built_in">int</span></span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;转移文章所有权（事务操作）&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> transaction_manager(<span class="variable language_">self</span>.db) <span class="keyword">as</span> session:</span><br><span class="line">            <span class="comment"># 检查用户是否存在</span></span><br><span class="line">            from_user = <span class="keyword">await</span> session.get(User, from_user_id)</span><br><span class="line">            to_user = <span class="keyword">await</span> session.get(User, to_user_id)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> from_user <span class="keyword">or</span> <span class="keyword">not</span> to_user:</span><br><span class="line">                <span class="keyword">raise</span> ValueError(<span class="string">&quot;用户不存在&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 更新文章所有权</span></span><br><span class="line">            stmt = update(Post).where(</span><br><span class="line">                Post.author_id == from_user_id</span><br><span class="line">            ).values(author_id=to_user_id)</span><br><span class="line">            </span><br><span class="line">            result = <span class="keyword">await</span> session.execute(stmt)</span><br><span class="line">            <span class="keyword">return</span> result.rowcount</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能优化实战技巧"><a href="#性能优化实战技巧" class="headerlink" title="性能优化实战技巧"></a>性能优化实战技巧</h2><h3 id="1-查询缓存策略"><a href="#1-查询缓存策略" class="headerlink" title="1. 查询缓存策略"></a>1. 查询缓存策略</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cache.py</span></span><br><span class="line"><span class="keyword">import</span> redis.asyncio <span class="keyword">as</span> redis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Any</span>, <span class="type">Optional</span>, <span class="type">Callable</span></span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AsyncRedisCache</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, redis_url: <span class="built_in">str</span> = <span class="string">&quot;redis://localhost:6379&quot;</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.redis = redis.from_url(redis_url)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get</span>(<span class="params">self, key: <span class="built_in">str</span></span>) -&gt; <span class="type">Optional</span>[<span class="type">Any</span>]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;获取缓存&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = <span class="keyword">await</span> <span class="variable language_">self</span>.redis.get(key)</span><br><span class="line">            <span class="keyword">if</span> data:</span><br><span class="line">                <span class="keyword">return</span> pickle.loads(data)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            logger.error(<span class="string">f&quot;获取缓存失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">set</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self, </span></span><br><span class="line"><span class="params">        key: <span class="built_in">str</span>, </span></span><br><span class="line"><span class="params">        value: <span class="type">Any</span>, </span></span><br><span class="line"><span class="params">        expire: <span class="built_in">int</span> = <span class="number">3600</span></span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;设置缓存&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            data = pickle.dumps(value)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable language_">self</span>.redis.<span class="built_in">set</span>(key, data, ex=expire)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            logger.error(<span class="string">f&quot;设置缓存失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params">self, key: <span class="built_in">str</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;删除缓存&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable language_">self</span>.redis.delete(key) &gt; <span class="number">0</span></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            logger.error(<span class="string">f&quot;删除缓存失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 缓存装饰器</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cache_result</span>(<span class="params">expire: <span class="built_in">int</span> = <span class="number">3600</span>, key_prefix: <span class="built_in">str</span> = <span class="string">&quot;&quot;</span></span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">decorator</span>(<span class="params">func: <span class="type">Callable</span></span>):</span><br><span class="line"><span class="meta">        @wraps(<span class="params">func</span>)</span></span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kwargs</span>):</span><br><span class="line">            <span class="comment"># 生成缓存键</span></span><br><span class="line">            cache_key = <span class="string">f&quot;<span class="subst">&#123;key_prefix&#125;</span>:<span class="subst">&#123;func.__name__&#125;</span>:&quot;</span></span><br><span class="line">            key_data = <span class="built_in">str</span>(args) + <span class="built_in">str</span>(<span class="built_in">sorted</span>(kwargs.items()))</span><br><span class="line">            cache_key += hashlib.md5(key_data.encode()).hexdigest()</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 尝试从缓存获取</span></span><br><span class="line">            cached_result = <span class="keyword">await</span> cache.get(cache_key)</span><br><span class="line">            <span class="keyword">if</span> cached_result <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">return</span> cached_result</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 执行函数并缓存结果</span></span><br><span class="line">            result = <span class="keyword">await</span> func(*args, **kwargs)</span><br><span class="line">            <span class="keyword">await</span> cache.<span class="built_in">set</span>(cache_key, result, expire)</span><br><span class="line">            <span class="keyword">return</span> result</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> wrapper</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="comment"># 全局缓存实例</span></span><br><span class="line">cache = AsyncRedisCache()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用缓存的服务</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CachedPostService</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, db: AsyncSession</span>):</span><br><span class="line">        <span class="variable language_">self</span>.db = db</span><br><span class="line">    </span><br><span class="line"><span class="meta">    @cache_result(<span class="params">expire=<span class="number">1800</span>, key_prefix=<span class="string">&quot;posts&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_popular_posts</span>(<span class="params">self, limit: <span class="built_in">int</span> = <span class="number">10</span></span>) -&gt; <span class="type">List</span>[Post]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;获取热门文章（缓存30分钟）&quot;&quot;&quot;</span></span><br><span class="line">        stmt = select(Post).options(</span><br><span class="line">            selectinload(Post.author)</span><br><span class="line">        ).where(</span><br><span class="line">            Post.is_published == <span class="literal">True</span></span><br><span class="line">        ).order_by(</span><br><span class="line">            desc(Post.view_count)</span><br><span class="line">        ).limit(limit)</span><br><span class="line">        </span><br><span class="line">        result = <span class="keyword">await</span> <span class="variable language_">self</span>.db.execute(stmt)</span><br><span class="line">        <span class="keyword">return</span> result.scalars().<span class="built_in">all</span>()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">invalidate_post_cache</span>(<span class="params">self, post_id: <span class="built_in">int</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;使文章相关缓存失效&quot;&quot;&quot;</span></span><br><span class="line">        patterns = [</span><br><span class="line">            <span class="string">f&quot;posts:get_popular_posts:*&quot;</span>,</span><br><span class="line">            <span class="string">f&quot;posts:get_post_by_id:*<span class="subst">&#123;post_id&#125;</span>*&quot;</span>,</span><br><span class="line">        ]</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> pattern <span class="keyword">in</span> patterns:</span><br><span class="line">            keys = <span class="keyword">await</span> cache.redis.keys(pattern)</span><br><span class="line">            <span class="keyword">if</span> keys:</span><br><span class="line">                <span class="keyword">await</span> cache.redis.delete(*keys)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数据库索引优化"><a href="#2-数据库索引优化" class="headerlink" title="2. 数据库索引优化"></a>2. 数据库索引优化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># migrations/versions/add_performance_indexes.py</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;添加性能优化索引</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Revision ID: 001</span></span><br><span class="line"><span class="string">Create Date: 2023-08-15 14:30:00.000000</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> alembic <span class="keyword">import</span> op</span><br><span class="line"><span class="keyword">import</span> sqlalchemy <span class="keyword">as</span> sa</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">upgrade</span>():</span><br><span class="line">    <span class="comment"># 复合索引：按作者和发布状态查询文章</span></span><br><span class="line">    op.create_index(</span><br><span class="line">        <span class="string">&#x27;idx_posts_author_published&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;posts&#x27;</span>,</span><br><span class="line">        [<span class="string">&#x27;author_id&#x27;</span>, <span class="string">&#x27;is_published&#x27;</span>, <span class="string">&#x27;created_at&#x27;</span>],</span><br><span class="line">        postgresql_using=<span class="string">&#x27;btree&#x27;</span></span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 部分索引：只为已发布的文章创建索引</span></span><br><span class="line">    op.execute(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        CREATE INDEX idx_posts_published_created </span></span><br><span class="line"><span class="string">        ON posts (created_at DESC) </span></span><br><span class="line"><span class="string">        WHERE is_published = true</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 全文搜索索引</span></span><br><span class="line">    op.execute(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        CREATE INDEX idx_posts_fulltext </span></span><br><span class="line"><span class="string">        ON posts </span></span><br><span class="line"><span class="string">        USING gin(to_tsvector(&#x27;english&#x27;, title || &#x27; &#x27; || content))</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 用户邮箱的唯一索引（如果还没有）</span></span><br><span class="line">    op.create_index(</span><br><span class="line">        <span class="string">&#x27;idx_users_email_unique&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;users&#x27;</span>,</span><br><span class="line">        [<span class="string">&#x27;email&#x27;</span>],</span><br><span class="line">        unique=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">downgrade</span>():</span><br><span class="line">    op.drop_index(<span class="string">&#x27;idx_posts_author_published&#x27;</span>)</span><br><span class="line">    op.execute(<span class="string">&quot;DROP INDEX IF EXISTS idx_posts_published_created&quot;</span>)</span><br><span class="line">    op.execute(<span class="string">&quot;DROP INDEX IF EXISTS idx_posts_fulltext&quot;</span>)</span><br><span class="line">    op.drop_index(<span class="string">&#x27;idx_users_email_unique&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="FastAPI路由集成"><a href="#FastAPI路由集成" class="headerlink" title="FastAPI路由集成"></a>FastAPI路由集成</h2><h3 id="1-异步路由实现"><a href="#1-异步路由实现" class="headerlink" title="1. 异步路由实现"></a>1. 异步路由实现</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># routers/posts.py</span></span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> APIRouter, Depends, HTTPException, Query</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.asyncio <span class="keyword">import</span> AsyncSession</span><br><span class="line"><span class="keyword">from</span> database <span class="keyword">import</span> get_db</span><br><span class="line"><span class="keyword">from</span> crud <span class="keyword">import</span> PostCRUD, UserCRUD</span><br><span class="line"><span class="keyword">from</span> schemas <span class="keyword">import</span> PostCreate, PostResponse, PaginatedPostResponse</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Optional</span>, <span class="type">List</span></span><br><span class="line"></span><br><span class="line">router = APIRouter(prefix=<span class="string">&quot;/posts&quot;</span>, tags=[<span class="string">&quot;posts&quot;</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">@router.get(<span class="params"><span class="string">&quot;/&quot;</span>, response_model=PaginatedPostResponse</span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_posts</span>(<span class="params"></span></span><br><span class="line"><span class="params">    page: <span class="built_in">int</span> = Query(<span class="params"><span class="number">1</span>, ge=<span class="number">1</span></span>),</span></span><br><span class="line"><span class="params">    size: <span class="built_in">int</span> = Query(<span class="params"><span class="number">20</span>, ge=<span class="number">1</span>, le=<span class="number">100</span></span>),</span></span><br><span class="line"><span class="params">    search: <span class="type">Optional</span>[<span class="built_in">str</span>] = Query(<span class="params"><span class="literal">None</span></span>),</span></span><br><span class="line"><span class="params">    author_id: <span class="type">Optional</span>[<span class="built_in">int</span>] = Query(<span class="params"><span class="literal">None</span></span>),</span></span><br><span class="line"><span class="params">    db: AsyncSession = Depends(<span class="params">get_db</span>)</span></span><br><span class="line"><span class="params"></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;获取文章列表（分页）&quot;&quot;&quot;</span></span><br><span class="line">    post_crud = PostCRUD(db)</span><br><span class="line">    pagination = PaginationParams(page=page, size=size)</span><br><span class="line">    </span><br><span class="line">    result = <span class="keyword">await</span> post_crud.get_posts_paginated(</span><br><span class="line">        pagination=pagination,</span><br><span class="line">        search=search,</span><br><span class="line">        author_id=author_id</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="meta">@router.get(<span class="params"><span class="string">&quot;/&#123;post_id&#125;&quot;</span>, response_model=PostResponse</span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_post</span>(<span class="params"></span></span><br><span class="line"><span class="params">    post_id: <span class="built_in">int</span>,</span></span><br><span class="line"><span class="params">    db: AsyncSession = Depends(<span class="params">get_db</span>)</span></span><br><span class="line"><span class="params"></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;获取单篇文章&quot;&quot;&quot;</span></span><br><span class="line">    post_crud = PostCRUD(db)</span><br><span class="line">    post = <span class="keyword">await</span> post_crud.get_post_by_id(post_id)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> post:</span><br><span class="line">        <span class="keyword">raise</span> HTTPException(status_code=<span class="number">404</span>, detail=<span class="string">&quot;文章不存在&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> post</span><br><span class="line"></span><br><span class="line"><span class="meta">@router.post(<span class="params"><span class="string">&quot;/&quot;</span>, response_model=PostResponse, status_code=<span class="number">201</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">create_post</span>(<span class="params"></span></span><br><span class="line"><span class="params">    post_data: PostCreate,</span></span><br><span class="line"><span class="params">    db: AsyncSession = Depends(<span class="params">get_db</span>),</span></span><br><span class="line"><span class="params">    current_user: User = Depends(<span class="params">get_current_user</span>)</span></span><br><span class="line"><span class="params"></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;创建文章&quot;&quot;&quot;</span></span><br><span class="line">    post_crud = PostCRUD(db)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 创建文章数据</span></span><br><span class="line">    post_dict = post_data.<span class="built_in">dict</span>()</span><br><span class="line">    post_dict[<span class="string">&quot;author_id&quot;</span>] = current_user.<span class="built_in">id</span></span><br><span class="line">    </span><br><span class="line">    post = <span class="keyword">await</span> post_crud.create_post(post_dict)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 使相关缓存失效</span></span><br><span class="line">    cached_service = CachedPostService(db)</span><br><span class="line">    <span class="keyword">await</span> cached_service.invalidate_post_cache(post.<span class="built_in">id</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> post</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-错误处理和日志记录"><a href="#2-错误处理和日志记录" class="headerlink" title="2. 错误处理和日志记录"></a>2. 错误处理和日志记录</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># error_handlers.py</span></span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> Request, HTTPException</span><br><span class="line"><span class="keyword">from</span> fastapi.responses <span class="keyword">import</span> JSONResponse</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.exc <span class="keyword">import</span> IntegrityError, SQLAlchemyError</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">database_exception_handler</span>(<span class="params">request: Request, exc: SQLAlchemyError</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;数据库异常处理器&quot;&quot;&quot;</span></span><br><span class="line">    logger.error(<span class="string">f&quot;数据库错误: <span class="subst">&#123;exc&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(exc, IntegrityError):</span><br><span class="line">        <span class="keyword">return</span> JSONResponse(</span><br><span class="line">            status_code=<span class="number">400</span>,</span><br><span class="line">            content=&#123;</span><br><span class="line">                <span class="string">&quot;detail&quot;</span>: <span class="string">&quot;数据完整性错误，可能是重复的唯一字段&quot;</span>,</span><br><span class="line">                <span class="string">&quot;type&quot;</span>: <span class="string">&quot;integrity_error&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        )</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> JSONResponse(</span><br><span class="line">        status_code=<span class="number">500</span>,</span><br><span class="line">        content=&#123;</span><br><span class="line">            <span class="string">&quot;detail&quot;</span>: <span class="string">&quot;数据库操作失败&quot;</span>,</span><br><span class="line">            <span class="string">&quot;type&quot;</span>: <span class="string">&quot;database_error&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在main.py中注册异常处理器</span></span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.exc <span class="keyword">import</span> SQLAlchemyError</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line">app.add_exception_handler(SQLAlchemyError, database_exception_handler)</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能监控和调试"><a href="#性能监控和调试" class="headerlink" title="性能监控和调试"></a>性能监控和调试</h2><h3 id="1-查询性能分析"><a href="#1-查询性能分析" class="headerlink" title="1. 查询性能分析"></a>1. 查询性能分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># profiling.py</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> event</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.engine <span class="keyword">import</span> Engine</span><br><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> asynccontextmanager</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">QueryProfiler</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.slow_query_threshold = <span class="number">1.0</span>  <span class="comment"># 慢查询阈值（秒）</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">setup_query_logging</span>(<span class="params">self, engine: Engine</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;设置查询日志记录&quot;&quot;&quot;</span></span><br><span class="line">        </span><br><span class="line"><span class="meta">        @event.listens_for(<span class="params">engine.sync_engine, <span class="string">&quot;before_cursor_execute&quot;</span></span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">receive_before_cursor_execute</span>(<span class="params">conn, cursor, statement, parameters, context, executemany</span>):</span><br><span class="line">            context._query_start_time = time.time()</span><br><span class="line">        </span><br><span class="line"><span class="meta">        @event.listens_for(<span class="params">engine.sync_engine, <span class="string">&quot;after_cursor_execute&quot;</span></span>)</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">receive_after_cursor_execute</span>(<span class="params">conn, cursor, statement, parameters, context, executemany</span>):</span><br><span class="line">            total = time.time() - context._query_start_time</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> total &gt; <span class="variable language_">self</span>.slow_query_threshold:</span><br><span class="line">                logger.warning(</span><br><span class="line">                    <span class="string">f&quot;慢查询检测 - 执行时间: <span class="subst">&#123;total:<span class="number">.2</span>f&#125;</span>s\n&quot;</span></span><br><span class="line">                    <span class="string">f&quot;SQL: <span class="subst">&#123;statement&#125;</span>\n&quot;</span></span><br><span class="line">                    <span class="string">f&quot;参数: <span class="subst">&#123;parameters&#125;</span>&quot;</span></span><br><span class="line">                )</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                logger.debug(<span class="string">f&quot;查询执行时间: <span class="subst">&#123;total:<span class="number">.2</span>f&#125;</span>s&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用性能分析器</span></span><br><span class="line">profiler = QueryProfiler()</span><br><span class="line">profiler.setup_query_logging(engine)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-应用性能监控"><a href="#2-应用性能监控" class="headerlink" title="2. 应用性能监控"></a>2. 应用性能监控</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># monitoring.py</span></span><br><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> Request, Response</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">add_process_time_header</span>(<span class="params">request: Request, call_next</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;添加请求处理时间头&quot;&quot;&quot;</span></span><br><span class="line">    start_time = time()</span><br><span class="line">    response = <span class="keyword">await</span> call_next(request)</span><br><span class="line">    process_time = time() - start_time</span><br><span class="line">    </span><br><span class="line">    response.headers[<span class="string">&quot;X-Process-Time&quot;</span>] = <span class="built_in">str</span>(process_time)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 记录慢请求</span></span><br><span class="line">    <span class="keyword">if</span> process_time &gt; <span class="number">2.0</span>:</span><br><span class="line">        logger.warning(</span><br><span class="line">            <span class="string">f&quot;慢请求检测 - <span class="subst">&#123;request.method&#125;</span> <span class="subst">&#123;request.url&#125;</span> - &quot;</span></span><br><span class="line">            <span class="string">f&quot;处理时间: <span class="subst">&#123;process_time:<span class="number">.2</span>f&#125;</span>s&quot;</span></span><br><span class="line">        )</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在main.py中添加中间件</span></span><br><span class="line">app.middleware(<span class="string">&quot;http&quot;</span>)(add_process_time_header)</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过以上的优化策略，我们可以显著提升FastAPI应用的数据库操作性能：</p>
+<ol>
+<li><strong>正确配置异步数据库连接</strong>：选择合适的驱动和连接池参数</li>
+<li><strong>避免N+1查询</strong>：使用预加载和连接查询</li>
+<li><strong>实现高效的分页</strong>：根据数据量选择偏移分页或游标分页</li>
+<li><strong>合理使用缓存</strong>：缓存热点数据和查询结果</li>
+<li><strong>优化数据库索引</strong>：创建复合索引和部分索引</li>
+<li><strong>监控性能指标</strong>：及时发现和解决性能问题</li>
+</ol>
+<p>这些技巧在我的生产环境中都得到了验证，希望能帮助你构建更高性能的FastAPI应用。记住，性能优化是一个持续的过程，需要根据实际的业务场景和数据特点来调整策略。</p>
+<p>你在FastAPI数据库优化方面有什么经验或问题吗？欢迎在评论中分享讨论！</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BC%98%E5%8C%96/">数据库优化</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/SQLAlchemy/">SQLAlchemy</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98/">性能调优</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/ORM/">ORM</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2023/vue/vue3-internationalization-i18n-guide/"
+                                   title="Vue 3 国际化实战：Vue I18n 多语言支持完整解决方案"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Vue 3 国际化实战：Vue I18n 多语言支持完整解决方案</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2023/thinkphp/thinkphp6-queue-async-task/"
+                                   title="ThinkPHP6/8 队列系统与异步任务处理实战指南"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">ThinkPHP6/8 队列系统与异步任务处理实战指南</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FastAPI%E5%BC%82%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E4%BC%98%E5%8C%96%EF%BC%9A%E4%BB%8ESQLAlchemy%E5%88%B0%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="nav-text">FastAPI异步数据库操作优化：从SQLAlchemy到性能调优</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF"><span class="nav-text">异步数据库连接的正确姿势</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%BC%82%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A9%B1%E5%8A%A8"><span class="nav-text">1. 选择合适的异步数据库驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%BC%82%E6%AD%A5SQLAlchemy%E5%BC%95%E6%93%8E"><span class="nav-text">2. 配置异步SQLAlchemy引擎</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E5%92%8C%E5%85%B3%E7%B3%BB%E5%A4%84%E7%90%86"><span class="nav-text">模型定义和关系处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%9A%E4%B9%89%E5%BC%82%E6%AD%A5%E5%8F%8B%E5%A5%BD%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-text">1. 定义异步友好的模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A4%84%E7%90%86N-1%E6%9F%A5%E8%AF%A2%E9%97%AE%E9%A2%98"><span class="nav-text">2. 处理N+1查询问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">高级查询优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9C%E4%BC%98%E5%8C%96"><span class="nav-text">1. 批量操作优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">2. 分页查询优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%92%8C%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-text">连接池和事务管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9B%91%E6%8E%A7%E5%92%8C%E8%B0%83%E4%BC%98"><span class="nav-text">1. 连接池监控和调优</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">2. 事务管理最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7"><span class="nav-text">性能优化实战技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="nav-text">1. 查询缓存策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96"><span class="nav-text">2. 数据库索引优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FastAPI%E8%B7%AF%E7%94%B1%E9%9B%86%E6%88%90"><span class="nav-text">FastAPI路由集成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BC%82%E6%AD%A5%E8%B7%AF%E7%94%B1%E5%AE%9E%E7%8E%B0"><span class="nav-text">1. 异步路由实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E5%92%8C%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="nav-text">2. 错误处理和日志记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%92%8C%E8%B0%83%E8%AF%95"><span class="nav-text">性能监控和调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">1. 查询性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BA%94%E7%94%A8%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="nav-text">2. 应用性能监控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Orion K</a>
+        
+    </div>
+
+
+    
+        
+        <div class="deploy-info info-item">
+            
+            本站由 <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/brands/github.png"></span> 提供部署服务
+            
+        </div>
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FastAPI%E5%BC%82%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C%E4%BC%98%E5%8C%96%EF%BC%9A%E4%BB%8ESQLAlchemy%E5%88%B0%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="nav-text">FastAPI异步数据库操作优化：从SQLAlchemy到性能调优</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF"><span class="nav-text">异步数据库连接的正确姿势</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%BC%82%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E9%A9%B1%E5%8A%A8"><span class="nav-text">1. 选择合适的异步数据库驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE%E5%BC%82%E6%AD%A5SQLAlchemy%E5%BC%95%E6%93%8E"><span class="nav-text">2. 配置异步SQLAlchemy引擎</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E5%92%8C%E5%85%B3%E7%B3%BB%E5%A4%84%E7%90%86"><span class="nav-text">模型定义和关系处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%9A%E4%B9%89%E5%BC%82%E6%AD%A5%E5%8F%8B%E5%A5%BD%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-text">1. 定义异步友好的模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%A4%84%E7%90%86N-1%E6%9F%A5%E8%AF%A2%E9%97%AE%E9%A2%98"><span class="nav-text">2. 处理N+1查询问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">高级查询优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9C%E4%BC%98%E5%8C%96"><span class="nav-text">1. 批量操作优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-text">2. 分页查询优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%92%8C%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-text">连接池和事务管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9B%91%E6%8E%A7%E5%92%8C%E8%B0%83%E4%BC%98"><span class="nav-text">1. 连接池监控和调优</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">2. 事务管理最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%9E%E6%88%98%E6%8A%80%E5%B7%A7"><span class="nav-text">性能优化实战技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="nav-text">1. 查询缓存策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96"><span class="nav-text">2. 数据库索引优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FastAPI%E8%B7%AF%E7%94%B1%E9%9B%86%E6%88%90"><span class="nav-text">FastAPI路由集成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BC%82%E6%AD%A5%E8%B7%AF%E7%94%B1%E5%AE%9E%E7%8E%B0"><span class="nav-text">1. 异步路由实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E5%92%8C%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95"><span class="nav-text">2. 错误处理和日志记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E5%92%8C%E8%B0%83%E8%AF%95"><span class="nav-text">性能监控和调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">1. 查询性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BA%94%E7%94%A8%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="nav-text">2. 应用性能监控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+            
+<script src="/js/post/toc.js"></script>
+
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+</body>
+</html>
